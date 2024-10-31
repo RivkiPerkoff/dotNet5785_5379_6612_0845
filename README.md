@@ -1,5 +1,3 @@
 מה קורה??
-Hello World
-Hello World!
-
+hello
 # dotNet5785_5379_6612_0845
