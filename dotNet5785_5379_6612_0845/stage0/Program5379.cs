@@ -9,7 +9,9 @@ namespace targil0
             Welcome5379();
             Welcome6612();
             Welcome0845();
+
             Console.ReadKey();
+           
 
         }
 
@@ -22,5 +24,6 @@ namespace targil0
             string name = Console.ReadLine();
             Console.WriteLine($"{name}, welcome to my first console application");
         }
+
     }
 }
