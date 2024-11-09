@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalFacade", "DalFacade\DalFacade.csproj", "{C70A28C2-50C1-40F5-9ACB-3979F39BE52F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +22,16 @@ Global
 		{4238D2F2-61F6-41D5-8A96-21AC72EAFF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4238D2F2-61F6-41D5-8A96-21AC72EAFF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4238D2F2-61F6-41D5-8A96-21AC72EAFF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70A28C2-50C1-40F5-9ACB-3979F39BE52F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70A28C2-50C1-40F5-9ACB-3979F39BE52F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70A28C2-50C1-40F5-9ACB-3979F39BE52F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70A28C2-50C1-40F5-9ACB-3979F39BE52F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C70A28C2-50C1-40F5-9ACB-3979F39BE52F} = {33724391-C5D5-4976-9A35-53D96041297A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9018DB55-99B4-4D4D-A52B-0E8AB5EC4B53}
