@@ -1,6 +1,6 @@
 ﻿namespace DO;
 
-public record Student
+public record Volunteer
 (
 int Id,
 string Name,
@@ -13,5 +13,5 @@ DateTime? BirthDate = null
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Student() : this(0, "", DateTime.Now, null, false, null) { }
+    public Volunteer() : this(0, "", DateTime.Now, null, false, null) { }
 }
