@@ -1,4 +1,4 @@
-﻿using DO.Enumes;
+﻿using static DO.Enumes;
 
 namespace DO
 {
