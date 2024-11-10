@@ -3,7 +3,7 @@
 namespace DO
 {
     public record Volunteer(
-    int IdVolunteer,
+    int VolunteerId,
     string Name = "",
     string PhoneNumber = "",
     string EmailOfVolunteer = "",
