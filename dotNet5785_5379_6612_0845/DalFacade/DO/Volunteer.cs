@@ -1,17 +1,28 @@
-﻿namespace DO;
+﻿using DO.Enumes;
 
-public record Volunteer
-(
-int Id,
-string Name,
-DateTime RegistrationDate,
-string? Alias = null,
-bool IsActive = false,
-DateTime? BirthDate = null
-)
+namespace DO
 {
-    /// <summary>
-    /// Default constructor for stage 3
-    /// </summary>
-    public Volunteer() : this(0, "", DateTime.Now, null, false, null) { }
+    public record Volunteer(
+    CarType Car, // השתמשנו בשם `Car` כמאפיין מסוג `CarModel`
+    string NameOfVolunteer,
+    bool IsAvailable = false 
+       
+     );
+        public struct CarType
+    {
+        public ModelCar ModelCar { get; init; }
+        public CarColor CarColor { get; init; }
+        public CarType(ModelCar model, CarColor color)
+        {
+            ModelCar = model;
+            CarColor = color;
+        }
+    }
+   
+    //public Volunteer(CarType car, string nameOfVolunteer, bool isAvailable = false)
+    //{
+    //    Car = car;
+    //    NameOfVolunteer = nameOfVolunteer;
+    //    IsAvailable = isAvailable;
+    //}
 }
