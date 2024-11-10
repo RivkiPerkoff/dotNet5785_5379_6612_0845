@@ -6,10 +6,10 @@
 namespace DO;
 internal class Assignment
 {
-    int nextAssignmentId =  NextVolunteerId();
-    int IdOfRunnerCalld = VolunteerId;
-    int VolunteerId= ;
-    DateTime EntryTimeForTreatment = Clock;
-    public DateTime EndTimeForTreatment = Clock;
-    Enumes.TerminationTypeTheTreatment TerminationTypeTheTreatment ;
+    private int NextAssignmentId ;
+    private int IdOfRunnerCalld ;
+    private int VolunteerId ;
+    private DateTime EntryTimeForTreatment ;
+    private DateTime EndTimeForTreatment ;
+    private Enumes.TerminationTypeTheTreatment TerminationTypeTheTreatment ;
 }
