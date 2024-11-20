@@ -61,12 +61,12 @@ internal class VolunteerImplementation : IVolunteer
 
     public void DeleteAll()
     {
-        throw new NotImplementedException();
+        items.Clear();
     }
 
     public Volunteer? Read(int id)
     {
-        throw new NotImplementedException();
+        return items.FirstOrDefault(item => idSelector(item) == id);
     }
 
     public List<Volunteer> ReadAll()

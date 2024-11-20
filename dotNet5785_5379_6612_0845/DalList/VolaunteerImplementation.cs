@@ -19,14 +19,14 @@ public class VolaunteerImplementation : IVolunteer
 
     public void DeleteAll()
     {
-    
-            items.Clear();
-  
+
+        throw new NotImplementedException();
+
     }
 
     public Volunteer? Read(int id)
     {
-        return items.FirstOrDefault(item => idSelector(item) == id);
+        throw new NotImplementedException();
     }
 
     public List<Volunteer> ReadAll()
@@ -39,7 +39,3 @@ public class VolaunteerImplementation : IVolunteer
         throw new NotImplementedException();
     }
 }
-
-{
-    items.Clear();
-   }
