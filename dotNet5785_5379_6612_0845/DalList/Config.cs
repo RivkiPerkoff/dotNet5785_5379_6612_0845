@@ -1,7 +1,7 @@
 ﻿
 namespace Dal;
 using DO;
-internal static class Config
+internal record Config
 {
     internal const int StartVolunteerId = 1000;
     private static int s_nextVolunteerId = StartVolunteerId;
@@ -20,4 +20,4 @@ internal static class Config
         RiskRange = range;
     }
 
-}
+    } 
