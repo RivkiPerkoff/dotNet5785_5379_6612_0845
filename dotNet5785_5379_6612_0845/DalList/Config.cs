@@ -12,4 +12,5 @@ internal static class Config
         s_nextVolunteerId = StartVolunteerId;
         Clock = DateTime.Now;
     } 
+
 }

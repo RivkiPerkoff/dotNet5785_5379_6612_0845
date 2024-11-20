@@ -1,4 +1,4 @@
-﻿using DO.Enumes;
+﻿//using DO.Enumes;
 
 namespace DO
 {
@@ -9,12 +9,15 @@ namespace DO
     string EmailOfVolunteer = "",
     string PasswordVolunteer = "",
     string AddressVolunteer = "",
-    double VolunteerLatitude,
-    double VolunteerLongitude,
+    double? VolunteerLatitude = 0,
+    double? VolunteerLongitude = 0,
     bool IsAvailable = false,
-    double MaximumDistanceForReceivingCall,
-    Enumes.Role Role,
-    Enumes.DistanceType DistanceType = 0
+    double? MaximumDistanceForReceivingCall = 0
+    //Enumes.Role Role ,
+    //Enumes.DistanceType DistanceType 
      );
-}
+//    {
+//    public Volunteer():this()
+//}
+}       
 
