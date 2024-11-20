@@ -1,7 +1,7 @@
 ﻿
 namespace Dal;
 using DO;
-internal static class Config
+internal record Config
 {
     internal const int StartVolunteerId = 1000;
     private static int s_nextVolunteerId = StartVolunteerId;
@@ -11,6 +11,13 @@ internal static class Config
     {
         s_nextVolunteerId = StartVolunteerId;
         Clock = DateTime.Now;
-    } 
+    }
 
-}
+    private static TimeSpan? RiskRange = null;
+
+    internal static void SetRiskRange(TimeSpan? range)
+    {
+        RiskRange = range;
+    }
+
+    } 

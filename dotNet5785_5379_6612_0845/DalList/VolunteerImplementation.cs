@@ -4,17 +4,60 @@ using DalApi;
 using DO;
 using System.Collections.Generic;
 
-internal class VolunteerImplementation/* : IVolunteer*/
+internal class VolunteerImplementation: IVolunteer
 {
     public void Create(Volunteer item)
     {
-        throw new NotImplementedException();
+        // אם המספר המזהה של האובייקט הוא ברירת מחדל, נטפל בו כמספר רץ
+        if (item.ID == default)
+        {
+            // יצירת מספר מזהה חדש
+            int newId = Config.NextVolunteerId;
+
+            // יצירת העתק של האובייקט ועדכון ה-ID שלו
+            Volunteer newItem = new Volunteer
+            {
+                ID = newId,
+                Name = item.Name,
+                Age = item.Age,
+                // הוסף שדות נוספים מתוך האובייקט לפי הצורך
+            };
+
+            // הוספה לרשימת האובייקטים
+            DataSource.Volunteers.Add(newItem);
+
+            // אין צורך בערך חוזר לפי ההוראות
+            return;
+        }
+
+        // אם המספר המזהה כבר נקבע, נוודא שאין כפילות
+        if (DataSource.Volunteers.Any(v => v.ID == item.ID))
+        {
+            throw new InvalidOperationException($"Volunteer with ID {item.ID} already exists.");
+        }
+
+        // הוספה לרשימת האובייקטים
+        DataSource.Volunteers.Add(item);
+
+        // אין צורך בערך חוזר לפי ההוראות
     }
+
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        // חיפוש האובייקט ברשימה עם ה-ID שהתקבל
+        var volunteer = DataSource.Volunteers.FirstOrDefault(v => v.ID == id);
+
+        // אם האובייקט לא נמצא, נזרוק חריגה מתאימה
+        if (volunteer == null)
+        {
+            throw new KeyNotFoundException($"Volunteer with ID {id} does not exist.");
+        }
+
+        // הסרת האובייקט מהרשימה
+        DataSource.Volunteers.Remove(volunteer);
     }
+
 
     public void DeleteAll()
     {
@@ -26,26 +69,39 @@ internal class VolunteerImplementation/* : IVolunteer*/
         throw new NotImplementedException();
     }
 
+
     public List<Volunteer> ReadAll()
     {
-        throw new NotImplementedException();
+        // יצירת עותק של הרשימה הקיימת של כל האובייקטים מטיפוס Volunteer
+        return new List<Volunteer>(DataSource.Volunteers);
     }
 
-    //    public void Update(Volunteer item)
-    //    {
-    //        // חפש אם קיים אובייקט עם ה-ID במאגר הנתונים
-    //        var existingItem = _repository.GetVolunteerById(item.VolunteerId);
+    public void Update(Volunteer item)
+    {
+        // המרת IEnumerable לרשימה
+        var volunteerList = DataSource.Volunteers.ToList();
 
-    //        if (existingItem == null)
-    //        {
-    //            throw new InvalidOperationException($"אובייקט מסוג Volunteer עם ID {item.VolunteerId} לא קיים.");
-    //        }
+        // חפש אם קיים אובייקט עם ה-ID במאגר הנתונים
+        var existingItem = volunteerList.FirstOrDefault(v => v.VolunteerId == item.VolunteerId);
 
-    //        // אם האובייקט קיים, מחק את הישן והוסף את החדש
-    //        _repository.RemoveVolunteer(item.VolunteerId);
-    //        _repository.AddVolunteer(item);
-    //    }
+        // אם האובייקט לא קיים, נזרוק חריגה
+        if (existingItem == null)
+        {
+            throw new InvalidOperationException($"אובייקט מסוג Volunteer עם ID {item.VolunteerId} לא קיים.");
+        }
 
+        // מצא את האובייקט עם ה-ID ונעדכן אותו במקום להסיר ולהוסיף מחדש
+        int index = volunteerList.FindIndex(v => v.VolunteerId == item.VolunteerId);
+
+        if (index >= 0)
+        {
+            // עדכון של האובייקט בעמדה הנכונה ברשימה
+            volunteerList[index] = item;
+
+            // עדכון הרשימה ב-DataSource
+            DataSource.Volunteers = volunteerList;
+        }
+    }
 
 }
 

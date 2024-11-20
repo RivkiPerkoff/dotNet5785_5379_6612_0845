@@ -1,5 +1,5 @@
 ﻿
-namespace DO
+namespace DO.Enumes
 {
         public enum TerminationTypeTheTreatment {Handled, Self_Cancellation, Admin_Cancellation, Expired_Cancellation}
         //public enum AreaActivity { Jerusalem, Tel_Aviv, Haifa, Beer_Sheva, Rishon_Lezion, Beit_Shemesh, Bnei_Brak, Beitar }
