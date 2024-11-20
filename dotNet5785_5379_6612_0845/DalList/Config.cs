@@ -11,5 +11,13 @@ internal static class Config
     {
         s_nextVolunteerId = StartVolunteerId;
         Clock = DateTime.Now;
-    } 
+    }
+
+    private static TimeSpan? RiskRange = null;
+
+    internal static void SetRiskRange(TimeSpan? range)
+    {
+        RiskRange = range;
+    }
+
 }
