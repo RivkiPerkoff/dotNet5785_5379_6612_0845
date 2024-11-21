@@ -4,7 +4,7 @@ using DalApi;
 using DO;
 using System.Collections.Generic;
 
-internal class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation: IVolunteer
 {
     public void Create(Volunteer item)
     {
@@ -63,22 +63,47 @@ internal class VolunteerImplementation : IVolunteer
 
     public void DeleteAll()
     {
-        throw new NotImplementedException();
+        items.Clear();
     }
 
     public Volunteer? Read(int id)
     {
-        throw new NotImplementedException();
+        return items.FirstOrDefault(item => idSelector(item) == id);
     }
+
 
     public List<Volunteer> ReadAll()
     {
-        throw new NotImplementedException();
+        // יצירת עותק של הרשימה הקיימת של כל האובייקטים מטיפוס Volunteer
+        return new List<Volunteer>(DataSource.Volunteers);
     }
 
     public void Update(Volunteer item)
     {
-        throw new NotImplementedException();
+        // המרת IEnumerable לרשימה
+        var volunteerList = DataSource.Volunteers.ToList();
+
+        // חפש אם קיים אובייקט עם ה-ID במאגר הנתונים
+        var existingItem = volunteerList.FirstOrDefault(v => v.VolunteerId == item.VolunteerId);
+
+        // אם האובייקט לא קיים, נזרוק חריגה
+        if (existingItem == null)
+        {
+            throw new InvalidOperationException($"אובייקט מסוג Volunteer עם ID {item.VolunteerId} לא קיים.");
+        }
+
+        // מצא את האובייקט עם ה-ID ונעדכן אותו במקום להסיר ולהוסיף מחדש
+        int index = volunteerList.FindIndex(v => v.VolunteerId == item.VolunteerId);
+
+        if (index >= 0)
+        {
+            // עדכון של האובייקט בעמדה הנכונה ברשימה
+            volunteerList[index] = item;
+
+            // עדכון הרשימה ב-DataSource
+            DataSource.Volunteers = volunteerList;
+        }
     }
+
 }
 

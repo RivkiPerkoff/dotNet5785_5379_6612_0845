@@ -2,10 +2,10 @@
 
 namespace DO
 {
-    internal class Call
+    internal record Call
     {
         int IdCall;
-        string CallDescription = null;
+        string? CallDescription = null;
         string? CallAddress = null;
         double? CallLatitude=0;
         double? CallLongitude=0;
