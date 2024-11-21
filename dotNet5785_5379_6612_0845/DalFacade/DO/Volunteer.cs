@@ -15,9 +15,17 @@ namespace DO
     double? MaximumDistanceForReceivingCall = 0
     //Enumes.Role Role ,
     //Enumes.DistanceType DistanceType 
-     );
-//    {
-//    public Volunteer():this()
-//}
-}
+     )
+    {
+        public Volunteer()
+        {
+        }
+
+        public object ID { get; set; }
+        public object Age { get; set; }
+    }
+    //    {
+    //    public Volunteer():this()
+    //    }
+}       
 
