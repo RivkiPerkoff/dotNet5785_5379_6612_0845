@@ -15,7 +15,7 @@ internal class VolunteerImplementation : IVolunteer
             int newId = Config.NextVolunteerId;
 
             // יצירת העתק של האובייקט ועדכון ה-ID שלו
-            Volunteer newItem = new Volunteer
+            Volunteer newItem = new()
             {
                 ID = newId,
                 Name = item.Name,
@@ -24,7 +24,7 @@ internal class VolunteerImplementation : IVolunteer
             };
 
             // הוספה לרשימת האובייקטים
-            DataSource.Volunteers.Add(newItem);
+            object value = DataSource.Volunteers.Add(newItem);
 
             // אין צורך בערך חוזר לפי ההוראות
             return;
@@ -35,9 +35,11 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new InvalidOperationException($"Volunteer with ID {item.ID} already exists.");
         }
-
-        // הוספה לרשימת האובייקטים
-        DataSource.Volunteers.Add(item);
+        else
+        {
+            // הוספה לרשימת האובייקטים
+            object value = DataSource.Volunteers.Add(item);
+        }
 
         // אין צורך בערך חוזר לפי ההוראות
     }
