@@ -1,5 +1,4 @@
-﻿
-namespace Dal;
+﻿namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
@@ -102,6 +101,5 @@ internal class VolunteerImplementation: IVolunteer
             DataSource.Volunteers = volunteerList;
         }
     }
-
 }
 
