@@ -19,7 +19,6 @@ internal class VolunteerImplementation: IVolunteer
         DataSource.Volunteers = volunteersList; // עדכון רשימת המתנדבים במקור הנתונים
     }
 
-
     public void Delete(int id)
     {
         // חיפוש האובייקט ברשימה עם ה-ID שהתקבל
