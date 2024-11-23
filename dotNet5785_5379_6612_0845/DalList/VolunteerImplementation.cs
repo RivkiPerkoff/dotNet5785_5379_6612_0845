@@ -7,24 +7,23 @@ internal class VolunteerImplementation: IVolunteer
 {
     public void Create(Volunteer item)
     {
+        // בדיקה אם ה-ID כבר קיים ברשימה
         if (DataSource.Volunteers.Any(v => v.ID == item.ID))
         {
             throw new InvalidOperationException($"Volunteer with ID {item.ID} already exists.");
         }
-        else
-        {
-            // הוספה לרשימת האובייקטים
-            object value = DataSource.Volunteers.Add(item);
-        }
 
-        // אין צורך בערך חוזר לפי ההוראות
+        // הוספת האובייקט לרשימת המתנדבים
+        var volunteersList = DataSource.Volunteers.ToList(); // המרת IEnumerable לרשימה
+        volunteersList.Add(item); // הוספת האובייקט
+        DataSource.Volunteers = volunteersList; // עדכון רשימת המתנדבים במקור הנתונים
     }
 
 
     public void Delete(int id)
     {
         // חיפוש האובייקט ברשימה עם ה-ID שהתקבל
-        var volunteer = DataSource.Volunteers.FirstOrDefault(v => v.ID == id);
+        var volunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == id);
 
         // אם האובייקט לא נמצא, נזרוק חריגה מתאימה
         if (volunteer == null)
@@ -39,13 +38,16 @@ internal class VolunteerImplementation: IVolunteer
 
     public void DeleteAll()
     {
-        DataSource.Volunteers.Clear();
+        while (DataSource.volunteers.Count > 0)
+        {
+            DataSource.Volunteers.RemoveAt(DataSource.volunteers.Count - 1);
+        }
     }
 
     public Volunteer? Read(int id)
     {
         // חיפוש האובייקט ברשימת המתנדבים לפי ID
-        return DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.ID == id);
+        return DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
     }
 
         public List<Volunteer> ReadAll()
