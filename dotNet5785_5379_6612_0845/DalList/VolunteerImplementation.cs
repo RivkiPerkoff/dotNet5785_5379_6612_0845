@@ -8,29 +8,6 @@ internal class VolunteerImplementation: IVolunteer
 {
     public void Create(Volunteer item)
     {
-        // אם המספר המזהה של האובייקט הוא ברירת מחדל, נטפל בו כמספר רץ
-        if (item.ID == default)
-        {
-        //    // יצירת מספר מזהה חדש
-        //    int newId = Config.NextVolunteerId;
-
-        //    // יצירת העתק של האובייקט ועדכון ה-ID שלו
-        //    Volunteer newItem = new()
-        //    {
-        //        ID = newId,
-        //        Name = item.Name,
-        //        Age = item.Age,
-        //        // הוסף שדות נוספים מתוך האובייקט לפי הצורך
-        //    };
-
-        //    // הוספה לרשימת האובייקטים
-        //    object value = DataSource.Volunteers.Add(newItem);
-
-        //    // אין צורך בערך חוזר לפי ההוראות
-        //    return;
-        //}
-
-        // אם המספר המזהה כבר נקבע, נוודא שאין כפילות
         if (DataSource.Volunteers.Any(v => v.ID == item.ID))
         {
             throw new InvalidOperationException($"Volunteer with ID {item.ID} already exists.");
