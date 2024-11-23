@@ -34,7 +34,6 @@ internal class VolunteerImplementation: IVolunteer
         DataSource.Volunteers.Remove(volunteer);
     }
 
-
     public void DeleteAll()
     {
         while (DataSource.volunteers.Count > 0)
