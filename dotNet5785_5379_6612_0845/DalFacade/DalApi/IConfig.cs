@@ -1,6 +1,7 @@
-﻿using DO;
+﻿
 
 namespace DalApi;
+using DO;
 public interface IConfig
 {
     DateTime Clock { get; set; }

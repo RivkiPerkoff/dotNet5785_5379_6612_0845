@@ -1,8 +1,8 @@
 ﻿
 
-namespace DalApi
+namespace DalApi;
+using DO;
+internal class Icall
 {
-    internal class Icall
-    {
-    }
+
 }

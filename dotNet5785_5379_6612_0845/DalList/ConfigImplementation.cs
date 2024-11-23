@@ -13,12 +13,11 @@ public class ConfigImplementation : IConfig
         get => Config.Clock;
         set => Config.Clock = value;
     }
-    public TimeSpan RiskRange 
+    public TimeSpan RiskRange
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException(); 
+        get => Config.RiskRange;
+        set => Config.RiskRange = value;
     }
-
     public void Reset()
     {
         Config.Reset();

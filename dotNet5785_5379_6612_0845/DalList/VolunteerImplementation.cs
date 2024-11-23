@@ -7,13 +7,10 @@ internal class VolunteerImplementation: IVolunteer
 {
     public void Create(Volunteer item)
     {
-        // בדיקה אם ה-ID כבר קיים ברשימה
-        if (DataSource.Volunteers.Any(v => v.ID == item.ID))
+        if (DataSource.Volunteers.Any(v => v.VolunteerId == item.VolunteerId))
         {
-            throw new InvalidOperationException($"Volunteer with ID {item.ID} already exists.");
+            throw new InvalidOperationException($"Volunteer with ID {item.VolunteerId} already exists.");
         }
-
-        // הוספת האובייקט לרשימת המתנדבים
         var volunteersList = DataSource.Volunteers.ToList(); // המרת IEnumerable לרשימה
         volunteersList.Add(item); // הוספת האובייקט
         DataSource.Volunteers = volunteersList; // עדכון רשימת המתנדבים במקור הנתונים
