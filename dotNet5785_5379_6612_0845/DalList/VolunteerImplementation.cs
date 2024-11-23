@@ -11,24 +11,24 @@ internal class VolunteerImplementation: IVolunteer
         // אם המספר המזהה של האובייקט הוא ברירת מחדל, נטפל בו כמספר רץ
         if (item.ID == default)
         {
-            // יצירת מספר מזהה חדש
-            int newId = Config.NextVolunteerId;
+        //    // יצירת מספר מזהה חדש
+        //    int newId = Config.NextVolunteerId;
 
-            // יצירת העתק של האובייקט ועדכון ה-ID שלו
-            Volunteer newItem = new()
-            {
-                ID = newId,
-                Name = item.Name,
-                Age = item.Age,
-                // הוסף שדות נוספים מתוך האובייקט לפי הצורך
-            };
+        //    // יצירת העתק של האובייקט ועדכון ה-ID שלו
+        //    Volunteer newItem = new()
+        //    {
+        //        ID = newId,
+        //        Name = item.Name,
+        //        Age = item.Age,
+        //        // הוסף שדות נוספים מתוך האובייקט לפי הצורך
+        //    };
 
-            // הוספה לרשימת האובייקטים
-            object value = DataSource.Volunteers.Add(newItem);
+        //    // הוספה לרשימת האובייקטים
+        //    object value = DataSource.Volunteers.Add(newItem);
 
-            // אין צורך בערך חוזר לפי ההוראות
-            return;
-        }
+        //    // אין צורך בערך חוזר לפי ההוראות
+        //    return;
+        //}
 
         // אם המספר המזהה כבר נקבע, נוודא שאין כפילות
         if (DataSource.Volunteers.Any(v => v.ID == item.ID))
@@ -63,16 +63,16 @@ internal class VolunteerImplementation: IVolunteer
 
     public void DeleteAll()
     {
-        items.Clear();
+        DataSource.Volunteers.Clear();
     }
 
     public Volunteer? Read(int id)
     {
-        return items.FirstOrDefault(item => idSelector(item) == id);
+        // חיפוש האובייקט ברשימת המתנדבים לפי ID
+        return DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.ID == id);
     }
 
-
-    public List<Volunteer> ReadAll()
+        public List<Volunteer> ReadAll()
     {
         // יצירת עותק של הרשימה הקיימת של כל האובייקטים מטיפוס Volunteer
         return new List<Volunteer>(DataSource.Volunteers);
@@ -89,7 +89,7 @@ internal class VolunteerImplementation: IVolunteer
         // אם האובייקט לא קיים, נזרוק חריגה
         if (existingItem == null)
         {
-            throw new InvalidOperationException($"אובייקט מסוג Volunteer עם ID {item.VolunteerId} לא קיים.");
+            throw new InvalidOperationException($"update faild: אובייקט מסוג Volunteer עם ID {item.VolunteerId} לא קיים.");
         }
 
         // מצא את האובייקט עם ה-ID ונעדכן אותו במקום להסיר ולהוסיף מחדש
