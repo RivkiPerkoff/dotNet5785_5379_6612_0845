@@ -17,9 +17,6 @@ namespace DO
     //Enumes.DistanceType DistanceType 
      )
     {
-        public Volunteer()
-        {
-        }
 
         public object ID { get; set; }
         public object Age { get; set; }

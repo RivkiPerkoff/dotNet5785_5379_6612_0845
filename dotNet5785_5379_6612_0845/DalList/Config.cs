@@ -15,9 +15,9 @@ internal record Config
 
     private static TimeSpan? RiskRange = null;
 
-    internal static void SetRiskRange(TimeSpan? range)
-    {
-        RiskRange = range;
-    }
+    //internal static void SetRiskRange(TimeSpan? range)
+    //{
+    //    RiskRange = range;
+    //}
 
     } 
