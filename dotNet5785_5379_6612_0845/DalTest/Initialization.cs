@@ -1,6 +1,7 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
+using DO.Enumes;
 
 using System.Net.Mail;
 using System.Numerics;
@@ -50,7 +51,7 @@ public static class Initialization
             {
                 id = s_rand.Next(1000, 9999);
             }
-            while (s_dalVolunteer!.Read(id) != null); // Make sure the ID is unique
+            while (s_dalVolunteer!.Read(id) != null); 
 
             string name = names[i];
             string email = emails[i];
@@ -125,15 +126,59 @@ public static class Initialization
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; // בין קווי רוחב של ישראל
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; // בין קווי אורך של ישראל
 
-            // יצירת זמן פתיחה רנדומלי
-            DateTime openingTime = DateTime.Now.AddMinutes(-s_rand.Next(0, 60 * 24 * 7)); // עד שבוע אחורה
+            DateTime maxEndTime = openingTime.Add(Config.RiskRange);
 
-            // קביעת תוקף הקריאה
-            bool isExpired = i < expiredCalls;
-            if (isExpired)
+            // בדיקת הזמן הנוכחי מול הזמן המקסימלי
+            FinishCallType finishType;
+
+            if (Config.Clock > maxEndTime) // אם הזמן הנוכחי עבר את הזמן המקסימלי
             {
-                openingTime = openingTime.AddDays(-s_rand.Next(1, 5)); // קריאות שפג תוקפן (לפני כמה ימים)
+                finishType = FinishCallType.Expired; // הקריאה פגה תוקף
             }
+            else
+            {
+                finishType = FinishCallType.TakenCareof; // הקריאה עדיין במסגרת הטיפול
+            }
+            //DateTime treatmentEndTime;
+            //FinishCallType finishType;
+
+            //if (s_rand.Next(0, 2) == 0) // קריאה מסתיימת לפני הזמן המקסימלי
+            //{
+            //    treatmentEndTime = treatmentStartTime.AddMinutes(s_rand.Next(10, 180));
+            //    finishType =FinishCallType.TakenCareof;
+            //}
+            //else // קריאה מסתיימת אחרי הזמן המקסימלי
+            //{
+            //    treatmentEndTime = maxEndTime.AddMinutes(s_rand.Next(1, 120));
+            //    finishType = FinishCallType.Expired;
+            //}
+
+            // יצירת זמן פתיחה רנדומלי
+            //DateTime openingTime = DateTime.Now.AddMinutes(-s_rand.Next(0, 60 * 24 * 7)); // עד שבוע אחורה
+
+            //DateTime maxEndTime = openingTime.AddHours(6);
+
+            //זמן התחלת הטיפול(צריך להיות אחרי זמן הפתיחה)
+            //DateTime treatmentStartTime = openingTime.AddMinutes(s_rand.Next(5, 60 * 2)); // בין 5 דקות ל-120 דקות
+            //DateTime treatmentEndTime;
+            //FinishCallType finishType;
+
+            //if (s_rand.Next(0, 2) == 0) // קריאה מסתיימת לפני הזמן המקסימלי
+            //{
+            //    treatmentEndTime = treatmentStartTime.AddMinutes(s_rand.Next(10, 180));
+            //    finishType = FinishCallType.TakenCareof;
+            //}
+            //else // קריאה מסתיימת אחרי הזמן המקסימלי
+            //{
+            //    treatmentEndTime = maxEndTime.AddMinutes(s_rand.Next(1, 120));
+            //    finishType = FinishCallType.Expired;
+            //}
+
+            //bool isExpired = i < expiredCalls;
+            //if (isExpired)
+            //{
+            //    openingTime = openingTime.AddDays(-s_rand.Next(1, 5)); 
+            //}
 
             // האם הקריאה הוקצתה
             bool isAssigned = i >= unassignedCalls;
