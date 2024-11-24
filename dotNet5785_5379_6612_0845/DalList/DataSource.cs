@@ -6,11 +6,7 @@ namespace Dal;
 
 internal static class DataSource
 {
-    public static IEnumerable<Volunteer> VolunteerName { get; internal set; }
-    public static IEnumerable<Volunteer> Volunteers { get; set; }
-    internal static List<DO.Volunteer> volunteers { get; } = new();
-    public static IEnumerable<Call> Name { get; internal set; }
+    public static List<Volunteer> Volunteers { get; } = new List<Volunteer>();
     internal static List<DO.Call> Calls { get; } = new();
-
-
+    internal static List<DO.Assignment> Assignments { get; } = new();
 }
