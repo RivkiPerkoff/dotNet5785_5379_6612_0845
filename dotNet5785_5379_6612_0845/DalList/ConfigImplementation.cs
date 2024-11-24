@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Dal;
+﻿namespace Dal;
 using DalApi;
 using System;
 
@@ -22,6 +19,5 @@ public class ConfigImplementation : IConfig
     {
         Config.Reset();
     }
-
 
 }
