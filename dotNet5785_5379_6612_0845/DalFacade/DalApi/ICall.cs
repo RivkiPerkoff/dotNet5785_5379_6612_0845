@@ -2,7 +2,7 @@
 
 namespace DalApi;
 using DO;
-internal class ICall
+ public interface ICall
 {
     public void Create(Call item);
 

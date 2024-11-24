@@ -1,6 +1,7 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
+
 using System.Net.Mail;
 using System.Numerics;
 using System.Xml.Linq;
@@ -152,6 +153,11 @@ public static class Initialization
 
     private static void createConfig()
     {
-        // Implement the method for creating config here.
+        // הגדרת טווח סיכון - לדוגמה, נניח שזו הגדרה של טווח זמן בין הקריאות
+        Config.RiskRange = TimeSpan.FromMinutes(30); // טווח סיכון של 30 דקות
+
+        // הגדרת הזמן הנוכחי בשעון המערכת
+        Config.Clock = DateTime.Now;
     }
+
 }
