@@ -1,14 +1,23 @@
 ﻿
 
-namespace DO
+namespace DO;
+
+public record Call
 {
-    internal record Call
+    public int IdCall { get; init; }
+    public string? CallDescription { get; init; }
+    public string? CallAddress { get; init; }
+    public double? CallLatitude { get; init; }
+    public double? CallLongitude { get; init; }
+    public DateTime OpeningTime { get; init; }
+
+    public Call(int idCall, string? callDescription, string? callAddress, double? callLatitude, double? callLongitude, DateTime openingTime)
     {
-        int IdCall;
-        string? CallDescription = null;
-        string? CallAddress = null;
-        double? CallLatitude=0;
-        double? CallLongitude=0;
-        internal static DateTime OpeningTime { get; set; } = DateTime.Now;
+        IdCall = idCall;
+        CallDescription = callDescription;
+        CallAddress = callAddress;
+        CallLatitude = callLatitude;
+        CallLongitude = callLongitude;
+        OpeningTime = openingTime;
     }
 }

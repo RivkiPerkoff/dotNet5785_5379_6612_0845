@@ -1,9 +1,39 @@
 ﻿
 namespace DO.Enumes
 {
-        public enum TerminationTypeTheTreatment {Handled, Self_Cancellation, Admin_Cancellation, Expired_Cancellation}
-        //public enum AreaActivity { Jerusalem, Tel_Aviv, Haifa, Beer_Sheva, Rishon_Lezion, Beit_Shemesh, Bnei_Brak, Beitar }
-        //public enum ModelCar { Kia, Toyota, Tesla, Mitsubishi, Subaru, Mercedes, Jaguar, Bentley, Volvo, BMW, Jaecoo, Mazda }
-        //public enum CarColor { Black, Grey, White, Red, Blue, Brown, Yellow }
+    public enum TerminationTypeTheTreatment { Handled, Self_Cancellation, Admin_Cancellation, Expired_Cancellation }
+    public enum DistanceType
+    {
+        AirDistance, // מרחק אווירי
+        RoadDistance, // מרחק דרך
+        WalkingDistance // מרחק הליכה
+    }
 
+    public enum Role
+    {
+        Manager,
+        Volunteer
+    }
+
+    public enum CallType
+
+    {
+        MusicPerformance,
+        MusicTherapy,
+        SingingAndEmotionalSupport,
+        GroupActivities,
+        PersonalizedMusicCare
+    }
+    public enum FinishCallType
+
+    {
+        TakenCareof,
+        CanceledByVolunteer,
+        CanceledByManager,
+        Expired
+    }
 }
+
+
+
+

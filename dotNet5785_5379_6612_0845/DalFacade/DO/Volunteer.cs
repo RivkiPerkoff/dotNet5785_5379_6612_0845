@@ -12,14 +12,19 @@ namespace DO
     double? VolunteerLatitude = 0,
     double? VolunteerLongitude = 0,
     bool IsAvailable = false,
-    double? MaximumDistanceForReceivingCall = 0
+    double? MaximumDistanceForReceivingCall = 0,
     //Enumes.Role Role ,
-    //Enumes.DistanceType DistanceType 
+    Enumes.DistanceType DistanceType= Enumes.DistanceType.AirDistance
      )
     {
+        public Volunteer(int volunteerId, string name, string emailOfVolunteer, string phoneNumber, string addressVolunteer)
+            : this(volunteerId, name, phoneNumber, emailOfVolunteer, "", addressVolunteer, 0, 0, false, 0, Enumes.DistanceType.AirDistance)
+        {
+        }
 
-        public object ID { get; set; }
-        public object Age { get; set; }
+        // קונסטרקטור ברירת מחדל
+        public Volunteer() : this(0, "", "", "", "", "", 0, 0, false, 0, Enumes.DistanceType.AirDistance) { }
+
     }
     //    {
     //    public Volunteer():this()

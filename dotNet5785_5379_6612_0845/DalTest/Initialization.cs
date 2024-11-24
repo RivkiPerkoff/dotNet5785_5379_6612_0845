@@ -1,15 +1,21 @@
-﻿
-
-namespace DalTest;
+﻿namespace DalTest;
 using DalApi;
 using DO;
+using System.Net.Mail;
+using System.Numerics;
+using System.Xml.Linq;
+
+//using System.Xml.Linq;
+
 public static class Initialization
 {
     private static IVolunteer? s_dalVolunteer;
     private static IConfig? s_dalConfig;
+    //private static IAssignment? s_dalAssignment;
     private static ICall? s_dalCall;
 
     private static readonly Random s_rand = new();
+
     private static void createVolunteer()
     {
         string[] names = {
