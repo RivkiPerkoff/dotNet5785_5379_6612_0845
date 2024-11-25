@@ -15,15 +15,8 @@ public class ConfigImplementation : IConfig
         get => Config.RiskRange;
         set => Config.RiskRange = value;
     }
-
-    public void Reset()
-    {
-        Config.Reset();
-    }
-
-    // מימוש הפונקציה Create
     public int Create()
     {
-        return Config.NextVolunteerId; // מחזיר ID רץ ייחודי
+        return Config.NextVolunteerId; 
     }
 }
