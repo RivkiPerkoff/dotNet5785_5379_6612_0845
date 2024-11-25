@@ -9,7 +9,7 @@ internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        var newAssignment= new Assignment(item.NextAssignmentId, item.VolunteerId, item.IdOfRunnerCalld, DateTime.Now) 
+        var newAssignment = new Assignment(item.NextAssignmentId, item.VolunteerId, item.IdOfRunnerCalld, DateTime.Now);
     }
 
     public void Delete(int id)

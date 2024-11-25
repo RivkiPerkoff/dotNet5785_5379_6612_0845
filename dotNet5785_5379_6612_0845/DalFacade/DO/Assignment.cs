@@ -4,7 +4,7 @@
 //using System;
 
 namespace DO;
-internal record Assignment
+public record Assignment
 {
     private int NextAssignmentId ;
     private int IdOfRunnerCalld ;
