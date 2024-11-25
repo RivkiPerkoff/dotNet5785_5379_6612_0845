@@ -4,12 +4,12 @@ using DalApi;
 using DO;
 using NSubstitute.Core;
 using System;
-
+using System.Collections.Generic;
 public class CallImplementation : ICall
 {
     public void Delete(int id)
     {
-        var call = Read(id);
+        int call = Read(id);
         if (call == null)
             throw new Exception($"Call with Id{id} was found");
         else
@@ -28,11 +28,13 @@ public class CallImplementation : ICall
     public List<Call> ReadAll()
 
     {
-        return new List<Call>(DataSource.Calls);
+        return DataSource.Calls.FirstOrDefault();
+        return DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
+
     }
     public void Update(Call item)
     {
-        var existingCall = Read(item.Id);
+        int existingCall = Read(item.Id);
         if (existingCall != null)
         {
             DataSource.Calls.Remove(existingCall);

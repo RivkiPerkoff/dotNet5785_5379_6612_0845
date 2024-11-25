@@ -10,8 +10,6 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new InvalidOperationException($"Volunteer with ID {item.VolunteerId} already exists.");
         }
-
-        // הוספת המתנדב ישירות לרשימה
         DataSource.Volunteers.Add(item);
     }
 
