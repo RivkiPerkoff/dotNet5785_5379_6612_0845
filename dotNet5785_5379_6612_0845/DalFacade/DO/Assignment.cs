@@ -11,5 +11,5 @@ internal class Assignment
     private int VolunteerId ;
     private DateTime EntryTimeForTreatment ;
     private DateTime EndTimeForTreatment ;
-    private Enumes.TerminationTypeTheTreatment TerminationTypeTheTreatment ;
+    private TerminationTypeTheTreatment TerminationTypeTheTreatment ;
 }

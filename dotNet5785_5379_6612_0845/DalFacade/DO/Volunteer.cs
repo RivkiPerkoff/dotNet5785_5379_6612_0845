@@ -1,5 +1,4 @@
-﻿//using DO.Enumes;
-
+﻿
 namespace DO
 {
     public record Volunteer(
@@ -13,21 +12,17 @@ namespace DO
     double? VolunteerLongitude = 0,
     bool IsAvailable = false,
     double? MaximumDistanceForReceivingCall = 0,
-    //Enumes.Role Role ,
-    Enumes.DistanceType DistanceType= Enumes.DistanceType.AirDistance
+    Role Role = Role.Volunteer,
+    DistanceType DistanceType= DistanceType.AirDistance
      )
     {
         public Volunteer(int volunteerId, string name, string emailOfVolunteer, string phoneNumber, string addressVolunteer)
-            : this(volunteerId, name, phoneNumber, emailOfVolunteer, "", addressVolunteer, 0, 0, false, 0, Enumes.DistanceType.AirDistance)
+            : this(volunteerId, name, phoneNumber, emailOfVolunteer, "", addressVolunteer, 0, 0, false, 0, 0)
         {
         }
 
-        // קונסטרקטור ברירת מחדל
-        public Volunteer() : this(0, "", "", "", "", "", 0, 0, false, 0, Enumes.DistanceType.AirDistance) { }
+        public Volunteer() : this(0, "", "", "", "", "", 0, 0, false, 0, 0) { }
 
     }
-    //    {
-    //    public Volunteer():this()
-    //    }
 }       
 

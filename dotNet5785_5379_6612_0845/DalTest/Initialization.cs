@@ -11,7 +11,7 @@ public static class Initialization
 {
     private static IVolunteer? s_dalVolunteer;
     private static IConfig? s_dalConfig;
-    //private static IAssignment? s_dalAssignment;
+    private static IAssignment? s_dalAssignment;
     private static ICall? s_dalCall;
 
     private static readonly Random s_rand = new();
@@ -69,7 +69,6 @@ public static class Initialization
             });
         }
     }
-
     private static void createCall()
     {
         // מאגר תיאורים לקריאות
@@ -102,30 +101,25 @@ public static class Initialization
     "HaHored 3 Haifa",
     "Tel Aviv 10 Ibn Gvirol",
     "HaGalil 15 Petah Tikva"
-        };
-
-        // מספר הקריאות הכולל
+    };
         const int totalCalls = 50;
-        // לפחות 15 קריאות שלא הוקצו
         const int unassignedCalls = 15;
-        // לפחות 5 קריאות שפג תוקפן
         const int expiredCalls = 5;
 
         for (int i = 0; i < totalCalls; i++)
         {
             // יצירת מזהה קריאה ייחודי מישות הקונפיגורציה
             int callId = s_dalConfig!.Create();
-
-            // בחירת תיאור וכתובת רנדומליים
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
-
-            // יצירת מיקום רנדומלי
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; // בין קווי רוחב של ישראל
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; // בין קווי אורך של ישראל
 
-            // יצירת זמן פתיחה רנדומלי
-            DateTime openingTime = DateTime.Now.AddMinutes(-s_rand.Next(0, 60 * 24 * 7)); // עד שבוע אחורה
+            DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1);
+            // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
+            int range = (s_dalConfig.Clock - start).Days;
+            // יצירת תאריך אקראי בטווח הזה
+            DateTime openingTime = start.AddDays(s_rand.Next(range));
 
             // קביעת תוקף הקריאה
             bool isExpired = i < expiredCalls;
@@ -136,7 +130,7 @@ public static class Initialization
 
             // האם הקריאה הוקצתה
             bool isAssigned = i >= unassignedCalls;
-
+           
             // שמירת הקריאה במאגר
             s_dalCall!.Create(new Call(
                 callId,
@@ -148,10 +142,12 @@ public static class Initialization
             ));
         }
     }
-
-
     private static void createConfig()
     {
-        // Implement the method for creating config here.
+        // הגדרת טווח סיכון - לדוגמה, נניח שזו הגדרה של טווח זמן בין הקריאות
+        s_dalConfig.RiskRange = TimeSpan.FromMinutes(30); // טווח סיכון של 30 דקות
+
+        // הגדרת הזמן הנוכחי בשעון המערכת
+        s_dalConfig.Clock = DateTime.Now;
     }
 }
