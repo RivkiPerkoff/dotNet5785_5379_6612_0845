@@ -112,8 +112,8 @@ public static class Initialization
             int callId = s_dalConfig!.Create();
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
-            double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; // בין קווי רוחב של ישראל
-            double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; // בין קווי אורך של ישראל
+            double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; 
+            double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; 
 
             DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1);
             // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
