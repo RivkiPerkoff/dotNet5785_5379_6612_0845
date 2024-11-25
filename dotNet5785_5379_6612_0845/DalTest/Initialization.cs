@@ -13,7 +13,7 @@ public static class Initialization
 {
     private static IVolunteer? s_dalVolunteer;
     private static IConfig? s_dalConfig;
-    //private static IAssignment? s_dalAssignment;
+    private static IAssignment? s_dalAssignment;
     private static ICall? s_dalCall;
 
     private static readonly Random s_rand = new();
@@ -71,7 +71,6 @@ public static class Initialization
             });
         }
     }
-
     private static void createCall()
     {
         // מאגר תיאורים לקריאות
@@ -105,29 +104,24 @@ public static class Initialization
     "Tel Aviv 10 Ibn Gvirol",
     "HaGalil 15 Petah Tikva"
     };
-
-        // מספר הקריאות הכולל
         const int totalCalls = 50;
-        // לפחות 15 קריאות שלא הוקצו
         const int unassignedCalls = 15;
-        // לפחות 5 קריאות שפג תוקפן
         const int expiredCalls = 5;
 
         for (int i = 0; i < totalCalls; i++)
         {
             // יצירת מזהה קריאה ייחודי מישות הקונפיגורציה
             int callId = s_dalConfig!.Create();
-
-            // בחירת תיאור וכתובת רנדומליים
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
-
-            // יצירת מיקום רנדומלי
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; // בין קווי רוחב של ישראל
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; // בין קווי אורך של ישראל
 
-            TimeSpan randomOffset = TimeSpan.FromMinutes(s_rand.Next(1, 120)); // עד שעתיים אחורה
-            DateTime openingTime = ConfigImplementation.Clock - randomOffset;
+            DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1);
+            // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
+            int range = (s_dalConfig.Clock - start).Days;
+            // יצירת תאריך אקראי בטווח הזה
+            DateTime openingTime = start.AddDays(s_rand.Next(range));
 
             // יצירת זמן סיום רנדומלי או השארתו null
             DateTime? closingTime = null;
@@ -137,7 +131,7 @@ public static class Initialization
                 closingTime = openingTime + maxDuration;
             }
             bool isAssigned = i >= unassignedCalls;
-
+           
             // שמירת הקריאה במאגר
             s_dalCall!.Create(new Call(
                 callId,
@@ -149,15 +143,12 @@ public static class Initialization
             ));
         }
     }
-
-
     private static void createConfig()
     {
         // הגדרת טווח סיכון - לדוגמה, נניח שזו הגדרה של טווח זמן בין הקריאות
-        Config.RiskRange = TimeSpan.FromMinutes(30); // טווח סיכון של 30 דקות
+        s_dalConfig.RiskRange = TimeSpan.FromMinutes(30); // טווח סיכון של 30 דקות
 
         // הגדרת הזמן הנוכחי בשעון המערכת
-        Config.Clock = DateTime.Now;
+        s_dalConfig.Clock = DateTime.Now;
     }
-
 }
