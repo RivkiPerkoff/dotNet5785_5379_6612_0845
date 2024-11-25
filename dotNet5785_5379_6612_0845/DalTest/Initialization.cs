@@ -102,7 +102,7 @@ public static class Initialization
     "HaHored 3 Haifa",
     "Tel Aviv 10 Ibn Gvirol",
     "HaGalil 15 Petah Tikva"
-    };
+        };
 
         // מספר הקריאות הכולל
         const int totalCalls = 50;
