@@ -4,10 +4,9 @@ namespace DalApi;
 using DO;
 public interface IConfig
 {
-    DateTime Clock { get; set; }
-    TimeSpan RiskRange { get; set; }
-    void Reset();
-    int Create();
-
+    public DateTime Clock { get; set; }
+    public TimeSpan RiskRange { get; set; }
+    //internal  void Reset();
+    public int Create();
 }
 
