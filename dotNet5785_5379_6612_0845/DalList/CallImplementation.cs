@@ -8,12 +8,14 @@ using System.Collections.Generic;
 public class CallImplementation : ICall
 {
     public void Delete(int id)
+
     {
         int call = Read(id);
         if (call == null)
             throw new Exception($"Call with Id{id} was found");
         else
             DataSource.Calls.Remove(call);
+
     }
 
     public void DeleteAll()
@@ -22,8 +24,9 @@ public class CallImplementation : ICall
     }
 
     public Call? Read(int id)
+
     { 
-        return DataSource.Calls.Find(a => a.IdCall == id);
+        return DataSource.Calls.Find(a => a.Id == id);
     }
     public List<Call> ReadAll()
 

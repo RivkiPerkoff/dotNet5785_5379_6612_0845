@@ -1,8 +1,6 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
-using Dal;
-
 using System.Net.Mail;
 using System.Numerics;
 using System.Xml.Linq;
@@ -51,7 +49,7 @@ public static class Initialization
             {
                 id = s_rand.Next(1000, 9999);
             }
-            while (s_dalVolunteer!.Read(id) != null); 
+            while (s_dalVolunteer!.Read(id) != null); // Make sure the ID is unique
 
             string name = names[i];
             string email = emails[i];
@@ -114,8 +112,8 @@ public static class Initialization
             int callId = s_dalConfig!.Create();
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
-            double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; // בין קווי רוחב של ישראל
-            double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; // בין קווי אורך של ישראל
+            double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; 
+            double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; 
 
             DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1);
             // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
@@ -123,13 +121,14 @@ public static class Initialization
             // יצירת תאריך אקראי בטווח הזה
             DateTime openingTime = start.AddDays(s_rand.Next(range));
 
-            // יצירת זמן סיום רנדומלי או השארתו null
-            DateTime? closingTime = null;
-            if (s_rand.Next(0, 2) == 1) // ב-50% מהמקרים
+            // קביעת תוקף הקריאה
+            bool isExpired = i < expiredCalls;
+            if (isExpired)
             {
-                TimeSpan maxDuration = TimeSpan.FromMinutes(s_rand.Next(30, 180)); // עד 3 שעות
-                closingTime = openingTime + maxDuration;
+                openingTime = openingTime.AddDays(-s_rand.Next(1, 5)); // קריאות שפג תוקפן (לפני כמה ימים)
             }
+
+            // האם הקריאה הוקצתה
             bool isAssigned = i >= unassignedCalls;
            
             // שמירת הקריאה במאגר

@@ -9,16 +9,21 @@ public class ConfigImplementation : IConfig
         get => Config.Clock;
         set => Config.Clock = value;
     }
+
     public TimeSpan RiskRange
     {
         get => Config.RiskRange;
         set => Config.RiskRange = value;
     }
+
+    public void Reset()
+    {
+        Config.Reset();
+    }
+
+    // מימוש הפונקציה Create
     public int Create()
     {
-        return Config.NextVolunteerId;
+        return Config.NextVolunteerId; // מחזיר ID רץ ייחודי
     }
 }
-
-
-
