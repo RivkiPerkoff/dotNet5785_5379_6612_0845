@@ -1,6 +1,6 @@
 ﻿namespace Dal;
 using DalApi;
-using DO;
+//using DO;
 
 public class ConfigImplementation : IConfig
 {
@@ -16,14 +16,9 @@ public class ConfigImplementation : IConfig
         set => Config.RiskRange = value;
     }
 
-    public void Reset()
-    {
-        Config.Reset();
-    }
 
-    // מימוש הפונקציה Create
     public int Create()
     {
-        return Config.NextVolunteerId; // מחזיר ID רץ ייחודי
+        return Config.NextVolunteerId; 
     }
 }

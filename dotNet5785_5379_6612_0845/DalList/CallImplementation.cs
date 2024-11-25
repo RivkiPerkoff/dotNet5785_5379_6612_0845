@@ -7,10 +7,15 @@ using System;
 
 public class CallImplementation : ICall
 {
+    public void Create(Call item)
+    {
+
+    }
+
     public void Delete(int id)
 
     {
-        var call = Read(id);
+        int call = Read(id);
         if (call == null)
             throw new Exception($"Call with Id{id} was found");
         else
