@@ -155,8 +155,16 @@ public static class Initialization
         s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
 
         Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset(); //stage 1
+        s_dalConfig.Reset();
         s_dalVolunteer.DeleteAll();
+        s_dalCall.DeleteAll();
+        s_dalAssignment.DeleteAll();
 
+        Console.WriteLine("Initializing Volunteers list ...");
+        createVolunteer();
+        Console.WriteLine("Initializing Calls list ...");
+        createCall();
+        Console.WriteLine("Initializing Assignment list ...");
+        createAssignment();
     }
 }

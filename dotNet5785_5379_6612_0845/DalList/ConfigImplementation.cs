@@ -19,4 +19,10 @@ public class ConfigImplementation : IConfig
     {
         return Config.NextVolunteerId; 
     }
+
+    public void Reset()
+    {
+        Config.Reset();
+    }
+
 }
