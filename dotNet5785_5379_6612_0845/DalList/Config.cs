@@ -16,5 +16,5 @@ internal record Config
         Clock = DateTime.Now;
     }
 
-    internal static TimeSpan RiskRange { get; set; }
+    internal static TimeSpan? RiskRange { get; set; }
 }

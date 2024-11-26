@@ -4,9 +4,6 @@ using DO;
 using System.Net.Mail;
 using System.Numerics;
 using System.Xml.Linq;
-
-//using System.Xml.Linq;
-
 public static class Initialization
 {
     private static IVolunteer? s_dalVolunteer;
@@ -58,15 +55,13 @@ public static class Initialization
 
             double maximumDistance = s_rand.NextDouble() * 50;
 
-            s_dalVolunteer!.Create(new Volunteer
-            {
-                VolunteerId = id,
-                Name = name,
-                EmailOfVolunteer = email,
-                PhoneNumber = phone,
-                AddressVolunteer = address,
-                MaximumDistanceForReceivingCall = maximumDistance
-            });
+            s_dalVolunteer!.Create(new Volunteer(
+             id,
+             name,
+             email,
+             phone,
+             address
+             ));
         }
     }
     private static void createCall()
@@ -105,18 +100,20 @@ public static class Initialization
 
         for (int i = 0; i < totalCalls; i++)
         {
-            // יצירת מזהה קריאה ייחודי מישות הקונפיגורציה
             int callId = s_dalConfig!.Create();
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
 
+
             DateTime start = new DateTime(s_dalConfig.Clock.Year, s_dalConfig.Clock.Month, s_dalConfig.Clock.Day, s_dalConfig.Clock.Hour - 5, 0, 0);
             // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
             int range = (s_dalConfig.Clock - start).Days;
             // יצירת תאריך אקראי בטווח הזה
             DateTime openingTime = start.AddDays(s_rand.Next(range));
+            DateTime MaxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dalConfig.Clock - openingTime).Days));
+
             //CallTypes callType = CallTypes
             s_dalCall!.Create(new Call(
                 callId,
@@ -124,8 +121,8 @@ public static class Initialization
                 address,
                 latitude,
                 longitude,
-                openingTime
-
+                openingTime,
+                MaxTimeToFinish
             ));
         }
     }

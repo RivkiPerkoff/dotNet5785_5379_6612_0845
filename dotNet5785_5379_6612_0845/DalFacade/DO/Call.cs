@@ -12,7 +12,7 @@ public record Call
     public DateTime OpeningTime { get; init; }
     public object MaxFinishTime { get; set; }
 
-    public Call(int idCall, string? callDescription, string? callAddress, double? callLatitude, double? callLongitude, DateTime openingTime)
+    public Call(int idCall, string? callDescription, string? callAddress, double? callLatitude, double? callLongitude, DateTime openingTime, object MaxFinishTime)
     {
         IdCall = idCall;
         CallDescription = callDescription;
@@ -20,5 +20,6 @@ public record Call
         CallLatitude = callLatitude;
         CallLongitude = callLongitude;
         OpeningTime = openingTime;
+        MaxFinishTime = MaxFinishTime;
     }
 }
