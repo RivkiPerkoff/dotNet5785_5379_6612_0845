@@ -117,7 +117,7 @@ public static class Initialization
             int range = (s_dalConfig.Clock - start).Days;
             // יצירת תאריך אקראי בטווח הזה
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-            CallTypes callType = CallTypes
+            //CallTypes callType = CallTypes
             s_dalCall!.Create(new Call(
                 callId,
                 description,
@@ -145,5 +145,18 @@ public static class Initialization
                 randomTime.AddHours(2),
              (FinishCallType)s_rand.Next(Enum.GetValues(typeof(FinishCallType)).Length - 1)));
         }
+    }
+
+    public static void DO(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig)
+    {
+        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
+
+        Console.WriteLine("Reset Configuration values and List values...");
+        s_dalConfig.Reset(); //stage 1
+        s_dalVolunteer.DeleteAll();
+
     }
 }

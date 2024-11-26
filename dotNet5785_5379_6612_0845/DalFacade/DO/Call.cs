@@ -10,8 +10,7 @@ public record Call
     public double? CallLatitude { get; init; }
     public double? CallLongitude { get; init; }
     public DateTime OpeningTime { get; init; }
-
-    enum CallTypes;
+    public object MaxFinishTime { get; set; }
 
     public Call(int idCall, string? callDescription, string? callAddress, double? callLatitude, double? callLongitude, DateTime openingTime)
     {

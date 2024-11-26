@@ -14,6 +14,17 @@ public record Assignment
      TerminationTypeTheTreatment? TerminationTypeTheTreatment = null
 )
 {
+    private DateTime randomTime;
+    private DateTime dateTime;
+    private FinishCallType finishCallType;
+
     public Assignment(int id) : this(0, 0, 0, DateTime.Now)
     {}
+
+    public Assignment(DateTime randomTime, DateTime dateTime, FinishCallType finishCallType)
+    {
+        this.randomTime = randomTime;
+        this.dateTime = dateTime;
+        this.finishCallType = finishCallType;
+    }
 }
