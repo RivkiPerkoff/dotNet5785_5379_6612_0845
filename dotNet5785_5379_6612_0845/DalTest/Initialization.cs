@@ -4,9 +4,6 @@ using DO;
 using System.Net.Mail;
 using System.Numerics;
 using System.Xml.Linq;
-
-//using System.Xml.Linq;
-
 public static class Initialization
 {
     private static IVolunteer? s_dalVolunteer;

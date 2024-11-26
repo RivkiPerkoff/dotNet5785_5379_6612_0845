@@ -8,9 +8,9 @@ internal record Config
 
     public static int NextVolunteerId => s_nextVolunteerId++;
 
-    internal static DateTime Clock { get; set; } = DateTime.Now;
+    public static DateTime Clock { get;internal set; } = DateTime.Now;
 
-    internal static void Reset()
+    public static void Reset()
     {
         s_nextVolunteerId = StartVolunteerId;
         Clock = DateTime.Now;
