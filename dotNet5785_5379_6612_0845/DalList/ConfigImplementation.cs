@@ -1,6 +1,6 @@
 ﻿namespace Dal;
 using DalApi;
-using DO;
+//using DO;
 
 public class ConfigImplementation : IConfig
 {
@@ -20,5 +20,9 @@ public class ConfigImplementation : IConfig
         return Config.NextVolunteerId; 
     }
 
-  
+    public void Reset()
+    {
+        Config.Reset();
+    }
+
 }

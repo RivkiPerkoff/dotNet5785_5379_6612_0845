@@ -1,40 +1,60 @@
-﻿namespace Dal;
+﻿
+namespace Dal;
 using DalApi;
 using DO;
-using NSubstitute.Core;
-using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 
 public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        var newAssignment = new Assignment(item.NextAssignmentId, item.VolunteerId, item.IdOfRunnerCalld, DateTime.Now);
+        int newId = Config.NextVolunteerId;
+        Assignment newAssignment = item with { VolunteerId = newId };
+        DataSource.Assignments.Add(item);
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        Assignment? assignment = Read(id);
+        if (assignment != null)
+        {
+            DataSource.Assignments.Remove(assignment);
+        }
+        else
+        {
+            throw new Exception($"Assignment with Id{id} was found");
+        }
     }
 
     public void DeleteAll()
     {
-        throw new NotImplementedException();
+        DataSource.Assignments.Clear();
     }
 
     public Assignment? Read(int id)
     {
-        throw new NotImplementedException();
+        Assignment? assignment = DataSource.Assignments.Find(assignment => assignment.VolunteerId == id);
+        return assignment;
     }
 
     public List<Assignment> ReadAll()
     {
-        throw new NotImplementedException();
+        return new List<Assignment>(DataSource.Assignments);
     }
 
     public void Update(Assignment item)
     {
-        throw new NotImplementedException();
+        Assignment? existingAssignment = Read(item.VolunteerId);
+        if (existingAssignment != null)
+        {
+            DataSource.Assignments.Remove(existingAssignment);
+            DataSource.Assignments.Add(item);
+        }
+        else
+        {
+            throw new Exception($"Could not Update Item, no assignment with Id{item.VolunteerId} found");
+
+        }
+
     }
 }
-

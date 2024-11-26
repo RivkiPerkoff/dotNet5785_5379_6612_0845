@@ -3,15 +3,15 @@ using DO;
 
 public interface IAssignment
 {
-     void Create(Assignment item);
+    public void Create(Assignment item);
 
-     Assignment? Read(int id);
+    public Assignment? Read(int id);
 
-     List<Assignment> ReadAll();
-     void Update(Assignment item);
+    public List<Assignment> ReadAll();
+    public void Update(Assignment item);
 
-     void Delete(int id);
+    public void Delete(int id);
 
-     void DeleteAll();
+    public void DeleteAll();
 }
 

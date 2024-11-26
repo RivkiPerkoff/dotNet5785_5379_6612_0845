@@ -8,6 +8,7 @@ public interface IConfig
     public TimeSpan RiskRange { get; set; }
     public int Create();
 
-   
+    public void Reset();
+
 }
 
