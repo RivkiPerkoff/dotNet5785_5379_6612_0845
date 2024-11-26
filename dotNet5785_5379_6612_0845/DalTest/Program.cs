@@ -10,7 +10,7 @@ namespace DalTest
             try
             {
                 Console.WriteLine("Hello, World!");
-              
+
             }
             catch (Exception ex)
             {
@@ -23,3 +23,6 @@ namespace DalTest
         private static IConfig? s_dalConfig = new ConfigImplementation(); //stage 1
     }
 }
+
+
+
