@@ -1,15 +1,19 @@
 ﻿
 
-//using DalApi;
-//using System;
-
 namespace DO;
-internal class Assignment
+/// <summary>
+/// 
+/// </summary>
+public record Assignment
+(
+     int NextAssignmentId,
+     int IdOfRunnerCall,
+     int VolunteerId,
+     DateTime EntryTimeForTreatment,
+     DateTime? EndTimeForTreatment = null,
+     TerminationTypeTheTreatment? TerminationTypeTheTreatment = null
+)
 {
-    private int NextAssignmentId ;
-    private int IdOfRunnerCalld ;
-    private int VolunteerId ;
-    private DateTime EntryTimeForTreatment ;
-    private DateTime EndTimeForTreatment ;
-    private TerminationTypeTheTreatment TerminationTypeTheTreatment ;
+    public Assignment(int id) : this(0, 0, 0, DateTime.Now)
+    {}
 }

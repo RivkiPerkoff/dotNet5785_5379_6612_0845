@@ -15,8 +15,6 @@ public class ConfigImplementation : IConfig
         get => Config.RiskRange;
         set => Config.RiskRange = value;
     }
-
-
     public int Create()
     {
         return Config.NextVolunteerId; 

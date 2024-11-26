@@ -79,7 +79,6 @@ public static class Initialization
         "Ride to a birthday party"
     };
 
-        // מאגר כתובות
         string[] addresses = {
     "Agrat Moshe 9 Ramat Shlomo Jerusalem",
     "HaNasi 12 Tel Aviv",
@@ -103,8 +102,6 @@ public static class Initialization
     "HaGalil 15 Petah Tikva"
     };
         const int totalCalls = 50;
-        const int unassignedCalls = 15;
-        const int expiredCalls = 5;
 
         for (int i = 0; i < totalCalls; i++)
         {
@@ -112,26 +109,15 @@ public static class Initialization
             int callId = s_dalConfig!.Create();
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
-            double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0; 
-            double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0; 
+            double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
+            double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
 
-            DateTime start = new DateTime(s_dalConfig.Clock.Year - 2, 1, 1);
+            DateTime start = new DateTime(s_dalConfig.Clock.Year, s_dalConfig.Clock.Month, s_dalConfig.Clock.Day, s_dalConfig.Clock.Hour - 5, 0, 0);
             // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
             int range = (s_dalConfig.Clock - start).Days;
             // יצירת תאריך אקראי בטווח הזה
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-
-            // קביעת תוקף הקריאה
-            bool isExpired = i < expiredCalls;
-            if (isExpired)
-            {
-                openingTime = openingTime.AddDays(-s_rand.Next(1, 5)); // קריאות שפג תוקפן (לפני כמה ימים)
-            }
-
-            // האם הקריאה הוקצתה
-            bool isAssigned = i >= unassignedCalls;
-           
-            // שמירת הקריאה במאגר
+            CallTypes callType = CallTypes
             s_dalCall!.Create(new Call(
                 callId,
                 description,
@@ -139,15 +125,25 @@ public static class Initialization
                 latitude,
                 longitude,
                 openingTime
+
             ));
         }
     }
-    private static void createConfig()
-    {
-        // הגדרת טווח סיכון - לדוגמה, נניח שזו הגדרה של טווח זמן בין הקריאות
-        s_dalConfig.RiskRange = TimeSpan.FromMinutes(30); // טווח סיכון של 30 דקות
 
-        // הגדרת הזמן הנוכחי בשעון המערכת
-        s_dalConfig.Clock = DateTime.Now;
+    private static void createAssignment()
+    {
+        List<Call>? calls = s_dalCall!.ReadAll();
+        for (int i = 0; i < 50; i++)
+        {
+            DateTime minTime = calls[i].OpeningTime;
+            DateTime maxTime = (DateTime)calls[i].MaxFinishTime!;
+            TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
+            DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
+
+            s_dalAssignment!.Create(new Assignment(
+                randomTime,
+                randomTime.AddHours(2),
+             (FinishCallType)s_rand.Next(Enum.GetValues(typeof(FinishCallType)).Length - 1)));
+        }
     }
 }

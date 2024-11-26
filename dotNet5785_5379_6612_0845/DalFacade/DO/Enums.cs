@@ -14,7 +14,7 @@ public enum Role
     Volunteer
 }
 
-public enum CallType
+public enum CallTypes
 
 {
     MusicPerformance,
@@ -24,7 +24,6 @@ public enum CallType
     PersonalizedMusicCare
 }
 public enum FinishCallType
-
 {
     TakenCareof,
     CanceledByVolunteer,

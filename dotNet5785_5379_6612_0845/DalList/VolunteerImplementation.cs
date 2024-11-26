@@ -2,7 +2,7 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
-internal class VolunteerImplementation : IVolunteer
+public class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {
@@ -10,8 +10,6 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new InvalidOperationException($"Volunteer with ID {item.VolunteerId} already exists.");
         }
-
-        // הוספת המתנדב ישירות לרשימה
         DataSource.Volunteers.Add(item);
     }
 
