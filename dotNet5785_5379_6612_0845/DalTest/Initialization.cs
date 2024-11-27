@@ -41,12 +41,12 @@ public static class Initialization
 
         for (int i = 0; i < names.Length; i++)
         {
-            int id;
-            do
-            {
-                id = s_rand.Next(1000, 9999);
-            }
-            while (s_dalVolunteer!.Read(id) != null); // Make sure the ID is unique
+            int id=s_dalConfig!.CreateVolunteerId();
+            //do
+            //{
+            //    id = s_rand.Next(1000, 9999);
+            //}
+            //while (s_dalVolunteer!.Read(id) != null); // Make sure the ID is unique
 
             string name = names[i];
             string email = emails[i];
@@ -100,7 +100,7 @@ public static class Initialization
 
         for (int i = 0; i < totalCalls; i++)
         {
-            int callId = s_dalConfig!.Create();
+            int callId = s_dalConfig!.CreateCallId();
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
@@ -127,40 +127,33 @@ public static class Initialization
         }
     }
 
-    //private static void createAssignment()
-    //{
-    //    List<Call>? calls = s_dalCall!.ReadAll();
-    //    for (int i = 0; i < 50; i++)
-    //    {
-    //        DateTime minTime = calls[i].OpeningTime;
-    //        DateTime maxTime = (DateTime)calls[i].MaxFinishTime!;
-    //        TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
-    //        DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
-
-    //        s_dalAssignment!.Create(new Assignment(
-    //            randomTime,
-    //            randomTime.AddHours(2),
-    //         (FinishCallType)s_rand.Next(Enum.GetValues(typeof(FinishCallType)).Length - 1)));
-    //    }
-    //}
-
     private static void createAssignment()
     {
         List<Call>? calls = s_dalCall!.ReadAll();
+        List<Volunteer>? Volunteers=s_dalVolunteer!.ReadAll();
         for (int i = 0; i < 50; i++)
         {
             // בדיקה אם OpeningTime לא null
             if (calls[i].OpeningTime.HasValue && calls[i].MaxFinishTime.HasValue)
             {
+                int id = s_dalConfig!.CreateAssignmentId();
                 DateTime minTime = calls[i].OpeningTime.Value;  // המרת OpeningTime ל-Value
                 DateTime maxTime = calls[i].MaxFinishTime.Value;  // המרת MaxFinishTime ל-Value
 
+                int volunteerId = Volunteers[s_rand.Next(Volunteers.Count)].VolunteerId;
+
+                // חישוב ההפרש בין הזמנים
                 TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
+
+                // יצירת זמן אקראי בין מינימום ומקסימום
                 DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
                 s_dalAssignment!.Create(new Assignment(
-                    randomTime,                                       
-                    TypeOfEndTime.treated,
-                    randomTime.AddHours(2)
+                    id,
+                    calls[i].IdCall,
+                    volunteerId, 
+                    randomTime, // EntryTimeForTreatment
+                    randomTime.AddHours(2), // EndTimeForTreatment
+                    TypeOfEndTime.treated // TypeOfEndTime
                 ));
             }
             else
@@ -169,8 +162,6 @@ public static class Initialization
             }
         }
     }
-
-
 
     public static void DO(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig)
     {

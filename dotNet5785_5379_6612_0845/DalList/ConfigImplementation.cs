@@ -15,11 +15,20 @@ public class ConfigImplementation : IConfig
         get => Config.RiskRange;
         set => Config.RiskRange = value;
     }
-    public int Create()
+    public int CreateVolunteerId()
     {
-        return Config.NextVolunteerId; 
+        return Config.NextVolunteerId;
     }
 
+    public int CreateCallId()
+    {
+        return Config.NextCallId;
+    }
+
+    public int CreateAssignmentId()
+    {
+        return Config.NextAssignmentId;
+    }
     public void Reset()
     {
         Config.Reset();
