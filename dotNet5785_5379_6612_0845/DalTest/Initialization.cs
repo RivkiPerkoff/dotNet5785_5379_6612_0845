@@ -155,14 +155,20 @@ public static class Initialization
                 DateTime minTime = calls[i].OpeningTime.Value;  // המרת OpeningTime ל-Value
                 DateTime maxTime = calls[i].MaxFinishTime.Value;  // המרת MaxFinishTime ל-Value
 
+                // חישוב ההפרש בין הזמנים
                 TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
+
+                // יצירת זמן אקראי בין מינימום ומקסימום
                 DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
 
                 // יצירת אובייקט Assignment עם הערכים הנכונים
                 s_dalAssignment!.Create(new Assignment(
-                    randomTime,                           // EntryTimeForTreatment
-                    randomTime.AddHours(2),               // EndTimeForTreatment
-                    TypeOfEndTime.treated                 // TypeOfEndTime
+                    0, // NextAssignmentId (לא צויין בקוד שלך כיצד ליצור אותו, אז שמתי כ-0)
+                    calls[i].IdCall, // IdOfRunnerCall (בהנחה שאתה רוצה את זה מה-Call)
+                    0, // VolunteerId (לא צויין, אז שמתי כ-0)
+                    randomTime, // EntryTimeForTreatment
+                    randomTime.AddHours(2), // EndTimeForTreatment
+                    TypeOfEndTime.treated // TypeOfEndTime
                 ));
             }
             else
@@ -171,6 +177,7 @@ public static class Initialization
             }
         }
     }
+
 
 
 
