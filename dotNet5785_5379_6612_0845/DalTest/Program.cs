@@ -1,10 +1,8 @@
-﻿using Dal;
+﻿
+namespace DalTest;
+using Dal;
 using DalApi;
 using DO;
-using DalList;
-
-namespace DalTest;
-
 internal class Program
 {
     private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); 
@@ -195,8 +193,13 @@ internal class Program
         Console.Write("Enter your phone: ");
         string phone = Console.ReadLine()!;
 
-        Console.Write("Enter your password: ");
-        string password = Console.ReadLine()!;
+        Console.Write("Password (leave blank for null): ");
+        string? password = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(password))
+            password = null;
+
+        //Console.Write("Enter your password: ");
+        //string password = Console.ReadLine()!;
 
         Console.Write("Enter your address: ");
         string address = Console.ReadLine()!;
@@ -272,7 +275,7 @@ internal class Program
         TypeOfEndTime typeOfEndTime = (TypeOfEndTime)int.Parse(Console.ReadLine()!);
         Console.Write("Enter Ending Time of Treatment ( YYYY-MM-DD HH:MM): ");
         DateTime EndTime = DateTime.Parse(Console.ReadLine()!);
-        return new Assignment(id, CallId, volunteerId, EndTime, typeOfEndTime);
+        return new Assignment(id, CallId, volunteerId, typeOfEndTime, EndTime);
     }
 
     private static void Update(string choice)

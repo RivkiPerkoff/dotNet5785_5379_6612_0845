@@ -38,7 +38,7 @@ public enum TypeOfReading
 
 public enum TypeOfEndTime
 {
-    treated = 1,
+    treated ,
     SelfCancellation,
     CancelingAnAdministrator,
     CancellationHasExpired

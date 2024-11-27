@@ -127,22 +127,50 @@ public static class Initialization
         }
     }
 
+    //private static void createAssignment()
+    //{
+    //    List<Call>? calls = s_dalCall!.ReadAll();
+    //    for (int i = 0; i < 50; i++)
+    //    {
+    //        DateTime minTime = calls[i].OpeningTime;
+    //        DateTime maxTime = (DateTime)calls[i].MaxFinishTime!;
+    //        TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
+    //        DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
+
+    //        s_dalAssignment!.Create(new Assignment(
+    //            randomTime,
+    //            randomTime.AddHours(2),
+    //         (FinishCallType)s_rand.Next(Enum.GetValues(typeof(FinishCallType)).Length - 1)));
+    //    }
+    //}
+
     private static void createAssignment()
     {
         List<Call>? calls = s_dalCall!.ReadAll();
         for (int i = 0; i < 50; i++)
         {
-            DateTime minTime = calls[i].OpeningTime;
-            DateTime maxTime = (DateTime)calls[i].MaxFinishTime!;
-            TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
-            DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
+            // בדיקה אם OpeningTime לא null
+            if (calls[i].OpeningTime.HasValue && calls[i].MaxFinishTime.HasValue)
+            {
+                DateTime minTime = calls[i].OpeningTime.Value;  // המרת OpeningTime ל-Value
+                DateTime maxTime = calls[i].MaxFinishTime.Value;  // המרת MaxFinishTime ל-Value
 
-            s_dalAssignment!.Create(new Assignment(
-                randomTime,
-                randomTime.AddHours(2),
-             (FinishCallType)s_rand.Next(Enum.GetValues(typeof(FinishCallType)).Length - 1)));
+                TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
+                DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
+                s_dalAssignment!.Create(new Assignment(
+                    randomTime,                                       
+                    TypeOfEndTime.treated,
+                    randomTime.AddHours(2)
+                ));
+            }
+            else
+            {
+                Console.WriteLine($"Call at index {i} has null OpeningTime or MaxFinishTime, skipping...");
+            }
         }
     }
+
+
 
     public static void DO(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig)
     {
