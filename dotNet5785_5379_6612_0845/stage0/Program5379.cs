@@ -21,7 +21,7 @@ namespace targil0
         private static void Welcome5379()
         {
             Console.WriteLine("Enter your name: ");
-            string name = Console.ReadLine();
+            string name = Console.ReadLine()!;
             Console.WriteLine($"{name}, welcome to my first console application");
         }
 

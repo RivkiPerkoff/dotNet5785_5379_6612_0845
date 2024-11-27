@@ -101,16 +101,16 @@ internal class Program
                 break;
             case MainMenuOptions.DisplayAllData:
                 {
-                    ReadAll("VolunteerSubmenu");
-                    ReadAll("CallSubmenu");
-                    ReadAll("AssignmentSubmenu");
+                    ReadAll("VolunteerSubMenu");
+                    ReadAll("CallSubMenu");
+                    ReadAll("AssignmentSubMenu");
                 }
                 break;
             case MainMenuOptions.ResetDatabase:
-                s_dalConfig.Reset(); //stage 1
-                s_dalVolunteer.DeleteAll(); //stage 1
-                s_dalCall.DeleteAll(); //stage 1
-                s_dalAssignment.DeleteAll(); //stage 1
+                s_dalConfig!.Reset(); //stage 1
+                s_dalVolunteer!.DeleteAll(); //stage 1
+                s_dalCall!.DeleteAll(); //stage 1
+                s_dalAssignment!.DeleteAll(); //stage 1
                 break;
             default:
                 Console.WriteLine("Invalid option.");
@@ -121,7 +121,7 @@ internal class Program
 
     private static void EntityMenu(MainMenuOptions choice)
     {
-        Console.WriteLine("Enter a number");
+        //Console.WriteLine("Enter a number");
         foreach (SubMenu option in Enum.GetValues(typeof(SubMenu)))
         {
             Console.WriteLine($"{(int)option}. {option}");
@@ -132,7 +132,7 @@ internal class Program
             switch (subChoice)
             {
                 case SubMenu.Create:
-                    Create(choice.ToString()); // כאן תוכל להמיר ל-string לפי הצורך
+                    Create(choice.ToString());
                     break;
                 case SubMenu.Read:
                     Console.WriteLine("Enter Your ID");
@@ -167,17 +167,17 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 Volunteer Vol = CreateVolunteer(yourId);
-                s_dalVolunteer.Create(Vol);
+                s_dalVolunteer?.Create(Vol);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 Call Call = CreateCall(yourId);
-                s_dalCall.Create(Call);
+                s_dalCall?.Create(Call);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 Assignment Ass = CreateAssignment(yourId);
-                s_dalAssignment.Create(Ass);
+                s_dalAssignment?.Create(Ass);
                 break;
 
         }
@@ -197,9 +197,6 @@ internal class Program
         string? password = Console.ReadLine();
         if (string.IsNullOrWhiteSpace(password))
             password = null;
-
-        //Console.Write("Enter your password: ");
-        //string password = Console.ReadLine()!;
 
         Console.Write("Enter your address: ");
         string address = Console.ReadLine()!;
@@ -285,17 +282,17 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 Volunteer Vol = CreateVolunteer(yourId);
-                s_dalVolunteer.Update(Vol);
+                s_dalVolunteer?.Update(Vol);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 Call Call = CreateCall(yourId);
-                s_dalCall.Update(Call);
+                s_dalCall?.Update(Call);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 Assignment Ass = CreateAssignment(yourId);
-                s_dalAssignment.Update(Ass);
+                s_dalAssignment?.Update(Ass);
                 break;
         }
     }
@@ -305,14 +302,14 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
-                s_dalVolunteer.Read(yourId);
+            case "VolunteerSubMenu":
+                s_dalVolunteer?.Read(yourId);
                 break;
-            case "CallSubmenu":
-                s_dalCall.Delete(yourId);
+            case "CallSubMenu":
+                s_dalCall?.Delete(yourId);
                 break;
-            case "AssignmentSubmenu":
-                s_dalAssignment.Delete(yourId);
+            case "AssignmentSubMenu":
+                s_dalAssignment?.Delete(yourId);
                 break;
         }
     }
@@ -321,15 +318,15 @@ internal class Program
 
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 foreach (var item in s_dalVolunteer!.ReadAll())
                     Console.WriteLine(item);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 foreach (var item in s_dalCall!.ReadAll())
                     Console.WriteLine(item);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 foreach (var item in s_dalAssignment!.ReadAll())
                     Console.WriteLine(item);
                 break;
@@ -341,14 +338,14 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
-                s_dalVolunteer.Delete(yourId);
+            case "VolunteerSubMenu":
+                s_dalVolunteer?.Delete(yourId);
                 break;
-            case "CallSubmenu":
-                s_dalCall.Delete(yourId);
+            case "CallSubMenu":
+                s_dalCall?.Delete(yourId);
                 break;
-            case "AssignmentSubmenu":
-                s_dalAssignment.Delete(yourId);
+            case "AssignmentSubMenu":
+                s_dalAssignment?.Delete(yourId);
                 break;
         }
     }
@@ -357,14 +354,14 @@ internal class Program
     {
         switch (choice)
         {
-            case "VolunteerSubmenu":
-                s_dalVolunteer.DeleteAll();
+            case "VolunteerSubMenu":
+                s_dalVolunteer?.DeleteAll();
                 break;
-            case "CallSubmenu":
-                s_dalCall.DeleteAll();
+            case "CallSubMenu":
+                s_dalCall?.DeleteAll();
                 break;
-            case "AssignmentSubmenu":
-                s_dalAssignment.DeleteAll();
+            case "AssignmentSubMenu":
+                s_dalAssignment?.DeleteAll();
                 break;
         }
 
@@ -385,29 +382,29 @@ internal class Program
                 {
                     case ConfigSubmenu.AdvanceClockByMinute:
 
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
+                        s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByHour:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
+                        s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByDay:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddDays(1);
+                        s_dalConfig!.Clock = s_dalConfig.Clock.AddDays(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByMonth:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddMonths(1);
+                        s_dalConfig!.Clock = s_dalConfig.Clock.AddMonths(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByYear:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddYears(1);
+                        s_dalConfig!.Clock = s_dalConfig.Clock.AddYears(1);
                         break;
                     case ConfigSubmenu.DisplayClock:
-                        Console.WriteLine(s_dalConfig.Clock);
+                        Console.WriteLine(s_dalConfig!.Clock);
                         break;
                     case ConfigSubmenu.ChangeClockOrRiskRange:
-                        Console.WriteLine($"RiskRange : {s_dalConfig.RiskRange}");
+                        Console.WriteLine($"RiskRange : {s_dalConfig!.RiskRange}");
                         break;
                     case ConfigSubmenu.DisplayConfigVar:
                         Console.Write("הזן ערך חדש עבור RiskRange (בפורמט שעות:דקות:שניות): ");
-                        string riskRangeInput = Console.ReadLine();
+                        string riskRangeInput = Console.ReadLine()!;
                         if (!TimeSpan.TryParse(riskRangeInput, out TimeSpan newRiskRange)) throw new FormatException("Invalid choice");
                         {
                             s_dalConfig!.RiskRange=newRiskRange;
@@ -416,7 +413,7 @@ internal class Program
                         break;
 
                     case ConfigSubmenu.Reset:
-                        s_dalConfig.Reset();
+                        s_dalConfig!.Reset();
                         break;
 
 

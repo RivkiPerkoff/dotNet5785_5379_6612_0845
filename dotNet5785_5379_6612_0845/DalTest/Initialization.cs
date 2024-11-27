@@ -137,8 +137,8 @@ public static class Initialization
             if (calls[i].OpeningTime.HasValue && calls[i].MaxFinishTime.HasValue)
             {
                 int id = s_dalConfig!.CreateAssignmentId();
-                DateTime minTime = calls[i].OpeningTime.Value;  // המרת OpeningTime ל-Value
-                DateTime maxTime = calls[i].MaxFinishTime.Value;  // המרת MaxFinishTime ל-Value
+                DateTime minTime = calls[i].OpeningTime!.Value;  // המרת OpeningTime ל-Value
+                DateTime maxTime = calls[i].MaxFinishTime!.Value;  // המרת MaxFinishTime ל-Value
 
                 int volunteerId = Volunteers[s_rand.Next(Volunteers.Count)].VolunteerId;
 
