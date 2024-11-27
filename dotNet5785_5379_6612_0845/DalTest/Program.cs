@@ -76,10 +76,10 @@ internal class Program
         {
             case MainMenuOptions.Exit:
                 Console.WriteLine("Exiting the program...");
-                Environment.Exit(0); 
+                Environment.Exit(0);
                 break;
-            case MainMenuOptions.VolunteerSubMenu:                              
-            case MainMenuOptions.CallSubMenu:                   
+            case MainMenuOptions.VolunteerSubMenu:
+            case MainMenuOptions.CallSubMenu:
             case MainMenuOptions.AssignmentSubMenu:
                 EntityMenu(option);
                 break;
@@ -192,4 +192,5 @@ internal class Program
         Console.WriteLine("Database reset successfully.");
     }
 }
+
 
