@@ -1,9 +1,9 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
-using System.Net.Mail;
-using System.Numerics;
-using System.Xml.Linq;
+/// <summary>
+/// A utility class to initialize the data source by creating and populating the Volunteers, Calls, and Assignments lists.
+/// </summary>
 public static class Initialization
 {
     private static IVolunteer? s_dalVolunteer;
@@ -13,89 +13,52 @@ public static class Initialization
 
     private static readonly Random s_rand = new();
 
+    /// <summary>
+    /// Creates a list of volunteers with random data and adds them to the volunteer data source.
+    /// </summary>
     private static void createVolunteer()
     {
-        string[] names = {
-            "Roni", "Maya", "Lior", "Noa", "Dani",
-            "Tomer", "Liat", "Gal", "Yona", "Nir",
-            "Omer", "Shira", "Erez", "Michal", "Hadar"
-        };
-
-        string[] emails = {
-            "Roni@gmail.com", "Maya@gmail.com", "Lior@gmail.com", "Noa@gmail.com", "Dani@gmail.com",
-            "Tomer@gmail.com", "Liat@gmail.com", "Gal@gmail.com", "Yona@gmail.com", "Nir@gmail.com",
-            "Omer@gmail.com", "Shira@gmail.com", "Erez@gmail.com", "Michal@gmail.com", "Hadar@gmail.com"
-        };
-
-        string[] phones = {
-            "050-321-7845", "052-987-1243", "054-123-9876", "053-549-4567", "055-789-1234",
-            "050-987-6789", "054-112-7654", "053-785-6543", "052-312-7890", "055-654-3210",
-            "053-789-5647", "050-125-1234", "052-456-8765", "054-654-4321", "055-123-4567"
-        };
-
-        string[] addresses = {
-            "Nazareth", "Haifa", "Beersheba", "Eilat", "Rosh Ha'ayin",
-            "Afula", "Kiryat Shmona", "Karmiel", "Dimona", "Tiberias",
-            "Safed", "Kiryat Gat", "Ashkelon", "Lod", "Ramat Gan"
-        };
+        string[] names = { "Roni", "Maya", "Lior", "Noa", "Dani", "Tomer", "Liat", "Gal", "Yona", "Nir", "Omer", "Shira", "Erez", "Michal", "Hadar" };
+        string[] emails = { "Roni@gmail.com", "Maya@gmail.com", "Lior@gmail.com", "Noa@gmail.com", "Dani@gmail.com", "Tomer@gmail.com", "Liat@gmail.com", "Gal@gmail.com", "Yona@gmail.com", "Nir@gmail.com", "Omer@gmail.com", "Shira@gmail.com", "Erez@gmail.com", "Michal@gmail.com", "Hadar@gmail.com" };
+        string[] phones = { "050-321-7845", "052-987-1243", "054-123-9876", "053-549-4567", "055-789-1234", "050-987-6789", "054-112-7654", "053-785-6543", "052-312-7890", "055-654-3210", "053-789-5647", "050-125-1234", "052-456-8765", "054-654-4321", "055-123-4567" };
+        string[] addresses = { "Nazareth", "Haifa", "Beersheba", "Eilat", "Rosh Ha'ayin", "Afula", "Kiryat Shmona", "Karmiel", "Dimona", "Tiberias", "Safed", "Kiryat Gat", "Ashkelon", "Lod", "Ramat Gan" };
 
         for (int i = 0; i < names.Length; i++)
         {
-            int id=s_dalConfig!.CreateVolunteerId();
-            //do
-            //{
-            //    id = s_rand.Next(1000, 9999);
-            //}
-            //while (s_dalVolunteer!.Read(id) != null); // Make sure the ID is unique
-
+            int id = s_dalConfig!.CreateVolunteerId();
             string name = names[i];
             string email = emails[i];
             string phone = phones[i];
             string address = addresses[i];
-
             double maximumDistance = s_rand.NextDouble() * 50;
 
             s_dalVolunteer!.Create(new Volunteer(
-             id,
-             name,
-             email,
-             phone,
-             address
-             ));
+                id,
+                name,
+                email,
+                phone,
+                address
+            ));
         }
     }
+
+    /// <summary>
+    /// Creates a list of calls with random data and adds them to the call data source.
+    /// </summary>
     private static void createCall()
     {
-        // מאגר תיאורים לקריאות
         string[] descriptions = {
-        "Ride to Ben Gurion Airport", "Ride to a family event", "Ride to work", "Return from the city", "Ride for shopping",
-        "Ride to the train station", "Arrival at volunteer conference", "Return from school", "Ride to an evening class", "Ride to the hospital",
-        "Ride to the airport", "Arrival at a group trip", "Ride to visit family", "Business meeting ride",
-        "Ride to a birthday party"
-    };
+            "Ride to Ben Gurion Airport", "Ride to a family event", "Ride to work", "Return from the city", "Ride for shopping",
+            "Ride to the train station", "Arrival at volunteer conference", "Return from school", "Ride to an evening class", "Ride to the hospital",
+            "Ride to the airport", "Arrival at a group trip", "Ride to visit family", "Business meeting ride", "Ride to a birthday party"
+        };
 
         string[] addresses = {
-    "Agrat Moshe 9 Ramat Shlomo Jerusalem",
-    "HaNasi 12 Tel Aviv",
-    "Chaim Ozer 5 Haifa",
-    "HaChoma 7 Be'er Sheva",
-    "Herzl 22 Eilat",
-    "HaGolan 14 Rishon LeZion",
-    "HaAtzmaut 3 Netanya",
-    "HaSivuv 10 Petah Tikva",
-    "HaMeretz 5 Ra'anana",
-    "Shderot Jerusalem 15 Hadera",
-    "HaHadarim 4 Modi'in",
-    "HaNamal 3 Ashdod",
-    "Herzliya 19 Kiryat Shmona",
-    "HaMaor 11 Safed",
-    "HaHermon 7 Tiberias",
-    "HaCarmel 8 Netanya",
-    "Har Tzion 22 Jerusalem",
-    "HaHored 3 Haifa",
-    "Tel Aviv 10 Ibn Gvirol",
-    "HaGalil 15 Petah Tikva"
-    };
+            "Agrat Moshe 9 Ramat Shlomo Jerusalem", "HaNasi 12 Tel Aviv", "Chaim Ozer 5 Haifa", "HaChoma 7 Be'er Sheva", "Herzl 22 Eilat",
+            "HaGolan 14 Rishon LeZion", "HaAtzmaut 3 Netanya", "HaSivuv 10 Petah Tikva", "HaMeretz 5 Ra'anana", "Shderot Jerusalem 15 Hadera",
+            "HaHadarim 4 Modi'in", "HaNamal 3 Ashdod", "Herzliya 19 Kiryat Shmona", "HaMaor 11 Safed", "HaHermon 7 Tiberias",
+            "HaCarmel 8 Netanya", "Har Tzion 22 Jerusalem", "HaHored 3 Haifa", "Tel Aviv 10 Ibn Gvirol", "HaGalil 15 Petah Tikva"
+        };
         const int totalCalls = 50;
 
         for (int i = 0; i < totalCalls; i++)
@@ -106,15 +69,11 @@ public static class Initialization
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
 
-
             DateTime start = new DateTime(s_dalConfig.Clock.Year, s_dalConfig.Clock.Month, s_dalConfig.Clock.Day, s_dalConfig.Clock.Hour - 5, 0, 0);
-            // חישוב הטווח של הימים בין השעון הנוכחי לבין תאריך ההתחלה
             int range = (s_dalConfig.Clock - start).Days;
-            // יצירת תאריך אקראי בטווח הזה
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-            DateTime MaxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dalConfig.Clock - openingTime).Days));
+            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dalConfig.Clock - openingTime).Days));
 
-            //CallTypes callType = CallTypes
             s_dalCall!.Create(new Call(
                 callId,
                 description,
@@ -122,38 +81,37 @@ public static class Initialization
                 latitude,
                 longitude,
                 openingTime,
-                MaxTimeToFinish
+                maxTimeToFinish
             ));
         }
     }
 
+    /// <summary>
+    /// Creates assignments linking volunteers and calls with random data and adds them to the assignment data source.
+    /// </summary>
     private static void createAssignment()
     {
         List<Call>? calls = s_dalCall!.ReadAll();
-        List<Volunteer>? Volunteers=s_dalVolunteer!.ReadAll();
+        List<Volunteer>? volunteers = s_dalVolunteer!.ReadAll();
         for (int i = 0; i < 50; i++)
         {
-            // בדיקה אם OpeningTime לא null
             if (calls[i].OpeningTime.HasValue && calls[i].MaxFinishTime.HasValue)
             {
                 int id = s_dalConfig!.CreateAssignmentId();
-                DateTime minTime = calls[i].OpeningTime.Value;  // המרת OpeningTime ל-Value
-                DateTime maxTime = calls[i].MaxFinishTime.Value;  // המרת MaxFinishTime ל-Value
+                DateTime minTime = calls[i].OpeningTime.GetValueOrDefault(DateTime.MinValue);
+                DateTime maxTime = calls[i].MaxFinishTime.GetValueOrDefault(DateTime.MinValue);
 
-                int volunteerId = Volunteers[s_rand.Next(Volunteers.Count)].VolunteerId;
+                int volunteerId = volunteers[s_rand.Next(volunteers.Count)].VolunteerId;
 
-                // חישוב ההפרש בין הזמנים
                 TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
-
-                // יצירת זמן אקראי בין מינימום ומקסימום
                 DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
                 s_dalAssignment!.Create(new Assignment(
                     id,
                     calls[i].IdCall,
                     volunteerId,
-                    TypeOfEndTime.treated, // TypeOfEndTime
-                    randomTime, // EntryTimeForTreatment
-                    (DateTime?)randomTime.AddHours(2) // EndTimeForTreatment, תעביר כ- DateTime?
+                    TypeOfEndTime.treated,
+                    randomTime,
+                    (DateTime?)randomTime.AddHours(2)
                 ));
             }
             else
@@ -163,6 +121,13 @@ public static class Initialization
         }
     }
 
+    /// <summary>
+    /// Initializes the DAL (Data Access Layer) by creating and adding volunteers, calls, and assignments to the system.
+    /// </summary>
+    /// <param name="dalVolunteer">The volunteer data access layer.</param>
+    /// <param name="dalCall">The call data access layer.</param>
+    /// <param name="dalAssignment">The assignment data access layer.</param>
+    /// <param name="dalConfig">The configuration data access layer.</param>
     public static void DO(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig)
     {
         s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");

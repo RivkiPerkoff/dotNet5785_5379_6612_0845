@@ -1,5 +1,7 @@
-﻿
-namespace DO;
+﻿namespace DO;
+/// <summary>
+/// Defines the types of distance used for calculating the range of a volunteer's work.
+/// </summary>
 public enum DistanceType
 {
     AirDistance, 

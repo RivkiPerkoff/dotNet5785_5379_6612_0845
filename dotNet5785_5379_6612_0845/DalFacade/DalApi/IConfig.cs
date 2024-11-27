@@ -1,7 +1,8 @@
-﻿
-
-namespace DalApi;
-using DO;
+﻿namespace DalApi;
+/// <summary>
+/// Interface for configuration settings in the data access layer.
+/// Provides methods to manage system settings like IDs and time ranges.
+/// </summary>
 public interface IConfig
 {
     public  DateTime Clock { get; set; }
