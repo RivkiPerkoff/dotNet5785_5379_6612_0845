@@ -150,10 +150,10 @@ public static class Initialization
                 s_dalAssignment!.Create(new Assignment(
                     id,
                     calls[i].IdCall,
-                    volunteerId, 
+                    volunteerId,
+                    TypeOfEndTime.treated, // TypeOfEndTime
                     randomTime, // EntryTimeForTreatment
-                    randomTime.AddHours(2), // EndTimeForTreatment
-                    TypeOfEndTime.treated // TypeOfEndTime
+                    (DateTime?)randomTime.AddHours(2) // EndTimeForTreatment, תעביר כ- DateTime?
                 ));
             }
             else

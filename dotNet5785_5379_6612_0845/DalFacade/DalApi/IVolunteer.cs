@@ -4,7 +4,6 @@ namespace DalApi;
 using DO;
 public interface IVolunteer
 {
-   // void Add(Volunteer volunteer);
     public void Create(Volunteer item);
     public void Delete(int id);
     public void DeleteAll();
