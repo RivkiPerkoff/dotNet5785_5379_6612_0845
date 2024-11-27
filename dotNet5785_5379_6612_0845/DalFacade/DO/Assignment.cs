@@ -1,30 +1,24 @@
 ﻿namespace DO;
 
 public record Assignment
+(
+    int NextAssignmentId,
+    int IdOfRunnerCall,
+    int VolunteerId,
+    DateTime EntryTimeForTreatment,
+    DateTime? EndTimeForTreatment = null,
+    TypeOfEndTime TypeOfEndTime = TypeOfEndTime.treated  // משתמשים ב-enum הקיים
+)
 {
-    public int NextAssignmentId { get; init; }
-    public int IdOfRunnerCall { get; init; }
-    public int VolunteerId { get; init; }
-    public DateTime EntryTimeForTreatment { get; init; }
-    public DateTime? EndTimeForTreatment { get; init; }
-    public TypeOfEndTime TypeOfEndTime { get; init; }
-
-    // קונסטרקטור ברירת מחדל
-    public Assignment()
-        : this(0, 0, 0, DateTime.Now, null, TypeOfEndTime.treated) { }
-
-    // קונסטרקטור ראשי
-    public Assignment(int nextAssignmentId, int idOfRunnerCall, int volunteerId, DateTime entryTimeForTreatment, DateTime? endTimeForTreatment, TypeOfEndTime typeOfEndTime)
+    // קונסטרוקטור מותאם אישית נוסף
+    public Assignment(DateTime randomTime, DateTime dateTime, FinishCallType finishCallType)
+        : this(0, 0, 0, randomTime, null, TypeOfEndTime.treated) // קריאה לקונסטרוקטור הבסיסי
     {
-        NextAssignmentId = nextAssignmentId;
-        IdOfRunnerCall = idOfRunnerCall;
-        VolunteerId = volunteerId;
-        EntryTimeForTreatment = entryTimeForTreatment;
-        EndTimeForTreatment = endTimeForTreatment;
-        TypeOfEndTime = typeOfEndTime;
-    }
+        // כאן תוכל להוסיף לוגיקה נוספת אם צריך
+        // לדוגמה, אם אתה רוצה להוסיף ערכים עבור 'FinishCallType' - תוכל להוסיף שדה או לוגיקה בהתאם.
+        // אם FinishCallType הוא שדה שצריך לשייך ל-Assignment, אתה צריך להוסיף אותו כפרמטר נוסף ב-record.
 
-    // קונסטרקטור מותאם אישית
-    public Assignment(DateTime randomTime, DateTime? endTimeForTreatment, TypeOfEndTime typeOfEndTime)
-        : this(0, 0, 0, randomTime, endTimeForTreatment, typeOfEndTime) { }
+        // לא ניתן לעדכן שדות ישירות בקונסטרוקטור של record, אם אתה רוצה להוסיף שדות נוספים עליך להוסיף אותם ל-`record`
+        // FinishCallType = finishCallType;
+    }
 }
