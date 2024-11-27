@@ -1,31 +1,30 @@
 ﻿namespace DO;
 
 public record Assignment
-(
-    int NextAssignmentId,
-    int IdOfRunnerCall,
-    int VolunteerId,
-    DateTime EntryTimeForTreatment,
-    DateTime? EndTimeForTreatment = null,
-    TypeOfEndTime TypeOfEndTime = TypeOfEndTime.treated  // משתמשים ב-enum הקיים
-)
-
 {
-    // קונסטרוקטור ברירת מחדל עם ערכים בסיסיים
-    //public Assignment()
-    //    : this(0, 0, 0, DateTime.Now, null, TypeOfEndTime.treated) { }
+    public int NextAssignmentId { get; init; }
+    public int IdOfRunnerCall { get; init; }
+    public int VolunteerId { get; init; }
+    public DateTime EntryTimeForTreatment { get; init; }
+    public DateTime? EndTimeForTreatment { get; init; }
+    public TypeOfEndTime TypeOfEndTime { get; init; }
 
-    // קונסטרוקטור מותאם אישית נוסף
-    public Assignment(DateTime randomTime, DateTime dateTime, FinishCallType finishCallType)
-        : this(0, 0, 0, randomTime, null, TypeOfEndTime.treated)
+    // קונסטרקטור ברירת מחדל
+    public Assignment()
+        : this(0, 0, 0, DateTime.Now, null, TypeOfEndTime.treated) { }
+
+    // קונסטרקטור ראשי
+    public Assignment(int nextAssignmentId, int idOfRunnerCall, int volunteerId, DateTime entryTimeForTreatment, DateTime? endTimeForTreatment, TypeOfEndTime typeOfEndTime)
     {
-        //RandomTime = randomTime;
-        //DateTime = dateTime;
-        //FinishCallType = finishCallType;
+        NextAssignmentId = nextAssignmentId;
+        IdOfRunnerCall = idOfRunnerCall;
+        VolunteerId = volunteerId;
+        EntryTimeForTreatment = entryTimeForTreatment;
+        EndTimeForTreatment = endTimeForTreatment;
+        TypeOfEndTime = typeOfEndTime;
     }
 
-    // תכונות נוספות שקשורות לקונסטרוקטור המותאם אישית
-    //public DateTime RandomTime { get; init; }
-    //public DateTime DateTime { get; init; }
-    //public FinishCallType FinishCallType { get; init; }
+    // קונסטרקטור מותאם אישית
+    public Assignment(DateTime randomTime, DateTime? endTimeForTreatment, TypeOfEndTime typeOfEndTime)
+        : this(0, 0, 0, randomTime, endTimeForTreatment, typeOfEndTime) { }
 }
