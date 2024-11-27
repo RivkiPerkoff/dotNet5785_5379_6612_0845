@@ -18,11 +18,11 @@ partial class Program
     static partial void Welcome6612();
     static partial void Welcome0845();
 
-    private static void Welcome5379()
-    {
-        Console.WriteLine("Enter your name: ");
-        string name = Console.ReadLine()!;
-        Console.WriteLine($"{name}, welcome to my first console application");
-    }
+        private static void Welcome5379()
+        {
+            Console.WriteLine("Enter your name: ");
+            string name = Console.ReadLine()!;
+            Console.WriteLine($"{name}, welcome to my first console application");
+        }
 
 }

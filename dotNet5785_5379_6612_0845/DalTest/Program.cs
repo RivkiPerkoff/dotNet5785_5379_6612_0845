@@ -104,16 +104,16 @@ internal class Program
                 break;
             case MainMenuOptions.DisplayAllData:
                 {
-                    ReadAll("VolunteerSubmenu");
-                    ReadAll("CallSubmenu");
-                    ReadAll("AssignmentSubmenu");
+                    ReadAll("VolunteerSubMenu");
+                    ReadAll("CallSubMenu");
+                    ReadAll("AssignmentSubMenu");
                 }
                 break;
             case MainMenuOptions.ResetDatabase:
-                s_dalConfig?.Reset(); //stage 1
-                s_dalVolunteer?.DeleteAll(); //stage 1
-                s_dalCall?.DeleteAll(); //stage 1
-                s_dalAssignment?.DeleteAll(); //stage 1
+                s_dalConfig!.Reset(); //stage 1
+                s_dalVolunteer!.DeleteAll(); //stage 1
+                s_dalCall!.DeleteAll(); //stage 1
+                s_dalAssignment!.DeleteAll(); //stage 1
                 break;
             default:
                 Console.WriteLine("Invalid option.");
@@ -135,7 +135,7 @@ internal class Program
             switch (subChoice)
             {
                 case SubMenu.Create:
-                    Create(choice.ToString()); // כאן תוכל להמיר ל-string לפי הצורך
+                    Create(choice.ToString());
                     break;
                 case SubMenu.Read:
                     Console.WriteLine("Enter Your ID");
@@ -170,15 +170,15 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 Volunteer Vol = CreateVolunteer(yourId);
                 s_dalVolunteer?.Create(Vol);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 Call Call = CreateCall(yourId);
                 s_dalCall?.Create(Call);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 Assignment Ass = CreateAssignment(yourId);
                 s_dalAssignment?.Create(Ass);
                 break;
@@ -285,15 +285,15 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 Volunteer Vol = CreateVolunteer(yourId);
                 s_dalVolunteer?.Update(Vol);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 Call Call = CreateCall(yourId);
                 s_dalCall?.Update(Call);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 Assignment Ass = CreateAssignment(yourId);
                 s_dalAssignment?.Update(Ass);
                 break;
@@ -305,13 +305,13 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 s_dalVolunteer?.Read(yourId);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 s_dalCall?.Delete(yourId);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 s_dalAssignment?.Delete(yourId);
                 break;
         }
@@ -321,15 +321,15 @@ internal class Program
 
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 foreach (var item in s_dalVolunteer!.ReadAll())
                     Console.WriteLine(item);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 foreach (var item in s_dalCall!.ReadAll())
                     Console.WriteLine(item);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 foreach (var item in s_dalAssignment!.ReadAll())
                     Console.WriteLine(item);
                 break;
@@ -341,13 +341,13 @@ internal class Program
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 s_dalVolunteer?.Delete(yourId);
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 s_dalCall?.Delete(yourId);
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 s_dalAssignment?.Delete(yourId);
                 break;
         }
@@ -357,13 +357,13 @@ internal class Program
     {
         switch (choice)
         {
-            case "VolunteerSubmenu":
+            case "VolunteerSubMenu":
                 s_dalVolunteer?.DeleteAll();
                 break;
-            case "CallSubmenu":
+            case "CallSubMenu":
                 s_dalCall?.DeleteAll();
                 break;
-            case "AssignmentSubmenu":
+            case "AssignmentSubMenu":
                 s_dalAssignment?.DeleteAll();
                 break;
         }
@@ -417,7 +417,7 @@ internal class Program
                         break;
 
                     case ConfigSubmenu.Reset:
-                        s_dalConfig?.Reset();
+                        s_dalConfig!.Reset();
                         break;
 
 
