@@ -28,6 +28,8 @@ public record Assignment
     }
 
     // קונסטרקטור מותאם אישית
-    public Assignment(DateTime randomTime, DateTime? endTimeForTreatment, TypeOfEndTime typeOfEndTime)
-        : this(0, 0, 0, randomTime, endTimeForTreatment, typeOfEndTime) { }
+    //public Assignment(DateTime randomTime, DateTime? endTimeForTreatment, TypeOfEndTime typeOfEndTime)
+    //    : this(0, 0, 0, randomTime, endTimeForTreatment, typeOfEndTime) { }
 }
+
+    //    return new Assignment(id, CallId, volunteerId, EndTime, typeOfEndTime);
