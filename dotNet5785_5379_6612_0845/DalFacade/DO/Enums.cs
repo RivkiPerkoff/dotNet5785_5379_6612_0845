@@ -1,6 +1,5 @@
 ﻿
 namespace DO;
-public enum TerminationTypeTheTreatment { Handled, Self_Cancellation, Admin_Cancellation, Expired_Cancellation }
 public enum DistanceType
 {
     AirDistance, 
@@ -31,6 +30,18 @@ public enum FinishCallType
     Expired
 }
 
+public enum TypeOfReading
+{
+    Type1 = 1,
+    Type2 = 2,
+}
 
+public enum TypeOfEndTime
+{
+    treated = 1,
+    SelfCancellation,
+    CancelingAnAdministrator,
+    CancellationHasExpired
+}
 
 

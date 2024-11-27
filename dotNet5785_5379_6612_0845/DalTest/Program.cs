@@ -7,8 +7,8 @@ namespace DalTest;
 
 internal class Program
 {
-    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); // stage 1
-    private static ICall? s_dalCall = new CallImplementation(); // stage 1
+    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); 
+    private static ICall? s_dalCall = new CallImplementation(); 
     private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // stage 1
     private static IConfig? s_dalConfig = new ConfigImplementation();
 
@@ -33,8 +33,20 @@ internal class Program
         Delete,
         DeleteAll
     }
-
-    static void Main(string[] args)
+    private enum ConfigSubmenu
+    {
+        Exit,
+        AdvanceClockByMinute,
+        AdvanceClockByHour,
+        AdvanceClockByDay,
+        AdvanceClockByMonth,
+        AdvanceClockByYear,
+        DisplayClock,
+        ChangeClockOrRiskRange,
+        DisplayConfigVar,
+        Reset
+    }
+    private static void Main(string[] args)
     {
         try
         {
@@ -84,16 +96,23 @@ internal class Program
                 EntityMenu(option);
                 break;
             case MainMenuOptions.ConfigurationSubMenu:
-                ShowConfigurationSubMenu();
+                ConfigSubmenuu();
                 break;
             case MainMenuOptions.InitializeData:
-                InitializeData();
+                Initialization.DO(s_dalVolunteer, s_dalCall, s_dalAssignment, s_dalConfig);
                 break;
             case MainMenuOptions.DisplayAllData:
-                DisplayAllData();
+                {
+                    ReadAll("VolunteerSubmenu");
+                    ReadAll("CallSubmenu");
+                    ReadAll("AssignmentSubmenu");
+                }
                 break;
             case MainMenuOptions.ResetDatabase:
-                ResetDatabase();
+                s_dalConfig.Reset(); //stage 1
+                s_dalVolunteer.DeleteAll(); //stage 1
+                s_dalCall.DeleteAll(); //stage 1
+                s_dalAssignment.DeleteAll(); //stage 1
                 break;
             default:
                 Console.WriteLine("Invalid option.");
@@ -143,54 +162,265 @@ internal class Program
             Enum.TryParse(Console.ReadLine(), out subChoice);
         }
     }
-
-
-    private static void ShowConfigurationSubMenu()
+    private static void Create(string choice)
     {
-        Console.WriteLine("\n=== Configuration Sub-Menu ===");
-        // Add options and logic for configuration-specific operations
-    }
-
-    private static void InitializeData()
-    {
-        Console.WriteLine("Initializing data...");
-        Initialization.DO(s_dalVolunteer, s_dalCall, s_dalAssignment, s_dalConfig);
-    }
-
-    private static void DisplayAllData()
-    {
-        Console.WriteLine("\n=== Display All Data ===");
-        Console.WriteLine("Volunteers:");
-        var volunteers = s_dalVolunteer!.ReadAll();
-        foreach (var volunteer in volunteers)
+        Console.WriteLine("Enter your details");
+        Console.Write("Enter ID: ");
+        int yourId = int.Parse(Console.ReadLine()!);
+        switch (choice)
         {
-            Console.WriteLine(volunteer);
-        }
+            case "VolunteerSubmenu":
+                Volunteer Vol = CreateVolunteer(yourId);
+                s_dalVolunteer.Create(Vol);
+                break;
+            case "CallSubmenu":
+                Call Call = CreateCall(yourId);
+                s_dalCall.Create(Call);
+                break;
+            case "AssignmentSubmenu":
+                Assignment Ass = CreateAssignment(yourId);
+                s_dalAssignment.Create(Ass);
+                break;
 
-        Console.WriteLine("\nCalls:");
-        var calls = s_dalCall!.ReadAll();
-        foreach (var call in calls)
-        {
-            Console.WriteLine(call);
-        }
-
-        Console.WriteLine("\nAssignments:");
-        var assignments = s_dalAssignment!.ReadAll();
-        foreach (var assignment in assignments)
-        {
-            Console.WriteLine(assignment);
         }
     }
-
-    private static void ResetDatabase()
+    private static Volunteer CreateVolunteer(int id)
     {
-        Console.WriteLine("Resetting database...");
-        s_dalConfig!.Reset();
-        s_dalVolunteer!.DeleteAll();
-        s_dalCall!.DeleteAll();
-        s_dalAssignment!.DeleteAll();
-        Console.WriteLine("Database reset successfully.");
+        Console.Write("Enter your name: ");
+        string name = Console.ReadLine()!;
+
+        Console.Write("Enter your email: ");
+        string email = Console.ReadLine()!;
+
+        Console.Write("Enter your phone: ");
+        string phone = Console.ReadLine()!;
+
+        Console.Write("Enter your password: ");
+        string password = Console.ReadLine()!;
+
+        Console.Write("Enter your address: ");
+        string address = Console.ReadLine()!;
+
+        Console.Write("Enter Maximum Distance: ");
+        double maximumDistance = double.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Latitude: ");
+        double latitude = double.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Longitude: ");
+        double longitude = double.Parse(Console.ReadLine()!);
+
+        Console.Write("Is Active? (true/false): ");
+        bool isAvailable = bool.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Role (1 for Manager, 2 for Volunteer): ");
+        Role role = (Role)int.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Distance Type (1 for Air, 2 for Walking, etc.): ");
+        DistanceType distanceType = (DistanceType)int.Parse(Console.ReadLine()!);
+
+        return new Volunteer(
+            VolunteerId: id,
+            Name: name,
+            PhoneNumber: phone,
+            EmailOfVolunteer: email,
+            PasswordVolunteer: password,
+            AddressVolunteer: address,
+            VolunteerLatitude: latitude,
+            VolunteerLongitude: longitude,
+            IsAvailable: isAvailable,
+            MaximumDistanceForReceivingCall: maximumDistance,
+            Role: role,
+            DistanceType: distanceType
+        );
     }
+
+    private static Call CreateCall(int id)
+    {
+        Console.Write("Enter Call Type (1 for Type1, 2 for Type2, etc.): ");
+        TypeOfReading typeOfReading = (TypeOfReading)int.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Description of the problem: ");
+        string description = Console.ReadLine()!;
+
+        Console.Write("Enter your address: ");
+        string address = Console.ReadLine()!;
+
+        Console.Write("Enter your Latitude: ");
+        double latitude = double.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter your Longitude: ");
+        double longitude = double.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Opening Time (YYYY-MM-DD HH:MM): ");
+        DateTime openingTime = DateTime.Parse(Console.ReadLine()!);
+
+        Console.Write("Enter Max Time Finish Calling (YYYY-MM-DD HH:MM): ");
+        DateTime maxClosing = DateTime.Parse(Console.ReadLine()!);
+
+        return new Call(id, description, address, latitude, longitude, openingTime, maxClosing);
+    }
+
+
+    private static Assignment CreateAssignment(int id)
+    {
+        Console.Write("Enter Call ID: ");
+        int CallId = int.Parse(Console.ReadLine()!);
+        Console.Write("Enter Volunteer ID: ");
+        int volunteerId = int.Parse(Console.ReadLine()!);
+        Console.Write("Enter Type Of End Time : 1 for treated, 2 for Self Cancellation,3 for CancelingAnAdministrator,4 for CancellationHasExpired ");
+        TypeOfEndTime typeOfEndTime = (TypeOfEndTime)int.Parse(Console.ReadLine()!);
+        Console.Write("Enter Ending Time of Treatment ( YYYY-MM-DD HH:MM): ");
+        DateTime EndTime = DateTime.Parse(Console.ReadLine()!);
+        return new Assignment(id, CallId, volunteerId, EndTime, typeOfEndTime);
+    }
+
+    private static void Update(string choice)
+    {
+        Console.WriteLine("Enter your details");
+        Console.Write("Enter ID: ");
+        int yourId = int.Parse(Console.ReadLine()!);
+        switch (choice)
+        {
+            case "VolunteerSubmenu":
+                Volunteer Vol = CreateVolunteer(yourId);
+                s_dalVolunteer.Update(Vol);
+                break;
+            case "CallSubmenu":
+                Call Call = CreateCall(yourId);
+                s_dalCall.Update(Call);
+                break;
+            case "AssignmentSubmenu":
+                Assignment Ass = CreateAssignment(yourId);
+                s_dalAssignment.Update(Ass);
+                break;
+        }
+    }
+    private static void Read(string choice)
+    {
+        Console.WriteLine("Enter ID: ");
+        int yourId = int.Parse(Console.ReadLine()!);
+        switch (choice)
+        {
+            case "VolunteerSubmenu":
+                s_dalVolunteer.Read(yourId);
+                break;
+            case "CallSubmenu":
+                s_dalCall.Delete(yourId);
+                break;
+            case "AssignmentSubmenu":
+                s_dalAssignment.Delete(yourId);
+                break;
+        }
+    }
+    private static void ReadAll(string choice)
+    {
+
+        switch (choice)
+        {
+            case "VolunteerSubmenu":
+                foreach (var item in s_dalVolunteer!.ReadAll())
+                    Console.WriteLine(item);
+                break;
+            case "CallSubmenu":
+                foreach (var item in s_dalCall!.ReadAll())
+                    Console.WriteLine(item);
+                break;
+            case "AssignmentSubmenu":
+                foreach (var item in s_dalAssignment!.ReadAll())
+                    Console.WriteLine(item);
+                break;
+        }
+    }
+    private static void Delete(string choice)
+    {
+        Console.WriteLine("Enter ID: ");
+        int yourId = int.Parse(Console.ReadLine()!);
+        switch (choice)
+        {
+            case "VolunteerSubmenu":
+                s_dalVolunteer.Delete(yourId);
+                break;
+            case "CallSubmenu":
+                s_dalCall.Delete(yourId);
+                break;
+            case "AssignmentSubmenu":
+                s_dalAssignment.Delete(yourId);
+                break;
+        }
+    }
+
+    private static void DeleteAll(string choice)
+    {
+        switch (choice)
+        {
+            case "VolunteerSubmenu":
+                s_dalVolunteer.DeleteAll();
+                break;
+            case "CallSubmenu":
+                s_dalCall.DeleteAll();
+                break;
+            case "AssignmentSubmenu":
+                s_dalAssignment.DeleteAll();
+                break;
+        }
+
+    }
+    private static void ConfigSubmenuu()
+    {
+        Console.WriteLine("Config Menu:");
+        foreach (ConfigSubmenu option in Enum.GetValues(typeof(ConfigSubmenu)))
+        {
+            Console.WriteLine($"{(int)option}. {option}");
+        }
+        Console.Write("Select an option: ");
+        if (!Enum.TryParse(Console.ReadLine(), out ConfigSubmenu userInput)) throw new FormatException("Invalid choice");
+        {
+            while (userInput is not ConfigSubmenu.Exit)
+            {
+                switch (userInput)
+                {
+                    case ConfigSubmenu.AdvanceClockByMinute:
+
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
+                        break;
+                    case ConfigSubmenu.AdvanceClockByHour:
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
+                        break;
+                    case ConfigSubmenu.AdvanceClockByDay:
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddDays(1);
+                        break;
+                    case ConfigSubmenu.AdvanceClockByMonth:
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddMonths(1);
+                        break;
+                    case ConfigSubmenu.AdvanceClockByYear:
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddYears(1);
+                        break;
+                    case ConfigSubmenu.DisplayClock:
+                        Console.WriteLine(s_dalConfig.Clock);
+                        break;
+                    case ConfigSubmenu.ChangeClockOrRiskRange:
+                        Console.WriteLine($"RiskRange : {s_dalConfig.RiskRange}");
+                        break;
+                    case ConfigSubmenu.DisplayConfigVar:
+                        Console.Write("הזן ערך חדש עבור RiskRange (בפורמט שעות:דקות:שניות): ");
+                        string riskRangeInput = Console.ReadLine();
+                        if (!TimeSpan.TryParse(riskRangeInput, out TimeSpan newRiskRange)) throw new FormatException("Invalid choice");
+                        {
+                            s_dalConfig!.RiskRange=newRiskRange;
+                            Console.WriteLine($"RiskRange update to: {s_dalConfig.RiskRange}");
+                        }
+                        break;
+
+                    case ConfigSubmenu.Reset:
+                        s_dalConfig.Reset();
+                        break;
+
+
+                }
+
+            }
+        }
+    }
+
 }
-
-

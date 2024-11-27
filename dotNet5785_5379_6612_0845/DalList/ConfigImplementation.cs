@@ -10,7 +10,7 @@ public class ConfigImplementation : IConfig
         set => Config.Clock = value;
     }
 
-    public TimeSpan RiskRange
+    public TimeSpan? RiskRange
     {
         get => Config.RiskRange;
         set => Config.RiskRange = value;

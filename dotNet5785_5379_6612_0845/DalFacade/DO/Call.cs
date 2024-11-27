@@ -1,25 +1,30 @@
 ﻿
-
 namespace DO;
-
 public record Call
+(
+    int IdCall,
+    string? CallDescription,
+    string? CallAddress,
+    double CallLatitude,
+    double CallLongitude,
+    DateTime OpeningTime,
+    DateTime MaxFinishTime,
+    TypeOfReading TypeOfReading
+)
 {
-    public int IdCall { get; init; }
-    public string? CallDescription { get; init; }
-    public string? CallAddress { get; init; }
-    public double? CallLatitude { get; init; }
-    public double? CallLongitude { get; init; }
-    public DateTime OpeningTime { get; init; }
-    public object MaxFinishTime { get; set; }
-
-    public Call(int idCall, string? callDescription, string? callAddress, double? callLatitude, double? callLongitude, DateTime openingTime, object MaxFinishTime)
-    {
-        IdCall = idCall;
-        CallDescription = callDescription;
-        CallAddress = callAddress;
-        CallLatitude = callLatitude;
-        CallLongitude = callLongitude;
-        OpeningTime = openingTime;
-        MaxFinishTime = MaxFinishTime;
-    }
+    public Call() : this(0, "", "", 0, 0, DateTime.Now, DateTime.Now, TypeOfReading.Type1) { }  // ערך ברירת מחדל עבור TypeOfReading
 }
+
+//{
+//    public Call(int idCall, string? callDescription, string? callAddress, double? callLatitude, double? callLongitude, DateTime openingTime, DateTime maxFinishTime, TypeOfReading TypeOfReading)
+//    {
+//        IdCall = idCall;
+//        CallDescription = callDescription;
+//        CallAddress = callAddress;
+//        CallLatitude = callLatitude;
+//        CallLongitude = callLongitude;
+//        OpeningTime = openingTime;
+//        MaxFinishTime = maxFinishTime;
+//        TypeOfReading TypeOfReading;
+//    }
+//}
