@@ -1,7 +1,5 @@
 ﻿namespace Dal;
 using DalApi;
-//using DO;
-
 public class ConfigImplementation : IConfig
 {
     public  DateTime Clock
@@ -9,7 +7,6 @@ public class ConfigImplementation : IConfig
         get => Config.Clock;
         set => Config.Clock = value;
     }
-
     public TimeSpan? RiskRange
     {
         get => Config.RiskRange;
