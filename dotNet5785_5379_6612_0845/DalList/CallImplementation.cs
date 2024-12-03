@@ -3,6 +3,8 @@ using DalApi;
 using DO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 /// <summary>
 /// Implementation of the ICall interface for managing call operations such as create, read, update, delete.
 /// </summary>
@@ -68,10 +70,11 @@ internal class CallImplementation : ICall
     /// Reads all calls from the data source.
     /// </summary>
     /// <returns>A list of all calls.</returns>
-    public List<Call> ReadAll()
-    {
-        return new List<Call>(DataSource.Calls);  // Return all calls as a new list.
-    }
+    public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) // stage 2
+        => filter == null
+            ? DataSource.Calls.Select(item => item)
+            : DataSource.Calls.Where(filter);
+
 
     /// <summary>
     /// Updates an existing call by replacing it with the provided item.

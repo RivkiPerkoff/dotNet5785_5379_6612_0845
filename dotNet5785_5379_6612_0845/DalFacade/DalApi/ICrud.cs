@@ -13,7 +13,7 @@ namespace DalApi
         public void Delete(int id);
         public void DeleteAll();
         public T? Read(int id);
-        public List<T> ReadAll();
+        IEnumerable<T> ReadAll(Func<T, bool>? filter = null);
         public void Update(T item);
         T? Read(Func<T, bool> filter);
     }

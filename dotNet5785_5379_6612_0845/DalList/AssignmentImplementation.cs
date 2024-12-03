@@ -64,10 +64,11 @@ internal class AssignmentImplementation : IAssignment
     /// Reads all assignments from the data source.
     /// </summary>
     /// <returns>A list of all assignments.</returns>
-    public List<Assignment> ReadAll()
-    {
-        return new List<Assignment>(DataSource.Assignments);  // Return all assignments as a new list.
-    }
+    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) // stage 2
+        => filter == null
+            ? DataSource.Assignments.Select(item => item)
+            : DataSource.Assignments.Where(filter);
+
 
     /// <summary>
     /// Updates an existing assignment by replacing it with the provided item.
