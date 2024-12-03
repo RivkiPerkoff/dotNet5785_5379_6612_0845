@@ -310,11 +310,9 @@ internal class Program
                 break;
             case "CallSubMenu":
                 Console.WriteLine(s_dalCall?.Read(yourId));
-                
                 break;
             case "AssignmentSubMenu":
                 Console.WriteLine(s_dalAssignment?.Read(yourId));
-              
                 break;
         }
     }
@@ -409,7 +407,7 @@ internal class Program
                         Console.WriteLine($"RiskRange : {s_dalConfig!.RiskRange}");
                         break;
                     case ConfigSubmenu.DisplayConfigVar:
-                        Console.Write("הזן ערך חדש עבור RiskRange (בפורמט שעות:דקות:שניות): ");
+                        Console.Write("Enter a new value for RiskRange (In format hours:minutes:seconds ): ");
                         string riskRangeInput = Console.ReadLine()!;
                         if (!TimeSpan.TryParse(riskRangeInput, out TimeSpan newRiskRange)) throw new FormatException("Invalid choice");
                         {
