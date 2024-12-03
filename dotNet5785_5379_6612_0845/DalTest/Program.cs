@@ -306,13 +306,15 @@ internal class Program
         switch (choice)
         {
             case "VolunteerSubMenu":
-                s_dalVolunteer?.Read(yourId);
+                Console.WriteLine(s_dalVolunteer?.Read(yourId));
                 break;
             case "CallSubMenu":
-                s_dalCall?.Delete(yourId);
+                Console.WriteLine(s_dalCall?.Read(yourId));
+                
                 break;
             case "AssignmentSubMenu":
-                s_dalAssignment?.Delete(yourId);
+                Console.WriteLine(s_dalAssignment?.Read(yourId));
+              
                 break;
         }
     }
