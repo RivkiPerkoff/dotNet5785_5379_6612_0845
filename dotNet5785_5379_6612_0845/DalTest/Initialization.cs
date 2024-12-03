@@ -6,10 +6,13 @@ using DO;
 /// </summary>
 public static class Initialization
 {
-    private static IVolunteer? s_dalVolunteer;
-    private static IConfig? s_dalConfig;
-    private static IAssignment? s_dalAssignment;
-    private static ICall? s_dalCall;
+    private static IDal? s_dal;
+
+    //private static IVolunteer? s_dalVolunteer;
+    //private static IAssignment? s_dalAssignment;
+    //private static ICall? s_dalCall;
+
+    //private static IConfig? s_dalConfig;
 
     private static readonly Random s_rand = new();
 
@@ -25,14 +28,14 @@ public static class Initialization
 
         for (int i = 0; i < names.Length; i++)
         {
-            int id = s_dalConfig!.CreateVolunteerId();
+            int id = s_dal!.Config.CreateVolunteerId();
             string name = names[i];
             string email = emails[i];
             string phone = phones[i];
             string address = addresses[i];
             double maximumDistance = s_rand.NextDouble() * 50;
 
-            s_dalVolunteer!.Create(new Volunteer(
+            s_dal!.Volunteer.Create(new Volunteer(
                 id,
                 name,
                 email,
@@ -63,18 +66,18 @@ public static class Initialization
 
         for (int i = 0; i < totalCalls; i++)
         {
-            int callId = s_dalConfig!.CreateCallId();
+            int callId = s_dal!.Config.CreateCallId();
             string description = descriptions[s_rand.Next(descriptions.Length)];
             string address = addresses[s_rand.Next(addresses.Length)];
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
 
-            DateTime start = new DateTime(s_dalConfig.Clock.Year, s_dalConfig.Clock.Month, s_dalConfig.Clock.Day, s_dalConfig.Clock.Hour - 5, 0, 0);
-            int range = (s_dalConfig.Clock - start).Days;
+            DateTime start = new DateTime(s_dal.Config.Clock.Year, s_dal.Config.Clock.Month, s_dal.Config.Clock.Day, s_dal.Config.Clock.Hour - 5, 0, 0);
+            int range = (s_dal.Config.Clock - start).Days;
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dalConfig.Clock - openingTime).Days));
+            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days));
 
-            s_dalCall!.Create(new Call(
+            s_dal!.Call.Create(new Call(
                 callId,
                 description,
                 address,
@@ -91,13 +94,13 @@ public static class Initialization
     /// </summary>
     private static void createAssignment()
     {
-        List<Call>? calls = s_dalCall!.ReadAll();
-        List<Volunteer>? volunteers = s_dalVolunteer!.ReadAll();
+        List<Call>? calls = s_dal!.Call.ReadAll();
+        List<Volunteer>? volunteers = s_dal.Volunteer!.ReadAll();
         for (int i = 0; i < 50; i++)
         {
             if (calls[i].OpeningTime.HasValue && calls[i].MaxFinishTime.HasValue)
             {
-                int id = s_dalConfig!.CreateAssignmentId();
+                int id = s_dal!.Config.CreateAssignmentId();
                 DateTime minTime = calls[i].OpeningTime!.Value;  // המרת OpeningTime ל-Value
                 DateTime maxTime = calls[i].MaxFinishTime!.Value;  // המרת MaxFinishTime ל-Value
 
@@ -105,7 +108,7 @@ public static class Initialization
 
                 TimeSpan difference = maxTime - minTime - TimeSpan.FromHours(2);
                 DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)difference.TotalMinutes));
-                s_dalAssignment!.Create(new Assignment(
+                s_dal!.Assignment.Create(new Assignment(
                     id,
                     calls[i].IdCall,
                     volunteerId,
@@ -128,18 +131,14 @@ public static class Initialization
     /// <param name="dalCall">The call data access layer.</param>
     /// <param name="dalAssignment">The assignment data access layer.</param>
     /// <param name="dalConfig">The configuration data access layer.</param>
-    public static void DO(IVolunteer? dalVolunteer, ICall? dalCall, IAssignment? dalAssignment, IConfig? dalConfig)
+    public static void DO(IDal? dal)
     {
-        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");
-        s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!");
-        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL object can not be null!");
-        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
+
 
         Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset();
-        s_dalVolunteer.DeleteAll();
-        s_dalCall.DeleteAll();
-        s_dalAssignment.DeleteAll();
+        dal.ResetDB();
+
 
         Console.WriteLine("Initializing Volunteers list ...");
         createVolunteer();
