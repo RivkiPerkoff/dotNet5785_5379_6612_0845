@@ -63,11 +63,15 @@ internal class VolunteerImplementation : IVolunteer
     /// Retrieves all volunteers from the system.
     /// </summary>
     /// <returns>A list of all volunteers in the system.</returns>
-    public List<Volunteer> ReadAll()
-    {
-        // Returning a copy of the list
-        return new List<Volunteer>(DataSource.Volunteers);
-    }
+    //public List<Volunteer> ReadAll()
+    //{
+    //    // Returning a copy of the list
+    //    return new List<Volunteer>(DataSource.Volunteers);
+    //}
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) // stage 2
+        => filter == null
+            ? DataSource.Volunteers.Select(item => item)
+            : DataSource.Volunteers.Where(filter);
 
     /// <summary>
     /// Updates an existing volunteer in the system. 
