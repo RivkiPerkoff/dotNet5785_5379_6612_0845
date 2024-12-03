@@ -16,7 +16,7 @@ internal class VolunteerImplementation : IVolunteer
     {
         if (DataSource.Volunteers.Any(v => v.VolunteerId == item.VolunteerId))
         {
-            throw new InvalidOperationException($"Volunteer with ID {item.VolunteerId} already exists.");
+            throw new DalExistException($"Volunteer with ID {item.VolunteerId} already exists.");
         }
         DataSource.Volunteers.Add(item);
     }
@@ -32,7 +32,7 @@ internal class VolunteerImplementation : IVolunteer
 
         if (volunteer == null)
         {
-            throw new KeyNotFoundException($"Volunteer with ID {id} does not exist.");
+            throw new DalDeletionImpossible($"Volunteer with ID {id} does not exist.");
         }
 
         // Removing the volunteer from the list
@@ -44,6 +44,10 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     public void DeleteAll()
     {
+        if (!DataSource.Volunteers.Any())
+        {
+            throw new DalDeletionImpossible("The Volunteers list is already empty.");
+        }
         // Clearing the volunteer list
         DataSource.Volunteers.Clear();
     }
@@ -55,14 +59,28 @@ internal class VolunteerImplementation : IVolunteer
     /// <returns>The volunteer entity, or null if not found.</returns>
     public Volunteer? Read(int id)
     {
-        // Searching for a volunteer by ID
-        return DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
+        var volunteer = DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
+
+        // זריקת חריגה אם לא נמצא מתנדב
+        if (volunteer == null)
+        {
+            throw new DalDoesNotExistException($"No Volunteer found with ID {id}.");
+        }
+
+        return volunteer;
     }
 
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
-        // Use LINQ to find the first Volunteer object that matches the filter criteria.
-        return DataSource.Volunteers.FirstOrDefault(filter);
+        var volunteer = DataSource.Volunteers.FirstOrDefault(filter);
+
+        // זריקת חריגה אם לא נמצא מתנדב מתאים
+        if (volunteer == null)
+        {
+            throw new DalDoesNotExistException("No Volunteer found matching the specified criteria.");
+        }
+
+        return volunteer;
     }
 
     /// <summary>
@@ -75,9 +93,20 @@ internal class VolunteerImplementation : IVolunteer
     //    return new List<Volunteer>(DataSource.Volunteers);
     //}
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) // stage 2
-        => filter == null
-            ? DataSource.Volunteers.Select(item => item)
+    {
+        // חיפוש נתונים עם או בלי סינון
+        var result = filter == null
+            ? DataSource.Volunteers
             : DataSource.Volunteers.Where(filter);
+
+        // זריקת חריגה אם אין נתונים
+        if (!result.Any())
+        {
+            throw new DalReedAllImpossible("No Volunteers found.");
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// Updates an existing volunteer in the system. 
@@ -91,7 +120,7 @@ internal class VolunteerImplementation : IVolunteer
 
         if (index == -1)
         {
-            throw new InvalidOperationException($"Update failed: Volunteer with ID {item.VolunteerId} does not exist.");
+            throw new DalDoesNotExistException($"Update failed: Volunteer with ID {item.VolunteerId} does not exist.");
         }
 
         // Updating the volunteer at the correct position
