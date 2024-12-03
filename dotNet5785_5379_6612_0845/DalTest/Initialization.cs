@@ -11,7 +11,6 @@ public static class Initialization
     private static IAssignment? s_dalAssignment;
     private static ICall? s_dalCall;
     private static readonly Random s_rand = new();
-    private static IDal? s_dal;
 
     /// <summary>
     /// Creates a list of volunteers with random data and adds them to the volunteer data source.
