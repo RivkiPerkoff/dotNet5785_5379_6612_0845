@@ -2,17 +2,20 @@
 using Dal;
 using DalApi;
 using DO;
+using System.Diagnostics;
+
 /// <summary>
 /// The main class of the program.
 /// Contains the main menu, sub-menus for manipulating entities like Volunteers, Calls, Assignments, and Configuration parameters.
 /// </summary>
 internal class Program
 {
-    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); 
-    private static ICall? s_dalCall = new CallImplementation(); 
-    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // stage 1
-    private static IConfig? s_dalConfig = new ConfigImplementation();
-
+    //    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); 
+    //    private static ICall? s_dalCall = new CallImplementation(); 
+    //    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // stage 1
+    //    private static IConfig? s_dalConfig = new ConfigImplementation();
+    static readonly IDal s_dal = new DalList();
+    
     private enum MainMenuOptions
     {
         Exit,
@@ -51,17 +54,18 @@ internal class Program
     {
         try
         {
-            while (true)
-            {
-                ShowMainMenu();
-                Console.WriteLine("Please choose an option: ");
-                if (!Enum.TryParse(Console.ReadLine(), out MainMenuOptions option) || !Enum.IsDefined(option))
-                {
-                    Console.WriteLine("Invalid option. Please try again.");
-                    continue;
-                }
-                HandleMainMenuOption(option);
-            }
+            //while (true)
+            //{
+            //    ShowMainMenu();
+            //    Console.WriteLine("Please choose an option: ");
+            //    if (!Enum.TryParse(Console.ReadLine(), out MainMenuOptions option) || !Enum.IsDefined(option))
+            //    {
+            //        Console.WriteLine("Invalid option. Please try again.");
+            //        continue;
+            //    }
+            //    HandleMainMenuOption(option);
+            //}
+            Initialization.Do(s_dal);
         }
         catch (Exception ex)
         {
@@ -100,7 +104,7 @@ internal class Program
                 ConfigSubmenuu();
                 break;
             case MainMenuOptions.InitializeData:
-                Initialization.DO(s_dalVolunteer, s_dalCall, s_dalAssignment, s_dalConfig);
+                Initialization.DO(s_dal.Volunteer, s_dal.Call, s_dal.Assignment, s_dalConfig);
                 break;
             case MainMenuOptions.DisplayAllData:
                 {
@@ -111,9 +115,9 @@ internal class Program
                 break;
             case MainMenuOptions.ResetDatabase:
                 s_dalConfig!.Reset(); //stage 1
-                s_dalVolunteer!.DeleteAll(); //stage 1
-                s_dalCall!.DeleteAll(); //stage 1
-                s_dalAssignment!.DeleteAll(); //stage 1
+                s_dal.Volunteer!.DeleteAll(); //stage 1
+                s_dal.Call!.DeleteAll(); //stage 1
+                s_dal.Assignment!.DeleteAll(); //stage 1
                 break;
             default:
                 Console.WriteLine("Invalid option.");
@@ -172,15 +176,15 @@ internal class Program
         {
             case "VolunteerSubMenu":
                 Volunteer Vol = CreateVolunteer(yourId);
-                s_dalVolunteer?.Create(Vol);
+                s_dal.Volunteer?.Create(Vol);
                 break;
             case "CallSubMenu":
                 Call Call = CreateCall(yourId);
-                s_dalCall?.Create(Call);
+                s_dal.Call?.Create(Call);
                 break;
             case "AssignmentSubMenu":
                 Assignment Ass = CreateAssignment(yourId);
-                s_dalAssignment?.Create(Ass);
+                s_dal.Assignment?.Create(Ass);
                 break;
 
         }
@@ -287,15 +291,15 @@ internal class Program
         {
             case "VolunteerSubMenu":
                 Volunteer Vol = CreateVolunteer(yourId);
-                s_dalVolunteer?.Update(Vol);
+                s_dal.Volunteer?.Update(Vol);
                 break;
             case "CallSubMenu":
                 Call Call = CreateCall(yourId);
-                s_dalCall?.Update(Call);
+                s_dal.Call?.Update(Call);
                 break;
             case "AssignmentSubMenu":
                 Assignment Ass = CreateAssignment(yourId);
-                s_dalAssignment?.Update(Ass);
+                s_dal.Assignment?.Update(Ass);
                 break;
         }
     }
@@ -306,13 +310,13 @@ internal class Program
         switch (choice)
         {
             case "VolunteerSubMenu":
-                Console.WriteLine(s_dalVolunteer?.Read(yourId));
+                Console.WriteLine(s_dal.Volunteer?.Read(yourId));
                 break;
             case "CallSubMenu":
-                Console.WriteLine(s_dalCall?.Read(yourId));
+                Console.WriteLine(s_dal.Call?.Read(yourId));
                 break;
             case "AssignmentSubMenu":
-                Console.WriteLine(s_dalAssignment?.Read(yourId));
+                Console.WriteLine(s_dal.Assignment?.Read(yourId));
                 break;
         }
     }
@@ -322,15 +326,15 @@ internal class Program
         switch (choice)
         {
             case "VolunteerSubMenu":
-                foreach (var item in s_dalVolunteer!.ReadAll())
+                foreach (var item in s_dal.Volunteer!.ReadAll())
                     Console.WriteLine(item);
                 break;
             case "CallSubMenu":
-                foreach (var item in s_dalCall!.ReadAll())
+                foreach (var item in s_dal.Call!.ReadAll())
                     Console.WriteLine(item);
                 break;
             case "AssignmentSubMenu":
-                foreach (var item in s_dalAssignment!.ReadAll())
+                foreach (var item in s_dal.Assignment!.ReadAll())
                     Console.WriteLine(item);
                 break;
         }
@@ -342,13 +346,13 @@ internal class Program
         switch (choice)
         {
             case "VolunteerSubMenu":
-                s_dalVolunteer?.Delete(yourId);
+                s_dal.Volunteer?.Delete(yourId);
                 break;
             case "CallSubMenu":
-                s_dalCall?.Delete(yourId);
+                s_dal.Call?.Delete(yourId);
                 break;
             case "AssignmentSubMenu":
-                s_dalAssignment?.Delete(yourId);
+                s_dal.Assignment?.Delete(yourId);
                 break;
         }
     }
@@ -358,13 +362,13 @@ internal class Program
         switch (choice)
         {
             case "VolunteerSubMenu":
-                s_dalVolunteer?.DeleteAll();
+                s_dal.Volunteer?.DeleteAll();
                 break;
             case "CallSubMenu":
-                s_dalCall?.DeleteAll();
+                s_dal.Call?.DeleteAll();
                 break;
             case "AssignmentSubMenu":
-                s_dalAssignment?.DeleteAll();
+                s_dal.Assignment?.DeleteAll();
                 break;
         }
 
