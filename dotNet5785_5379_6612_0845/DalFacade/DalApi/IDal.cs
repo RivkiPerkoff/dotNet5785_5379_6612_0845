@@ -1,5 +1,4 @@
-﻿
-using DalApi;
+﻿using DalApi;
 
 public interface IDal
 {
