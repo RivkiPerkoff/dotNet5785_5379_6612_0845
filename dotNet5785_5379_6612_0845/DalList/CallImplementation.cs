@@ -57,7 +57,7 @@ internal class CallImplementation : ICall
     /// <returns>The call with the specified ID, or null if not found.</returns>
     public Call? Read(int id)
     {
-        return DataSource.Calls.Find(a => a.IdCall == id);  // Find the call by ID.
+        return DataSource.Calls.FirstOrDefault(call => call.IdCall == id);  // Find the call by ID.
     }
 
     /// <summary>
