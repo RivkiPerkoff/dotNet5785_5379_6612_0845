@@ -50,7 +50,7 @@ internal class AssignmentImplementation : IAssignment
     /// <returns>The assignment with the specified ID, or null if not found.</returns>
     public Assignment? Read(int id)
     {
-        Assignment? assignment = DataSource.Assignments.Find(assignment => assignment.VolunteerId == id);  // Find the assignment by volunteer ID.
+        Assignment? assignment = DataSource.Assignments.FirstOrDefault(assignment => assignment.VolunteerId == id);  // Find the assignment by volunteer ID.
         return assignment;
     }
 
