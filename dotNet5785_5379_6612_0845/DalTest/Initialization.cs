@@ -93,8 +93,8 @@ public static class Initialization
     /// </summary>
     private static void createAssignment()
     {
-        List<Call>? calls = s_dal!.Call.ReadAll();
-        List<Volunteer>? volunteers = s_dal.Volunteer!.ReadAll();
+        List<Call>? calls = s_dal!.Call.ReadAll().ToList();
+        List<Volunteer>? volunteers = s_dal.Volunteer!.ReadAll().ToList();
         for (int i = 0; i < 50; i++)
         {
             if (calls[i].OpeningTime.HasValue && calls[i].MaxFinishTime.HasValue)
