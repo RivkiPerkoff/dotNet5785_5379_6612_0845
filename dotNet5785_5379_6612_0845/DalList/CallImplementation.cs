@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Implementation of the ICall interface for managing call operations such as create, read, update, delete.
 /// </summary>
-public class CallImplementation : ICall
+internal class CallImplementation : ICall
 {
     /// <summary>
     /// Creates a new call and adds it to the data source.

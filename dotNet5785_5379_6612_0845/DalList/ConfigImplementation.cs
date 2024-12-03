@@ -4,7 +4,7 @@ using DalApi;
 /// Implementation of the IConfig interface. Provides methods to access configuration values
 /// for system clock, risk range, and unique ID generation for volunteers, calls, and assignments.
 /// </summary>
-public class ConfigImplementation : IConfig
+internal class ConfigImplementation : IConfig
 {
     /// <summary>
     /// Gets or sets the system clock.

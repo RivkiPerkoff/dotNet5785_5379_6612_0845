@@ -4,7 +4,7 @@ using DO;
 /// <summary>
 /// Implementation of the IAssignment interface for managing assignment operations such as create, read, update, delete.
 /// </summary>
-public class AssignmentImplementation : IAssignment
+internal class AssignmentImplementation : IAssignment
 {
     /// <summary>
     /// Creates a new assignment with a unique volunteer ID.

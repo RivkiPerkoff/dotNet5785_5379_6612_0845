@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Implementation of the IVolunteer interface, providing functionality for CRUD operations (Create, Read, Update, Delete) on Volunteer entities.
 /// </summary>
-public class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : IVolunteer
 {
     /// <summary>
     /// Creates a new volunteer in the system. 
