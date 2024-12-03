@@ -59,6 +59,12 @@ internal class VolunteerImplementation : IVolunteer
         return DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
     }
 
+    public Volunteer? Read(Func<Volunteer, bool> filter)
+    {
+        // Use LINQ to find the first Volunteer object that matches the filter criteria.
+        return DataSource.Volunteers.FirstOrDefault(filter);
+    }
+
     /// <summary>
     /// Retrieves all volunteers from the system.
     /// </summary>

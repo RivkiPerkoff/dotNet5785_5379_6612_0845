@@ -54,6 +54,12 @@ internal class AssignmentImplementation : IAssignment
         return assignment;
     }
 
+    public Assignment? Read(Func<Assignment, bool> filter)
+    {
+        // Use LINQ to find the first element matching the filter, or return null if none is found.
+        return DataSource.Assignments.FirstOrDefault(filter);
+    }
+
     /// <summary>
     /// Reads all assignments from the data source.
     /// </summary>
