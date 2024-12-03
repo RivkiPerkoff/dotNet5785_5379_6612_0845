@@ -54,18 +54,17 @@ internal class Program
     {
         try
         {
-            //while (true)
-            //{
-            //    ShowMainMenu();
-            //    Console.WriteLine("Please choose an option: ");
-            //    if (!Enum.TryParse(Console.ReadLine(), out MainMenuOptions option) || !Enum.IsDefined(option))
-            //    {
-            //        Console.WriteLine("Invalid option. Please try again.");
-            //        continue;
-            //    }
-            //    HandleMainMenuOption(option);
-            //}
-            Initialization.Do(s_dal);
+            while (true)
+            {
+                ShowMainMenu();
+                Console.WriteLine("Please choose an option: ");
+                if (!Enum.TryParse(Console.ReadLine(), out MainMenuOptions option) || !Enum.IsDefined(option))
+                {
+                    Console.WriteLine("Invalid option. Please try again.");
+                    continue;
+                }
+                HandleMainMenuOption(option);
+            }
         }
         catch (Exception ex)
         {
@@ -104,7 +103,7 @@ internal class Program
                 ConfigSubmenuu();
                 break;
             case MainMenuOptions.InitializeData:
-                Initialization.DO(s_dal.Volunteer, s_dal.Call, s_dal.Assignment, s_dalConfig);
+                Initialization.DO(s_dal);
                 break;
             case MainMenuOptions.DisplayAllData:
                 {
@@ -114,7 +113,7 @@ internal class Program
                 }
                 break;
             case MainMenuOptions.ResetDatabase:
-                s_dalConfig!.Reset(); //stage 1
+                s_dal.Config!.Reset(); //stage 1
                 s_dal.Volunteer!.DeleteAll(); //stage 1
                 s_dal.Call!.DeleteAll(); //stage 1
                 s_dal.Assignment!.DeleteAll(); //stage 1
@@ -390,38 +389,38 @@ internal class Program
                 {
                     case ConfigSubmenu.AdvanceClockByMinute:
 
-                        s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
+                        s_dal.Config!.Clock = s_dal.Config.Clock.AddMinutes(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByHour:
-                        s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1);
+                        s_dal.Config!.Clock = s_dal.Config.Clock.AddHours(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByDay:
-                        s_dalConfig!.Clock = s_dalConfig.Clock.AddDays(1);
+                        s_dal.Config!.Clock = s_dal.Config.Clock.AddDays(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByMonth:
-                        s_dalConfig!.Clock = s_dalConfig.Clock.AddMonths(1);
+                        s_dal.Config!.Clock = s_dal.Config.Clock.AddMonths(1);
                         break;
                     case ConfigSubmenu.AdvanceClockByYear:
-                        s_dalConfig!.Clock = s_dalConfig.Clock.AddYears(1);
+                        s_dal.Config!.Clock = s_dal.Config.Clock.AddYears(1);
                         break;
                     case ConfigSubmenu.DisplayClock:
-                        Console.WriteLine(s_dalConfig!.Clock);
+                        Console.WriteLine(s_dal.Config!.Clock);
                         break;
                     case ConfigSubmenu.ChangeClockOrRiskRange:
-                        Console.WriteLine($"RiskRange : {s_dalConfig!.RiskRange}");
+                        Console.WriteLine($"RiskRange : {s_dal.Config!.RiskRange}");
                         break;
                     case ConfigSubmenu.DisplayConfigVar:
                         Console.Write("Enter a new value for RiskRange (In format hours:minutes:seconds ): ");
                         string riskRangeInput = Console.ReadLine()!;
                         if (!TimeSpan.TryParse(riskRangeInput, out TimeSpan newRiskRange)) throw new FormatException("Invalid choice");
                         {
-                            s_dalConfig!.RiskRange=newRiskRange;
-                            Console.WriteLine($"RiskRange update to: {s_dalConfig.RiskRange}");
+                            s_dal.Config!.RiskRange=newRiskRange;
+                            Console.WriteLine($"RiskRange update to: {s_dal.Config.RiskRange}");
                         }
                         break;
 
                     case ConfigSubmenu.Reset:
-                        s_dalConfig!.Reset();
+                        s_dal.Config!.Reset();
                         break;
 
 
