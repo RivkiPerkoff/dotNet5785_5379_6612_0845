@@ -1,6 +1,8 @@
 ﻿namespace Dal;
 using DalApi;
 using DO;
+using System.Linq;
+
 /// <summary>
 /// Implementation of the IAssignment interface for managing assignment operations such as create, read, update, delete.
 /// </summary>
@@ -31,7 +33,7 @@ internal class AssignmentImplementation : IAssignment
         }
         else
         {
-            throw new Exception($"Assignment with Id {id} was not found");  // Throw an exception if no assignment is found.
+            throw new DalDeletionImpossible($"Assignment with Id {id} was not found");  // Throw an exception if no assignment is found.
         }
     }
 
@@ -40,6 +42,10 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     public void DeleteAll()
     {
+        if (!DataSource.Assignments.Any())
+        {
+            throw new DalDeletionImpossible("The Assignments list is already empty.");
+        }
         DataSource.Assignments.Clear();  // Clear all assignments from the data source.
     }
 
@@ -51,11 +57,21 @@ internal class AssignmentImplementation : IAssignment
     public Assignment? Read(int id)
     {
         Assignment? assignment = DataSource.Assignments.FirstOrDefault(assignment => assignment.VolunteerId == id);  // Find the assignment by volunteer ID.
+        if (assignment == null)
+        {
+            throw new DalDoesNotExistException($"No Assignment found with ID {id}.");
+        }
         return assignment;
     }
 
     public Assignment? Read(Func<Assignment, bool> filter)
     {
+        var assignment = DataSource.Assignments.FirstOrDefault(filter);
+
+        if (assignment == null)
+        {
+            throw new DalDoesNotExistException("No Assignment found matching the specified criteria.");
+        }
         // Use LINQ to find the first element matching the filter, or return null if none is found.
         return DataSource.Assignments.FirstOrDefault(filter);
     }
@@ -64,11 +80,17 @@ internal class AssignmentImplementation : IAssignment
     /// Reads all assignments from the data source.
     /// </summary>
     /// <returns>A list of all assignments.</returns>
-    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) // stage 2
-        => filter == null
+    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
+    {
+        var result = filter == null
             ? DataSource.Assignments.Select(item => item)
             : DataSource.Assignments.Where(filter);
-
+        if (!result.Any())
+        {
+            throw new DalReedAllImpossible("No Volunteers found.");
+        }
+        return result;
+    }
 
     /// <summary>
     /// Updates an existing assignment by replacing it with the provided item.
@@ -85,7 +107,7 @@ internal class AssignmentImplementation : IAssignment
         }
         else
         {
-            throw new Exception($"Could not update item, no assignment with Id {item.VolunteerId} found");  // Throw an exception if assignment is not found.
+            throw new DalDoesNotExistException($"Could not update item, no assignment with Id {item.VolunteerId} found");  // Throw an exception if assignment is not found.
         }
     }
 }
