@@ -306,13 +306,13 @@ internal class Program
         switch (choice)
         {
             case "VolunteerSubMenu":
-                s_dalVolunteer?.Read(yourId);
+                Console.WriteLine(s_dalVolunteer?.Read(yourId));
                 break;
             case "CallSubMenu":
-                s_dalCall?.Delete(yourId);
+                Console.WriteLine(s_dalCall?.Read(yourId));
                 break;
             case "AssignmentSubMenu":
-                s_dalAssignment?.Delete(yourId);
+                Console.WriteLine(s_dalAssignment?.Read(yourId));
                 break;
         }
     }
@@ -407,7 +407,7 @@ internal class Program
                         Console.WriteLine($"RiskRange : {s_dalConfig!.RiskRange}");
                         break;
                     case ConfigSubmenu.DisplayConfigVar:
-                        Console.Write("הזן ערך חדש עבור RiskRange (בפורמט שעות:דקות:שניות): ");
+                        Console.Write("Enter a new value for RiskRange (In format hours:minutes:seconds ): ");
                         string riskRangeInput = Console.ReadLine()!;
                         if (!TimeSpan.TryParse(riskRangeInput, out TimeSpan newRiskRange)) throw new FormatException("Invalid choice");
                         {
