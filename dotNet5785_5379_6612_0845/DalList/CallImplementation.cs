@@ -19,7 +19,7 @@ internal class CallImplementation : ICall
     {
         if (DataSource.Calls.Exists(a => a.IdCall == item.IdCall))
         {
-            throw new Exception($"Call with Id {item.IdCall} already exists");  // Throw an exception if the call already exists.
+            throw new DalExistException($"Call with Id {item.IdCall} already exists");  // Throw an exception if the call already exists.
         }
         DataSource.Calls.Add(item);  // Add the new call to the data source.
     }
@@ -34,7 +34,7 @@ internal class CallImplementation : ICall
         Call? call = Read(id);  // Find the call by ID.
         if (call == null)
         {
-            throw new Exception($"Call with Id {id} was not found");  // Throw an exception if the call is not found.
+            throw new DalDeletionImpossible($"Call with Id {id} was not found");  // Throw an exception if the call is not found.
         }
         else
         {
@@ -47,6 +47,10 @@ internal class CallImplementation : ICall
     /// </summary>
     public void DeleteAll()
     {
+        if (!DataSource.Calls.Any())
+        {
+            throw new DalDeletionImpossible("The Calls list is already empty.");
+        }
         DataSource.Calls.Clear();  // Clear all calls from the data source.
     }
 
@@ -57,13 +61,31 @@ internal class CallImplementation : ICall
     /// <returns>The call with the specified ID, or null if not found.</returns>
     public Call? Read(int id)
     {
-        return DataSource.Calls.FirstOrDefault(call => call.IdCall == id);  // Find the call by ID.
+        //return DataSource.Calls.FirstOrDefault(call => call.IdCall == id);  // Find the call by ID.
+        var call = DataSource.Calls.FirstOrDefault(volunteer => volunteer.IdCall == id);
+
+        // זריקת חריגה אם לא נמצא מתנדב
+        if (call == null)
+        {
+            throw new DalDoesNotExistException($"No Call found with ID {id}.");
+        }
+
+        return call;
     }
 
     public Call? Read(Func<Call, bool> filter)
     {
         // Use LINQ to find the first Call object that matches the filter criteria.
-        return DataSource.Calls.FirstOrDefault(filter);
+        //return DataSource.Calls.FirstOrDefault(filter);
+        var call = DataSource.Calls.FirstOrDefault(filter);
+
+        // זריקת חריגה אם לא נמצא מתנדב מתאים
+        if (call == null)
+        {
+            throw new DalDoesNotExistException("No Call found matching the specified criteria.");
+        }
+
+        return call;
     }
 
     /// <summary>
@@ -71,10 +93,20 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <returns>A list of all calls.</returns>
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) // stage 2
-        => filter == null
+    {
+        // חיפוש נתונים עם או בלי סינון
+        var result = filter == null
             ? DataSource.Calls.Select(item => item)
             : DataSource.Calls.Where(filter);
 
+        // זריקת חריגה אם אין נתונים
+        if (!result.Any())
+        {
+            throw new DalReedAllImpossible("No Calls found.");
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// Updates an existing call by replacing it with the provided item.
@@ -91,7 +123,7 @@ internal class CallImplementation : ICall
         }
         else
         {
-            throw new Exception($"Could not update item, no Call with Id {item.IdCall} found");  // Throw an exception if no matching call is found.
+            throw new DalDoesNotExistException($"Could not update item, no Call with Id {item.IdCall} found");  // Throw an exception if no matching call is found.
         }
     }
 }
