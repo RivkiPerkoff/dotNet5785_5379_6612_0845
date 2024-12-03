@@ -15,6 +15,7 @@ namespace DalApi
         public T? Read(int id);
         public List<T> ReadAll();
         public void Update(T item);
+        T? Read(Func<T, bool> filter);
     }
 }
 
