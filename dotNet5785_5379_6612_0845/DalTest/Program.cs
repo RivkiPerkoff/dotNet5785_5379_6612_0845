@@ -89,8 +89,8 @@ internal class Program
 
     private static void HandleMainMenuOption(MainMenuOptions option)
     {
-        try
-        {
+        //try
+        //{
             switch (option)
             {
                 case MainMenuOptions.Exit:
@@ -125,10 +125,10 @@ internal class Program
                     Console.WriteLine("Invalid option.");
                     break;
             }
-        }
-        catch (Exception ex) {
-            Console.WriteLine($"An exception occurred: {ex.Message}");
-        }
+        //}
+        //catch (Exception ex) {
+        //    Console.WriteLine($"An exception occurred: {ex.Message}");
+        //}
     }
 
 
