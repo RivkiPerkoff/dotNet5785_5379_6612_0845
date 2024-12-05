@@ -70,6 +70,7 @@ internal class Program
         {
             Console.WriteLine($"An exception occurred: {ex.Message}");
         }
+
     }
 
     private static void ShowMainMenu()
@@ -88,47 +89,55 @@ internal class Program
 
     private static void HandleMainMenuOption(MainMenuOptions option)
     {
-        switch (option)
+        try
         {
-            case MainMenuOptions.Exit:
-                Console.WriteLine("Exiting the program...");
-                Environment.Exit(0);
-                break;
-            case MainMenuOptions.VolunteerSubMenu:
-            case MainMenuOptions.CallSubMenu:
-            case MainMenuOptions.AssignmentSubMenu:
-                EntityMenu(option);
-                break;
-            case MainMenuOptions.ConfigurationSubMenu:
-                ConfigSubmenuu();
-                break;
-            case MainMenuOptions.InitializeData:
-                Initialization.DO(s_dal);
-                break;
-            case MainMenuOptions.DisplayAllData:
-                {
-                    ReadAll("VolunteerSubMenu");
-                    ReadAll("CallSubMenu");
-                    ReadAll("AssignmentSubMenu");
-                }
-                break;
-            case MainMenuOptions.ResetDatabase:
-                s_dal.Config!.Reset(); //stage 1
-                s_dal.Volunteer!.DeleteAll(); //stage 1
-                s_dal.Call!.DeleteAll(); //stage 1
-                s_dal.Assignment!.DeleteAll(); //stage 1
-                break;
-            default:
-                Console.WriteLine("Invalid option.");
-                break;
+            switch (option)
+            {
+                case MainMenuOptions.Exit:
+                    Console.WriteLine("Exiting the program...");
+                    Environment.Exit(0);
+                    break;
+                case MainMenuOptions.VolunteerSubMenu:
+                case MainMenuOptions.CallSubMenu:
+                case MainMenuOptions.AssignmentSubMenu:
+                    EntityMenu(option);
+                    break;
+                case MainMenuOptions.ConfigurationSubMenu:
+                    ConfigSubmenuu();
+                    break;
+                case MainMenuOptions.InitializeData:
+                    Initialization.DO(s_dal);
+                    break;
+                case MainMenuOptions.DisplayAllData:
+                    {
+                        ReadAll("VolunteerSubMenu");
+                        ReadAll("CallSubMenu");
+                        ReadAll("AssignmentSubMenu");
+                    }
+                    break;
+                case MainMenuOptions.ResetDatabase:
+                    s_dal.Config!.Reset(); //stage 1
+                    s_dal.Volunteer!.DeleteAll(); //stage 1
+                    s_dal.Call!.DeleteAll(); //stage 1
+                    s_dal.Assignment!.DeleteAll(); //stage 1
+                    break;
+                default:
+                    Console.WriteLine("Invalid option.");
+                    break;
+            }
+        }
+        catch (Exception ex) {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
         }
     }
 
 
     private static void EntityMenu(MainMenuOptions choice)
     {
-        //Console.WriteLine("Enter a number");
-        foreach (SubMenu option in Enum.GetValues(typeof(SubMenu)))
+        try
+        {
+            //Console.WriteLine("Enter a number");
+            foreach (SubMenu option in Enum.GetValues(typeof(SubMenu)))
         {
             Console.WriteLine($"{(int)option}. {option}");
         }
@@ -164,6 +173,11 @@ internal class Program
             }
             Console.WriteLine("Enter a number");
             Enum.TryParse(Console.ReadLine(), out subChoice);
+        }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
         }
     }
     private static void Create(string choice)
