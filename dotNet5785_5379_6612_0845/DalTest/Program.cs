@@ -318,6 +318,7 @@ internal class Program
     }
     private static void Read(string choice)
     {
+
         Console.WriteLine("Enter ID: ");
         int yourId = int.Parse(Console.ReadLine()!);
         switch (choice)
@@ -335,8 +336,9 @@ internal class Program
     }
     private static void ReadAll(string choice)
     {
-
-        switch (choice)
+        try
+        {
+            switch (choice)
         {
             case "VolunteerSubMenu":
                 foreach (var item in s_dal.Volunteer!.ReadAll())
@@ -350,6 +352,11 @@ internal class Program
                 foreach (var item in s_dal.Assignment!.ReadAll())
                     Console.WriteLine(item);
                 break;
+        }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
         }
     }
     private static void Delete(string choice)

@@ -87,7 +87,7 @@ internal class AssignmentImplementation : IAssignment
             : DataSource.Assignments.Where(filter);
         if (!result.Any())
         {
-            throw new DalReedAllImpossible("No Volunteers found.");
+            throw new DalReedAllImpossible("No Assignments found.");
         }
         return result;
     }
