@@ -47,11 +47,18 @@ internal class CallImplementation : ICall
     /// </summary>
     public void DeleteAll()
     {
-        if (!DataSource.Calls.Any())
+        try
         {
-            throw new DalDeletionImpossible("The Calls list is already empty.");
+            if (!DataSource.Calls.Any())
+            {
+                throw new DalDeletionImpossible("The Calls list is already empty.");
+            }
+            DataSource.Calls.Clear();  // Clear all calls from the data source.
         }
-        DataSource.Calls.Clear();  // Clear all calls from the data source.
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
+        }
     }
 
     /// <summary>

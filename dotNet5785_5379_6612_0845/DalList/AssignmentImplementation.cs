@@ -42,11 +42,18 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     public void DeleteAll()
     {
-        if (!DataSource.Assignments.Any())
+        try
         {
-            throw new DalDeletionImpossible("The Assignments list is already empty.");
+            if (!DataSource.Assignments.Any())
+            {
+                throw new DalDeletionImpossible("The Assignments list is already empty.");
+            }
+            DataSource.Assignments.Clear();  // Clear all assignments from the data source.
         }
-        DataSource.Assignments.Clear();  // Clear all assignments from the data source.
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
+        }
     }
 
     /// <summary>
@@ -87,7 +94,7 @@ internal class AssignmentImplementation : IAssignment
             : DataSource.Assignments.Where(filter);
         if (!result.Any())
         {
-            throw new DalReedAllImpossible("No Volunteers found.");
+            throw new DalReedAllImpossible("No Assignments found.");
         }
         return result;
     }

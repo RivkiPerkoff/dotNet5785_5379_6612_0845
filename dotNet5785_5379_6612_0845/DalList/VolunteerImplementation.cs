@@ -2,6 +2,8 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+
 /// <summary>
 /// Implementation of the IVolunteer interface, providing functionality for CRUD operations (Create, Read, Update, Delete) on Volunteer entities.
 /// </summary>
@@ -44,12 +46,19 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     public void DeleteAll()
     {
-        if (!DataSource.Volunteers.Any())
+        try
         {
-            throw new DalDeletionImpossible("The Volunteers list is already empty.");
+            if (!DataSource.Volunteers.Any())
+            {
+                throw new DalDeletionImpossible("The Volunteers list is already empty.");
+            }
+            // Clearing the volunteer list
+            DataSource.Volunteers.Clear();
         }
-        // Clearing the volunteer list
-        DataSource.Volunteers.Clear();
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
+        }
     }
 
     /// <summary>
