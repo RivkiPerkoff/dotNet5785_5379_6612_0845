@@ -42,11 +42,18 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     public void DeleteAll()
     {
-        if (!DataSource.Assignments.Any())
+        try
         {
-            throw new DalDeletionImpossible("The Assignments list is already empty.");
+            if (!DataSource.Assignments.Any())
+            {
+                throw new DalDeletionImpossible("The Assignments list is already empty.");
+            }
+            DataSource.Assignments.Clear();  // Clear all assignments from the data source.
         }
-        DataSource.Assignments.Clear();  // Clear all assignments from the data source.
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An exception occurred: {ex.Message}");
+        }
     }
 
     /// <summary>
