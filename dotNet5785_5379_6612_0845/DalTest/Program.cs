@@ -3,7 +3,7 @@ using Dal;
 using DalApi;
 using DO;
 using System.Diagnostics;
-
+///
 /// <summary>
 /// The main class of the program.
 /// Contains the main menu, sub-menus for manipulating entities like Volunteers, Calls, Assignments, and Configuration parameters.
