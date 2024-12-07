@@ -428,8 +428,9 @@ internal class Program
         {
             Console.WriteLine($"{(int)option}. {option}");
         }
+        ConfigSubmenu userInput;
         Console.Write("Select an option: ");
-        if (!Enum.TryParse(Console.ReadLine(), out ConfigSubmenu userInput)) throw new FormatException("Invalid choice");
+        if (!Enum.TryParse(Console.ReadLine(), out userInput)) throw new FormatException("Invalid choice");
         {
             while (userInput is not ConfigSubmenu.Exit)
             {
@@ -473,7 +474,8 @@ internal class Program
 
 
                 }
-
+                Console.Write("Select an option: ");
+                if (!Enum.TryParse(Console.ReadLine(), out userInput)) throw new FormatException("Invalid choice");
             }
         }
     }
