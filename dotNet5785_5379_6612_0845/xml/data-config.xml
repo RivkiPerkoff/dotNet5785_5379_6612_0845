@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+	<NextVolunteerId>1008</NextVolunteerId>
+	<NextCallId>1008</NextCallId>
+	<NextAssignmentId>1008</NextAssignmentId>
+	<NextLinkId>41</NextLinkId>
+	<Clock>41</Clock>
+	<MaxRange>41</MaxRange>
 </config>
