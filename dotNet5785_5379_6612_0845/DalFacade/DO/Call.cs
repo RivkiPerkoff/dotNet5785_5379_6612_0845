@@ -26,8 +26,9 @@ public record Call
     // קונסטרקטור מותאם אישית
     public Call(int idCall, string? callDescription, string? callAddress, double callLatitude, double callLongitude, DateTime openingTime, DateTime maxFinishTime, TypeOfReading typeOfReading)
         : this(idCall, callDescription, callAddress, callLatitude, callLongitude, (DateTime?)openingTime, (DateTime?)maxFinishTime, typeOfReading)
-    {
-    }
+    { }
+    public Call() : this(0) { }
+
 }
 
 
