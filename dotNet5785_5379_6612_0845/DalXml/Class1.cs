@@ -1,7 +1,5 @@
-﻿namespace DalXml
+﻿namespace DalXml;
+public class Class1
 {
-    public class Class1
-    {
 
-    }
 }
