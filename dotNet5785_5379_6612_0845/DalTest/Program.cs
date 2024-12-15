@@ -14,7 +14,8 @@ internal class Program
     //    private static ICall? s_dalCall = new CallImplementation(); 
     //    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // stage 1
     //    private static IConfig? s_dalConfig = new ConfigImplementation();
-    static readonly IDal s_dal = new DalList();
+    //static readonly IDal s_dal = new DalList();
+    static readonly IDal s_dal = new DalXml();
 
     private enum MainMenuOptions
     {
