@@ -34,6 +34,19 @@ internal static class Config
 
         Clock = DateTime.Now;
 }
-    internal static TimeSpan? RiskRange { get; set; } = new TimeSpan(1, 30, 0);
+    //internal static TimeSpan? RiskRange { get; set; } = new TimeSpan(1, 30, 0);
+    internal static TimeSpan RiskRange
+    {
+        get
+        {
+            DateTime dateTime = XMLTools.GetConfigDateVal(s_data_config_xml, "RiskRange");
+            return dateTime.TimeOfDay; 
+        }
+        set
+        {
+            DateTime dateTime = DateTime.Today.Add(value);
+            XMLTools.SetConfigDateVal(s_data_config_xml, "RiskRange", dateTime);
+        }
+    }
 
 }

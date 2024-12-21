@@ -18,11 +18,28 @@ internal class ConfigImplementation : IConfig
     /// <summary>
     /// Gets or sets the risk range for the system.
     /// </summary>
+    //public TimeSpan? RiskRange
+    //{
+    //    get => Config.RiskRange;
+    //    set => Config.RiskRange = value;
+    //}
+
     public TimeSpan? RiskRange
     {
         get => Config.RiskRange;
-        set => Config.RiskRange = value;
+        set
+        {
+            if (value.HasValue) 
+            {
+                Config.RiskRange = value.Value;
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(value), "RiskRange cannot be null.");
+            }
+        }
     }
+
 
     /// <summary>
     /// Creates and returns the next unique volunteer ID.
