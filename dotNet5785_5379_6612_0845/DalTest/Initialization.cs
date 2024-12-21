@@ -6,7 +6,7 @@ using DO;
 /// </summary>
 public static class Initialization
 {
-    private static IDal? s_dal;
+    public static IDal? s_dal;
 
     //private static IVolunteer? s_dalVolunteer;
     //private static IAssignment? s_dalAssignment;
@@ -27,7 +27,7 @@ public static class Initialization
 
         for (int i = 0; i < names.Length; i++)
         {
-            int id = s_dal!.Config.CreateVolunteerId();
+            var id = s_dal!.Config.CreateVolunteerId();
             string name = names[i];
             string email = emails[i];
             string phone = phones[i];
@@ -134,7 +134,7 @@ public static class Initialization
     {
         s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
         Console.WriteLine("Reset Configuration values and List values...");
-        dal.ResetDB();
+        s_dal.ResetDB();
         Console.WriteLine("Initializing Volunteers list ...");
         createVolunteer();
         Console.WriteLine("Initializing Calls list ...");

@@ -45,8 +45,8 @@ internal class VolunteerImplementation : IVolunteer
     public void Create(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
-        if (Volunteers.RemoveAll(it => it.VolunteerId == item.VolunteerId) == 0)
-            throw new DalDoesNotExistException($"Course with ID={item.VolunteerId} does Not exist");
+        if (Volunteers.Any(v => v.VolunteerId == item.VolunteerId))
+            throw new DalExistException($"Volunteer with ID {item.VolunteerId} already exists.");
         Volunteers.Add(item);
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
