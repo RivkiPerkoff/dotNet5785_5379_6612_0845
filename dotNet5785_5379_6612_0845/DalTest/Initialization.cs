@@ -27,7 +27,7 @@ public static class Initialization
 
         for (int i = 0; i < names.Length; i++)
         {
-            var id = s_dal!.Config.CreateVolunteerId();
+            int id = s_dal!.Config.CreateVolunteerId();
             string name = names[i];
             string email = emails[i];
             string phone = phones[i];
