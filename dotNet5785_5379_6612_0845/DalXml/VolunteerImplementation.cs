@@ -81,7 +81,8 @@ internal class VolunteerImplementation : IVolunteer
 
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
-        throw new NotImplementedException();
+        var volunteers = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c => getVolunteer(c));
+        return filter is null ? volunteers : volunteers.Where(filter);
     }
 
     public void Update(Volunteer item)

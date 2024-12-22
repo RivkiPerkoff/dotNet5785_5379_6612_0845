@@ -88,7 +88,7 @@ static class XMLTools
         int newValue = nextId + 1;
         root.Element(elemName)?.SetValue(newValue.ToString());
         SaveListToXMLElement(root, xmlFileName);
-        return nextId+1;
+        return nextId;
     }
     public static int GetConfigIntVal(string xmlFileName, string elemName)
     {
