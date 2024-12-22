@@ -24,10 +24,10 @@ public static class Initialization
         string[] emails = { "Roni@gmail.com", "Maya@gmail.com", "Lior@gmail.com", "Noa@gmail.com", "Dani@gmail.com", "Tomer@gmail.com", "Liat@gmail.com", "Gal@gmail.com", "Yona@gmail.com", "Nir@gmail.com", "Omer@gmail.com", "Shira@gmail.com", "Erez@gmail.com", "Michal@gmail.com", "Hadar@gmail.com" };
         string[] phones = { "050-321-7845", "052-987-1243", "054-123-9876", "053-549-4567", "055-789-1234", "050-987-6789", "054-112-7654", "053-785-6543", "052-312-7890", "055-654-3210", "053-789-5647", "050-125-1234", "052-456-8765", "054-654-4321", "055-123-4567" };
         string[] addresses = { "Nazareth", "Haifa", "Beersheba", "Eilat", "Rosh Ha'ayin", "Afula", "Kiryat Shmona", "Karmiel", "Dimona", "Tiberias", "Safed", "Kiryat Gat", "Ashkelon", "Lod", "Ramat Gan" };
-        int t = 1000;
+
         for (int i = 0; i < names.Length; i++)
         {
-            int id = t++; //s_dal!.Config.CreateVolunteerId();
+            int id = s_dal!.Config.CreateVolunteerId();
             string name = names[i];
             string email = emails[i];
             string phone = phones[i];
