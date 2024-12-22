@@ -48,7 +48,6 @@ internal class VolunteerImplementation : IVolunteer
         if (Volunteers.Any(v => v.VolunteerId == item.VolunteerId))
             throw new DalExistException($"Volunteer with ID {item.VolunteerId} already exists.");
         Volunteers.Add(item);
-        Console.WriteLine(Volunteers);
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
 

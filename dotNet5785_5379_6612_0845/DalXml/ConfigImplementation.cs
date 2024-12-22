@@ -29,7 +29,7 @@ internal class ConfigImplementation : IConfig
         get => Config.RiskRange;
         set
         {
-            if (value.HasValue) 
+            if (value.HasValue)
             {
                 Config.RiskRange = value.Value;
             }
@@ -56,6 +56,7 @@ internal class ConfigImplementation : IConfig
     /// <returns>The next call ID.</returns>
     public int CreateCallId()
     {
+       // get => Config.NextCallId;
         return Config.NextCallId;
     }
 
