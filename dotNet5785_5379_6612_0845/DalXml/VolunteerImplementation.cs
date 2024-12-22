@@ -81,7 +81,7 @@ internal class VolunteerImplementation : IVolunteer
 
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
-        var volunteers = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c => getVolunteer(c));
+        var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(c => getVolunteer(c));
         return filter is null ? volunteers : volunteers.Where(filter);
     }
 

@@ -70,8 +70,8 @@ public static class Initialization
             string address = addresses[s_rand.Next(addresses.Length)];
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
-
-            DateTime start = new DateTime(s_dal.Config.Clock.Year-1, s_dal.Config.Clock.Month, s_dal.Config.Clock.Day, s_dal.Config.Clock.Hour - 5, 0, 0);
+            ///////////////////////////////////////////////////////////////////לשים לב לשעה
+            DateTime start = new DateTime(s_dal.Config.Clock.Year-1, s_dal.Config.Clock.Month, s_dal.Config.Clock.Day, s_dal.Config.Clock.Hour + 5, 0, 0);
             int range = (s_dal.Config.Clock - start).Days;
             DateTime openingTime = start.AddDays(s_rand.Next(range));
             DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days));
