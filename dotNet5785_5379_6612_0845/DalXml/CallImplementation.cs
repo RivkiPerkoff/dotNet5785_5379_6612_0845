@@ -75,7 +75,7 @@ internal class CallImplementation : ICall
         var calls = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c => GetCall(c));
         return filter is null ? calls : calls.Where(filter);
     }
-
+   
     public void Update(Call item)
     {
         XElement callRootElem = XMLTools.LoadListFromXMLElement(Config.s_calls_xml);
