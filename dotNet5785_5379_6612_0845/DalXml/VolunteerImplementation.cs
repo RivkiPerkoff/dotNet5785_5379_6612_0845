@@ -41,6 +41,7 @@ internal class VolunteerImplementation : IVolunteer
             new XElement("DistanceType", item.DistanceType.ToString()) // Enum to string
         );
     }
+
     public void Create(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -49,21 +50,16 @@ internal class VolunteerImplementation : IVolunteer
         Volunteers.Add(item);
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
+
     public void Delete(int id)
     {
-        // טען את הרשימה
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
-
-        // בדוק אם ה-ID קיים
         if (!Volunteers.Any(v => v.VolunteerId == id))
             throw new DalDoesNotExistException($"Volunteer with ID={id} does not exist");
-
-        // מחק את המתנדב
         Volunteers.RemoveAll(it => it.VolunteerId == id);
-
-        // שמור את הרשימה המעודכנת
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
+
 
     //public void Delete(int id)
     //{
@@ -74,7 +70,9 @@ internal class VolunteerImplementation : IVolunteer
     //}
     public void DeleteAll()
     {
-        XMLTools.SaveListToXMLSerializer(new List<Volunteer>(), Config.s_volunteers_xml);
+        //XMLTools.SaveListToXMLSerializer(new List<Volunteer>(), Config.s_volunteers_xml);
+        XMLTools.SaveListToXMLElement(new XElement("ArrayOfVolunteer", []), Config.s_volunteers_xml);
+
     }
     //public Volunteer? Read(int id)
     //{
@@ -92,16 +90,9 @@ internal class VolunteerImplementation : IVolunteer
     //}
     public Volunteer Read(int id)
     {
-        // טען את הרשימה ונסה למצוא את האלמנט המתאים
-        XElement? volunteerElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml)
-            .Elements()
-            .FirstOrDefault(v => (int?)v.Element("VolunteerId") == id); // וודא שמחפש "VolunteerId"
-
-        // אם האלמנט לא נמצא, זרוק שגיאה
+        XElement? volunteerElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == id); 
         if (volunteerElem == null)
             throw new DO.DalDoesNotExistException($"Volunteer with ID={id} does not exist");
-
-        // החזר את המתנדב שנמצא
         return getVolunteer(volunteerElem);
     }
 
