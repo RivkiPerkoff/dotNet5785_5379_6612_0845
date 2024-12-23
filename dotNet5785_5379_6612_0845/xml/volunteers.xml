@@ -152,4 +152,76 @@
     <IsAvailable>false</IsAvailable>
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
     <Role>Manager</Role>
-    <DistanceTyp
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1011</VolunteerId>
+    <Name>Shira</Name>
+    <PhoneNumber>050-125-1234</PhoneNumber>
+    <EmailOfVolunteer>Shira@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer />
+    <AddressVolunteer>Kiryat Gat</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1012</VolunteerId>
+    <Name>Erez</Name>
+    <PhoneNumber>052-456-8765</PhoneNumber>
+    <EmailOfVolunteer>Erez@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer />
+    <AddressVolunteer>Ashkelon</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1013</VolunteerId>
+    <Name>Michal</Name>
+    <PhoneNumber>054-654-4321</PhoneNumber>
+    <EmailOfVolunteer>Michal@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer />
+    <AddressVolunteer>Lod</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1014</VolunteerId>
+    <Name>Hadar</Name>
+    <PhoneNumber>055-123-4567</PhoneNumber>
+    <EmailOfVolunteer>Hadar@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer />
+    <AddressVolunteer>Ramat Gan</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>327880845</VolunteerId>
+    <Name>4</Name>
+    <PhoneNumber>4</PhoneNumber>
+    <EmailOfVolunteer>4</EmailOfVolunteer>
+    <PasswordVolunteer>4</PasswordVolunteer>
+    <AddressVolunteer>4</AddressVolunteer>
+    <VolunteerLatitude>4</VolunteerLatitude>
+    <VolunteerLongitude>4</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>4</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>RoadDistance</DistanceType>
+  </Volunteer>
+</ArrayOfVolunteer>
