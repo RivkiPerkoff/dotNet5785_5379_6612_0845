@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfVolunteer />
+<ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Volunteer>
+    <VolunteerId>327880845</VolunteerId>
+    <Name>1</Name>
+    <PhoneNumber>1</PhoneNumber>
+    <EmailOfVolunteer>1</EmailOfVolunteer>
+    <PasswordVolunteer>1</PasswordVolunteer>
+    <AddressVolunteer>11</AddressVolunteer>
+    <VolunteerLatitude>1</VolunteerLatitude>
+    <VolunteerLongitude>1</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>1</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>RoadDistance</DistanceType>
+  </Volunteer>
+</ArrayOfVolunteer>
