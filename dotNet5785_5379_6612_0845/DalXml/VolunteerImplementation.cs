@@ -7,6 +7,12 @@ using System.Xml.Linq;
 
 internal class VolunteerImplementation : IVolunteer
 {
+    /// <summary>
+    /// Converts an XElement representing a volunteer into a Volunteer object.
+    /// </summary>
+    /// <param name="v">The XElement containing volunteer data.</param>
+    /// <returns>A Volunteer object.</returns>
+    /// <exception cref="FormatException">Thrown when conversion fails for required fields.</exception>
     static Volunteer getVolunteer(XElement v)
     {
         return new DO.Volunteer(
@@ -24,6 +30,12 @@ internal class VolunteerImplementation : IVolunteer
          DistanceType: (DistanceType)Enum.Parse(typeof(DistanceType), (string?)v.Element("DistanceType") ?? "AirDistance")
      );
     }
+
+    /// <summary>
+    /// Converts a Volunteer object into an XElement representation.
+    /// </summary>
+    /// <param name="item">The Volunteer object to convert.</param>
+    /// <returns>An XElement representing the volunteer.</returns>
     static XElement createVolunteerElement(Volunteer item)
     {
         return new XElement("Volunteer",
@@ -37,10 +49,16 @@ internal class VolunteerImplementation : IVolunteer
             new XElement("VolunteerLongitude", item.VolunteerLongitude),
             new XElement("IsAvailable", item.IsAvailable),
             new XElement("MaximumDistanceForReceivingCall", item.MaximumDistanceForReceivingCall),
-            new XElement("Role", item.Role.ToString()), // Enum to string
-            new XElement("DistanceType", item.DistanceType.ToString()) // Enum to string
+            new XElement("Role", item.Role.ToString()),
+            new XElement("DistanceType", item.DistanceType.ToString())
         );
     }
+
+    /// <summary>
+    /// Adds a new volunteer to the system.
+    /// </summary>
+    /// <param name="item">The volunteer to add.</param>
+    /// <exception cref="DalExistException">Thrown if a volunteer with the same ID already exists.</exception>
     public void Create(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -49,90 +67,73 @@ internal class VolunteerImplementation : IVolunteer
         Volunteers.Add(item);
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
+
+    /// <summary>
+    /// Deletes a volunteer by ID.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to delete.</param>
+    /// <exception cref="DalDoesNotExistException">Thrown if the volunteer does not exist.</exception>
     public void Delete(int id)
     {
-        // טען את הרשימה
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
-
-        // בדוק אם ה-ID קיים
         if (!Volunteers.Any(v => v.VolunteerId == id))
             throw new DalDoesNotExistException($"Volunteer with ID={id} does not exist");
 
-        // מחק את המתנדב
         Volunteers.RemoveAll(it => it.VolunteerId == id);
-
-        // שמור את הרשימה המעודכנת
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
 
-    //public void Delete(int id)
-    //{
-    //    List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
-    //    if (Volunteers.RemoveAll(it => it.VolunteerId == id) == 0)
-    //        throw new DalDoesNotExistException($"Course with ID={id} does Not exist");
-    //    XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
-    //}
+    /// <summary>
+    /// Deletes all volunteers from the system.
+    /// </summary>
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLSerializer(new List<Volunteer>(), Config.s_volunteers_xml);
     }
-    //public Volunteer? Read(int id)
-    //{
-    //    XElement? volunteerElem =
-    //    XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v =>
-    //    (int?)v.Element("Id") == id);
-    //    return volunteerElem is null ? null : getVolunteer(volunteerElem);
-    //}
-    //public Volunteer? Read(int id)
-    //{
-    //    XElement? volunteerElem =
-    //    XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v =>
-    //    (int?)v.Element("VolunteerId") == id); // תיקון מ-"Id" ל-"VolunteerId"
-    //    return volunteerElem is null ? null : getVolunteer(volunteerElem);
-    //}
+
+    /// <summary>
+    /// Retrieves a volunteer by ID.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to retrieve.</param>
+    /// <returns>The requested volunteer.</returns>
+    /// <exception cref="DalDoesNotExistException">Thrown if the volunteer does not exist.</exception>
     public Volunteer Read(int id)
     {
-        // טען את הרשימה ונסה למצוא את האלמנט המתאים
         XElement? volunteerElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml)
             .Elements()
-            .FirstOrDefault(v => (int?)v.Element("VolunteerId") == id); // וודא שמחפש "VolunteerId"
+            .FirstOrDefault(v => (int?)v.Element("VolunteerId") == id);
 
-        // אם האלמנט לא נמצא, זרוק שגיאה
         if (volunteerElem == null)
             throw new DO.DalDoesNotExistException($"Volunteer with ID={id} does not exist");
 
-        // החזר את המתנדב שנמצא
         return getVolunteer(volunteerElem);
     }
 
-    //public Volunteer? Read(Func<Volunteer, bool> filter)
-    //{
-    //    return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v =>
-    //    getVolunteer(v)).FirstOrDefault(filter);
-    //}
-    public Volunteer Read(Func<Volunteer, bool> filter)
-    {
-        // טען את כל האלמנטים כמתנדבים
-        var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml)
-            .Elements()
-            .Select(v => getVolunteer(v));
+    /// <summary>
+    /// Retrieves a volunteer matching the specified filter.
+    /// </summary>
+    /// <param name="filter">The filter function to match volunteers.</param>
+    /// <returns>The first matching volunteer, or null if no match is found.</returns>
+    public Volunteer? Read(Func<Volunteer, bool> filter)
+        => XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Where(v => v != null)
+        .Select(v => getVolunteer(v)).FirstOrDefault(filter);
 
-        // נסה למצוא מתנדב שעונה לתנאי
-        Volunteer? volunteer = volunteers.FirstOrDefault(filter);
-
-        // אם לא נמצא, זרוק שגיאה
-        if (volunteer == null)
-            throw new DO.DalDoesNotExistException("No volunteer matching the specified condition exists");
-
-        // החזר את המתנדב שנמצא
-        return volunteer;
-    }
-
+    /// <summary>
+    /// Retrieves all volunteers, optionally filtered by a predicate.
+    /// </summary>
+    /// <param name="filter">An optional filter function to apply.</param>
+    /// <returns>A collection of volunteers.</returns>
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
         var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(c => getVolunteer(c));
         return filter is null ? volunteers : volunteers.Where(filter);
     }
+
+    /// <summary>
+    /// Updates an existing volunteer's information.
+    /// </summary>
+    /// <param name="item">The updated volunteer object.</param>
+    /// <exception cref="DalDoesNotExistException">Thrown if the volunteer does not exist.</exception>
     public void Update(Volunteer item)
     {
         XElement VolunteerRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);

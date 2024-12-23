@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfAssignment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+<ArrayOfAssignment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Assignment>
+    <NextAssignmentId>1000</NextAssignmentId>
+    <IdOfRunnerCall>1000</IdOfRunnerCall>
+    <VolunteerId>1003</VolunteerId>
+    <TypeOfEndTime>treated</TypeOfEndTime>
+    <EntryTimeForTreatment>2024-04-15T06:36:00</EntryTimeForTreatment>
+    <EndTimeForTreatment>2024-04-15T08:36:00</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1001</NextAssignmentId>
+    <IdOfRunnerCall>1001</IdOfRunnerCall>
+    <VolunteerId>1000</VolunteerId>
+    <TypeOfEndTime>treated</TypeOfEndTime>
+    <EntryTimeForTreatment>2024-11-25T14:19:00</EntryTimeForTreatment>
+    <EndTimeForTreatment>2024-11-25T16:19:00</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1002</NextAssignmentId>
+    <IdOfRunnerCall>1002</IdOfRunnerCall>
+    <VolunteerId>1001</VolunteerId>
+    <TypeOfEndTime>treated</TypeOfEndTime>
+    <EntryTimeForTreatment>2024-08-15T18:09:00</EntryTimeForTreatment>
+    <EndTimeForTreatment>2024-08-15T20:09:00</EndTimeForTreatment>
+  </Assignment>
+</ArrayOfAssignment>

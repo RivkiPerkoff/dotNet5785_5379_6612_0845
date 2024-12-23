@@ -152,7 +152,7 @@ internal class Program
                         Create(choice.ToString());
                         break;
                     case SubMenu.Read:
-                        Console.WriteLine("Enter Your ID");
+                        
                         Read(choice.ToString());
                         break;
                     case SubMenu.ReadAll:
@@ -301,7 +301,7 @@ internal class Program
     {
         try
         {
-            Console.WriteLine("Enter your details");
+            Console.WriteLine("Enter your details:");
             Console.Write("Enter ID: ");
             int yourId = int.Parse(Console.ReadLine()!);
             switch (choice)
