@@ -31,7 +31,7 @@ internal class CallImplementation : ICall
     /// <exception cref="Exception">Thrown when no call with the specified ID is found.</exception>
     public void Delete(int id)
     {
-        Call? call = Read(id);  // Find the call by ID.
+        Call? call = Read(id);
         if (call == null)
         {
             throw new DalDeletionImpossible($"Call with Id {id} was not found");  // Throw an exception if the call is not found.

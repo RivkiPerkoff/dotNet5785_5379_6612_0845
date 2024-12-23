@@ -51,15 +51,20 @@ internal class VolunteerImplementation : IVolunteer
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
 
+    //public void Delete(int id)
+    //{
+    //    List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
+    //    if (!Volunteers.Any(v => v.VolunteerId == id))
+    //        throw new DalDoesNotExistException($"Volunteer with ID={id} does not exist");
+    //    Volunteers.RemoveAll(it => it.VolunteerId == id);
+    //    XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
+    //}
     public void Delete(int id)
     {
-        List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
-        if (!Volunteers.Any(v => v.VolunteerId == id))
-            throw new DalDoesNotExistException($"Volunteer with ID={id} does not exist");
-        Volunteers.RemoveAll(it => it.VolunteerId == id);
-        XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
+        XElement volunteersRoot = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
+        (volunteersRoot.Elements().FirstOrDefault(v => (int?)v.Element("Id") == id) ?? throw new DalDoesNotExistException($"Volunteer with ID={id} does Not exist")).Remove();
+        XMLTools.SaveListToXMLElement(volunteersRoot, Config.s_volunteers_xml);
     }
-
 
     //public void Delete(int id)
     //{
@@ -74,63 +79,55 @@ internal class VolunteerImplementation : IVolunteer
         XMLTools.SaveListToXMLElement(new XElement("ArrayOfVolunteer", []), Config.s_volunteers_xml);
 
     }
-    //public Volunteer? Read(int id)
+
+    //public Volunteer Read(int id)
     //{
-    //    XElement? volunteerElem =
-    //    XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v =>
-    //    (int?)v.Element("Id") == id);
-    //    return volunteerElem is null ? null : getVolunteer(volunteerElem);
+    //    XElement? volunteerElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == id); 
+    //    if (volunteerElem == null)
+    //        throw new DO.DalDoesNotExistException($"Volunteer with ID={id} does not exist");
+    //    return getVolunteer(volunteerElem);
     //}
-    //public Volunteer? Read(int id)
-    //{
-    //    XElement? volunteerElem =
-    //    XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v =>
-    //    (int?)v.Element("VolunteerId") == id); // תיקון מ-"Id" ל-"VolunteerId"
-    //    return volunteerElem is null ? null : getVolunteer(volunteerElem);
-    //}
-    public Volunteer Read(int id)
+
+    public Volunteer? Read(int id)
     {
-        XElement? volunteerElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == id); 
-        if (volunteerElem == null)
-            throw new DO.DalDoesNotExistException($"Volunteer with ID={id} does not exist");
-        return getVolunteer(volunteerElem);
+        XElement? volunteersElemements = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(volunteer => (int?)volunteer.Element("Id") == id);
+        return volunteersElemements is null ? null : getVolunteer(volunteersElemements);
     }
-
-    //public Volunteer? Read(Func<Volunteer, bool> filter)
+    //public Volunteer Read(Func<Volunteer, bool> filter)
     //{
-    //    return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v =>
-    //    getVolunteer(v)).FirstOrDefault(filter);
+    //    var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v));
+    //    Volunteer? volunteer = volunteers.FirstOrDefault(filter);
+    //    if (volunteer == null)
+    //        throw new DO.DalDoesNotExistException("No volunteer matching the specified condition exists");
+    //    return volunteer;
     //}
-    public Volunteer Read(Func<Volunteer, bool> filter)
-    {
-        // טען את כל האלמנטים כמתנדבים
-        var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml)
-            .Elements()
-            .Select(v => getVolunteer(v));
-
-        // נסה למצוא מתנדב שעונה לתנאי
-        Volunteer? volunteer = volunteers.FirstOrDefault(filter);
-
-        // אם לא נמצא, זרוק שגיאה
-        if (volunteer == null)
-            throw new DO.DalDoesNotExistException("No volunteer matching the specified condition exists");
-
-        // החזר את המתנדב שנמצא
-        return volunteer;
-    }
-
+    public Volunteer? Read(Func<Volunteer, bool> filter)
+    => XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Where(v => v != null).Select(v => getVolunteer(v)).FirstOrDefault(filter);
+    //public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
+    //{
+    //    var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(c => getVolunteer(c));
+    //    return filter is null ? volunteers : volunteers.Where(filter);
+    //}
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
+    => filter == null
+    ? XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Where(v => v != null).Select(v => getVolunteer(v))
+    : XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Where(v => v != null).Select(v => getVolunteer(v)).Where(filter);
+    
+    //public void Update(Volunteer item)
+    //{
+    //    XElement VolunteerRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
+    //    (VolunteerRootElem.Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == item.VolunteerId)
+    //    ?? throw new DO.DalDoesNotExistException($"volunteer with ID={item.VolunteerId} does Not exist"))
+    //    .Remove();
+    //    VolunteerRootElem.Add(createVolunteerElement(item));
+    //    XMLTools.SaveListToXMLElement(VolunteerRootElem, Config.s_volunteers_xml);
+    //}
+
+    public void Update(Volunteer updatedVolunteer)
     {
-        var volunteers = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(c => getVolunteer(c));
-        return filter is null ? volunteers : volunteers.Where(filter);
-    }
-    public void Update(Volunteer item)
-    {
-        XElement VolunteerRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
-        (VolunteerRootElem.Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == item.VolunteerId)
-        ?? throw new DO.DalDoesNotExistException($"volunteer with ID={item.VolunteerId} does Not exist"))
-        .Remove();
-        VolunteerRootElem.Add(createVolunteerElement(item));
-        XMLTools.SaveListToXMLElement(VolunteerRootElem, Config.s_volunteers_xml);
+        XElement volunteersRootElemement = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
+        (volunteersRootElemement.Elements().FirstOrDefault(v => (int?)v.Element("Id") == updatedVolunteer.VolunteerId) ?? throw new DalDoesNotExistException($"Volunteer with ID={updatedVolunteer.VolunteerId} does Not exist")).Remove();
+        volunteersRootElemement.Add(new XElement("Volunteer", createVolunteerElement(updatedVolunteer)));
+        XMLTools.SaveListToXMLElement(volunteersRootElemement, Config.s_volunteers_xml);
     }
 }

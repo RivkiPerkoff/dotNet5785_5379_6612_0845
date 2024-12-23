@@ -60,9 +60,8 @@ internal class CallImplementation : ICall
 
     public Call? Read(int id)
     {
-        XElement? callElem = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().FirstOrDefault(c =>
-            (int?)c.Element("IdCall") == id);
-        return callElem is null ? null : GetCall(callElem);
+        XElement? callElem = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().FirstOrDefault(c => (int?)c.Element("IdCall") == id);
+        return callElem is null ? throw new DalDoesNotExistException($"Call with ID={id} does not exist") : GetCall(callElem);
     }
 
     public Call? Read(Func<Call, bool> filter)

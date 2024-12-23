@@ -58,7 +58,7 @@ internal class AssignmentImplementation : IAssignment
     {
         XElement? assignmentElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml).Elements().FirstOrDefault(a =>
             (int?)a.Element("NextAssignmentId") == id);
-        return assignmentElem is null ? null : GetAssignment(assignmentElem);
+        return assignmentElem is null ? throw new DalDoesNotExistException($"Call with ID={id} does not exist") : GetAssignment(assignmentElem);
     }
 
     public Assignment? Read(Func<Assignment, bool> filter)
