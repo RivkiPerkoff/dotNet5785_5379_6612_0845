@@ -17,40 +17,7 @@ internal class Program
     //static readonly IDal s_dal = new DalList();
     static readonly IDal s_dal = new DalXml();
 
-    private enum MainMenuOptions
-    {
-        Exit,
-        VolunteerSubMenu,
-        CallSubMenu,
-        AssignmentSubMenu,
-        ConfigurationSubMenu,
-        InitializeData,
-        DisplayAllData,
-        ResetDatabase
-    }
-    public enum SubMenu
-    {
-        Exit,
-        Create,
-        Read,
-        ReadAll,
-        UpDate,
-        Delete,
-        DeleteAll
-    }
-    private enum ConfigSubmenu
-    {
-        Exit,
-        AdvanceClockByMinute,
-        AdvanceClockByHour,
-        AdvanceClockByDay,
-        AdvanceClockByMonth,
-        AdvanceClockByYear,
-        DisplayClock,
-        ChangeClockOrRiskRange,
-        DisplayConfigVar,
-        Reset
-    }
+   
     private static void Main(string[] args)
     {
         try

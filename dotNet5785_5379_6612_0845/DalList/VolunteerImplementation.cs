@@ -124,15 +124,15 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="item">The updated volunteer entity.</param>
     public void Update(Volunteer item)
     {
-        // Searching for the index of the volunteer by ID
-        int index = DataSource.Volunteers.FindIndex(v => v.VolunteerId == item.VolunteerId);
-
-        if (index == -1)
+        Volunteer? existingVolunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == item.VolunteerId); // Find the existing volunteer.
+        if (existingVolunteer != null)
         {
-            throw new DalDoesNotExistException($"Update failed: Volunteer with ID {item.VolunteerId} does not exist.");
+            DataSource.Volunteers.Remove(existingVolunteer); // Remove the existing volunteer from the data source.
+            DataSource.Volunteers.Add(item); // Add the updated volunteer to the data source.
         }
-
-        // Updating the volunteer at the correct position
-        DataSource.Volunteers[index] = item;
+        else
+        {
+            throw new DalDoesNotExistException($"Could not update item, no volunteer with Id {item.VolunteerId} found"); // Throw an exception if volunteer is not found.
+        }
     }
 }
