@@ -17,7 +17,7 @@ sealed internal class DalXml : IDal
     private static class DalListHolder
     {
         // המשתנה הסטטי נוצר Lazy בצורה Thread Safe
-        internal static readonly IDal instance = new DalList();
+        internal static readonly IDal instance = new DalXml();
     }
     // פרסום ה-Instance
     public static IDal Instance => DalListHolder.instance;

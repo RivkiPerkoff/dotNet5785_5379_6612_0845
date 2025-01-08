@@ -1,4 +1,5 @@
 ﻿namespace DalTest;
+using DalXml;
 using Dal;
 using DalApi;
 using DO;
@@ -14,9 +15,9 @@ internal class Program
     //    private static ICall? s_dalCall = new CallImplementation(); 
     //    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // stage 1
     //    private static IConfig? s_dalConfig = new ConfigImplementation();
-          static readonly IDal s_dal = new DalList();
+    //    static readonly IDal s_dal = new DalList();
     //    static readonly IDal s_dal = new DalXml();
-   
+    static readonly IDal s_dal = Factory.Get;
     private static void Main(string[] args)
     {
         try
@@ -73,7 +74,8 @@ internal class Program
                     ConfigSubmenuu();
                     break;
                 case MainMenuOptions.InitializeData:
-                    Initialization.DO(s_dal);
+                    //Initialization.DO(s_dal);
+                    Initialization.DO();
                     break;
                 case MainMenuOptions.DisplayAllData:
                     {

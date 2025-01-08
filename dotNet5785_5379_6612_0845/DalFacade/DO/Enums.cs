@@ -46,7 +46,7 @@ public enum TypeOfEndTime
     CancellationHasExpired
 }
 
-private enum MainMenuOptions
+public enum MainMenuOptions
 {
     Exit,
     VolunteerSubMenu,
@@ -67,7 +67,7 @@ public enum SubMenu
     Delete,
     DeleteAll
 }
-private enum ConfigSubmenu
+public enum ConfigSubmenu
 {
     Exit,
     AdvanceClockByMinute,

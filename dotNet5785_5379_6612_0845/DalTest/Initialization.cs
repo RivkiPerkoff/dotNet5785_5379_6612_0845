@@ -130,9 +130,10 @@ public static class Initialization
     /// <param name="dalCall">The call data access layer.</param>
     /// <param name="dalAssignment">The assignment data access layer.</param>
     /// <param name="dalConfig">The configuration data access layer.</param>
-    public static void DO(IDal? dal)
+    public static void DO()
     {
-        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
+        //    s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dal = DalApi.Factory.Get;
         Console.WriteLine("Reset Configuration values and List values...");
         s_dal.ResetDB();
         Console.WriteLine("Initializing Volunteers list ...");
