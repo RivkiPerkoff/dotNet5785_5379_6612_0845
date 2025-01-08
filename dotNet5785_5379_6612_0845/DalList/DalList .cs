@@ -1,7 +1,19 @@
 ﻿namespace Dal;
 using DalApi;
-sealed public class DalList : IDal
+sealed internal class DalList : IDal
 {
+    //    public static IDal Instance { get; } = new DalList();
+    private static class DalListHolder
+    {
+        // המשתנה הסטטי נוצר Lazy בצורה Thread Safe
+        internal static readonly IDal instance = new DalList();
+    }
+
+    // פרסום ה-Instance
+    public static IDal Instance => DalListHolder.instance;
+
+    private DalList() { }
+
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();
 
     public IAssignment Assignment { get; } = new AssignmentImplementation();

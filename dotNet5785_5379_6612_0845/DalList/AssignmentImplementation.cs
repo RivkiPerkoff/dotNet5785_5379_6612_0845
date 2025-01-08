@@ -27,13 +27,13 @@ internal class AssignmentImplementation : IAssignment
     public void Delete(int id)
     {
         Assignment? assignment = Read(id);  // Find the assignment by ID.
-        if (assignment != null)
+        if (assignment == null)
         {
-            DataSource.Assignments.Remove(assignment);  // Remove the assignment from the data source.
+            throw new DalDeletionImpossible($"Assignment with Id {id} was not found");  // Throw an exception if no assignment is found.
         }
         else
         {
-            throw new DalDeletionImpossible($"Assignment with Id {id} was not found");  // Throw an exception if no assignment is found.
+            DataSource.Assignments.Remove(assignment);  // Remove the assignment from the data source.
         }
     }
 

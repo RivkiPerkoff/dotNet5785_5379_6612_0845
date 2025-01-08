@@ -46,4 +46,37 @@ public enum TypeOfEndTime
     CancellationHasExpired
 }
 
-
+private enum MainMenuOptions
+{
+    Exit,
+    VolunteerSubMenu,
+    CallSubMenu,
+    AssignmentSubMenu,
+    ConfigurationSubMenu,
+    InitializeData,
+    DisplayAllData,
+    ResetDatabase
+}
+public enum SubMenu
+{
+    Exit,
+    Create,
+    Read,
+    ReadAll,
+    UpDate,
+    Delete,
+    DeleteAll
+}
+private enum ConfigSubmenu
+{
+    Exit,
+    AdvanceClockByMinute,
+    AdvanceClockByHour,
+    AdvanceClockByDay,
+    AdvanceClockByMonth,
+    AdvanceClockByYear,
+    DisplayClock,
+    ChangeClockOrRiskRange,
+    DisplayConfigVar,
+    Reset
+}
