@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace BL.BO;
 public enum Role
 {
@@ -16,5 +18,11 @@ public enum CallTypes
 
 {
     ManDriver,
-    WomanDriver
+    WomanDriver,
+    None
+}
+public enum RiskRangeStatus
+{
+    InTreatment,
+    InRiskTreatment
 }

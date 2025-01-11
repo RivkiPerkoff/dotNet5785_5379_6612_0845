@@ -20,7 +20,7 @@ public record Call
     double CallLongitude = 0,
     DateTime? OpeningTime = null,
     DateTime? MaxFinishTime = null,
-    TypeOfReading TypeOfReading = TypeOfReading.Type1
+    CallTypes CallTypes =CallTypes.None
 )
 {
     // קונסטרקטור מותאם אישית
