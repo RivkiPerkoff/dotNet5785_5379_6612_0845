@@ -15,7 +15,6 @@ public record Assignment
     int IdOfRunnerCall,
     int VolunteerId,
     TypeOfEndTime TypeOfEndTime,
-
     DateTime EntryTimeForTreatment,
     DateTime? EndTimeForTreatment = null
 )
