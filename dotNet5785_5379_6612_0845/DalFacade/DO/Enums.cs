@@ -19,7 +19,8 @@ public enum CallTypes
 
 {
     ManDriver,
-    WomanDriver
+    WomanDriver,
+    None
 }
 public enum FinishCallType
 {
@@ -29,11 +30,6 @@ public enum FinishCallType
     Expired
 }
 
-public enum TypeOfReading
-{
-    Type1 = 1,
-    Type2 = 2,
-}
 
 public enum TypeOfEndTime
 {

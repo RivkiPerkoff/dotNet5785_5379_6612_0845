@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace BL.BO;
 public enum Role
 {
@@ -15,22 +17,11 @@ public enum DistanceType
 public enum CallTypes
 {
     ManDriver,
-    WomanDriver
+    WomanDriver,
+    None
 }
-
-public enum StatusCallType
+public enum RiskRangeStatus
 {
-    Open,
-    InProgress,
-    Closed,
-    OpenAtRisk,
-    InRiskManagement,
-    Expired
-}
-public enum TreatmentEndType
-{
-    treated,
-    SelfCancellation,
-    CancelingAnAdministrator,
-    CancellationHasExpired
+    InTreatment,
+    InRiskTreatment
 }
