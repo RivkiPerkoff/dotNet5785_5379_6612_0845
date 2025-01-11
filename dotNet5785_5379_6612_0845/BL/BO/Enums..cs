@@ -12,3 +12,9 @@ public enum DistanceType
     RoadDistance,
     WalkingDistance
 }
+public enum CallTypes
+
+{
+    ManDriver,
+    WomanDriver
+}

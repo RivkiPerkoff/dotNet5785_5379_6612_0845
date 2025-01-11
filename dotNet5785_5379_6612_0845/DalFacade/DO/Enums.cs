@@ -4,8 +4,8 @@
 /// </summary>
 public enum DistanceType
 {
-    AirDistance, 
-    RoadDistance, 
+    AirDistance,
+    RoadDistance,
     WalkingDistance
 }
 
@@ -18,11 +18,8 @@ public enum Role
 public enum CallTypes
 
 {
-    MusicPerformance,
-    MusicTherapy,
-    SingingAndEmotionalSupport,
-    GroupActivities,
-    PersonalizedMusicCare
+    ManDriver,
+    WomanDriver
 }
 public enum FinishCallType
 {
@@ -40,7 +37,7 @@ public enum TypeOfReading
 
 public enum TypeOfEndTime
 {
-    treated ,
+    treated,
     SelfCancellation,
     CancelingAnAdministrator,
     CancellationHasExpired
