@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BL.BIApi;
-
-internal class IVolunteer
+namespace BL.BO
 {
-    public 
+    internal class OpenCallInList
+    {
+    }
 }
