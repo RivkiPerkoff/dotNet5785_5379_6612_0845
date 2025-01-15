@@ -25,3 +25,8 @@ public enum RiskRangeStatus
     InTreatment,
     InRiskTreatment
 }
+public enum TypeSortingVolunteers
+{
+    Id,
+    Name
+}

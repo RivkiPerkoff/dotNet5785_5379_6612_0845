@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace BL.BO
+namespace BL.BO;
+
+public interface IVolunteer
 {
-    internal interface IVolunteer
-    {
-    }
+    void Login(string username, string password);
+    public List<VolunteerInList> GetVolunteers(Boolean? isActive, TypeSortingVolunteers? TypeSortingVolunteers);
+
+
 }

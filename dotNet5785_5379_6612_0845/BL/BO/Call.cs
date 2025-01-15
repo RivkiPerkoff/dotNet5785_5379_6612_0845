@@ -16,7 +16,6 @@ public class Call
     DateTime OpeningTime { get; init; }
     DateTime? MaxFinishTime { get; init; }
     StatusCallType StatusCallType { get; set; }
-
     List<BO.CallAssignInList>? callAssignInLists { get; set; }
     public override string ToString() => this.ToStringProperty();
 }

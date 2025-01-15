@@ -1,6 +1,6 @@
 ﻿namespace BL.BO
 {
-    internal class VolunteerInList
+    public class VolunteerInList
     {
         public int VolunteerId { get; set; }
         public string FullName { get; set; }
