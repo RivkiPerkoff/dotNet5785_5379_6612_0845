@@ -7,6 +7,7 @@ namespace BL.BIApi
     /// </summary>
     public interface IAdmin
     {
+        string Name { get; }
         /// <summary>
         /// Gets the current system clock value.
         /// </summary>
