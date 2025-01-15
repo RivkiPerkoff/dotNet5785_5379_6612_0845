@@ -1,7 +1,6 @@
 ﻿using BL.BlImplementation;
 using BL.BO;
-
-namespace Helpers;
+namespace BL.Helpers;
 
 /// <summary>
 /// Internal BL manager for all Application's Clock logic policies
