@@ -39,3 +39,8 @@ public enum TimeUnit
     Month,
     Year
 }
+
+public enum StatusCallType
+{
+
+}
