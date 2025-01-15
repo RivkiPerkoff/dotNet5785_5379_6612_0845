@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="BIApi\" />
     <Folder Include="BlImplementation\" />
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>
