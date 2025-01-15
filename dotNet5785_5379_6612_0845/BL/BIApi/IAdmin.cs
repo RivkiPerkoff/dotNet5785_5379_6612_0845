@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BL.BO
+namespace BL.BIApi;
+
+internal interface IAdmin
 {
-    internal interface IAdmin
-    {
-    }
 }
