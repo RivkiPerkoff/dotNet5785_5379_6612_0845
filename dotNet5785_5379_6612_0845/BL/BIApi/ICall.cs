@@ -1,25 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BL.BIApi;
-public interface ICall
+﻿
+namespace BL.BIApi
 {
-    int[] CallListAmount();
+    public interface ICall
+    {
+        /// <summary>
+        /// Retrieves an array of call amounts grouped by their status.
+        /// </summary>
+        /// <returns>An array where each index represents a call status, and the value is the count of calls with that status.</returns>
+        int[] GetCallAmountsByStatus();
 
-    //לא גמור
-    CallInList RequestCallListRead(Enum toFiltering, object? filtering, Enum toSort);
-    void UpdateCallDetail(Call callObject);
-    void DeleteCall(int id);
-    void AddCall(Call callObject);
-    //לא גמור
-    ClosedCallInList RequestListOfClosedCallsVolunteer(int volunteerId, CallTypes? callType, Enum a);
-    //לא גמור
-    ClosedCallInList RequestListOfOpenCallSelectedByvolunteer(int volunteerId, Enum? a, Enum? b);
-    void UpdateEndTreatment(int id, int idAsignment);
-    void UpdateCancelTreatment(int id, int idAsignment);
-    void ChoosingCallForTreatment(int id, int idAsignment);
+        /// <summary>
+        /// Retrieves a filtered and sorted list of calls based on the provided parameters.
+        /// </summary>
+        /// <param name="filterField">The enum field of the call entity to filter by (nullable).</param>
+        /// <param name="filterValue">The value to filter by (nullable).</param>
+        /// <param name="sortField">The enum field of the call entity to sort by (nullable).</param>
+        /// <returns>A sorted and filtered collection of call entities.</returns>
+        IEnumerable<BO.CallInList> GetFilteredAndSortedCallList(Enum? filterField, object? filterValue, Enum? sortField);
 
+        /// <summary>
+        /// Updates the details of an existing call.
+        /// </summary>
+        /// <param name="callObject">The call object containing updated details.</param>
+        void UpdateCallDetails(BO.Call callObject);
+
+        /// <summary>
+        /// Deletes a call based on its identifier.
+        /// </summary>
+        /// <param name="callId">The unique identifier of the call to delete.</param>
+        void DeleteCall(int callId);
+
+        /// <summary>
+        /// Adds a new call to the system.
+        /// </summary>
+        /// <param name="callObject">The call object to add.</param>
+        void AddCall(BO.Call callObject);
+
+        /// <summary>
+        /// Retrieves a list of closed calls handled by a specific volunteer.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer.</param>
+        /// <param name="callType">The type of call to filter by (nullable).</param>
+        /// <param name="sortField">The field to sort the results by (nullable).</param>
+        /// <returns>A list of closed call entities handled by the specified volunteer.</returns>
+        IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? callType, Enum? sortField);
+
+        /// <summary>
+        /// Retrieves a list of open calls available for selection by a volunteer.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer.</param>
+        /// <param name="filterField">The field to filter the calls by (nullable).</param>
+        /// <param name="sortField">The field to sort the results by (nullable).</param>
+        /// <returns>A list of open call entities available for the specified volunteer.</returns>
+        IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, Enum? filterField, Enum? sortField);
+
+        /// <summary>
+        /// Marks a call treatment as completed.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer completing the treatment.</param>
+        /// <param name="assignmentId">The ID of the assignment being completed.</param>
+        void CompleteCallTreatment(int volunteerId, int assignmentId);
+
+        /// <summary>
+        /// Cancels a call treatment.
+        /// </summary>
+        /// <param name="requesterId">The ID of the person requesting the cancellation.</param>
+        /// <param name="assignmentId">The ID of the assignment being canceled.</param>
+        void CancelCallTreatment(int requesterId, int assignmentId);
+
+        /// <summary>
+        /// Assigns a volunteer to a call for treatment.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer taking the assignment.</param>
+        /// <param name="callId">The ID of the call to assign.</param>
+        void AssignVolunteerToCall(int volunteerId, int callId);
+    }
 }

@@ -30,3 +30,12 @@ public enum TypeSortingVolunteers
     Id,
     Name
 }
+
+public enum TimeUnit
+{
+    Minute,
+    Hour,
+    Day,
+    Month,
+    Year
+}

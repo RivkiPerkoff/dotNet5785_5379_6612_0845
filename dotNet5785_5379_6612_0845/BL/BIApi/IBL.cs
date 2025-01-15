@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace BL.BIApi;
 
-internal interface IBI
+public interface IBL
 {
+    ICall Call { get; }
+    IVolunteer Volunteer { get; }  
+    IAdmin Admin { get; }
 }
