@@ -1,4 +1,5 @@
-﻿
+﻿using BL.BO;
+
 
 namespace BL.BIApi;
 

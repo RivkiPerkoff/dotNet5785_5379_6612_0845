@@ -1,46 +1,48 @@
 ﻿using System;
-namespace BL.BIApi
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BL.BIApi;
+
+/// <summary>
+/// Interface for Admin service logic.
+/// Contains methods required for managing system administration tasks.
+/// </summary>
+public interface IAdmin
 {
     /// <summary>
-    /// Interface for Admin service logic.
-    /// Contains methods required for managing system administration tasks.
+    /// Gets the current system clock value.
     /// </summary>
-    public interface IAdmin
-    {
-        string Name { get; }
-        /// <summary>
-        /// Gets the current system clock value.
-        /// </summary>
-        /// <returns>The current system clock value as a DateTime object.</returns>
-        DateTime GetClock();
+    /// <returns>The current system clock value as a DateTime object.</returns>
+    DateTime GetClock();
 
-        /// <summary>
-        /// Advances the system clock by a specified time unit.
-        /// </summary>
-        /// <param name="timeUnit">The time unit by which to advance the clock (e.g., Minute, Hour, Day).</param>
-        void AdvanceClock(BO.TimeUnit timeUnit);
+    /// <summary>
+    /// Advances the system clock by a specified time unit.
+    /// </summary>
+    /// <param name="timeUnit">The time unit by which to advance the clock (e.g., Minute, Hour, Day).</param>
+    void AdvanceClock(BO.TimeUnit timeUnit);
 
-        /// <summary>
-        /// Gets the value of the risk time range configuration.
-        /// </summary>
-        /// <returns>The risk time range as a TimeSpan object.</returns>
-        TimeSpan GetRiskTimeRange();
+    /// <summary>
+    /// Gets the value of the risk time range configuration.
+    /// </summary>
+    /// <returns>The risk time range as a TimeSpan object.</returns>
+    TimeSpan GetRiskTimeRange();
 
-        /// <summary>
-        /// Sets the value of the risk time range configuration.
-        /// </summary>
-        /// <param name="timeRange">The new risk time range to set.</param>
-        void SetRiskTimeRange(TimeSpan timeRange);
+    /// <summary>
+    /// Sets the value of the risk time range configuration.
+    /// </summary>
+    /// <param name="timeRange">The new risk time range to set.</param>
+    void SetRiskTimeRange(TimeSpan timeRange);
 
-        /// <summary>
-        /// Resets the database by clearing all data and configuration to default values.
-        /// </summary>
-        void ResetDatabase();
+    /// <summary>
+    /// Resets the database by clearing all data and configuration to default values.
+    /// </summary>
+    void ResetDatabase();
 
-        /// <summary>
-        /// Initializes the database by resetting it and adding initial data for all entities.
-        /// </summary>
-        void InitializeDatabase();
-    }
-
+    /// <summary>
+    /// Initializes the database by resetting it and adding initial data for all entities.
+    /// </summary>
+    void InitializeDatabase();
 }
