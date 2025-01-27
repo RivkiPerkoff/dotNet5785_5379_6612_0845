@@ -1,5 +1,5 @@
-﻿using DalApi;
-
+﻿//using DalApi;
+namespace DalApi;
 public interface IDal
 {
     IVolunteer Volunteer { get; }

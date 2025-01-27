@@ -22,7 +22,7 @@ public interface IAdmin
     /// Advances the system clock by a specified time unit.
     /// </summary>
     /// <param name="timeUnit">The time unit by which to advance the clock (e.g., Minute, Hour, Day).</param>
-    void AdvanceClock(BO.TimeUnit timeUnit);
+    DateTime AdvanceClock(BO.TimeUnit timeUnit);
 
     /// <summary>
     /// Gets the value of the risk time range configuration.

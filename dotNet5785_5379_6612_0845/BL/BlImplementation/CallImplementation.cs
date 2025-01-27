@@ -3,7 +3,7 @@ using BL.BO;
 
 namespace BL.BlImplementation;
 
-internal class CallImplementation : ICall
+internal class CallImplementation : BIApi.ICall
 {
     public void AddCall(Call callObject)
     {
@@ -59,4 +59,7 @@ internal class CallImplementation : ICall
     {
         throw new NotImplementedException();
     }
+
+    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
 }
