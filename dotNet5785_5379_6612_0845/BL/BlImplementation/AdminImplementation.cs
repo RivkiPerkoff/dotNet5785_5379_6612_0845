@@ -1,9 +1,9 @@
 ﻿using BL.BIApi;
-
 namespace BL.BlImplementation;
-
 internal class AdminImplementation : IAdmin
 {
+    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
     public void AdvanceClock(BO.TimeUnit timeUnit)
     {
         throw new NotImplementedException();

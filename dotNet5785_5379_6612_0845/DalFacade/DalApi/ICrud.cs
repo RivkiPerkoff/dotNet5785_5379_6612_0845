@@ -5,17 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DalApi
+namespace DalApi;
+
+public interface ICrud<T> where T : class
 {
-    public interface ICrud<T> where T : class
-    {
-        public void Create(T item);
-        public void Delete(int id);
-        public void DeleteAll();
-        public T? Read(int id);
-        IEnumerable<T> ReadAll(Func<T, bool>? filter = null);
-        public void Update(T item);
-        T? Read(Func<T, bool> filter);
-    }
+    public void Create(T item);
+    public void Delete(int id);
+    public void DeleteAll();
+    public T? Read(int id);
+    IEnumerable<T> ReadAll(Func<T, bool>? filter = null);
+    public void Update(T item);
+    T? Read(Func<T, bool> filter);
 }
 
