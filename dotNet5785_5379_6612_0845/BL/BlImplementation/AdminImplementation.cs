@@ -1,16 +1,19 @@
 ﻿using BL.BIApi;
+using BL.Helpers;
+
 namespace BL.BlImplementation;
 internal class AdminImplementation : IAdmin
 {
-    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-
-    public void AdvanceClock(BO.TimeUnit timeUnit)
+    public DateTime AdvanceClock(BO.TimeUnit timeUnit)
     {
+       return ClockManager.UpdateClock(ClockManager.Now.AddMinutes(1));
         throw new NotImplementedException();
     }
 
     public DateTime GetClock()
     {
+        return ClockManager.Now;
+
         throw new NotImplementedException();
     }
 
@@ -33,4 +36,7 @@ internal class AdminImplementation : IAdmin
     {
         throw new NotImplementedException();
     }
+
+    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
 }

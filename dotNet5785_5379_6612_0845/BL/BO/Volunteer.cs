@@ -2,6 +2,7 @@
 using System;
 
 namespace BL.BO;
+
 public class Volunteer
 {
     public int Id { get; init; }
@@ -20,8 +21,5 @@ public class Volunteer
     public int TotalCallsCanceled { get; set; }
     public int SelectedAndExpiredCalls { get; set; }
     public CallInProgress? callInProgress { get; set; }
-    public override string ToString()
-    {
-        return $"Volunteer: {Name}, Email: {Email}, IsActive: {IsActive}";
-    }
+    public override string ToString() => this.ToStringProperty();
 }

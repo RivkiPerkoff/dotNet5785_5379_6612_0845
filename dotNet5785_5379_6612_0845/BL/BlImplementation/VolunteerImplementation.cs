@@ -34,4 +34,7 @@ internal class VolunteerImplementation : IVolunteer
     {
         throw new NotImplementedException();
     }
+
+    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
 }
