@@ -20,30 +20,38 @@ internal class VolunteerImplementation : IVolunteer
 
     public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy)
     {
-        var volunteers = _dal.Volunteer.ReadAll().Select(v => new BO.VolunteerInList
-        {
-            VolunteerId = v.VolunteerId,
-            Name = v.Name,
-            IsAvailable = v.IsAvailable,
-            //HandledCalls="",
-            //CanceledCalls='',
-            //ExpiredCalls='',
-            //CurrentCallId='',
-            // CallType=''
-        });
 
-        if (isActive.HasValue)
+        try
         {
-            volunteers = volunteers.Where(v => v.IsAvailable == isActive.Value);
+            IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll(v =>
+                !isActive.HasValue || v.IsAvailable == isActive.Value);
+
+            var volunteerList = Tools.GetVolunteerList(volunteers);
+
+            volunteerList = sortBy.HasValue ? sortBy.Value switch
+            {
+                BO.TypeSortingVolunteers.VolunteerId => volunteerList.OrderBy(v => v.Id).ToList(),
+                BO.TypeSortingVolunteers.Name => volunteerList.OrderBy(v => v.Name).ToList(),
+                BO.TypeSortingVolunteers.IsAvailable => volunteerList.OrderBy(v => v.Active).ToList(),
+                BO.TypeSortingVolunteers.HandledCalls => volunteerList.OrderByDescending(v => v.TotalResponsesHandled).ToList(),
+                BO.TypeSortingVolunteers.CanceledCalls => volunteerList.OrderByDescending(v => v.TotalResponsesCancelled).ToList(),
+                BO.TypeSortingVolunteers.ExpiredCalls => volunteerList.OrderByDescending(v => v.TotalExpiredResponses).ToList(),
+                BO.TypeSortingVolunteers.CurrentCallId => volunteerList.OrderBy(v => v.CurrentCallInProgress?.Id).ToList(),
+                BO.TypeSortingVolunteers.CallType => volunteerList.OrderBy(v => v.MyRole).ToList(),
+                _ => volunteerList.OrderBy(v => v.Id).ToList()
+            } : volunteerList.OrderBy(v => v.Id).ToList();
+
+
+            return volunteerList.ToList();
         }
-
-        return sortBy switch
+        catch (DO.DalDoesNotExistException ex)
         {
-            TypeSortingVolunteers.Name => volunteers.OrderBy(v => v.Name).ToList(),
-            TypeSortingVolunteers.VolunteerId => volunteers.OrderBy(v => v.VolunteerId).ToList(),
-            TypeSortingVolunteers.TotalCallsHandled => volunteers.OrderByDescending(v => v.HandledCalls).ToList(),
-            _ => volunteers.OrderBy(v => v.VolunteerId).ToList(),
-        };
+            throw new BO.BlGeneralDatabaseException("Error accessing data.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
+        }
     }
     public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
@@ -72,17 +80,17 @@ internal class VolunteerImplementation : IVolunteer
                         EntryTimeForTreatment = currentAssignment.EntryTimeForTreatment,
 
 
-                        CallingDistanceFromVolunteer = Tools.CalculateDistance(doVolunteer.VolunteerLatitude, doVolunteer.VolunteerLongitude, callDetails.CallLatitude, callDetails.CallLatitude),
+                        CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
                         Status = Tools.CalculateStatus(currentAssignment, callDetails, 30)
                     };
                 }
             }
             volunteer.TotalCallsHandled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.TakenCareof);
-            volunteer.TotalCallsCancelled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
-            volunteer.TotalExpiredCallsChosen = assigments.Count(a => a.FinishCallType == DO.FinishCallType.Expired);
-            volunteer.CurrentCallInProgress = callInProgress;
+            volunteer.TotalCallsCanceled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
+            volunteer.SelectedAndExpiredCalls = assigments.Count(a => a.FinishCallType == DO.FinishCallType.Expired);
+            volunteer.CallInProgress = callInProgress;
 
-            return (BO.Volunteer)volunteer;
+            return volunteer;
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -201,22 +209,19 @@ internal class VolunteerImplementation : IVolunteer
     private DO.Volunteer MapToDO(Volunteer volunteer)
     {
         return new DO.Volunteer(
-            volunteer.VolunteerId, // עדכון ל-VolunteerId
+            volunteer.VolunteerId,
             volunteer.Name,
-            volunteer.PhoneNumber, // עדכון ל-PhoneNumber
-            volunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
-            volunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
-            volunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
+            volunteer.PhoneNumber,
+            volunteer.EmailOfVolunteer,
+            volunteer.PasswordVolunteer,
+            volunteer.AddressVolunteer,
             volunteer.VolunteerLatitude,
             volunteer.VolunteerLongitude,
-            volunteer.IsAvailable, // עדכון ל-IsAvailable
-            volunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
-            (DO.Role)volunteer.Role, // המרה בין הטיפוסים
-            (DO.DistanceType)volunteer.DistanceType, // המרה בין הטיפוסים
-            volunteer.TotalCallsHandled,
-            volunteer.TotalCallsCanceled,
-            volunteer.SelectedAndExpiredCalls,
-            volunteer.callInProgress // התאמה למאפיין callInProgress
+            volunteer.IsAvailable,
+            volunteer.MaximumDistanceForReceivingCall,
+            (DO.Role)volunteer.Role,
+            (DO.DistanceType)volunteer.DistanceType
         );
+
     }
 }
