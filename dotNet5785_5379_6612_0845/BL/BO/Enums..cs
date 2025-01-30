@@ -27,8 +27,9 @@ public enum RiskRangeStatus
 }
 public enum TypeSortingVolunteers
 {
-    Id,
-    Name
+    Name,
+    VolunteerId,
+    TotalCallsHandled
 }
 
 public enum TimeUnit
