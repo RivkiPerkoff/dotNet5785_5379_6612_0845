@@ -18,14 +18,13 @@ public record Call
     string? CallAddress = "",
     double CallLatitude = 0,
     double CallLongitude = 0,
-    DateTime? OpeningTime = null,
+    DateTime OpeningTime = default,
     DateTime? MaxFinishTime = null,
     CallTypes CallTypes =CallTypes.None
 )
 {
-    // קונסטרקטור מותאם אישית
-    public Call(int idCall, string? callDescription, string? callAddress, double callLatitude, double callLongitude, DateTime openingTime, DateTime maxFinishTime, TypeOfReading typeOfReading)
-        : this(idCall, callDescription, callAddress, callLatitude, callLongitude, (DateTime?)openingTime, (DateTime?)maxFinishTime, typeOfReading)
+    public Call(int idCall, string? callDescription, string? callAddress, double callLatitude, double callLongitude, DateTime openingTime, DateTime maxFinishTime, CallTypes CallTypes)
+        : this(idCall, callDescription, callAddress, callLatitude, callLongitude, openingTime, (DateTime?)maxFinishTime, CallTypes)
     { }
     public Call() : this(0) { }
 

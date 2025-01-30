@@ -14,7 +14,7 @@ internal class AssignmentImplementation : IAssignment
             NextAssignmentId: (int?)a.Element("NextAssignmentId") ?? throw new FormatException("Can't convert NextAssignmentId"),
             IdOfRunnerCall: (int?)a.Element("IdOfRunnerCall") ?? throw new FormatException("Can't convert IdOfRunnerCall"),
             VolunteerId: (int?)a.Element("VolunteerId") ?? throw new FormatException("Can't convert VolunteerId"),
-            TypeOfEndTime: (TypeOfEndTime)Enum.Parse(typeof(TypeOfEndTime), a.Element("TypeOfEndTime")?.Value ?? "treated"),
+            FinishCallType: (FinishCallType)Enum.Parse(typeof(FinishCallType), a.Element("FinishCallType")?.Value ?? "TakenCareof"),
             EntryTimeForTreatment: DateTime.Parse(a.Element("EntryTimeForTreatment")?.Value ?? throw new FormatException("Can't parse EntryTimeForTreatment")),
             EndTimeForTreatment: (DateTime?)a.Element("EndTimeForTreatment")
         );
@@ -26,7 +26,7 @@ internal class AssignmentImplementation : IAssignment
             new XElement("NextAssignmentId", item.NextAssignmentId),
             new XElement("IdOfRunnerCall", item.IdOfRunnerCall),
             new XElement("VolunteerId", item.VolunteerId),
-            new XElement("TypeOfEndTime", item.TypeOfEndTime.ToString()),
+            new XElement("FinishCallType", item.FinishCallType.ToString()),
             new XElement("EntryTimeForTreatment", item.EntryTimeForTreatment),
             new XElement("EndTimeForTreatment", item.EndTimeForTreatment)
         );

@@ -258,11 +258,11 @@ internal class Program
         int CallId = int.Parse(Console.ReadLine()!);
         Console.Write("Enter Volunteer ID: ");
         int volunteerId = int.Parse(Console.ReadLine()!);
-        Console.Write("Enter Type Of End Time : 1 for treated, 2 for Self Cancellation,3 for CancelingAnAdministrator,4 for CancellationHasExpired ");
-        TypeOfEndTime typeOfEndTime = (TypeOfEndTime)int.Parse(Console.ReadLine()!);
+        Console.Write("Enter Type Of End Time : 1 for TakenCareof, 2 for Self Cancellation,3 for CancelingAnAdministrator,4 for CancellationHasExpired ");
+        FinishCallType FinishCallType = (FinishCallType)int.Parse(Console.ReadLine()!);
         Console.Write("Enter Ending Time of Treatment ( YYYY-MM-DD HH:MM): ");
         DateTime EndTime = DateTime.Parse(Console.ReadLine()!);
-        return new Assignment(id, CallId, volunteerId, typeOfEndTime, EndTime);
+        return new Assignment(id, CallId, volunteerId, FinishCallType, EndTime);
     }
 
     private static void Update(string choice)

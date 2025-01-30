@@ -21,5 +21,23 @@ public class Volunteer
     public int TotalCallsCanceled { get; set; }
     public int SelectedAndExpiredCalls { get; set; }
     public CallInProgress? CallInProgress { get; set; }
-    public override string ToString() => this.ToStringProperty();
+    public override string ToString()
+    {
+        return $"VolunteerId: {VolunteerId}, " +
+               $"Name: {Name}, " +
+               $"PhoneNumber: {PhoneNumber}, " +
+               $"EmailOfVolunteer: {EmailOfVolunteer}, " +
+               $"PasswordVolunteer: {PasswordVolunteer}, " +
+               $"AddressVolunteer: {AddressVolunteer}, " +
+               $"VolunteerLatitude: {VolunteerLatitude}, " +
+               $"VolunteerLongitude: {VolunteerLongitude}, " +
+               $"IsAvailable: {IsAvailable}, " +
+               $"MaximumDistanceForReceivingCall: {MaximumDistanceForReceivingCall}, " +
+               $"Role: {Role}, " +
+               $"DistanceType: {DistanceType}, " +
+               $"TotalCallsHandled: {TotalCallsHandled}, " +
+               $"TotalCallsCanceled: {TotalCallsCanceled}, " +
+               $"SelectedAndExpiredCalls: {SelectedAndExpiredCalls}, " +
+               $"CallInProgress: {CallInProgress?.ToString() ?? "None"}";
+    }
 }

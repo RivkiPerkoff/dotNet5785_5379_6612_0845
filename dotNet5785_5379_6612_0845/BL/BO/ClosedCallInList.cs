@@ -10,7 +10,7 @@ public class ClosedCallInList
     DateTime OpeningTime { get; set; }
     DateTime EntryTimeForTreatment { get; set; }
     DateTime? EndTimeForTreatment { get; set; }
-    TypeOfEndTime? TypeOfEndTime { get; set; }
+    FinishCallType? FinishCallType { get; set; }
 
 }
 
