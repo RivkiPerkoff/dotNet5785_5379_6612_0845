@@ -1,5 +1,6 @@
 ﻿using BL.BIApi;
 using BL.BO;
+using BL.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -97,7 +98,7 @@ internal class VolunteerImplementation : IVolunteer
         var requester = _dal.Volunteer.Read(requesterId)
                         ?? throw new BO.BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
 
-        if (requester.Role != Role.Admin && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
+        if (requester.Role != Role.Manager && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
         {
             throw new BO.BlUnauthorizedAccessException("Only admins or the volunteer themselves can update details");
         }
@@ -107,7 +108,7 @@ internal class VolunteerImplementation : IVolunteer
         var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId) // עדכון ל-VolunteerId
                                ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist");
 
-        if (requester.Role != Role.Admin && existingVolunteer.Role != volunteer.Role)
+        if (requester.Role != Role.Manager && existingVolunteer.Role != volunteer.Role)
         {
             throw new BO.BlUnauthorizedAccessException("Only admins can update the role");
         }
@@ -148,13 +149,13 @@ internal class VolunteerImplementation : IVolunteer
 
         if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
         {
-            var (latitude, longitude) = AddressValidator.GetCoordinates(volunteer.AddressVolunteer) // עדכון ל-AddressVolunteer
-                ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
 
             volunteer.VolunteerLatitude = latitude;
             volunteer.VolunteerLongitude = longitude;
         }
     }
+
 
     private Volunteer MapToBO(DO.Volunteer doVolunteer)
     {
@@ -182,22 +183,19 @@ internal class VolunteerImplementation : IVolunteer
     private DO.Volunteer MapToDO(Volunteer volunteer)
     {
         return new DO.Volunteer(
-            volunteer.VolunteerId, // עדכון ל-VolunteerId
+            volunteer.VolunteerId,
             volunteer.Name,
-            volunteer.PhoneNumber, // עדכון ל-PhoneNumber
-            volunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
-            volunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
-            volunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
+            volunteer.PhoneNumber,
+            volunteer.EmailOfVolunteer,
+            volunteer.PasswordVolunteer,
+            volunteer.AddressVolunteer,
             volunteer.VolunteerLatitude,
             volunteer.VolunteerLongitude,
-            volunteer.IsAvailable, // עדכון ל-IsAvailable
-            volunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
-            (DO.Role)volunteer.Role, // המרה בין הטיפוסים
-            (DO.DistanceType)volunteer.DistanceType, // המרה בין הטיפוסים
-            volunteer.TotalCallsHandled,
-            volunteer.TotalCallsCanceled,
-            volunteer.SelectedAndExpiredCalls,
-            volunteer.callInProgress // התאמה למאפיין callInProgress
+            volunteer.IsAvailable,
+            volunteer.MaximumDistanceForReceivingCall,
+            (DO.Role)volunteer.Role,
+            (DO.DistanceType)volunteer.DistanceType
         );
+
     }
 }
