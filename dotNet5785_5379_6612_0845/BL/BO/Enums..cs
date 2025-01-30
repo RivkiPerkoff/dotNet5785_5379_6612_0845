@@ -1,7 +1,4 @@
 ﻿
-
-using System;
-
 namespace BL.BO;
 public enum Role
 {

@@ -1,11 +1,12 @@
 ﻿using BL.BIApi;
 using BL.BO;
-using System.ComponentModel.DataAnnotations;
+using BL.Helpers;
+using DalApi;
+using DO;
 using System.Text.RegularExpressions;
 
 namespace BL.BlImplementation;
-
-internal class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : BIApi.IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public string Login(string username, string password)
@@ -44,87 +45,105 @@ internal class VolunteerImplementation : IVolunteer
             _ => volunteers.OrderBy(v => v.VolunteerId).ToList(),
         };
     }
-    public Volunteer GetVolunteerDetails(int volunteerId)
+    public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
-        var doVolunteer = _dal.Volunteer.Read(volunteerId)
-                         ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
-
-        return MapToBO(doVolunteer);
-    }
-
-    public void AddVolunteer(Volunteer volunteer)
-    {
-        ValidateVolunteer(volunteer);
-
-        // Map BO to DO
-        var doVolunteer = MapToDO(volunteer);
-
         try
         {
-            _dal.Volunteer.Create(doVolunteer);
+            var doVolunteer = _dal.Volunteer.Read(volunteerId) ??
+               throw new DO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
+            var volunteer = MapToBO(doVolunteer);
+            var assigments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+            var currentAssignment = assigments.FirstOrDefault(a => a.EndTimeForTreatment == null);
+            BO.CallInProgress? callInProgress = null;
+            if (currentAssignment != null)
+            {
+                var callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
+                if (callDetails != null)
+                {
+                    callInProgress = new BO.CallInProgress
+                    {
+                        Id = currentAssignment.NextAssignmentId,
+                        CallId = currentAssignment.IdOfRunnerCall,
+                        CallTypes = (BO.CallTypes)callDetails.CallTypes,
+                        Description = callDetails.CallDescription,
+                        CallingAddress = callDetails.CallAddress!,
+                        OpeningTime = callDetails.OpeningTime,
+                        MaxFinishTime = callDetails.MaxFinishTime,
+                        EntryTimeForTreatment = currentAssignment.EntryTimeForTreatment,
+
+
+                        CallingDistanceFromVolunteer = Tools.CalculateDistance(doVolunteer.VolunteerLatitude, doVolunteer.VolunteerLongitude, callDetails.CallLatitude, callDetails.CallLatitude),
+                        Status = Tools.CalculateStatus(currentAssignment, callDetails, 30)
+                    };
+                }
+            }
+            volunteer.TotalCallsHandled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.TakenCareof);
+            volunteer.TotalCallsCancelled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
+            volunteer.TotalExpiredCallsChosen = assigments.Count(a => a.FinishCallType == DO.FinishCallType.Expired);
+            volunteer.CurrentCallInProgress = callInProgress;
+
+            return (BO.Volunteer)volunteer;
         }
-        catch (DO.DalAlreadyExistsException ex)
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlAlreadyExistsException($"Volunteer with ID={volunteer.VolunteerId} already exists", ex); // השתמשתי ב-VolunteerId
+            throw new BO.BlDoesNotExistException("Volunteer not found in data layer.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An unexpected error occurred while geting Volunteer details.", ex);
         }
     }
-
-   
-
-
     public void DeleteVolunteer(int volunteerId)
     {
-        var volunteer = _dal.Volunteer.Read(volunteerId)
-                       ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
-
-        if (volunteer.TotalCallsHandled > 0 || volunteer.SelectedAndExpiredCalls > 0)
-        {
-            throw new BO.BlValidationException($"Volunteer with ID={volunteerId} cannot be deleted as they have handled calls");
-        }
-
         try
         {
+            var volunteer = _dal.Volunteer.Read(volunteerId)
+                       ?? throw new DO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
+
+            IEnumerable<DO.Assignment> volunteerAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+            if (volunteerAssignments.Any())
+                throw new BO.BlDeletionException($"Volunteer with ID={volunteerId} cannot be deleted as they have treat/ed calls.");
+
             _dal.Volunteer.Delete(volunteerId);
         }
         catch (DO.DalDoesNotExistException)
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
         }
+        catch (Exception ex)
+        {
+            throw new BO.BlValidationException("An unexpected error occurred while geting Volunteer details.", ex);
+        }
     }
 
-    public void UpdateVolunteer(int requesterId, Volunteer volunteer)
+
+    public void AddVolunteer(BO.Volunteer volunteer)
     {
-        var requester = _dal.Volunteer.Read(requesterId)
-                        ?? throw new BO.BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
-
-        if (requester.Role != Role.Admin && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
-        {
-            throw new BO.BlUnauthorizedAccessException("Only admins or the volunteer themselves can update details");
-        }
-
-        ValidateVolunteer(volunteer);
-
-        var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId) // עדכון ל-VolunteerId
-                               ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist");
-
-        if (requester.Role != Role.Admin && existingVolunteer.Role != volunteer.Role)
-        {
-            throw new BO.BlUnauthorizedAccessException("Only admins can update the role");
-        }
-
-        var doVolunteer = MapToDO(volunteer);
-
         try
         {
-            _dal.Volunteer.Update(doVolunteer);
+            ValidateVolunteer(volunteer);
+            var doVolunteer = MapToDO(volunteer);
+            _dal.Volunteer.Create(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist", ex); // עדכון ל-VolunteerId
+            throw new BO.BlAlreadyExistsException($"Volunteer with ID={volunteer.VolunteerId} already exists", ex);
         }
+        catch (Exception ex)
+        {
+            throw new BO.BlValidationException("An unexpected error occurred while creating Volunteer.", ex);
+        }
+
     }
 
-    private void ValidateVolunteer(Volunteer volunteer)
+
+
+    public void UpdateVolunteer(int requesterId, Volunteer volunteer)
+    {
+
+    }
+
+    private void ValidateVolunteer(BO.Volunteer volunteer)
     {
         if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
         {
@@ -155,49 +174,49 @@ internal class VolunteerImplementation : IVolunteer
             volunteer.VolunteerLongitude = longitude;
         }
     }
+    //private Volunteer MapToBO(DO.Volunteer doVolunteer)
+    //{
+    //    return new Volunteer
+    //    {
+    //        VolunteerId = doVolunteer.VolunteerId, // עדכון ל-VolunteerId
+    //        Name = doVolunteer.Name,
+    //        PhoneNumber = doVolunteer.PhoneNumber, // עדכון ל-PhoneNumber
+    //        EmailOfVolunteer = doVolunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
+    //        PasswordVolunteer = doVolunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
+    //        AddressVolunteer = doVolunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
+    //        VolunteerLatitude = doVolunteer.VolunteerLatitude,
+    //        VolunteerLongitude = doVolunteer.VolunteerLongitude,
+    //        IsAvailable = doVolunteer.IsAvailable, // עדכון ל-IsAvailable
+    //        MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
+    //        Role = (Role)doVolunteer.Role, // המרה בין הטיפוסים
+    //        DistanceType = (DistanceType)doVolunteer.DistanceType, // המרה בין הטיפוסים
+    //        TotalCallsHandled = doVolunteer.TotalCallsHandled,
+    //        TotalCallsCanceled = doVolunteer.TotalCallsCanceled,
+    //        SelectedAndExpiredCalls = doVolunteer.SelectedAndExpiredCalls,
+    //        CallInProgress = doVolunteer.callInProgress
+    //    };
+    //}
 
-    private Volunteer MapToBO(DO.Volunteer doVolunteer)
-    {
-        return new Volunteer
-        {
-            VolunteerId = doVolunteer.VolunteerId, // עדכון ל-VolunteerId
-            Name = doVolunteer.Name,
-            PhoneNumber = doVolunteer.PhoneNumber, // עדכון ל-PhoneNumber
-            EmailOfVolunteer = doVolunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
-            PasswordVolunteer = doVolunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
-            AddressVolunteer = doVolunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
-            VolunteerLatitude = doVolunteer.VolunteerLatitude,
-            VolunteerLongitude = doVolunteer.VolunteerLongitude,
-            IsAvailable = doVolunteer.IsAvailable, // עדכון ל-IsAvailable
-            MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
-            Role = (Role)doVolunteer.Role, // המרה בין הטיפוסים
-            DistanceType = (DistanceType)doVolunteer.DistanceType, // המרה בין הטיפוסים
-            //TotalCallsHandled = doVolunteer.TotalCallsHandled,
-            //TotalCallsCanceled = doVolunteer.TotalCallsCanceled,
-            //SelectedAndExpiredCalls = doVolunteer.SelectedAndExpiredCalls,
-            //CallInProgress = doVolunteer.callInProgress 
-        };
-    }
-
-    private DO.Volunteer MapToDO(Volunteer volunteer)
+    private DO.Volunteer MapToDO(BO.Volunteer volunteer)
     {
         return new DO.Volunteer(
-            volunteer.VolunteerId, // עדכון ל-VolunteerId
+            volunteer.VolunteerId,
             volunteer.Name,
-            volunteer.PhoneNumber, // עדכון ל-PhoneNumber
-            volunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
-            volunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
-            volunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
+            volunteer.PhoneNumber,
+            volunteer.EmailOfVolunteer,
+            volunteer.PasswordVolunteer,
+            volunteer.AddressVolunteer,
             volunteer.VolunteerLatitude,
             volunteer.VolunteerLongitude,
-            volunteer.IsAvailable, // עדכון ל-IsAvailable
-            volunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
-            (DO.Role)volunteer.Role, // המרה בין הטיפוסים
-            (DO.DistanceType)volunteer.DistanceType, // המרה בין הטיפוסים
-            volunteer.TotalCallsHandled,
-            volunteer.TotalCallsCanceled,
-            volunteer.SelectedAndExpiredCalls,
-            volunteer.callInProgress // התאמה למאפיין callInProgress
+            volunteer.IsAvailable,
+            volunteer.MaximumDistanceForReceivingCall,
+            (DO.Role)volunteer.Role,
+            (DO.DistanceType)volunteer.DistanceType
         );
+
+    }
+    public void UpdateVolunteer(int requesterId, BO.Volunteer volunteer)
+    {
+        throw new NotImplementedException();
     }
 }

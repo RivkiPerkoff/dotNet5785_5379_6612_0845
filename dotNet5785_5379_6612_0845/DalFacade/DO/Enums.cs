@@ -31,14 +31,6 @@ public enum FinishCallType
 }
 
 
-public enum TypeOfEndTime
-{
-    treated,
-    SelfCancellation,
-    CancelingAnAdministrator,
-    CancellationHasExpired
-}
-
 public enum MainMenuOptions
 {
     Exit,
