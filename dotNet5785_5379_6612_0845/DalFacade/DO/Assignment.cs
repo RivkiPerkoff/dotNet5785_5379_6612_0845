@@ -15,10 +15,9 @@ public record Assignment
     int IdOfRunnerCall,
     int VolunteerId,
     FinishCallType? FinishCallType,
-    DateTime? EntryTimeForTreatment,
+    DateTime? EntryTimeForTreatment = null, 
     DateTime? EndTimeForTreatment = null
 )
 {
-    public Assignment() : this(0, 0, 0, null, DateTime.Now) { }
-
+    public Assignment() : this(0, 0, 0, null, null, null) { }
 }

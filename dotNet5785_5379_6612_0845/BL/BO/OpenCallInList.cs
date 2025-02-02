@@ -1,13 +1,14 @@
-﻿namespace BL.BO;
+﻿using DO;
+namespace BL.BO;
 
 public class OpenCallInList
 {
-    int Id { get; init; }
-    CallTypes callTypes { get; set; }
-    string? CallDescription { get; set; }
-    public string Address { get; set; }
-    DateTime OpeningTime { get; set; }
-    DateTime? MaxFinishTime { get; set; }
-    double calldistance { get; set; }
+   public int Id { get; init; }
+   public CallTypes CallTypes { get; set; }
+   public string? CallDescription { get; set; }
+   public string Address { get; set; }
+   public DateTime OpeningTime { get; set; }
+   public DateTime? MaxFinishTime { get; set; }
+   public double CallDistance { get; set; }
 }
 

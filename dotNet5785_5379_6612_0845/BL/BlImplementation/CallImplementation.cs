@@ -3,6 +3,7 @@ using System.Net;
 using BL.BIApi;
 using BL.BO;
 using BL.Helpers;
+using DO;
 
 namespace BL.BlImplementation;
 
@@ -40,23 +41,49 @@ internal class CallImplementation : ICall
         _dal.Call.Create(callDO);
     }
 
-    public void AssignVolunteerToCall(int volunteerId, int callId)
+    public void ChoosingCallForTreatment(int volunteerId, int callId)
     {
-        var call = _dal.Call.Get(callId)
-                  ?? throw new InvalidOperationException("Call not found.");
-
-        if (call.Status != Dal.DO.StatusCallType.Open)
-            throw new InvalidOperationException("Call is not open for assignment.");
-
-        var assignment = new Dal.DO.Assignment
+        try
         {
-            CallId = callId,
-            VolunteerId = volunteerId,
-            StartTime = DateTime.Now,
-            EndTime = null
-        };
+            // שלב 1: שליפת נתוני המתנדב והקריאה מה-DAL
+            var volunteer = _dal.Volunteer.Read(volunteerId)
+                ?? throw new BO.BlGeneralDatabaseException($"Volunteer with ID={volunteerId} does not exist.");
 
-        _dal.Assignment.Add(assignment);
+            var call = _dal.Call.Read(callId)
+                ?? throw new BO.BlGeneralDatabaseException($"Call with ID={callId} does not exist.");
+
+            // שלב 2: בדיקת סטטוס הקריאה
+            var callStatus = Tools.GetCallStatus(callId);
+            if (callStatus != StatusCallType.open && callStatus != StatusCallType.openInRisk)
+                throw new BO.BlInvalidOperationException("Call is already assigned or has expired.");
+
+            // שלב 3: בדיקה שאין הקצאה פתוחה על הקריאה
+            var existingAssignment = _dal.Assignment.ReadAll()
+                .FirstOrDefault(a => a.IdOfRunnerCall == callId && a.EndTimeForTreatment == null);
+
+            if (existingAssignment != null)
+                throw new BO.BlInvalidOperationException("Call is already being handled by another volunteer.");
+
+            // שלב 4: יצירת הקצאה חדשה
+            var newAssignment = new DO.Assignment(
+                NextAssignmentId: 0, // ישות חדשה - ה-DAL אמור לקבוע מזהה
+                IdOfRunnerCall: callId,
+                VolunteerId: volunteerId,
+                FinishCallType: null, // לא נקבע סוג סיום בשלב זה
+                EntryTimeForTreatment: ClockManager.Now,
+                EndTimeForTreatment: null
+            );
+
+            _dal.Assignment.Create(newAssignment); // הוספת ההקצאה למסד הנתונים
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlGeneralDatabaseException("Database error while accessing call or volunteer data.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An error occurred while assigning the call.", ex);
+        }
     }
 
     public void CancelCallTreatment(int requesterId, int assignmentId)
@@ -88,72 +115,205 @@ internal class CallImplementation : ICall
 
     public void CompleteCallTreatment(int volunteerId, int assignmentId)
     {
-        var assignment = _dal.Assignment.Get(assignmentId)
-                         ?? throw new InvalidOperationException("Assignment not found.");
+        try
+        {
+            // שלב 1: קריאת ההקצאה משכבת הנתונים
+            var assignment = _dal.Assignment.Read(assignmentId)
+                ?? throw new DO.DalDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
 
-        if (assignment.VolunteerId != volunteerId)
-            throw new InvalidOperationException("Unauthorized completion.");
+            // שלב 2: בדיקת הרשאה - האם המתנדב שמבקש הוא זה שעליו רשומה ההקצאה
+            if (assignment.VolunteerId != volunteerId)
+                throw new BO.BlPermissionException("Unauthorized: The volunteer is not assigned to this task.");
 
-        if (assignment.EndTime != null)
-            throw new InvalidOperationException("Treatment is already completed.");
+            // שלב 3: בדיקה שההקצאה עדיין פתוחה (כלומר, לא טופלה או בוטלה)
+            if (assignment.FinishCallType.HasValue)
+                throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
 
-        assignment.EndTime = DateTime.Now;
-        assignment.Status = Dal.DO.AssignmentStatus.Completed;
+            // שלב 4: יצירת אובייקט מעודכן עם סטטוס "טופלה" וזמן סיום
+            var updatedAssignment = assignment with
+            {
+                FinishCallType = FinishCallType.TakenCareof,
+                EndTimeForTreatment = ClockManager.Now
+            };
 
-        _dal.Assignment.Update(assignment);
+            // שלב 5: ביצוע עדכון לשכבת הנתונים
+            _dal.Assignment.Update(updatedAssignment);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlGeneralDatabaseException("The specified assignment does not exist.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An error occurred while completing the call treatment.", ex);
+        }
     }
 
     public void DeleteCall(int callId)
     {
-        var call = _dal.Call.Get(callId)
-                  ?? throw new InvalidOperationException("Call not found.");
-
-        if (call.Status != Dal.DO.StatusCallType.Open || _dal.Assignment.ExistsForCall(callId))
-            throw new InvalidOperationException("Cannot delete this call.");
-
-        _dal.Call.Delete(callId);
+        try
+        {
+            var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
+            var callStatus = Tools.GetCallStatus(call.IdCall);
+            var assignments = _dal.Assignment.ReadAll()
+            .Any(a => a.IdOfRunnerCall == callId);
+            if (callStatus != StatusCallType.open || assignments)
+                throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
+            _dal.Call.Delete(callId);
+        }
+        catch (DO.DalDeletionImpossible ex)
+        {
+            throw new BO.BlDoesNotExistException("Call not found in data layer.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An unexpected error occurred while geting Volunteer details.", ex);
+        }
     }
 
-    public int[] GetCallAmountsByStatus()
+    public int[] GetCallAmounts()
     {
-        var calls = _dal.Call.GetAll();
-        return calls
-            .GroupBy(call => (int)call.Status)
-            .OrderBy(group => group.Key)
-            .Select(group => group.Count())
-            .ToArray();
+        IEnumerable<DO.Call> doCalls = _dal.Call.ReadAll();
+        IEnumerable<BO.Call> boCalls = CallManager.ConvertToBOCalls(doCalls);
+
+        int enumSize = Enum.GetValues(typeof(StatusCallType)).Length; // Get the number of enum values
+        int[] statusCounts = new int[enumSize]; // Create an array matching the enum size
+
+        foreach (var group in boCalls.GroupBy(call => (int)call.StatusCallType))
+        {
+            statusCounts[group.Key] = group.Count(); // Using GroupBy.
+        }
+
+        return statusCounts;
     }
 
-    public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? callType, Enum? sortField)
+    public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? filterType, ClosedCallInListFields? sortField)
     {
-        var calls = _dal.Call.GetAll()
-            .Where(call => call.Status == Dal.DO.StatusCallType.Closed && call.AssignedVolunteerId == volunteerId);
+        var volunteerAssignments = _dal.Assignment.ReadAll()
+            .Where(a => a.VolunteerId == volunteerId)
+            .Select(a => a.IdOfRunnerCall);
 
-        if (callType.HasValue)
-            calls = calls.Where(call => call.CallType == (Dal.DO.CallTypes)callType.Value);
+        var closedCalls = _dal.Call.ReadAll()
+            .Where(c => volunteerAssignments.Contains(c.IdCall))
+            .Join(_dal.Assignment.ReadAll(),
+                  call => call.IdCall,
+                  assignment => assignment.IdOfRunnerCall,
+                  (call, assignment) => new ClosedCallInList
+                  {
+                      Id = call.IdCall,
+                      CallTypes = call.CallTypes,
+                      Address = call.CallAddress ?? string.Empty,
+                      OpeningTime = call.OpeningTime,
+                      EntryTimeForTreatment = assignment.EntryTimeForTreatment ?? default,
+                      EndTimeForTreatment = assignment.EndTimeForTreatment,
+                      FinishCallType = assignment.FinishCallType
+                  })
+            .Where(c => c.FinishCallType != null);
 
-        return SortCalls(calls, sortField).Select(ToClosedCallInList);
+        if (filterType.HasValue)
+        {
+            closedCalls = closedCalls.Where(c => c.CallTypes == filterType.Value);
+        }
+
+        if (sortField.HasValue)
+        {
+            closedCalls = closedCalls.OrderBy(c => c.GetType()
+                                                    .GetProperty(sortField.ToString())?
+                                                    .GetValue(c))
+                                     .ThenBy(c => c.Id);
+        }
+        else
+        {
+            closedCalls = closedCalls.OrderBy(c => c.Id);
+        }
+
+        return closedCalls.ToList(); // הפיכת IEnumerable ל- List
     }
 
-    public IEnumerable<CallInList> GetFilteredAndSortedCallList(Enum? filterField, object? filterValue, Enum? sortField)
+    public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
     {
-        var calls = _dal.Call.GetAll();
+        var calls = _dal.Call.ReadAll();
+        var assignments = _dal.Assignment.ReadAll();
+        var callList = calls.Select(call =>
+        {
+            var lastAssignment = assignments
+                .Where(a => a.IdOfRunnerCall == call.IdCall)
+                .OrderByDescending(a => a.EntryTimeForTreatment)
+                .FirstOrDefault();
+            return new CallInList
+            {
+                Id = call.IdCall,
+                CallId = call.IdCall,
+                CallType = call.CallTypes,
+                StartTime = call.OpeningTime,
+                TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
+                LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
+                TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true
+                    ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment
+                    : null,
+                Status = Tools.GetCallStatus(call.IdCall),
+                TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
+            };
+        }).ToList();
 
         if (filterField != null && filterValue != null)
-            calls = calls.Where(call => GetFieldValue(call, filterField).Equals(filterValue));
-
-        return SortCalls(calls, sortField).Select(ToCallInList);
+        {
+            callList = callList.Where(call =>
+                CallManager.GetFieldValue(call, filterField.Value)?.Equals(filterValue) == true
+            ).ToList();
+        }
+        callList = sortField switch
+        {
+            null => callList.OrderBy(c => c.CallId).ToList(),
+            _ => callList.OrderBy(c => CallManager.GetFieldValue(c, sortField.Value)).ToList()
+        };
+        return callList;
     }
 
-    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, Enum? filterField, Enum? sortField)
+    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, CallTypes? filterField, OpenCallInListFields? sortField)
     {
-        var calls = _dal.Call.GetAll()
-            .Where(call => call.Status == Dal.DO.StatusCallType.Open || call.Status == Dal.DO.StatusCallType.OpenWithRisk);
+        try
+        {
+            var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
 
-        if (filterField != null)
-            calls = calls.Where(call => GetFieldValue(call, filterField).Equals(filterField));
+            var volunteerAssignments = _dal.Assignment.ReadAll()
+                .Where(a => a.VolunteerId == volunteerId) // סינון על פי ת.ז של המתנדב
+                .Select(a => a.IdOfRunnerCall); // קבלת IdOfRunnerCall מתוך ההקצאות
 
-        return SortCalls(calls, sortField).Select(ToOpenCallInList);
+            // שלב 2: קריאה ל- DAL על מנת להחזיר את הקריאות הפתוחות עם סטטוס מתאים
+            var openCalls = _dal.Call.ReadAll()
+                .Where(c => volunteerAssignments.Contains(c.IdCall) &&
+                            (Tools.GetCallStatus(c.IdCall) == StatusCallType.open || Tools.GetCallStatus(c.IdCall) == StatusCallType.openInRisk)) // סינון לפי סטטוס "פתוחה" או "פתוחה בסיכון"
+                .Join(_dal.Assignment.ReadAll(), // ביצוע Join בין קריאות להקצאות
+                      call => call.IdCall, // חיבור לפי IdCall
+                      assignment => assignment.IdOfRunnerCall, // חיבור לפי IdOfRunnerCall בהקצאה
+                      (call, assignment) => new OpenCallInList // יצירת אובייקטים מסוג OpenCallInList
+                      {
+                          Id = call.IdCall, // ID של הקריאה
+                          CallTypes = call.CallTypes, // מיפוי CallTypes ל-BO
+                          CallDescription = call.CallDescription, // תיאור הקריאה
+                          Address = call.CallAddress, // כתובת הקריאה
+                          OpeningTime = call.OpeningTime, // זמן פתיחת הקריאה
+                          MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
+                          CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
+                      });
+
+            // שלב 3: סינון לפי סוג הקריאה אם הועבר filterField
+            if (filterField.HasValue)
+                openCalls = openCalls.Where(c => c.CallTypes == filterField.Value); // סינון לפי סוג הקריאה
+
+            // שלב 4: מיון הקריאות לפי שדה הסדר (sortField), ברירת מחדל לפי ID של הקריאה
+            openCalls = sortField.HasValue
+                ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c)) // מיון לפי השדה שנבחר
+                : openCalls.OrderBy(c => c.Id); // אם לא הועבר sortField, מיון לפי ID של הקריאה
+
+            // החזרת רשימת הקריאות הממוינת והמסוננת בצורה מוחלטת
+            return openCalls.ToList(); // יש להמיר את ה- IEnumerable ל- List
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An error occurred while retrieving the open calls list.", ex);
+        }
     }
 
 
@@ -197,55 +357,6 @@ internal class CallImplementation : ICall
         _dal.Call.Update(updatedCall);
     }
 
-
-
-    // Helper functions
-    private IEnumerable<Dal.DO.Call> SortCalls(IEnumerable<Dal.DO.Call> calls, Enum? sortField)
-    {
-        return sortField switch
-        {
-            CallSortField.Number => calls.OrderBy(call => call.Id),
-            CallSortField.Priority => calls.OrderBy(call => call.Priority),
-            _ => calls.OrderBy(call => call.Id)
-        };
-    }
-
-    private object GetFieldValue(Dal.DO.Call call, Enum? field)
-    {
-        // Reflection or a dictionary mapping can be used to get the value based on the field
-        throw new NotImplementedException();
-    }
-
-    private CallInList ToCallInList(Dal.DO.Call call)
-    {
-        return new CallInList
-        {
-            Id = call.Id,
-            Address = call.Address,
-            Status = call.Status
-        };
-    }
-
-    private ClosedCallInList ToClosedCallInList(Dal.DO.Call call)
-    {
-        return new ClosedCallInList
-        {
-            Id = call.Id,
-            Address = call.Address,
-            Status = call.Status
-        };
-    }
-
-    private OpenCallInList ToOpenCallInList(Dal.DO.Call call)
-    {
-        return new OpenCallInList
-        {
-            Id = call.Id,
-            Address = call.Address,
-            Status = call.Status
-        };
-    }
-
     public BO.Call GetCallDetails(int callId)
     {
         // קבלת הקריאה מה-DAL
@@ -259,7 +370,7 @@ internal class CallImplementation : ICall
             {
                 VolunteerId = a.VolunteerId,
                 VolunteerName = _dal.Volunteer.Read(a.VolunteerId)?.Name, // שליפת שם המתנדב
-                EntryTimeForTreatment = a.EntryTimeForTreatment,
+                EntryTimeForTreatment = a.EntryTimeForTreatment ?? default,
                 EndTimeForTreatment = a.EndTimeForTreatment,
                 TreatmentEndType = (BO.TreatmentEndType?)(a.FinishCallType) // המרה נכונה לסוג סיום טיפול
             })
@@ -270,7 +381,7 @@ internal class CallImplementation : ICall
         return new BO.Call
         {
             IdCall = call.IdCall,
-            CallType = (BO.CallTypes)call.CallTypes,
+            CallType = (DO.CallTypes)call.CallTypes,
             CallDescription = call.CallDescription,
             AddressOfCall = call.CallAddress,
             CallLatitude = call.CallLatitude,

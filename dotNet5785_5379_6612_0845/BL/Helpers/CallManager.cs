@@ -16,7 +16,7 @@ internal class CallManager
         return doCalls.Select(doCall => new BO.Call
         {
             IdCall = doCall.IdCall,
-            CallType = (BO.CallTypes)doCall.CallTypes, // המרת סוג קריאה
+            CallType = (DO.CallTypes)doCall.CallTypes, // המרת סוג קריאה
             CallDescription = doCall.CallDescription,
             AddressOfCall = doCall.CallAddress, // שינוי שם השדה בהתאם לשכבות
             CallLongitude = doCall.CallLongitude,
