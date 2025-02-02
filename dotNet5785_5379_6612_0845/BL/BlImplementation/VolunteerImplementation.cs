@@ -173,7 +173,7 @@ internal class VolunteerImplementation : IVolunteer
             //TotalCallsHandled = doVolunteer.TotalCallsHandled,
             //TotalCallsCanceled = doVolunteer.TotalCallsCanceled,
             //SelectedAndExpiredCalls = doVolunteer.SelectedAndExpiredCalls,
-            //CallInProgress = doVolunteer.callInProgress 
+            //CallInProgress = doVolunteer.callInProgress
         };
     }
 
