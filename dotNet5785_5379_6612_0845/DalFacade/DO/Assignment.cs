@@ -14,11 +14,11 @@ public record Assignment
     int NextAssignmentId,
     int IdOfRunnerCall,
     int VolunteerId,
-    FinishCallType FinishCallType,
-    DateTime EntryTimeForTreatment,
+    FinishCallType? FinishCallType,
+    DateTime? EntryTimeForTreatment,
     DateTime? EndTimeForTreatment = null
 )
 {
-    public Assignment() : this(0, 0, 0, FinishCallType.TakenCareof, DateTime.Now) { }
+    public Assignment() : this(0, 0, 0, null, DateTime.Now) { }
 
 }

@@ -1,4 +1,5 @@
 ﻿using BL.BO;
+using DO;
 
 namespace BL.BIApi;
 
@@ -8,7 +9,7 @@ public interface ICall
     /// Retrieves an array of call amounts grouped by their status.
     /// </summary>
     /// <returns>An array where each index represents a call status, and the value is the count of calls with that status.</returns>
-    int[] GetCallAmountsByStatus();
+    int[] GetCallAmounts();
 
     /// <summary>
     /// Retrieves a filtered and sorted list of calls based on the provided parameters.
@@ -17,7 +18,7 @@ public interface ICall
     /// <param name="filterValue">The value to filter by (nullable).</param>
     /// <param name="sortField">The enum field of the call entity to sort by (nullable).</param>
     /// <returns>A sorted and filtered collection of call entities.</returns>
-    IEnumerable<BO.CallInList> GetFilteredAndSortedCallList(Enum? filterField, object? filterValue, Enum? sortField);
+    IEnumerable<BO.CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField);
 
     /// <summary>
     /// Updates the details of an existing call.
@@ -44,7 +45,7 @@ public interface ICall
     /// <param name="callType">The type of call to filter by (nullable).</param>
     /// <param name="sortField">The field to sort the results by (nullable).</param>
     /// <returns>A list of closed call entities handled by the specified volunteer.</returns>
-    IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? callType, Enum? sortField);
+    IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? callType, ClosedCallInListFields? sortField);
 
     /// <summary>
     /// Retrieves a list of open calls available for selection by a volunteer.
@@ -53,7 +54,7 @@ public interface ICall
     /// <param name="filterField">The field to filter the calls by (nullable).</param>
     /// <param name="sortField">The field to sort the results by (nullable).</param>
     /// <returns>A list of open call entities available for the specified volunteer.</returns>
-    IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, Enum? filterField, Enum? sortField);
+    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, CallTypes? filterField, OpenCallInListFields? sortField);
 
     /// <summary>
     /// Marks a call treatment as completed.
@@ -74,5 +75,5 @@ public interface ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer taking the assignment.</param>
     /// <param name="callId">The ID of the call to assign.</param>
-    void AssignVolunteerToCall(int volunteerId, int callId);
+    void ChoosingCallForTreatment(int volunteerId, int callId);
 }

@@ -4,13 +4,13 @@ namespace BL.BO;
 
 public class ClosedCallInList
 {
-    int Id { get; init; }
-    CallTypes callTypes { get; set; }
-    string Address { get; set; }
-    DateTime OpeningTime { get; set; }
-    DateTime EntryTimeForTreatment { get; set; }
-    DateTime? EndTimeForTreatment { get; set; }
-    FinishCallType? FinishCallType { get; set; }
+  public int Id { get; init; }
+  public DO.CallTypes CallTypes { get; set; }
+  public string Address { get; set; }
+  public DateTime OpeningTime { get; set; }
+  public DateTime EntryTimeForTreatment { get; set; }
+  public DateTime? EndTimeForTreatment { get; set; }
+  public FinishCallType? FinishCallType { get; set; }
 
 }
 

@@ -11,12 +11,7 @@ public enum DistanceType
     RoadDistance,
     WalkingDistance
 }
-public enum CallTypes
-{
-    ManDriver,
-    WomanDriver,
-    None
-}
+
 public enum RiskRangeStatus
 {
     InTreatment,
@@ -45,6 +40,55 @@ public enum TimeUnit
 }
 
 public enum StatusCallType
+{
+    HandlingInRisk,
+    inHandling,
+    closed,
+    Expired,
+    openInRisk,
+    open
+}
+/// <summary>
+/// Enum representing the fields of the CallInList class.
+/// </summary>
+public enum CallInListFields
+{
+    Id,
+    CallId,
+    CallType,
+    StartTime,
+    TimeToEnd,
+    LastUpdateBy,
+    TimeToCompleteTreatment,
+    Status,
+    TotalAssignment
+}
+/// <summary>
+/// Enum representing the fields in the ClosedCallInList class.
+/// </summary>
+public enum ClosedCallInListFields
+{
+    Id,
+    CallTypes,
+    Address,
+    OpeningTime,
+    EntryTimeForTreatment,
+    EndTimeForTreatment,
+    FinishCallType
+}
+
+public enum OpenCallInListFields
+{
+    Id,
+    CallTypes,
+    CallDescription,
+    Address,
+    OpeningTime,
+    MaxFinishTime,
+    Calldistance,
+}
+
+public enum TreatmentEndType
 {
 
 }

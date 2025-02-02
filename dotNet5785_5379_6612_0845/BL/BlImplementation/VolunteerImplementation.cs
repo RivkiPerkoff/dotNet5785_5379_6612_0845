@@ -1,12 +1,16 @@
 ﻿using BL.BIApi;
 using BL.BO;
 using BL.Helpers;
+using DalApi;
+using DO;
+using NSubstitute.Core;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace BL.BlImplementation;
 
-internal class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : BIApi.IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public string Login(string username, string password)
@@ -15,7 +19,7 @@ internal class VolunteerImplementation : IVolunteer
             .FirstOrDefault(v => v.Name == username && v.PasswordVolunteer == password)
             ?? throw new BO.BlLoginFailedException("Username or password is incorrect");
 
-        return ((Role)volunteer.Role).ToString();
+        return (volunteer.Role).ToString();
     }
 
     public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy)
@@ -40,7 +44,6 @@ internal class VolunteerImplementation : IVolunteer
                 BO.TypeSortingVolunteers.CallType => volunteerList.OrderBy(v => v.MyRole).ToList(),
                 _ => volunteerList.OrderBy(v => v.Id).ToList()
             } : volunteerList.OrderBy(v => v.Id).ToList();
-
 
             return volunteerList.ToList();
         }
@@ -81,7 +84,7 @@ internal class VolunteerImplementation : IVolunteer
 
 
                         CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
-                        Status = Tools.CalculateStatus(currentAssignment, callDetails, 30)
+                        Status = Tools.GetCallStatus(currentAssignment.IdOfRunnerCall)
                     };
                 }
             }
@@ -150,78 +153,35 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist", ex); // עדכון ל-VolunteerId
         }
     }
-
-    private void ValidateVolunteer(Volunteer volunteer)
+    public void AddVolunteer(BO.Volunteer Volunteer)
     {
-        if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
+        try
         {
-            throw new BO.BlValidationException("Name must be at least 2 characters long");
+            var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == Volunteer.VolunteerId);
+            if (existingVolunteer != null)
+                throw new DO.DalDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists.");
+            ValidateVolunteer(Volunteer);
+
+            DO.Volunteer doVolunteer = VolunteerManager.CreateDoVolunteer(Volunteer);
+            _dal.Volunteer.Create(doVolunteer);
         }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.EmailOfVolunteer) && !Regex.IsMatch(volunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlValidationException("Invalid email format");
+            throw new BO.BlAlreadyExistsException($"Volunteer with ID={Volunteer.VolunteerId} already exists", ex);
         }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) && !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
+        catch (Exception ex)
         {
-            throw new BO.BlValidationException("Phone must be a valid 10-digit number");
-        }
-
-        if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
-        {
-            throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
-        {
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
-
-            volunteer.VolunteerLatitude = latitude;
-            volunteer.VolunteerLongitude = longitude;
+            throw new BO.BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
     }
 
-
-    private Volunteer MapToBO(DO.Volunteer doVolunteer)
+    private void ValidateVolunteer(BO.Volunteer volunteer)
     {
-        return new Volunteer
-        {
-            VolunteerId = doVolunteer.VolunteerId, // עדכון ל-VolunteerId
-            Name = doVolunteer.Name,
-            PhoneNumber = doVolunteer.PhoneNumber, // עדכון ל-PhoneNumber
-            EmailOfVolunteer = doVolunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
-            PasswordVolunteer = doVolunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
-            AddressVolunteer = doVolunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
-            VolunteerLatitude = doVolunteer.VolunteerLatitude,
-            VolunteerLongitude = doVolunteer.VolunteerLongitude,
-            IsAvailable = doVolunteer.IsAvailable, // עדכון ל-IsAvailable
-            MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
-            Role = (Role)doVolunteer.Role, // המרה בין הטיפוסים
-            DistanceType = (DistanceType)doVolunteer.DistanceType, // המרה בין הטיפוסים
-            //TotalCallsHandled = doVolunteer.TotalCallsHandled,
-            //TotalCallsCanceled = doVolunteer.TotalCallsCanceled,
-            //SelectedAndExpiredCalls = doVolunteer.SelectedAndExpiredCalls,
-            //CallInProgress = doVolunteer.callInProgress
-        };
+        throw new NotImplementedException();
     }
 
-    private DO.Volunteer MapToDO(Volunteer volunteer)
+    public void UpdateVolunteer(int requesterId, BO.Volunteer volunteer)
     {
-        return new DO.Volunteer(
-            volunteer.VolunteerId,
-            volunteer.Name,
-            volunteer.PhoneNumber,
-            volunteer.EmailOfVolunteer,
-            volunteer.PasswordVolunteer,
-            volunteer.AddressVolunteer,
-            volunteer.VolunteerLatitude,
-            volunteer.VolunteerLongitude,
-            volunteer.IsAvailable,
-            volunteer.MaximumDistanceForReceivingCall,
-            (DO.Role)volunteer.Role,
-            (DO.DistanceType)volunteer.DistanceType
-        );
-
+        throw new NotImplementedException();
     }
 }
