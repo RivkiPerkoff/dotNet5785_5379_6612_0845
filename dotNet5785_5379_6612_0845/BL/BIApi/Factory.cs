@@ -5,7 +5,7 @@ using System.Xml;
 namespace BlApi;
 public static class Factory
 {
-    public static IBl Get() => new lBlImplementation.Bl();
+    public static IBL Get() => new BL.BlImplementation.Bl();
 
 
 }
