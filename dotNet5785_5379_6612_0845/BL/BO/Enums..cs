@@ -46,5 +46,26 @@ public enum TimeUnit
 
 public enum StatusCallType
 {
+    HandlingInRisk,
+    inHandling,
+    closed,
+    Expired,
+    openInRisk,
+    open
+}
+public enum TreatmentEndType
+{
 
+}
+public enum CallInListFields
+{
+    Id,
+    CallId,
+    CallType,
+    StartTime,
+    TimeToEnd,
+    LastUpdateBy,
+    TimeTocompleteTreatment,
+    Status,
+    TotalAssignment
 }

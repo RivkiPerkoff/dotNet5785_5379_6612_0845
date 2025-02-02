@@ -151,36 +151,7 @@ internal class VolunteerImplementation : IVolunteer
         }
     }
 
-    private void ValidateVolunteer(Volunteer volunteer)
-    {
-        if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
-        {
-            throw new BO.BlValidationException("Name must be at least 2 characters long");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.EmailOfVolunteer) && !Regex.IsMatch(volunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-        {
-            throw new BO.BlValidationException("Invalid email format");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) && !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
-        {
-            throw new BO.BlValidationException("Phone must be a valid 10-digit number");
-        }
-
-        if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
-        {
-            throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
-        {
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
-
-            volunteer.VolunteerLatitude = latitude;
-            volunteer.VolunteerLongitude = longitude;
-        }
-    }
+    
 
 
     private Volunteer MapToBO(DO.Volunteer doVolunteer)
@@ -223,5 +194,32 @@ internal class VolunteerImplementation : IVolunteer
             (DO.DistanceType)volunteer.DistanceType
         );
 
+    }
+
+    public void AddVolunteer(BO.Volunteer Volunteer)
+    {
+        try
+        {
+            var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == Volunteer.VolunteerId);
+            if (existingVolunteer != null)
+                throw new DO.DalDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists.");
+            VolunteerManager.ValidateVolunteer(Volunteer);
+
+            if (latitude != null && longitude != null)
+            {
+                boVolunteer.Latitude = latitude;
+                boVolunteer.Longitude = longitude;
+            }
+            DO.Volunteer doVolunteer =MapToDO(boVolunteer);
+            _dal.Volunteer.Create(doVolunteer);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlAlreadyExistsException($"Volunteer with ID={Volunteer.VolunteerId} already exists", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
+        }
     }
 }
