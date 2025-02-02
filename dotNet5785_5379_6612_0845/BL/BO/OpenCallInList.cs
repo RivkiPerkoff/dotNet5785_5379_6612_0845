@@ -1,4 +1,5 @@
-﻿namespace BL.BO;
+﻿using DO;
+namespace BL.BO;
 
 public class OpenCallInList
 {

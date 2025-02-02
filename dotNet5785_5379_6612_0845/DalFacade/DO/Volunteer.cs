@@ -28,6 +28,7 @@ double? MaximumDistanceForReceivingCall = 0,
 Role Role = Role.Volunteer,
 DistanceType DistanceType= DistanceType.AirDistance
  )
+
 {
     public Volunteer(int volunteerId, string name, string emailOfVolunteer, string phoneNumber, string addressVolunteer)
         : this(volunteerId, name, phoneNumber, emailOfVolunteer, "", addressVolunteer, 0, 0, false, 0, 0)

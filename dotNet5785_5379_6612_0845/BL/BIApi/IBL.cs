@@ -1,4 +1,6 @@
 ﻿
+using BL.BlImplementation;
+
 namespace BL.BIApi;
 
 public interface IBL

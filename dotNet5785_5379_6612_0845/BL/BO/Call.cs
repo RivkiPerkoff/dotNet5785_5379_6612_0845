@@ -13,10 +13,11 @@ public class Call
     public string AddressOfCall { get; set; }
     public double CallLongitude { get; set; }
     public double CallLatitude { get; set; }
-    public DateTime OpeningTime { get; init; }
-    public DateTime? MaxFinishTime { get; init; }
+    public DateTime OpeningTime { get; set; }
+    public DateTime? MaxFinishTime { get; set; }
     public StatusCallType StatusCallType { get; set; }
     public List<BO.CallAssignInList>? CallAssignInLists { get; set; }
+    //public override string ToString() => this.ToStringProperty();
     public override string ToString()
     {
         var sb = new StringBuilder();

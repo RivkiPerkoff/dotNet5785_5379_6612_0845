@@ -174,6 +174,16 @@ internal class VolunteerImplementation : BIApi.IVolunteer
             throw new BO.BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
     }
+        }
+
+        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
+        {
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
+
+            volunteer.VolunteerLatitude = latitude;
+            volunteer.VolunteerLongitude = longitude;
+        }
+    }
 
     private void ValidateVolunteer(BO.Volunteer volunteer)
     {
@@ -183,5 +193,32 @@ internal class VolunteerImplementation : BIApi.IVolunteer
     public void UpdateVolunteer(int requesterId, BO.Volunteer volunteer)
     {
         throw new NotImplementedException();
+    }
+
+    public void AddVolunteer(BO.Volunteer Volunteer)
+    {
+        try
+        {
+            var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == Volunteer.VolunteerId);
+            if (existingVolunteer != null)
+                throw new DO.DalDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists.");
+            VolunteerManager.ValidateVolunteer(Volunteer);
+
+            if (latitude != null && longitude != null)
+            {
+                boVolunteer.Latitude = latitude;
+                boVolunteer.Longitude = longitude;
+            }
+            DO.Volunteer doVolunteer =MapToDO(boVolunteer);
+            _dal.Volunteer.Create(doVolunteer);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlAlreadyExistsException($"Volunteer with ID={Volunteer.VolunteerId} already exists", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
+        }
     }
 }
