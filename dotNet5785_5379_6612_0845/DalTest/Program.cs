@@ -1,9 +1,9 @@
-﻿namespace DalTest;
-using DalXml;
+﻿using DalXml;
 using Dal;
 using DalApi;
 using DO;
-using System.Diagnostics;
+
+namespace DalTest;
 ///
 /// <summary>
 /// The main class of the program.
@@ -11,12 +11,6 @@ using System.Diagnostics;
 /// </summary>
 internal class Program
 {
-    //    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation(); 
-    //    private static ICall? s_dalCall = new CallImplementation(); 
-    //    private static IAssignment? s_dalAssignment = new AssignmentImplementation(); // stage 1
-    //    private static IConfig? s_dalConfig = new ConfigImplementation();
-    //    static readonly IDal s_dal = new DalList();
-    //    static readonly IDal s_dal = new DalXml();
     static readonly IDal s_dal = Factory.Get;
     private static void Main(string[] args)
     {

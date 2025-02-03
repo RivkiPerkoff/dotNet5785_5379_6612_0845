@@ -1,4 +1,5 @@
 ﻿using BL.BIApi;
+using BL.BO;
 using BL.Helpers;
 
 namespace BL.BlImplementation;
@@ -8,7 +9,6 @@ internal class AdminImplementation : IAdmin
 
     public void AdvanceClock(BO.TimeUnit timeUnit)
     {
-        // קבלת הזמן הנוכחי
         DateTime currentClock = ClockManager.Now;
 
         // יצירת הזמן החדש על פי יחידת הזמן
@@ -19,7 +19,7 @@ internal class AdminImplementation : IAdmin
             BO.TimeUnit.Day => currentClock.AddDays(1),
             BO.TimeUnit.Month => currentClock.AddMonths(1),
             BO.TimeUnit.Year => currentClock.AddYears(1),
-            _ => throw new ArgumentException("Invalid time unit", nameof(timeUnit))
+            _ => throw new BlDoesNotExistException($"Invalid time unit {nameof(timeUnit)}")
         };
 
         ClockManager.UpdateClock(newClock);
@@ -34,7 +34,7 @@ internal class AdminImplementation : IAdmin
     {
         // שימוש במשתנה _dal במקום Factory.Get
         return _dal.Config.RiskRange
-               ?? throw new InvalidOperationException("RiskRange is not set in the configuration.");
+               ?? throw new BlInvalidOperationException("RiskRange is not set in the configuration.");
     }
 
     public void SetRiskTimeRange(TimeSpan timeRange)

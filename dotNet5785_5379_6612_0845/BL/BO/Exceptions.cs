@@ -30,6 +30,15 @@ public class BlReedAllImpossible : Exception //If there is no data to read
     public BlReedAllImpossible(string message, Exception innerException)
    : base(message, innerException) { }
 }
-
-
-
+public class BlInvalidOperationException : Exception //If there is no data to read
+{
+    public BlInvalidOperationException(string? message) : base(message) { }
+    public BlInvalidOperationException(string message, Exception innerException)
+   : base(message, innerException) { }
+}
+public class BlGeneralDatabaseException : Exception //שגיאה בעת קבלת נתונים
+{
+    public BlGeneralDatabaseException(string? message) : base(message) { }
+    public BlGeneralDatabaseException(string message, Exception innerException)
+   : base(message, innerException) { }
+}

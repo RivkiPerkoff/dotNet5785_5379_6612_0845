@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using BL.BO
+using BL.BO;
 namespace BL.Helpers;
-
 static internal class VolunteerManager
 {
     private static IDal s_dal = Factory.Get; 
