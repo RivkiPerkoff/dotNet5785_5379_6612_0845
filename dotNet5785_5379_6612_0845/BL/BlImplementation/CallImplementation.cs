@@ -35,7 +35,7 @@ internal class CallImplementation : ICall
         return new BO.Call
         {
             IdCall = call.IdCall,
-            CallType = call.CallTypes,
+            CallType = (BO.CallTypes)call.CallTypes,
             CallDescription = call.CallDescription,
             AddressOfCall = call.CallAddress,
             CallLongitude = call.CallLongitude,

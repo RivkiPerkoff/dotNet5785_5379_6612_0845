@@ -32,10 +32,10 @@ static internal class VolunteerManager
             throw new BO.BlValidationException("Phone must be a valid 10-digit number");
         }
 
-        if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
-        {
-            throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
-        }
+        //if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
+        //{
+        //    throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
+        //}
 
         if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
         {
@@ -89,23 +89,23 @@ static internal class VolunteerManager
 
     }
 
-        if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) && !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
-        {
-            throw new BO.BlValidationException("Phone must be a valid 10-digit number");
-        }
+        //if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) && !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
+        //{
+        //    throw new BO.BlValidationException("Phone must be a valid 10-digit number");
+        //}
 
-        if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
-        {
-            throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
-        }
+        //if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
+        //{
+        //    throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
+        //}
 
-        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
-        {
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
+        //if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
+        //{
+        //    var (latitude, longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) ?? throw new BO.BlValidationException("Invalid address - unable to find coordinates");
 
-            volunteer.VolunteerLatitude = latitude;
-            volunteer.VolunteerLongitude = longitude;
-        }
+        //    volunteer.VolunteerLatitude = latitude;
+        //    volunteer.VolunteerLongitude = longitude;
+        //}
 }
 
         
