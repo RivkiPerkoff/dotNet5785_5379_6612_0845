@@ -87,7 +87,13 @@ public enum OpenCallInListFields
     MaxFinishTime,
     Calldistance,
 }
+public enum CallTypes
 
+{
+    ManDriver,
+    WomanDriver,
+    None
+}
 public enum TreatmentEndType
 {
 

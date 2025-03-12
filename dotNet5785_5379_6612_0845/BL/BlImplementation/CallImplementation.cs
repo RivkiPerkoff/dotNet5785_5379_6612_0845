@@ -23,6 +23,12 @@ internal class CallImplementation : ICall
 
         return statusCounts;
     }
+
+    public BO.Call GetCallDetails(int CallId)
+    {
+     
+    }
+
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
     {
         var calls = _dal.Call.ReadAll();

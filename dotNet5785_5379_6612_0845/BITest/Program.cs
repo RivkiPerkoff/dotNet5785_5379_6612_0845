@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata;
 using BL.BIApi;
 using BL.BO;
 using BL.BO;
@@ -22,11 +23,12 @@ namespace BlTest
                 Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
                 string password = Console.ReadLine()!;
 
+                //BL.BO.Role userRole = s_bl.Volunteer.Login(username,password);
                 string userRole = s_bl.Volunteer.Login(username, password);
                 Console.WriteLine($"Login successful! Your role is: {userRole}");
 
                 //בדיקה אם התפקיד הוא Manager
-                if (userRole == BL.BO.Role.Manager)
+                if (userRole == "Manager")
                 {
                     //הכניסה ללולאת התפריט רק אם התפקיד הוא Manager
                     ShowMenu();
@@ -41,7 +43,7 @@ namespace BlTest
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-            catch (BL.BO.BlInvalidOperationException ex)
+            catch (BL.BO.BlInvalidFormatException ex)
             {
                 Console.WriteLine("The sub menu choice is not valid.", ex);
             }
@@ -119,16 +121,16 @@ namespace BlTest
                     switch (choice)
                     {
                         case 1:
-                            s_bl.Admin.ResetDB();
+                            s_bl.Admin.ResetDatabase();
                             Console.WriteLine("Database reset successfully");
                             break;
                         case 2:
-                            s_bl.Admin.InitializeDB();
+                            s_bl.Admin.InitializeDatabase();
                             Console.WriteLine("Database initialized successfully");
                             break;
                         case 3:
                             Console.Write("Enter time unit (Minute, Hour, Day, Month, Year): ");
-                            if (Enum.TryParse(Console.ReadLine(), true, out BO.TimeUnit timeUnit))
+                            if (Enum.TryParse(Console.ReadLine(), true, out BL.BO.TimeUnit timeUnit))
                             {
                                 s_bl.Admin.AdvanceClock(timeUnit);
                                 Console.WriteLine("System clock advanced.");
@@ -142,13 +144,13 @@ namespace BlTest
                             Console.WriteLine($"Current System Clock: {s_bl.Admin.GetClock()}");
                             break;
                         case 5:
-                            Console.WriteLine($"Current Risk Time Range: {s_bl.Admin.GetMaxRange()}");
+                            Console.WriteLine($"Current Risk Time Range: {s_bl.Admin.GetRiskTimeRange()}");
                             break;
                         case 6:
                             Console.Write("Enter new risk time range (hh:mm:ss): ");
                             if (TimeSpan.TryParse(Console.ReadLine(), out TimeSpan timeRange))
                             {
-                                s_bl.Admin.SetMaxRange(timeRange);
+                                s_bl.Admin.SetRiskTimeRange(timeRange);
                                 Console.WriteLine("Risk time range updated.");
                             }
                             else
@@ -163,7 +165,7 @@ namespace BlTest
                             break;
                     }
                 }
-                catch (BL.BO.BlInvalidOperationException)
+                catch (BL.BO.BlInvalidFormatException)
                 {
                     Console.WriteLine("Invalid time format.");
                 }
@@ -180,7 +182,7 @@ namespace BlTest
             {
                 Console.WriteLine("\n--- Volunteer Management ---");
                 Console.WriteLine("1. List Volunteers");
-                Console.WriteLine("2. Get Filter/Sort volunteer");
+                //Console.WriteLine("2. Get Filter/Sort volunteer");
                 Console.WriteLine("3. Read Volunteer by ID");
                 Console.WriteLine("4. Add Volunteer");
                 Console.WriteLine("5. Remove Volunteer");
@@ -197,7 +199,7 @@ namespace BlTest
                     case 1:
                         try
                         {
-                            foreach (var volunteer in s_bl.Volunteer.GetVolunteersList())
+                            foreach (var volunteer in s_bl.Volunteer.GetVolunteers())
                                 Console.WriteLine(volunteer);
                         }
                         catch (BL.BO.BlDoesNotExistException ex)
@@ -209,28 +211,28 @@ namespace BlTest
                             Console.WriteLine($"System Error: {ex.Message}");
                         }
                         break;
-                    case 2:
-                        try
-                        {
-                            bool? isActive;
-                            BO.VolunteerSortField? sortBy;
-                            GetVolunteerFilterAndSortCriteria(out isActive, out sortBy);
-                            var volunteersList = s_bl.Volunteer.GetVolunteersList(isActive, sortBy);
-                            if (volunteersList != null)
-                                foreach (var volunteer in volunteersList)
-                                    Console.WriteLine(volunteer);
-                            else
-                                Console.WriteLine("No volunteers found matching the criteria.");
-                        }
-                        catch (BL.BO.BlDoesNotExistException ex)
-                        {
-                            Console.WriteLine($"Error: {ex.Message}");
-                        }
-                        catch (BL.BO.BlGeneralDatabaseException ex)
-                        {
-                            Console.WriteLine($"System Error: {ex.Message}");
-                        }
-                        break;
+                    //case 2:
+                    //    try
+                    //    {
+                    //        bool? IsAvailable;
+                    //        BL.BO.VolunteerSortField? sortBy;
+                    //        GetVolunteerFilterAndSortCriteria(out IsAvailable, out sortBy);
+                    //        var volunteersList = s_bl.Volunteer.GetVolunteers(IsAvailable, sortBy);
+                    //        if (volunteersList != null)
+                    //            foreach (var volunteer in volunteersList)
+                    //                Console.WriteLine(volunteer);
+                    //        else
+                    //            Console.WriteLine("No volunteers found matching the criteria.");
+                    //    }
+                    //    catch (BL.BO.BlDoesNotExistException ex)
+                    //    {
+                    //        Console.WriteLine($"Error: {ex.Message}");
+                    //    }
+                    //    catch (BL.BO.BlGeneralDatabaseException ex)
+                    //    {
+                    //        Console.WriteLine($"System Error: {ex.Message}");
+                    //    }
+                    //    break;
                     case 3:
                         try
                         {
@@ -266,7 +268,7 @@ namespace BlTest
                         {
                             Console.WriteLine($"Error BlAlreadyExistsException: {ex.Message}");
                         }
-                        catch (BL.BO.BlInvalidOperationException ex)
+                        catch (BL.BO.BlInvalidFormatException ex)
                         {
                             Console.WriteLine($"Input Error: {ex.Message}");
                         }
@@ -318,82 +320,83 @@ namespace BlTest
                 }
             }
         }
-        public static void GetVolunteerFilterAndSortCriteria(out bool? isActive, out BO.VolunteerSortField? sortBy)
-        {
-            isActive = null;
-            sortBy = null;
+        //public static void GetVolunteerFilterAndSortCriteria(out bool? isActive, out BL.BO.VolunteerSortField? sortBy)
+        //{
+        //    isActive = null;
+        //    sortBy = null;
 
-            try
-            {
-                Console.WriteLine("Is the volunteer active? (yes/no or leave blank for null): ");
-                string activeInput = Console.ReadLine();
+        //    try
+        //    {
 
-                if (!string.IsNullOrEmpty(activeInput))
-                {
-                    if (activeInput.Equals("yes", StringComparison.OrdinalIgnoreCase))
-                        isActive = true;
-                    else if (activeInput.Equals("no", StringComparison.OrdinalIgnoreCase))
-                        isActive = false;
-                    else
-                        Console.WriteLine("Invalid input for active status. Defaulting to null.");
-                }
+        //        Console.WriteLine("Is the volunteer active? (yes/no or leave blank for null): ");
+        //        string activeInput = Console.ReadLine();
 
-                Console.WriteLine("Choose how to sort the volunteers by: ");
-                Console.WriteLine("1. ID");
-                Console.WriteLine("2. Name");
-                Console.WriteLine("3. Total Responses Handled");
-                Console.WriteLine("4. Total Responses Cancelled");
-                Console.WriteLine("5. Total Expired Responses");
-                Console.WriteLine("6. Sum of Calls");
-                Console.WriteLine("7. Sum of Cancellations");
-                Console.WriteLine("8. Sum of Expired Calls");
-                Console.WriteLine("Select sorting option by number: ");
-                string sortInput = Console.ReadLine();
+        //        if (!string.IsNullOrEmpty(activeInput))
+        //        {
+        //            if (activeInput.Equals("yes", StringComparison.OrdinalIgnoreCase))
+        //                isActive = true;
+        //            else if (activeInput.Equals("no", StringComparison.OrdinalIgnoreCase))
+        //                isActive = false;
+        //            else
+        //                Console.WriteLine("Invalid input for active status. Defaulting to null.");
+        //        }
 
-                if (int.TryParse(sortInput, out int sortOption))
-                {
-                    switch (sortOption)
-                    {
-                        case 1:
-                            sortBy = .BO.VolunteerSortField.Id;
-                            break;
-                        case 2:
-                            sortBy = BO.VolunteerSortField.Name;
-                            break;
-                        case 3:
-                            sortBy = BO.VolunteerSortField.TotalResponsesHandled;
-                            break;
-                        case 4:
-                            sortBy = BO.VolunteerSortField.TotalResponsesCancelled;
-                            break;
-                        case 5:
-                            sortBy = BO.VolunteerSortField.TotalExpiredResponses;
-                            break;
-                        case 6:
-                            sortBy = BO.VolunteerSortField.SumOfCalls;
-                            break;
-                        case 7:
-                            sortBy = BO.VolunteerSortField.SumOfCancellation;
-                            break;
-                        case 8:
-                            sortBy = BO.VolunteerSortField.SumOfExpiredCalls;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid selection. Defaulting to sorting by ID.");
-                            break;
-                    }
-                }
-                else
-                {
-                    throw new FormatException("Invalid input for sorting option. Defaulting to sorting by ID.");
-                }
-            }
-            catch (BL.BO.BlGeneralDatabaseException ex)
-            {
-                Console.WriteLine($"Exception: {ex.GetType().Name}");
-                Console.WriteLine($"Message: {ex.Message}");
-            }
-        }
+        //        Console.WriteLine("Choose how to sort the volunteers by: ");
+        //        Console.WriteLine("1. ID");
+        //        Console.WriteLine("2. Name");
+        //        Console.WriteLine("3. Total Responses Handled");
+        //        Console.WriteLine("4. Total Responses Cancelled");
+        //        Console.WriteLine("5. Total Expired Responses");
+        //        Console.WriteLine("6. Sum of Calls");
+        //        Console.WriteLine("7. Sum of Cancellations");
+        //        Console.WriteLine("8. Sum of Expired Calls");
+        //        Console.WriteLine("Select sorting option by number: ");
+        //        string sortInput = Console.ReadLine();
+
+        //        if (int.TryParse(sortInput, out int sortOption))
+        //        {
+        //            switch (sortOption)
+        //            {
+        //                case 1:
+        //                    sortBy = BO.VolunteerSortField.Id;
+        //                    break;
+        //                case 2:
+        //                    sortBy = BO.VolunteerSortField.Name;
+        //                    break;
+        //                case 3:
+        //                    sortBy = BO.VolunteerSortField.TotalResponsesHandled;
+        //                    break;
+        //                case 4:
+        //                    sortBy = BO.VolunteerSortField.TotalResponsesCancelled;
+        //                    break;
+        //                case 5:
+        //                    sortBy = BO.VolunteerSortField.TotalExpiredResponses;
+        //                    break;
+        //                case 6:
+        //                    sortBy = BO.VolunteerSortField.SumOfCalls;
+        //                    break;
+        //                case 7:
+        //                    sortBy = BO.VolunteerSortField.SumOfCancellation;
+        //                    break;
+        //                case 8:
+        //                    sortBy = BO.VolunteerSortField.SumOfExpiredCalls;
+        //                    break;
+        //                default:
+        //                    Console.WriteLine("Invalid selection. Defaulting to sorting by ID.");
+        //                    break;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw new FormatException("Invalid input for sorting option. Defaulting to sorting by ID.");
+        //        }
+        //    }
+        //    catch (BL.BO.BlGeneralDatabaseException ex)
+        //    {
+        //        Console.WriteLine($"Exception: {ex.GetType().Name}");
+        //        Console.WriteLine($"Message: {ex.Message}");
+        //    }
+        //}
         //מה לעשות עם כל הTRY ועם הזריקות
         static BL.BO.Volunteer CreateVolunteer(int requesterId)
         {
@@ -412,7 +415,7 @@ namespace BlTest
                 throw new FormatException("Invalid input for IsActive.");
 
             Console.WriteLine("Please enter Role: 'Manager' or 'Volunteer'.");
-            if (!Enum.TryParse(Console.ReadLine(), out BO.Role role))
+            if (!Enum.TryParse(Console.ReadLine(), out BL.BO.Role role))
                 throw new FormatException("Invalid role.");
 
             Console.Write("Password: ");
@@ -435,28 +438,29 @@ namespace BlTest
                 throw new FormatException("Invalid largest distance format.");
 
             Console.Write("Distance Type (Air, Drive or Walk): ");
-            if (!Enum.TryParse(Console.ReadLine(), true, out BO.DistanceType myDistanceType))
+            if (!Enum.TryParse(Console.ReadLine(), true, out BL.BO.DistanceType myDistanceType))
                 throw new FormatException("Invalid distance type.");
 
-            return new BO.Volunteer
+            return new BL.BO.Volunteer
             {
-                Id = requesterId,
+                VolunteerId = requesterId,
                 Name = name,
-                Phone = phoneNumber,
-                Email = email,
-                Active = active,
-                MyRole = role,
-                Password = password,
-                Address = address,
-                Latitude = latitude,
-                Longitude = longitude,
-                LargestDistance = largestDistance,
-                MyDistanceType = myDistanceType,
+                PhoneNumber = phoneNumber, 
+                EmailOfVolunteer = email, 
+                PasswordVolunteer = password,
+                AddressVolunteer = address, 
+                VolunteerLatitude = latitude,
+                VolunteerLongitude = longitude, 
+                IsAvailable = active, 
+                Role = role, 
+                DistanceType = myDistanceType, 
+                MaximumDistanceForReceivingCall = largestDistance, 
                 TotalCallsHandled = 0,
-                TotalCallsCancelled = 0,
-                TotalExpiredCallsChosen = 0,
-                CurrentCallInProgress = null
+                TotalCallsCanceled = 0,
+                SelectedAndExpiredCalls = 0, 
+                CallInProgress = null
             };
+
 
 
 
@@ -476,7 +480,7 @@ namespace BlTest
                 Console.Write("Enter requester ID: ");
                 if (int.TryParse(Console.ReadLine(), out int requesterId))
                 {
-                    BO.Volunteer boVolunteer = CreateVolunteer(requesterId);
+                    BL.BO.Volunteer boVolunteer = CreateVolunteer(requesterId);
                     s_bl.Volunteer.UpdateVolunteer(requesterId, boVolunteer);
                     Console.WriteLine("Volunteer updated successfully.");
                 }
@@ -537,7 +541,7 @@ namespace BlTest
                         case 1:
                             try
                             {
-                                int[] callQuantities = s_bl.Call.GetCallQuantitiesByStatus();
+                                int[] callQuantities = s_bl.Call.GetCallAmounts();
                                 Console.WriteLine("Call quantities by status:");
 
                                 foreach (BO.Status status in Enum.GetValues(typeof(BO.Status)))
@@ -562,13 +566,13 @@ namespace BlTest
                                 {
                                     Console.WriteLine("Enter Call Type filter (or press Enter to skip):");
                                     string? callTypeInput = Console.ReadLine();
-                                    BO.CallType? callTypeFilter = Enum.TryParse(callTypeInput, out BO.CallType parsedCallType) ? parsedCallType : null;
+                                    BL.BO.CallTypes? callTypeFilter = Enum.TryParse(callTypeInput, out BL.BO.CallTypes parsedCallType) ? parsedCallType : null;
 
                                     Console.WriteLine("Enter Sort Field (or press Enter to skip):");
                                     string? sortFieldInput = Console.ReadLine();
-                                    BO.ClosedCallInListFields? sortField = Enum.TryParse(sortFieldInput, out BO.ClosedCallInListFields parsedSortField) ? parsedSortField : null;
+                                    BL.BO.ClosedCallInListFields? sortField = Enum.TryParse(sortFieldInput, out BL.BO.ClosedCallInListFields parsedSortField) ? parsedSortField : null;
 
-                                    var closedCalls = s_bl.Call.GetClosedCallsByVolunteer(volunteerId, callTypeFilter, sortField);
+                                    var closedCalls = s_bl.Call.GetClosedCallsForVolunteer(volunteerId, callTypeFilter, sortField);
 
                                     Console.WriteLine("\nClosed Calls Handled By Volunteer:");
                                     foreach (var call in closedCalls)
@@ -595,7 +599,7 @@ namespace BlTest
                             {
                                 Console.WriteLine("Enter sort field (CallId, CallType, OpenTime, TimeRemainingToCall, LastVolunteer, CompletionTime, MyStatus, TotalAllocations) or press Enter to skip:");
                                 string? filterFieldInput = Console.ReadLine();
-                                BO.CallInListFields? filterField = Enum.TryParse(filterFieldInput, out BO.CallInListFields parsedFilterField) ? parsedFilterField : null;
+                                BL.BO.CallInListFields? filterField = Enum.TryParse(filterFieldInput, out BL.BO.CallInListFields parsedFilterField) ? parsedFilterField : null;
 
                                 object? filterValue = null;
                                 if (filterField.HasValue)
@@ -606,9 +610,9 @@ namespace BlTest
 
                                 Console.WriteLine("Enter sort field (CallId, CallType, OpenTime, TimeRemainingToCall, LastVolunteer, CompletionTime, MyStatus, TotalAllocations) or press Enter to skip:");
                                 string? sortFieldInput = Console.ReadLine();
-                                BO.CallInListFields? sortField = Enum.TryParse(sortFieldInput, out BO.CallInListFields parsedSortField) ? parsedSortField : null;
+                                BL.BO.CallInListFields? sortField = Enum.TryParse(sortFieldInput, out BL.BO.CallInListFields parsedSortField) ? parsedSortField : null;
 
-                                var callList = s_bl.Call.GetCallList(filterField, filterValue, sortField);
+                                var callList = s_bl.Call.GetFilteredAndSortedCallList(filterField, filterValue, sortField);
 
                                 foreach (var call in callList)
                                     Console.WriteLine(call);
@@ -650,7 +654,7 @@ namespace BlTest
                                 Console.Write("ID: ");
                                 if (int.TryParse(Console.ReadLine(), out int id))
                                 {
-                                    BO.Call call = CreateCall(id);
+                                    BL.BO.Call call = CreateCall(id);
                                     s_bl.Call.AddCall(call);
                                     Console.WriteLine("Call created successfully!");
                                 }
@@ -728,7 +732,7 @@ namespace BlTest
 
                                     Console.WriteLine("Enter Sort Field (or press Enter to skip):");
                                     string? sortFieldInput = Console.ReadLine();
-                                    BO.OpenCallInListFields? sortField = Enum.TryParse(sortFieldInput, out BO.OpenCallInListFields parsedSortField) ? parsedSortField : null;
+                                    BL.BO.OpenCallInListFields? sortField = Enum.TryParse(sortFieldInput, out BL.BO.OpenCallInListFields parsedSortField) ? parsedSortField : null;
 
                                     var openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId, callTypeFilter, sortField);
 
@@ -808,7 +812,7 @@ namespace BlTest
 
                                 Console.WriteLine("Call completion updated successfully!");
                             }
-                            catch (BO.BlDoesNotExistException ex)
+                            catch (BL.BO.BlDoesNotExistException ex)
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
@@ -816,11 +820,11 @@ namespace BlTest
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
-                            catch (BO.BlInvalidOperationException ex)
+                            catch (BL.BO.BlInvalidOperationException ex)
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
-                            catch (BO.BlGeneralDatabaseException ex)
+                            catch (BL.BO.BlGeneralDatabaseException ex)
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
@@ -869,7 +873,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-        static BO.Call CreateCall(int id)
+        static BL.BO.Call CreateCall(int id)
         {
             Console.WriteLine("Enter the call type (0 for None, 1 for MusicPerformance, 2 for MusicTherapy, 3 for SingingAndEmotionalSupport, 4 for GroupActivities, 5 for PersonalizedMusicCare):");
             if (!Enum.TryParse(Console.ReadLine(), out BO.CallType callType))
@@ -937,8 +941,8 @@ namespace BlTest
             {
                 var callToUpdate = s_bl.Call.GetCallDetails(callId);
                 if (callToUpdate == null)
-                    throw new BO.BlDoesNotExistException($"Call with ID{callId} does not exist!");
-                var newUpdatedCall = new BL.BO.Call
+                    throw new BL.BO.BlDoesNotExistException($"Call with ID{callId} does not exist!");
+                var newUpdatedCall = new BO.Call
                 {
                     Id = callId,
                     VerbalDescription = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.VerbalDescription,

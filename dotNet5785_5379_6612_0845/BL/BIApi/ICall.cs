@@ -11,6 +11,8 @@ public interface ICall
     /// <returns>An array where each index represents a call status, and the value is the count of calls with that status.</returns>
     int[] GetCallAmounts();
 
+    BO.Call GetCallDetails(int CallId);
+
     /// <summary>
     /// Retrieves a filtered and sorted list of calls based on the provided parameters.
     /// </summary>
@@ -45,7 +47,7 @@ public interface ICall
     /// <param name="callType">The type of call to filter by (nullable).</param>
     /// <param name="sortField">The field to sort the results by (nullable).</param>
     /// <returns>A list of closed call entities handled by the specified volunteer.</returns>
-    IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? callType, ClosedCallInListFields? sortField);
+    IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BL.BO.CallTypes? callType, ClosedCallInListFields? sortField);
 
     /// <summary>
     /// Retrieves a list of open calls available for selection by a volunteer.
@@ -54,7 +56,7 @@ public interface ICall
     /// <param name="filterField">The field to filter the calls by (nullable).</param>
     /// <param name="sortField">The field to sort the results by (nullable).</param>
     /// <returns>A list of open call entities available for the specified volunteer.</returns>
-    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, CallTypes? filterField, OpenCallInListFields? sortField);
+    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BL.BO.CallTypes? filterField, OpenCallInListFields? sortField);
 
     /// <summary>
     /// Marks a call treatment as completed.
