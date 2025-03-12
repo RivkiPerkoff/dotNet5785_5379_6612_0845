@@ -51,4 +51,4 @@ namespace BL.BO;
         /// </summary>
         public int TotalAssignment { get; set; }
     }
-}
+

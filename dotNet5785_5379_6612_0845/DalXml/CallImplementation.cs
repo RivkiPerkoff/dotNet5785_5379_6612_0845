@@ -17,8 +17,8 @@ internal class CallImplementation : ICall
             CallLatitude: (double?)c.Element("CallLatitude") ?? 0,
             CallLongitude: (double?)c.Element("CallLongitude") ?? 0,
             OpeningTime: DateTime.Parse(c.Element("OpeningTime")?.Value ?? throw new FormatException("Can't parse OpeningTime")),
-            MaxFinishTime: DateTime.Parse(c.Element("MaxFinishTime")?.Value ?? throw new FormatException("Can't parse MaxFinishTime")),
-            TypeOfReading: (TypeOfReading)Enum.Parse(typeof(TypeOfReading), c.Element("TypeOfReading")?.Value ?? "Type1")
+            MaxFinishTime: DateTime.Parse(c.Element("MaxFinishTime")?.Value ?? throw new FormatException("Can't parse MaxFinishTime"))
+            //TypeOfReading: (TypeOfReading)Enum.Parse(typeof(TypeOfReading), c.Element("TypeOfReading")?.Value ?? "Type1")
         );
     }
 
@@ -31,8 +31,8 @@ internal class CallImplementation : ICall
             new XElement("CallLatitude", item.CallLatitude),
             new XElement("CallLongitude", item.CallLongitude),
             new XElement("OpeningTime", item.OpeningTime),
-            new XElement("MaxFinishTime", item.MaxFinishTime),
-            new XElement("TypeOfReading", item.TypeOfReading.ToString())
+            new XElement("MaxFinishTime", item.MaxFinishTime)
+            //new XElement("TypeOfReading", item.TypeOfReading.ToString())
         );
     }
 

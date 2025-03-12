@@ -18,9 +18,10 @@ public record Call
     string? CallAddress = "",
     double CallLatitude = 0,
     double CallLongitude = 0,
-    DateTime OpeningTime = default,
+    DateTime? OpeningTime = default,
     DateTime? MaxFinishTime = null,
     CallTypes CallTypes =CallTypes.None
+
 )
 {
     public Call(int idCall, string? callDescription, string? callAddress, double callLatitude, double callLongitude, DateTime openingTime, DateTime maxFinishTime, CallTypes CallTypes)

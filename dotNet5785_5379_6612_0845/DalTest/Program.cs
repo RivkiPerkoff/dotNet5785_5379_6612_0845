@@ -1,5 +1,4 @@
-﻿using DalXml;
-using Dal;
+﻿using Dal;
 using DalApi;
 using DO;
 
@@ -221,8 +220,8 @@ internal class Program
 
     private static Call CreateCall(int id)
     {
-        Console.Write("Enter Call Type (1 for Type1, 2 for Type2, etc.): ");
-        TypeOfReading typeOfReading = (TypeOfReading)int.Parse(Console.ReadLine()!);
+        //Console.Write("Enter Call Type (1 for Type1, 2 for Type2, etc.): ");
+        //TypeOfReading typeOfReading = (TypeOfReading)int.Parse(Console.ReadLine()!);
 
         Console.Write("Enter Description of the problem: ");
         string description = Console.ReadLine()!;
