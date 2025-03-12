@@ -1,6 +1,7 @@
 ﻿using BL.BIApi;
 using BL.BO;
 using BL.Helpers;
+using DalApi;
 using DO;
 
 namespace BL.BlImplementation;
@@ -26,8 +27,27 @@ internal class CallImplementation : ICall
 
     public BO.Call GetCallDetails(int CallId)
     {
-     
+        var call = _dal.Call.Read(CallId);
+
+        if (call == null)
+            throw new Exception($"Call with ID {CallId} not found.");
+
+        return new BO.Call
+        {
+            IdCall = call.IdCall,
+            CallType = call.CallTypes,
+            CallDescription = call.CallDescription,
+            AddressOfCall = call.CallAddress,
+            CallLongitude = call.CallLongitude,
+            CallLatitude = call.CallLatitude,
+            OpeningTime = call.OpeningTime,
+            MaxFinishTime = call.MaxFinishTime,
+            StatusCallType = StatusCallType.Pending, // ניתן לקבוע סטטוס ברירת מחדל
+            CallAssignInLists = null // אם אין צורך בהקצאות ניתן להשאיר את זה ריק
+        };
     }
+
+
 
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
     {
@@ -43,7 +63,7 @@ internal class CallImplementation : ICall
             {
                 Id = call.IdCall,
                 CallId = call.IdCall,
-                CallType = call.CallTypes,
+                CallType = (BO.CallTypes)call.CallTypes,
                 StartTime = call.OpeningTime,
                 TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
                 LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
@@ -183,7 +203,7 @@ internal class CallImplementation : ICall
                           Id = call.IdCall, // ID של הקריאה
                           CallTypes = call.CallTypes, // מיפוי CallTypes ל-BO
                           CallDescription = call.CallDescription, // תיאור הקריאה
-                          Address = call.CallAddress , // כתובת הקריאה
+                          Address = call.CallAddress, // כתובת הקריאה
                           OpeningTime = call.OpeningTime, // זמן פתיחת הקריאה
                           MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
                           CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה

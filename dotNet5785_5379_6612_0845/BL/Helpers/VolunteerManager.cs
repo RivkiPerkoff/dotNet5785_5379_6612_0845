@@ -106,5 +106,6 @@ static internal class VolunteerManager
             volunteer.VolunteerLatitude = latitude;
             volunteer.VolunteerLongitude = longitude;
         }
-    }
 }
+
+        

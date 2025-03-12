@@ -547,7 +547,7 @@ namespace BlTest
                                 int[] callQuantities = s_bl.Call.GetCallAmounts();
                                 Console.WriteLine("Call quantities by status:");
 
-                                foreach (BO.Status status in Enum.GetValues(typeof(BO.Status)))
+                                foreach (BL.BO.Status status in Enum.GetValues(typeof(BO.Status)))
                                 {
                                     Console.WriteLine($"{status}: {callQuantities[(int)status]}");
                                 }
