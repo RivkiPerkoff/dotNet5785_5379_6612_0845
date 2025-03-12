@@ -42,3 +42,10 @@ public class BlGeneralDatabaseException : Exception //שגיאה בעת קבלת
     public BlGeneralDatabaseException(string message, Exception innerException)
    : base(message, innerException) { }
 }
+
+public class BlPermissionException : Exception 
+{
+    public BlPermissionException(string? message) : base(message) { }
+    public BlPermissionException(string message, Exception innerException)
+   : base(message, innerException) { }
+}

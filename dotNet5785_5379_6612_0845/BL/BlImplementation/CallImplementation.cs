@@ -180,7 +180,7 @@ internal class CallImplementation : ICall
                           Address = call.CallAddress , // כתובת הקריאה
                           OpeningTime = call.OpeningTime, // זמן פתיחת הקריאה
                           MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
-                          Calldistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
+                          CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
                       });
 
             // שלב 3: סינון לפי סוג הקריאה אם הועבר filterField
