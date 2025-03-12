@@ -112,9 +112,6 @@ internal class CallImplementation : ICall
             maxFinishTime: callObject.MaxFinishTime ?? default,
             CallTypes: (DO.CallTypes)callObject.CallType
         );
-
-
-
         // Add call to data layer
         _dal.Call.Create(callDO);
     }

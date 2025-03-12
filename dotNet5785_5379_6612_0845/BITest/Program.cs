@@ -544,7 +544,7 @@ namespace BlTest
                                 int[] callQuantities = s_bl.Call.GetCallAmounts();
                                 Console.WriteLine("Call quantities by status:");
 
-                                foreach (BO.Status status in Enum.GetValues(typeof(BO.Status)))
+                                foreach (BL.BO.StatusCallType status in Enum.GetValues(typeof(BL.BO.StatusCallType)))
                                 {
                                     Console.WriteLine($"{status}: {callQuantities[(int)status]}");
                                 }
@@ -728,13 +728,13 @@ namespace BlTest
                                 {
                                     Console.WriteLine("Enter Call Type filter (or press Enter to skip):");
                                     string? callTypeInput = Console.ReadLine();
-                                    BO.CallType? callTypeFilter = Enum.TryParse(callTypeInput, out BO.CallType parsedCallType) ? parsedCallType : null;
+                                    BL.BO.CallTypes? callTypeFilter = Enum.TryParse(callTypeInput, out BL.BO.CallTypes parsedCallType) ? parsedCallType : null;
 
                                     Console.WriteLine("Enter Sort Field (or press Enter to skip):");
                                     string? sortFieldInput = Console.ReadLine();
                                     BL.BO.OpenCallInListFields? sortField = Enum.TryParse(sortFieldInput, out BL.BO.OpenCallInListFields parsedSortField) ? parsedSortField : null;
 
-                                    var openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId, callTypeFilter, sortField);
+                                    var openCalls = s_bl.Call.GetOpenCallsForVolunteerSelection(volunteerId, callTypeFilter, sortField);
 
                                     Console.WriteLine("\nOpen Calls Available for Volunteer:");
                                     foreach (var call in openCalls)
@@ -770,8 +770,8 @@ namespace BlTest
                                 Console.Write("Enter call ID: ");
                                 if (!int.TryParse(Console.ReadLine(), out int assignmentId))
                                     throw new BlInvalidFormatException("Invalid input. call ID must be a number.");
-
-                                s_bl.Call.UpdateCallCancellation(volunteerId, assignmentId);
+                             
+                                s_bl.Call.CancelCallTreatment(volunteerId, assignmentId);
                                 Console.WriteLine("The call was successfully canceled.");
                             }
                             catch (BL.BO.BlUnauthorizedAccessException ex)
@@ -808,7 +808,7 @@ namespace BlTest
                                     throw new FormatException("Invalid input. Assignment ID must be a number.");
                                 }
 
-                                s_bl.Call.UpdateCallCompletion(volunteerId, assignmentId);
+                                s_bl.Call.CompleteCallTreatment(volunteerId, assignmentId);
 
                                 Console.WriteLine("Call completion updated successfully!");
                             }
@@ -816,7 +816,7 @@ namespace BlTest
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
-                            catch (BO.BlUnauthorizedAccessException ex)
+                            catch (BL.BO.BlUnauthorizedAccessException ex)
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
@@ -840,7 +840,7 @@ namespace BlTest
                                 if (!int.TryParse(Console.ReadLine(), out int callId))
                                     throw new FormatException("Invalid input. Call ID must be a number.");
 
-                                s_bl.Call.SelectCallForTreatment(volunteerId, callId);
+                                s_bl.Call.ChoosingCallForTreatment(volunteerId, callId);
                                 Console.WriteLine("The call has been successfully assigned to the volunteer.");
                             }
                             catch (FormatException ex)
@@ -876,7 +876,7 @@ namespace BlTest
         static BL.BO.Call CreateCall(int id)
         {
             Console.WriteLine("Enter the call type (0 for None, 1 for MusicPerformance, 2 for MusicTherapy, 3 for SingingAndEmotionalSupport, 4 for GroupActivities, 5 for PersonalizedMusicCare):");
-            if (!Enum.TryParse(Console.ReadLine(), out BO.CallType callType))
+            if (!Enum.TryParse(Console.ReadLine(), out BL.BO.CallTypes callType))
             {
                 throw new FormatException("Invalid call type.");
             }
@@ -904,21 +904,21 @@ namespace BlTest
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);
 
             Console.WriteLine("Enter the status (0 for InProgress, 1 for AtRisk, 2 for InProgressAtRisk, 3 for Opened, 4 for Closed, 5 for Expired):");
-            if (!Enum.TryParse(Console.ReadLine(), out Status status))
+            if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
             {
                 throw new FormatException("Invalid status.");
             }
 
-            return new BO.Call
+            return new BL.BO.Call
             {
-                Id = id,
-                MyCallType = callType,
-                VerbalDescription = verbalDescription,
-                Address = address,
-                Latitude = 0,
-                Longitude = 0,
+                IdCall = id,
+                CallType = callType,
+                CallDescription = verbalDescription,
+                AddressOfCall = address,
+                CallLatitude = 0,
+                CallLongitude = 0,
                 //האם זה הזמן הנוכחי?
-                OpenTime = DateTime.Now,
+                OpeningTime = DateTime.Now,
             };
 
 
@@ -934,7 +934,7 @@ namespace BlTest
             Console.Write("Enter New Full Address (optional) : ");
             string address = Console.ReadLine();
             Console.Write("Enter Call Type (optional) : ");
-            BO.CallType? callType = Enum.TryParse(Console.ReadLine(), out BO.CallType parsedType) ? parsedType : (BO.CallType?)null;
+            BL.BO.CallTypes? callType = Enum.TryParse(Console.ReadLine(), out BL.BO.CallTypes parsedType) ? parsedType : (BL.BO.CallTypes?)null;
             Console.Write("Enter Max Finish Time (hh:mm , (optional)): ");
             TimeSpan? maxFinishTime = TimeSpan.TryParse(Console.ReadLine(), out TimeSpan parsedTime) ? parsedTime : (TimeSpan?)null;
             try
@@ -942,14 +942,14 @@ namespace BlTest
                 var callToUpdate = s_bl.Call.GetCallDetails(callId);
                 if (callToUpdate == null)
                     throw new BL.BO.BlDoesNotExistException($"Call with ID{callId} does not exist!");
-                var newUpdatedCall = new BO.Call
+                var newUpdatedCall = new BL.BO.Call
                 {
-                    Id = callId,
-                    VerbalDescription = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.VerbalDescription,
-                    Address = !string.IsNullOrWhiteSpace(address) ? address : /*callToUpdate. FullAddress*/"No Address",
-                    OpenTime = callToUpdate.OpenTime,
+                    IdCall = callId,
+                    CallDescription = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.CallDescription,
+                    AddressOfCall = !string.IsNullOrWhiteSpace(address) ? address : /*callToUpdate. FullAddress*/"No Address",
+                    OpeningTime = callToUpdate.OpeningTime,
                     MaxFinishTime = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.MaxFinishTime),
-                    MyCallType = callType ?? callToUpdate.MyCallType
+                    CallType = callType ?? callToUpdate.CallType
                 };
                 s_bl.Call.UpdateCallDetails(newUpdatedCall);
                 Console.WriteLine("Call updated successfully.");
