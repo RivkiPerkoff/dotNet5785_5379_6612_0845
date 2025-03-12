@@ -8,7 +8,7 @@ namespace BL.BO;
 public class Call
 {
     public int IdCall { get; init; }
-    public DO.CallTypes CallType { get; set; }
+    public CallTypes CallType { get; set; }
     public string? CallDescription { get; set; }
     public string AddressOfCall { get; set; }
     public double CallLongitude { get; set; }

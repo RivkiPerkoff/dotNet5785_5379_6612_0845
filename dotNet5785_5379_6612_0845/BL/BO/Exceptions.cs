@@ -49,3 +49,29 @@ public class BlPermissionException : Exception
     public BlPermissionException(string message, Exception innerException)
    : base(message, innerException) { }
 }
+public class BlAlreadyExistsException : Exception
+{
+    public BlAlreadyExistsException(string? message) : base(message) { }
+    public BlAlreadyExistsException(string message, Exception innerException)
+   : base(message, innerException) { }
+}
+public class BlGeolocationNotFoundException : Exception
+{
+    public BlGeolocationNotFoundException(string? message) : base(message) { }
+    public BlGeolocationNotFoundException(string message, Exception innerException)
+   : base(message, innerException) { }
+}
+
+public class BlUnauthorizedAccessException : Exception
+{
+    public BlUnauthorizedAccessException(string? message) : base(message) { }
+    public BlUnauthorizedAccessException(string message, Exception innerException)
+   : base(message, innerException) { }
+}
+
+public class BlInvalidFormatException : Exception
+{
+    public BlInvalidFormatException(string? message) : base(message) { }
+    public BlInvalidFormatException(string message, Exception innerException)
+   : base(message, innerException) { }
+}
