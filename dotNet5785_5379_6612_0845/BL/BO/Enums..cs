@@ -89,7 +89,6 @@ public enum OpenCallInListFields
     Calldistance,
 }
 public enum CallTypes
-
 {
     ManDriver,
     WomanDriver,

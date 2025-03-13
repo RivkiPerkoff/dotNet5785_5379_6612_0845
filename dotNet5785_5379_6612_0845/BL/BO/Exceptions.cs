@@ -75,7 +75,6 @@ public class BlInvalidFormatException : Exception
     public BlInvalidFormatException(string message, Exception innerException)
    : base(message, innerException) { }
 }
-
 public class BlValidationException : Exception
 {
     public BlValidationException(string? message) : base(message) { }

@@ -3,10 +3,11 @@ using BL.BO;
 using BL.Helpers;
 using DalApi;
 using DO;
+using NSubstitute.Core;
 
 namespace BL.BlImplementation;
 
-internal class CallImplementation : ICall
+internal class CallImplementation : BIApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public int[] GetCallAmounts()
@@ -24,7 +25,6 @@ internal class CallImplementation : ICall
 
         return statusCounts;
     }
-
     public BO.Call GetCallDetails(int CallId)
     {
         var call = _dal.Call.Read(CallId);
@@ -42,13 +42,9 @@ internal class CallImplementation : ICall
             CallLatitude = call.CallLatitude,
             OpeningTime = call.OpeningTime,
             MaxFinishTime = call.MaxFinishTime,
-            StatusCallType = StatusCallType.Pending, // ניתן לקבוע סטטוס ברירת מחדל
-            CallAssignInLists = null // אם אין צורך בהקצאות ניתן להשאיר את זה ריק
+            CallAssignInLists = null 
         };
     }
-
-
-
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
     {
         var calls = _dal.Call.ReadAll();
@@ -136,7 +132,7 @@ internal class CallImplementation : ICall
         _dal.Call.Create(callDO);
     }
 
-    public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, CallTypes? filterType, ClosedCallInListFields? sortField)
+    public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType, ClosedCallInListFields? sortField)
     {
         var volunteerAssignments = _dal.Assignment.ReadAll()
             .Where(a => a.VolunteerId == volunteerId)
@@ -161,7 +157,7 @@ internal class CallImplementation : ICall
 
         if (filterType.HasValue)
         {
-            closedCalls = closedCalls.Where(c => c.CallTypes == filterType.Value);
+            closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
         }
 
         if (sortField.HasValue)
@@ -178,7 +174,7 @@ internal class CallImplementation : ICall
 
         return closedCalls.ToList(); // הפיכת IEnumerable ל- List
     }
-    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, CallTypes? filterField, OpenCallInListFields? sortField)
+    public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
     {
         try
         {
@@ -208,7 +204,10 @@ internal class CallImplementation : ICall
 
             // שלב 3: סינון לפי סוג הקריאה אם הועבר filterField
             if (filterField.HasValue)
-                openCalls = openCalls.Where(c => c.CallTypes == filterField.Value); // סינון לפי סוג הקריאה
+                openCalls = openCalls.Where(c =>
+                {
+                    return (BO.CallTypes)c.CallTypes == filterField.Value;
+                }); // סינון לפי סוג הקריאה
 
             // שלב 4: מיון הקריאות לפי שדה הסדר (sortField), ברירת מחדל לפי ID של הקריאה
             openCalls = sortField.HasValue
@@ -367,38 +366,6 @@ internal class CallImplementation : ICall
 
         // ביצוע העדכון בשכבת הנתונים
         _dal.Call.Update(updatedCall);
-    }
-    public BO.Call GetCallDetails(int callId)
-    {
-        // קבלת הקריאה מה-DAL
-        var call = _dal.Call.Read(callId)
-                  ?? throw new InvalidOperationException("Call not found.");
-
-        // קבלת כל ההקצאות המשויכות לקריאה
-        var assignments = _dal.Assignment.ReadAll()
-            .Where(a => a.IdOfRunnerCall == callId)
-            .Select(a => new BO.CallAssignInList
-            {
-                VolunteerId = a.VolunteerId,
-                VolunteerName = _dal.Volunteer.Read(a.VolunteerId)?.Name, // שליפת שם המתנדב
-                EntryTimeForTreatment = a.EntryTimeForTreatment ?? default,
-                EndTimeForTreatment = a.EndTimeForTreatment,
-                TreatmentEndType = (BO.TreatmentEndType?)(a.FinishCallType) // המרה נכונה לסוג סיום טיפול
-            })
-            .ToList();
-        // יצירת אובייקט הלוגיקה העסקית (BO) של הקריאה והוספת ההקצאות
-        return new BO.Call
-        {
-            IdCall = call.IdCall,
-            CallType = (DO.CallTypes)call.CallTypes,
-            CallDescription = call.CallDescription,
-            AddressOfCall = call.CallAddress,
-            CallLatitude = call.CallLatitude,
-            OpeningTime = call.OpeningTime,
-            MaxFinishTime = call.MaxFinishTime,
-            StatusCallType = (BO.StatusCallType)call.CallTypes,
-            CallAssignInLists = assignments
-        };
     }
 
 }
