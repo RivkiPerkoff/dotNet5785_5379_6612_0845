@@ -62,5 +62,5 @@ public interface IVolunteer
     /// <exception cref="ArgumentException">Thrown if any of the provided data is invalid.</exception>
     /// <exception cref="InvalidOperationException">Thrown if a volunteer with the same ID already exists.</exception>
     void AddVolunteer(BO.Volunteer volunteer);
-    //IEnumerable<VolunteerInList?> GetVolunteers();
+    IEnumerable<VolunteerInList?> GetVolunteers();
 }

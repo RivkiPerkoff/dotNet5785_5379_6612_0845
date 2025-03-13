@@ -18,7 +18,7 @@ static internal class VolunteerManager
     {
         return DateTime.Now;
     }
-    private static void ValidateVolunteer(BO.Volunteer volunteer)
+    public static void ValidateVolunteer(BO.Volunteer volunteer)
     {
         if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
         {
@@ -55,7 +55,7 @@ static internal class VolunteerManager
 
     }
 
-    private static BO.Volunteer MapToBO(DO.Volunteer doVolunteer)
+    public static BO.Volunteer MapToBO(DO.Volunteer doVolunteer)
     {
         return new BO.Volunteer
         {
@@ -77,7 +77,7 @@ static internal class VolunteerManager
             //CallInProgress = doVolunteer.callInProgress 
         };
     }
-    private static DO.Volunteer MapToDO(BO.Volunteer volunteer)
+    public static DO.Volunteer MapToDO(BO.Volunteer volunteer)
     {
         return new DO.Volunteer(
                volunteer.VolunteerId,
@@ -93,9 +93,10 @@ static internal class VolunteerManager
                (DO.Role)volunteer.Role
                );
     }
-
+ 
     public static List<BO.Volunteer> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
     {
         return volunteers.Select(MapToBO).ToList();
     }
+
 }

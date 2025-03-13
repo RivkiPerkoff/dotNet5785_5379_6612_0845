@@ -1,10 +1,11 @@
 ﻿using BL.BIApi;
-using BO;
+//using BO;
 
 using BL.BO;
 using BL.Helpers;
 using DO;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace BL.BlImplementation;
@@ -77,8 +78,13 @@ internal class VolunteerImplementation : IVolunteer
             IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll(v =>
                 !isActive.HasValue || v.IsAvailable == isActive.Value);
 
+            // המרה של כל DO.Volunteer ל- BO.VolunteerInList
+            //var volunteerList = volunteers
+            //    .Select(v => VolunteerManager.MapToBO(v)) // העברת v לפונקציה MapToBO
+            //    .ToList(); // המרה לרשימה של BO.VolunteerInList
             var volunteerList = VolunteerManager.GetVolunteerList(volunteers);
 
+            // מיון לפי פרמטרים שנבחרו
             volunteerList = sortBy.HasValue ? sortBy.Value switch
             {
                 BO.TypeSortingVolunteers.VolunteerId => volunteerList.OrderBy(v => v.VolunteerId).ToList(),
@@ -92,7 +98,10 @@ internal class VolunteerImplementation : IVolunteer
                 _ => volunteerList.OrderBy(v => v.VolunteerId).ToList()
             } : volunteerList.OrderBy(v => v.VolunteerId).ToList();
 
-            return volunteerList.ToList();
+            //volunteerList = volunteerList
+            //    .Select(v => VolunteerManager.MapToDO(v))  // המרה של כל פריט
+            //    .ToList();
+            return volunteerList; // החזרת List<BO.VolunteerInList>
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -103,6 +112,11 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
         }
     }
+
+
+
+
+
     public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
         try
@@ -184,17 +198,17 @@ internal class VolunteerImplementation : IVolunteer
             var requester = _dal.Volunteer.Read(requesterId)
                         ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
 
-            if (requester.Role != Role.Manager && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
+            if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
             {
                 throw new BlInvalidOperationException("Only admins or the volunteer themselves can update details");
             }
 
-            if (requester.Role != Role.Manager && existingVolunteer.Role != volunteer.Role)
+            if (requester.Role == DO.Role.Manager && existingVolunteer.Role != (DO.Role)volunteer.Role)
             {
                 throw new BlGeneralDatabaseException("Only admins can update the role");
             }
 
-            var doVolunteer = MapToDO(volunteer);
+            var doVolunteer = VolunteerManager.MapToDO(volunteer);
 
 
             _dal.Volunteer.Update(doVolunteer);
@@ -218,7 +232,7 @@ internal class VolunteerImplementation : IVolunteer
                 throw new DO.DalDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists.");
             VolunteerManager.ValidateVolunteer(Volunteer);
 
-            DO.Volunteer doVolunteer = VolunteerManager.CreateDoVolunteer(Volunteer);
+            DO.Volunteer doVolunteer = VolunteerManager.MapToDO(Volunteer);
             _dal.Volunteer.Create(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -229,5 +243,11 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
+    }
+
+    public IEnumerable<VolunteerInList?> GetVolunteers()
+    {
+
+        return (IEnumerable<VolunteerInList?>)_dal.Volunteer.ReadAll();
     }
 }
