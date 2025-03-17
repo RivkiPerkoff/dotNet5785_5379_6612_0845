@@ -3,6 +3,7 @@ using BL.BO;
 using BL.Helpers;
 using DO;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace BL.BlImplementation;
@@ -73,6 +74,11 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
         }
     }
+
+
+
+
+
     public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
         try

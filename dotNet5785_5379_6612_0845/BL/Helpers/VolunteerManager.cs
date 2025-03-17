@@ -93,7 +93,7 @@ static internal class VolunteerManager
                (DO.Role)volunteer.Role
                );
     }
-
+ 
     public static List<BO.Volunteer> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
     {
         return volunteers.Select(MapToBO).ToList();

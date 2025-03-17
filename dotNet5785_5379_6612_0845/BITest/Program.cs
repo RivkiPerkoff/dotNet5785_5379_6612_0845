@@ -5,7 +5,6 @@ using BL.BO;
 using BL.BO;
 using BlApi;
 using DO;
-///לבדוק מה עם כל הזריקות שיש פה
 namespace BlTest
 {
     class Program
@@ -23,7 +22,6 @@ namespace BlTest
                 Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
                 string password = Console.ReadLine()!;
 
-                //BL.BO.Role userRole = s_bl.Volunteer.Login(username,password);
                 string userRole = s_bl.Volunteer.Login(username, password);
                 Console.WriteLine($"Login successful! Your role is: {userRole}");
 

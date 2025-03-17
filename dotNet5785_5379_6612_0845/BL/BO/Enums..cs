@@ -46,7 +46,8 @@ public enum StatusCallType
     closed,
     Expired,
     openInRisk,
-    open
+    open,
+    Pending
 }
 /// <summary>
 /// Enum representing the fields of the CallInList class.
