@@ -57,7 +57,7 @@ namespace BlTest
             try
             {
                 while (true)
-                {
+                { 
                     Console.WriteLine("\n--- BL Test System ---");
                     Console.WriteLine("1. Administration");
                     Console.WriteLine("2. Volunteers");
@@ -116,6 +116,7 @@ namespace BlTest
 
                 try
                 {
+                    
                     switch (choice)
                     {
                         case 1:
@@ -390,7 +391,7 @@ namespace BlTest
             if (!bool.TryParse(Console.ReadLine(), out bool active))
                 throw new FormatException("Invalid input for IsActive.");
 
-            Console.WriteLine("Please enter Role: 'Manager' or 'Volunteer'.");
+            Console.WriteLine("Please enter Role:('Manager' or 'Volunteer').");
             if (!Enum.TryParse(Console.ReadLine(), out BL.BO.Role role))
                 throw new FormatException("Invalid role.");
 
