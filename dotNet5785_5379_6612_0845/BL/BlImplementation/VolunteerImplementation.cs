@@ -1,6 +1,4 @@
 ﻿using BL.BIApi;
-using BO;
-
 using BL.BO;
 using BL.Helpers;
 using DO;
@@ -27,72 +25,44 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
         }
     }
-
-    //public IEnumerable<BO.Volunteer> GetVolunteersList(bool? isActive, VolunteerSortBy? sortBy)
-    //{
-    //    try
-    //    {
-    //        // Retrieve volunteers with activity filtering
-    //        IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll(v =>
-    //            !isActive.HasValue || v.Active == isActive.Value);
-
-    //        // Convert DO volunteers to BO volunteers
-    //        var volunteerList = VolunteerManager.GetVolunteerList(volunteers);
-
-    //        // Loop through each volunteer to count the calls they have handled, canceled, and expired
-    //        foreach (var volunteer in volunteerList)
-    //        {
-    //            // Retrieve all assignments for the volunteer
-    //            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteer.Id);
-
-    //            // Calculate the total number of calls handled, canceled, and expired
-    //            volunteer.TotalCallsHandled = assignments.Count(a => a.CallResolutionStatus == CallResolutionStatus.Treated);
-    //            volunteer.TotalCallsCanceled = assignments.Count(a => a.CallResolutionStatus == CallResolutionStatus.SelfCanceled);
-    //            volunteer.TotalCallsExpired = assignments.Count(a => a.CallResolutionStatus == CallResolutionStatus.Expired);
-
-    //        }
-
-    //        // Sort the list based on selected criteria
-    //        volunteerList = sortBy.HasValue ? sortBy.Value switch
-    //        {
-    //            VolunteerSortBy.FullName => volunteerList.OrderBy(v => v.FullName).ToList(),
-    //            VolunteerSortBy.TotalHandledCalls => volunteerList.OrderByDescending(v => v.TotalCallsHandled).ToList(),
-    //            VolunteerSortBy.TotalCanceledCalls => volunteerList.OrderByDescending(v => v.TotalCallsCanceled).ToList(),
-    //            VolunteerSortBy.TotalExpiredCalls => volunteerList.OrderByDescending(v => v.TotalCallsExpired).ToList(),
-    //            _ => volunteerList.OrderBy(v => v.Id).ToList()
-    //        } : volunteerList.OrderBy(v => v.Id).ToList();
-
-    //        // Return the sorted list of volunteers
-    //        return volunteerList;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BlGeneralDatabaseException($"An unexpected error occurred while retrieving the volunteer list: {ex.Message}");
-    //    }
+    //public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy) { }
 
     public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy)
     {
         try
         {
             IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll(v =>
-                !isActive.HasValue || v.IsAvailable == isActive.Value);
+            {
+                if (!isActive.HasValue || v.IsAvailable == isActive.Value)
+                {
+                    return true;
+                }
+                return false;
+            });
 
-            var volunteerList = VolunteerManager.GetVolunteerList(volunteers);
+            List<BO.VolunteerInList> volunteerList = new List<BO.VolunteerInList>();
 
+            foreach (DO.Volunteer volunteer in volunteers)
+            {
+                BO.VolunteerInList volunteerInList = VolunteerManager.MapToVolunteerInList(volunteer);
+                volunteerList.Add(volunteerInList);
+            }
+
+            // מיון לפי פרמטרים שנבחרו
             volunteerList = sortBy.HasValue ? sortBy.Value switch
             {
                 BO.TypeSortingVolunteers.VolunteerId => volunteerList.OrderBy(v => v.VolunteerId).ToList(),
                 BO.TypeSortingVolunteers.Name => volunteerList.OrderBy(v => v.Name).ToList(),
                 BO.TypeSortingVolunteers.IsAvailable => volunteerList.OrderBy(v => v.IsAvailable).ToList(),
-                BO.TypeSortingVolunteers.HandledCalls => volunteerList.OrderByDescending(v => v.TotalCallsHandled).ToList(),
-                BO.TypeSortingVolunteers.CanceledCalls => volunteerList.OrderByDescending(v => v.TotalCallsCanceled).ToList(),
-                BO.TypeSortingVolunteers.ExpiredCalls => volunteerList.OrderByDescending(v => v.SelectedAndExpiredCalls).ToList(),
-                BO.TypeSortingVolunteers.CurrentCallId => volunteerList.OrderBy(v => v.CallInProgress?.Id).ToList(),
-                BO.TypeSortingVolunteers.CallType => volunteerList.OrderBy(v => v.Role).ToList(),
+                BO.TypeSortingVolunteers.HandledCalls => volunteerList.OrderByDescending(v => v.HandledCalls).ToList(),
+                BO.TypeSortingVolunteers.CanceledCalls => volunteerList.OrderByDescending(v => v.CanceledCalls).ToList(),
+                BO.TypeSortingVolunteers.ExpiredCalls => volunteerList.OrderByDescending(v => v.ExpiredCalls).ToList(),
+                BO.TypeSortingVolunteers.CurrentCallId => volunteerList.OrderBy(v => v.CurrentCallId).ToList(),
+                BO.TypeSortingVolunteers.CallType => volunteerList.OrderBy(v => v.CallType).ToList(),
                 _ => volunteerList.OrderBy(v => v.VolunteerId).ToList()
             } : volunteerList.OrderBy(v => v.VolunteerId).ToList();
 
-            return volunteerList.ToList();
+            return volunteerList; // כבר רשימה של BO.VolunteerInList, אין צורך להמיר שוב
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -184,17 +154,17 @@ internal class VolunteerImplementation : IVolunteer
             var requester = _dal.Volunteer.Read(requesterId)
                         ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
 
-            if (requester.Role != Role.Manager && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
+            if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
             {
                 throw new BlInvalidOperationException("Only admins or the volunteer themselves can update details");
             }
 
-            if (requester.Role != Role.Manager && existingVolunteer.Role != volunteer.Role)
+            if (requester.Role == DO.Role.Manager && existingVolunteer.Role != (DO.Role)volunteer.Role)
             {
                 throw new BlGeneralDatabaseException("Only admins can update the role");
             }
 
-            var doVolunteer = MapToDO(volunteer);
+            var doVolunteer = VolunteerManager.MapToDO(volunteer);
 
 
             _dal.Volunteer.Update(doVolunteer);
@@ -218,7 +188,7 @@ internal class VolunteerImplementation : IVolunteer
                 throw new DO.DalDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists.");
             VolunteerManager.ValidateVolunteer(Volunteer);
 
-            DO.Volunteer doVolunteer = VolunteerManager.CreateDoVolunteer(Volunteer);
+            DO.Volunteer doVolunteer = VolunteerManager.MapToDO(Volunteer);
             _dal.Volunteer.Create(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -229,5 +199,10 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
+    }
+
+    public IEnumerable<VolunteerInList?> GetVolunteers()
+    {
+        throw new NotImplementedException();
     }
 }

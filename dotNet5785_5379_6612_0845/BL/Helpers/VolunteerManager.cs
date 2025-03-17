@@ -18,7 +18,7 @@ static internal class VolunteerManager
     {
         return DateTime.Now;
     }
-    private static void ValidateVolunteer(BO.Volunteer volunteer)
+    public static void ValidateVolunteer(BO.Volunteer volunteer)
     {
         if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
         {
@@ -55,7 +55,7 @@ static internal class VolunteerManager
 
     }
 
-    private static BO.Volunteer MapToBO(DO.Volunteer doVolunteer)
+    public static BO.Volunteer MapToBO(DO.Volunteer doVolunteer)
     {
         return new BO.Volunteer
         {
@@ -71,13 +71,13 @@ static internal class VolunteerManager
             MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
             Role = (BO.Role)doVolunteer.Role, // המרה בין הטיפוסים
             DistanceType = (BO.DistanceType)doVolunteer.DistanceType, // המרה בין הטיפוסים
-            //TotalCallsHandled = doVolunteer.TotalCallsHandled,
-            //TotalCallsCanceled = doVolunteer.TotalCallsCanceled,
-            //SelectedAndExpiredCalls = doVolunteer.SelectedAndExpiredCalls,
-            //CallInProgress = doVolunteer.callInProgress 
+            //TotalCallsHandled = 0,
+            //TotalCallsCanceled = 0,
+            //SelectedAndExpiredCalls = 0,
+            //CallInProgress = null
         };
     }
-    private static DO.Volunteer MapToDO(BO.Volunteer volunteer)
+    public static DO.Volunteer MapToDO(BO.Volunteer volunteer)
     {
         return new DO.Volunteer(
                volunteer.VolunteerId,
@@ -98,4 +98,20 @@ static internal class VolunteerManager
     {
         return volunteers.Select(MapToBO).ToList();
     }
+    public static BO.VolunteerInList MapToVolunteerInList(DO.Volunteer doVolunteer)
+    {
+        return new BO.VolunteerInList
+        {
+            VolunteerId = doVolunteer.VolunteerId,
+            Name = doVolunteer.Name,
+            IsAvailable = doVolunteer.IsAvailable,
+            HandledCalls = 0, // ערכים ברירת מחדל או לחשב מתוך הנתונים
+            CanceledCalls = 0,
+            ExpiredCalls = 0,
+            CurrentCallId = null,
+            CallType =BO.CallTypes.None
+        };
+    }
+
+
 }

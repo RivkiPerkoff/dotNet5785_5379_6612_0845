@@ -16,12 +16,12 @@ internal class CallManager
         return doCalls.Select(doCall => new BO.Call
         {
             IdCall = doCall.IdCall,
-            CallType = doCall.CallTypes, // המרת סוג קריאה
+            CallType = (CallTypes)doCall.CallTypes, // המרת סוג קריאה
             CallDescription = doCall.CallDescription,
             AddressOfCall = doCall.CallAddress != null ? doCall.CallAddress : throw new ArgumentNullException(nameof(doCall.CallAddress)),
             CallLongitude = doCall.CallLongitude,
             CallLatitude = doCall.CallLatitude,
-            OpeningTime = doCall.OpeningTime,
+            OpeningTime = (DateTime)doCall.OpeningTime,
             MaxFinishTime = doCall.MaxFinishTime,
             StatusCallType = BO.StatusCallType.closed,
         });

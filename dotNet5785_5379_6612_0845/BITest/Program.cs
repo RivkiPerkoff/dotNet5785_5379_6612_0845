@@ -211,28 +211,6 @@ namespace BlTest
                             Console.WriteLine($"System Error: {ex.Message}");
                         }
                         break;
-                    //case 2:
-                    //    try
-                    //    {
-                    //        bool? IsAvailable;
-                    //        BL.BO.VolunteerSortField? sortBy;
-                    //        GetVolunteerFilterAndSortCriteria(out IsAvailable, out sortBy);
-                    //        var volunteersList = s_bl.Volunteer.GetVolunteers(IsAvailable, sortBy);
-                    //        if (volunteersList != null)
-                    //            foreach (var volunteer in volunteersList)
-                    //                Console.WriteLine(volunteer);
-                    //        else
-                    //            Console.WriteLine("No volunteers found matching the criteria.");
-                    //    }
-                    //    catch (BL.BO.BlDoesNotExistException ex)
-                    //    {
-                    //        Console.WriteLine($"Error: {ex.Message}");
-                    //    }
-                    //    catch (BL.BO.BlGeneralDatabaseException ex)
-                    //    {
-                    //        Console.WriteLine($"System Error: {ex.Message}");
-                    //    }
-                    //    break;
                     case 3:
                         try
                         {

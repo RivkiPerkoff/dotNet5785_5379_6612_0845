@@ -39,7 +39,7 @@ internal class CallImplementation : BIApi.ICall
             AddressOfCall = call.CallAddress,
             CallLongitude = call.CallLongitude,
             CallLatitude = call.CallLatitude,
-            OpeningTime = call.OpeningTime,
+            OpeningTime = (DateTime)call.OpeningTime,
             MaxFinishTime = call.MaxFinishTime,
             CallAssignInLists = null 
         };
@@ -59,7 +59,7 @@ internal class CallImplementation : BIApi.ICall
                 Id = call.IdCall,
                 CallId = call.IdCall,
                 CallType = (BO.CallTypes)call.CallTypes,
-                StartTime = call.OpeningTime,
+                StartTime = (DateTime)call.OpeningTime,
                 TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
                 LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
                 TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true
@@ -147,7 +147,7 @@ internal class CallImplementation : BIApi.ICall
                       Id = call.IdCall,
                       CallTypes = call.CallTypes,
                       Address = call.CallAddress ?? string.Empty,
-                      OpeningTime = call.OpeningTime,
+                      OpeningTime = (DateTime)call.OpeningTime,
                       EntryTimeForTreatment = assignment.EntryTimeForTreatment ?? default,
                       EndTimeForTreatment = assignment.EndTimeForTreatment,
                       FinishCallType = assignment.FinishCallType
@@ -196,7 +196,7 @@ internal class CallImplementation : BIApi.ICall
                           CallTypes = call.CallTypes, // מיפוי CallTypes ל-BO
                           CallDescription = call.CallDescription, // תיאור הקריאה
                           Address = call.CallAddress , // כתובת הקריאה
-                          OpeningTime = call.OpeningTime, // זמן פתיחת הקריאה
+                          OpeningTime = (DateTime)call.OpeningTime, // זמן פתיחת הקריאה
                           MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
                           CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
                       });
