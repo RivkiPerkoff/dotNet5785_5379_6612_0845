@@ -56,7 +56,7 @@ namespace BlTest
             try
             {
                 while (true)
-                {
+                { 
                     Console.WriteLine("\n--- BL Test System ---");
                     Console.WriteLine("1. Administration");
                     Console.WriteLine("2. Volunteers");
@@ -115,6 +115,7 @@ namespace BlTest
 
                 try
                 {
+                    
                     switch (choice)
                     {
                         case 1:
@@ -313,7 +314,7 @@ namespace BlTest
             if (!bool.TryParse(Console.ReadLine(), out bool active))
                 throw new FormatException("Invalid input for IsActive.");
 
-            Console.WriteLine("Please enter Role: 'Manager' or 'Volunteer'.");
+            Console.WriteLine("Please enter Role:('Manager' or 'Volunteer').");
             if (!Enum.TryParse(Console.ReadLine(), out BL.BO.Role role))
                 throw new FormatException("Invalid role.");
 
@@ -408,8 +409,6 @@ namespace BlTest
                 Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
         }
-
-
         static void CallMenu()
         {
             try
@@ -420,7 +419,7 @@ namespace BlTest
                     Console.WriteLine("\n--- Call Management ---");
                     Console.WriteLine("1. Get call quantities by status");
                     Console.WriteLine("2. Get Closed Calls Handled By Volunteer");
-                    Console.WriteLine("3. Show All Callsl");
+                    Console.WriteLine("3. Show All Calls");
                     Console.WriteLine("4. Read Call by ID");
                     Console.WriteLine("5. Add Call");
                     Console.WriteLine("6. Remove Call");
@@ -474,10 +473,18 @@ namespace BlTest
                                     var closedCalls = s_bl.Call.GetClosedCallsForVolunteer(volunteerId, callTypeFilter, sortField);
 
                                     Console.WriteLine("\nClosed Calls Handled By Volunteer:");
-                                    foreach (var call in closedCalls)
+                                    if (!closedCalls.Any())
                                     {
-                                        Console.WriteLine(call);
+                                        Console.WriteLine("אין קריאות סגורות להצגה.");
                                     }
+                                    else
+                                    {
+                                        foreach (var call in closedCalls)
+                                        {
+                                            Console.WriteLine(call);
+                                        }
+                                    }
+
                                 }
                                 else
                                 {

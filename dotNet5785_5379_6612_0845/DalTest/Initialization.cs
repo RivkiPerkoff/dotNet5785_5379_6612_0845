@@ -1,6 +1,8 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
+using System.Text;
+
 /// <summary>
 /// A utility class to initialize the data source by creating and populating the Volunteers, Calls, and Assignments lists.
 /// </summary>
@@ -33,16 +35,48 @@ public static class Initialization
             string phone = phones[i];
             string address = addresses[i];
             double maximumDistance = s_rand.NextDouble() * 50;
+            string password = GenerateRandomPassword(12);
 
             s_dal!.Volunteer.Create(new Volunteer(
                 id,
                 name,
                 email,
                 phone,
-                address
+                address,
+                password
             ));
         }
     }
+
+    /// <summary>
+    /// Generates a random password that meets the security requirements:
+    /// At least 8 characters, containing upper and lower case letters, a digit, and a special character.
+    /// </summary>
+    private static string GenerateRandomPassword(int length)
+    {
+        const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string lowerCase = "abcdefghijklmnopqrstuvwxyz";
+        const string digits = "0123456789";
+        const string specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?/";
+
+        // Ensuring at least one character from each required category
+        StringBuilder password = new();
+        password.Append(upperCase[s_rand.Next(upperCase.Length)]);
+        password.Append(lowerCase[s_rand.Next(lowerCase.Length)]);
+        password.Append(digits[s_rand.Next(digits.Length)]);
+        password.Append(specialChars[s_rand.Next(specialChars.Length)]);
+
+        // Filling the rest of the password with a mix of all characters
+        string allChars = upperCase + lowerCase + digits + specialChars;
+        for (int i = password.Length; i < length; i++)
+        {
+            password.Append(allChars[s_rand.Next(allChars.Length)]);
+        }
+
+        // Shuffling the characters to ensure randomness
+        return new string(password.ToString().ToCharArray().OrderBy(_ => s_rand.Next()).ToArray());
+    }
+   
 
     /// <summary>
     /// Creates a list of calls with random data and adds them to the call data source.

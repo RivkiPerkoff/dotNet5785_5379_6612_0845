@@ -206,6 +206,9 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
     }
+    public IEnumerable<VolunteerInList?> GetVolunteers()
+    {
+        var volunteers = _dal.Volunteer.ReadAll();
 
     public IEnumerable<VolunteerInList?> GetVolunteers()
     {
