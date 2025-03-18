@@ -90,7 +90,7 @@ internal class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(int id)
     {
-        XElement? volunteersElemements = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(volunteer => (int?)volunteer.Element("Id") == id);
+        XElement? volunteersElemements = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(volunteer => (int?)volunteer.Element("VolunteerId") == id);
         return volunteersElemements is null ? null : getVolunteer(volunteersElemements);
     }
     //public Volunteer Read(Func<Volunteer, bool> filter)

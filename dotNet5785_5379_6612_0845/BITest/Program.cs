@@ -297,84 +297,7 @@ namespace BlTest
                 }
             }
         }
-        //public static void GetVolunteerFilterAndSortCriteria(out bool? isActive, out BL.BO.VolunteerSortField? sortBy)
-        //{
-        //    isActive = null;
-        //    sortBy = null;
-
-        //    try
-        //    {
-
-        //        Console.WriteLine("Is the volunteer active? (yes/no or leave blank for null): ");
-        //        string activeInput = Console.ReadLine();
-
-        //        if (!string.IsNullOrEmpty(activeInput))
-        //        {
-        //            if (activeInput.Equals("yes", StringComparison.OrdinalIgnoreCase))
-        //                isActive = true;
-        //            else if (activeInput.Equals("no", StringComparison.OrdinalIgnoreCase))
-        //                isActive = false;
-        //            else
-        //                Console.WriteLine("Invalid input for active status. Defaulting to null.");
-        //        }
-
-        //        Console.WriteLine("Choose how to sort the volunteers by: ");
-        //        Console.WriteLine("1. ID");
-        //        Console.WriteLine("2. Name");
-        //        Console.WriteLine("3. Total Responses Handled");
-        //        Console.WriteLine("4. Total Responses Cancelled");
-        //        Console.WriteLine("5. Total Expired Responses");
-        //        Console.WriteLine("6. Sum of Calls");
-        //        Console.WriteLine("7. Sum of Cancellations");
-        //        Console.WriteLine("8. Sum of Expired Calls");
-        //        Console.WriteLine("Select sorting option by number: ");
-        //        string sortInput = Console.ReadLine();
-
-        //        if (int.TryParse(sortInput, out int sortOption))
-        //        {
-        //            switch (sortOption)
-        //            {
-        //                case 1:
-        //                    sortBy = BO.VolunteerSortField.Id;
-        //                    break;
-        //                case 2:
-        //                    sortBy = BO.VolunteerSortField.Name;
-        //                    break;
-        //                case 3:
-        //                    sortBy = BO.VolunteerSortField.TotalResponsesHandled;
-        //                    break;
-        //                case 4:
-        //                    sortBy = BO.VolunteerSortField.TotalResponsesCancelled;
-        //                    break;
-        //                case 5:
-        //                    sortBy = BO.VolunteerSortField.TotalExpiredResponses;
-        //                    break;
-        //                case 6:
-        //                    sortBy = BO.VolunteerSortField.SumOfCalls;
-        //                    break;
-        //                case 7:
-        //                    sortBy = BO.VolunteerSortField.SumOfCancellation;
-        //                    break;
-        //                case 8:
-        //                    sortBy = BO.VolunteerSortField.SumOfExpiredCalls;
-        //                    break;
-        //                default:
-        //                    Console.WriteLine("Invalid selection. Defaulting to sorting by ID.");
-        //                    break;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new FormatException("Invalid input for sorting option. Defaulting to sorting by ID.");
-        //        }
-        //    }
-        //    catch (BL.BO.BlGeneralDatabaseException ex)
-        //    {
-        //        Console.WriteLine($"Exception: {ex.GetType().Name}");
-        //        Console.WriteLine($"Message: {ex.Message}");
-        //    }
-        //}
-        //מה לעשות עם כל הTRY ועם הזריקות
+      
         static BL.BO.Volunteer CreateVolunteer(int requesterId)
         {
 
@@ -486,8 +409,6 @@ namespace BlTest
                 Console.WriteLine("An unexpected error occurred: " + ex.Message);
             }
         }
-
-
         static void CallMenu()
         {
             try
@@ -498,7 +419,7 @@ namespace BlTest
                     Console.WriteLine("\n--- Call Management ---");
                     Console.WriteLine("1. Get call quantities by status");
                     Console.WriteLine("2. Get Closed Calls Handled By Volunteer");
-                    Console.WriteLine("3. Show All Callsl");
+                    Console.WriteLine("3. Show All Calls");
                     Console.WriteLine("4. Read Call by ID");
                     Console.WriteLine("5. Add Call");
                     Console.WriteLine("6. Remove Call");
@@ -552,10 +473,18 @@ namespace BlTest
                                     var closedCalls = s_bl.Call.GetClosedCallsForVolunteer(volunteerId, callTypeFilter, sortField);
 
                                     Console.WriteLine("\nClosed Calls Handled By Volunteer:");
-                                    foreach (var call in closedCalls)
+                                    if (!closedCalls.Any())
                                     {
-                                        Console.WriteLine(call);
+                                        Console.WriteLine("אין קריאות סגורות להצגה.");
                                     }
+                                    else
+                                    {
+                                        foreach (var call in closedCalls)
+                                        {
+                                            Console.WriteLine(call);
+                                        }
+                                    }
+
                                 }
                                 else
                                 {
