@@ -10,4 +10,15 @@ public class VolunteerInList
     public int ExpiredCalls { get; set; }
     public int? CurrentCallId { get; set; }
     public CallTypes CallType { get; set; }
+    public override string ToString()
+    {
+        return $"VolunteerId: {VolunteerId}, " +
+               $"Name: {Name}, " +
+               $"IsAvailable: {IsAvailable}, " +
+               $"HandledCalls: {HandledCalls}, " +
+               $"CanceledCalls: {CanceledCalls}, " +
+               $"ExpiredCalls: {ExpiredCalls}, " +
+               $"CurrentCallId: {CurrentCallId}, " +
+               $"CallType: {CallType}, ";
+    }
 }

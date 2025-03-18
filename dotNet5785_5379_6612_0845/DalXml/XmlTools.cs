@@ -62,7 +62,7 @@ static class XMLTools
         }
     }
     public static XElement LoadListFromXMLElement(string xmlFileName)
-    {
+   {
         string xmlFilePath = s_xmlDir + xmlFileName;
 
         try

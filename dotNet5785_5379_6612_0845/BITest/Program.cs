@@ -2,7 +2,6 @@
 using System.Reflection.Metadata;
 using BL.BIApi;
 using BL.BO;
-using BL.BO;
 using BlApi;
 using DO;
 namespace BlTest
@@ -198,7 +197,7 @@ namespace BlTest
                         try
                         {
                             foreach (var volunteer in s_bl.Volunteer.GetVolunteers())
-                                Console.WriteLine(volunteer);
+                                Console.WriteLine(volunteer.ToString());
                         }
                         catch (BL.BO.BlDoesNotExistException ex)
                         {
@@ -214,6 +213,7 @@ namespace BlTest
                         {
                             Console.Write("Enter Volunteer ID: ");
                             if (int.TryParse(Console.ReadLine(), out int volunteerId))
+                            
                             {
                                 var volunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
                                 Console.WriteLine(volunteer);
@@ -296,84 +296,7 @@ namespace BlTest
                 }
             }
         }
-        //public static void GetVolunteerFilterAndSortCriteria(out bool? isActive, out BL.BO.VolunteerSortField? sortBy)
-        //{
-        //    isActive = null;
-        //    sortBy = null;
 
-        //    try
-        //    {
-
-        //        Console.WriteLine("Is the volunteer active? (yes/no or leave blank for null): ");
-        //        string activeInput = Console.ReadLine();
-
-        //        if (!string.IsNullOrEmpty(activeInput))
-        //        {
-        //            if (activeInput.Equals("yes", StringComparison.OrdinalIgnoreCase))
-        //                isActive = true;
-        //            else if (activeInput.Equals("no", StringComparison.OrdinalIgnoreCase))
-        //                isActive = false;
-        //            else
-        //                Console.WriteLine("Invalid input for active status. Defaulting to null.");
-        //        }
-
-        //        Console.WriteLine("Choose how to sort the volunteers by: ");
-        //        Console.WriteLine("1. ID");
-        //        Console.WriteLine("2. Name");
-        //        Console.WriteLine("3. Total Responses Handled");
-        //        Console.WriteLine("4. Total Responses Cancelled");
-        //        Console.WriteLine("5. Total Expired Responses");
-        //        Console.WriteLine("6. Sum of Calls");
-        //        Console.WriteLine("7. Sum of Cancellations");
-        //        Console.WriteLine("8. Sum of Expired Calls");
-        //        Console.WriteLine("Select sorting option by number: ");
-        //        string sortInput = Console.ReadLine();
-
-        //        if (int.TryParse(sortInput, out int sortOption))
-        //        {
-        //            switch (sortOption)
-        //            {
-        //                case 1:
-        //                    sortBy = BO.VolunteerSortField.Id;
-        //                    break;
-        //                case 2:
-        //                    sortBy = BO.VolunteerSortField.Name;
-        //                    break;
-        //                case 3:
-        //                    sortBy = BO.VolunteerSortField.TotalResponsesHandled;
-        //                    break;
-        //                case 4:
-        //                    sortBy = BO.VolunteerSortField.TotalResponsesCancelled;
-        //                    break;
-        //                case 5:
-        //                    sortBy = BO.VolunteerSortField.TotalExpiredResponses;
-        //                    break;
-        //                case 6:
-        //                    sortBy = BO.VolunteerSortField.SumOfCalls;
-        //                    break;
-        //                case 7:
-        //                    sortBy = BO.VolunteerSortField.SumOfCancellation;
-        //                    break;
-        //                case 8:
-        //                    sortBy = BO.VolunteerSortField.SumOfExpiredCalls;
-        //                    break;
-        //                default:
-        //                    Console.WriteLine("Invalid selection. Defaulting to sorting by ID.");
-        //                    break;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new FormatException("Invalid input for sorting option. Defaulting to sorting by ID.");
-        //        }
-        //    }
-        //    catch (BL.BO.BlGeneralDatabaseException ex)
-        //    {
-        //        Console.WriteLine($"Exception: {ex.GetType().Name}");
-        //        Console.WriteLine($"Message: {ex.Message}");
-        //    }
-        //}
-        //מה לעשות עם כל הTRY ועם הזריקות
         static BL.BO.Volunteer CreateVolunteer(int requesterId)
         {
 

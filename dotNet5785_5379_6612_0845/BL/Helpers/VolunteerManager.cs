@@ -42,15 +42,17 @@ static internal class VolunteerManager
 
         if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
         {
-            if (Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer) is (double latitude, double longitude))
+            try
             {
+                (double latitude, double longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
                 volunteer.VolunteerLatitude = latitude;
                 volunteer.VolunteerLongitude = longitude;
             }
-            else
+            catch
             {
                 throw new BO.BlValidationException("Invalid address - unable to find coordinates");
             }
+
         }
 
     }

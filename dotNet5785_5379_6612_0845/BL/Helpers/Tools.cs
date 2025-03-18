@@ -27,8 +27,13 @@ static internal class Tools
 
         var root = doc.RootElement[0];
 
-        return (root.GetProperty("lat").GetDouble(), root.GetProperty("lon").GetDouble());
+        // המרת הערכים ל-double
+        double latitude = double.Parse(root.GetProperty("lat").GetString());
+        double longitude = double.Parse(root.GetProperty("lon").GetString());
+
+        return (latitude, longitude);
     }
+
 
     internal static double DistanceCalculation(string address1, string address2)
     {

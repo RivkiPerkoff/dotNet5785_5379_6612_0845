@@ -209,6 +209,16 @@ internal class VolunteerImplementation : IVolunteer
 
     public IEnumerable<VolunteerInList?> GetVolunteers()
     {
-        throw new NotImplementedException();
+        var volunteers = _dal.Volunteer.ReadAll();
+
+        List<BO.VolunteerInList> volunteerList = new List<BO.VolunteerInList>();
+
+        foreach (DO.Volunteer volunteer in volunteers)
+        {
+            BO.VolunteerInList volunteerInList = VolunteerManager.MapToVolunteerInList(volunteer);
+            volunteerList.Add(volunteerInList);
+        }
+         
+        return volunteerList;
     }
 }
