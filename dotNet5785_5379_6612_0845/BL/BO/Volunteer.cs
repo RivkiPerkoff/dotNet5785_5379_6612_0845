@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace BL.BO;
 
 public class Volunteer

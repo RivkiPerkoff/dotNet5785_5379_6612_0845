@@ -192,6 +192,7 @@ namespace BlTest
                     //האם אפשר לעשות פה כזאת זריקה?
                     throw new FormatException("The volunteer menu choice is not valid.");
 
+                
                 switch (choice)
                 {
                     case 1:
@@ -366,15 +367,8 @@ namespace BlTest
 
 
         }
-        //לדעת לטפל בזריקות עם כל הTRY
         static void UpDateVolunteer()
         {
-
-            //מה עושים עם כל אלה בעדכון?
-            //TotalCallsHandled = 0,
-            //     TotalCallsCancelled = 0,
-            //     TotalExpiredCallsChosen = 0,
-            //צריך פשוט לא לעדכן אותם
             try
             {
                 Console.Write("Enter requester ID: ");

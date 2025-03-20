@@ -26,7 +26,6 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
         }
     }
-    //public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy) { }
 
     public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy)
     {
@@ -206,9 +205,6 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
     }
-    public IEnumerable<VolunteerInList?> GetVolunteers()
-    {
-        var volunteers = _dal.Volunteer.ReadAll();
 
     public IEnumerable<VolunteerInList?> GetVolunteers()
     {
