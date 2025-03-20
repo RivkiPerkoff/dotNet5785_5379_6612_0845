@@ -31,4 +31,13 @@ public class CallAssignInList
     /// Gets or sets the type of treatment completion. This value can be null if the type is not determined.
     /// </summary>
     public TreatmentEndType? TreatmentEndType { get; set; }
+    public override string ToString()
+    {
+        return $"Volunteer ID: {(VolunteerId.HasValue ? VolunteerId.Value.ToString() : "N/A")}, " +
+               $"Volunteer Name: {(string.IsNullOrEmpty(VolunteerName) ? "N/A" : VolunteerName)}, " +
+               $"Entry Time: {EntryTimeForTreatment}, " +
+               $"End Time: {(EndTimeForTreatment.HasValue ? EndTimeForTreatment.Value.ToString() : "N/A")}, " +
+               $"Treatment End Type: {(TreatmentEndType.HasValue ? TreatmentEndType.Value.ToString() : "N/A")}";
+    }
+
 }

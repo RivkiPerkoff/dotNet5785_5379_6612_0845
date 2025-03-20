@@ -42,7 +42,7 @@ internal class CallImplementation : BIApi.ICall
             CallLatitude = call.CallLatitude,
             OpeningTime = (DateTime)call.OpeningTime,
             MaxFinishTime = call.MaxFinishTime,
-            CallAssignInLists = null 
+            CallAssignInLists = null
         };
     }
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
@@ -90,9 +90,9 @@ internal class CallImplementation : BIApi.ICall
         {
             var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
             var callStatus = Tools.GetCallStatus(call.IdCall);
-            var assignments = _dal.Assignment.ReadAll()
-            .Any(a => a.IdOfRunnerCall == callId);
-            if (callStatus != StatusCallType.open || assignments)
+            var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId);
+               //.Any(a => a.IdOfRunnerCall == callId);
+            if (callStatus != StatusCallType.open || assignments.Any())
                 throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
             _dal.Call.Delete(callId);
         }
@@ -109,8 +109,6 @@ internal class CallImplementation : BIApi.ICall
     {
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
-
-        // Validate fields
         if (string.IsNullOrWhiteSpace(callObject.AddressOfCall))
             throw new InvalidOperationException("Address cannot be empty.");
         if (callObject.MaxFinishTime <= callObject.OpeningTime)
@@ -196,7 +194,7 @@ internal class CallImplementation : BIApi.ICall
                           Id = call.IdCall, // ID של הקריאה
                           CallTypes = call.CallTypes, // מיפוי CallTypes ל-BO
                           CallDescription = call.CallDescription, // תיאור הקריאה
-                          Address = call.CallAddress , // כתובת הקריאה
+                          Address = call.CallAddress, // כתובת הקריאה
                           OpeningTime = (DateTime)call.OpeningTime, // זמן פתיחת הקריאה
                           MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
                           CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
@@ -328,7 +326,7 @@ internal class CallImplementation : BIApi.ICall
 
         _dal.Assignment.Update(assignment);
     }
-    public void UpdateCallDetails(BL.BO.Call callObject)
+    public  void UpdateCallDetails(BL.BO.Call callObject)
     {
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
@@ -336,7 +334,8 @@ internal class CallImplementation : BIApi.ICall
         // ניסיון להשיג קואורדינטות מהכתובת
         try
         {
-            (double latitude, double longitude) = Helpers.Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
+
+            var ( latitude,  longitude) = Helpers.Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
             callObject.CallLatitude = latitude;
             callObject.CallLongitude = longitude;
         }

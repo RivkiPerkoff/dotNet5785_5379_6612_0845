@@ -38,11 +38,8 @@ public class Call
                 sb.AppendLine($"  - {assign}");
             }
         }
-        else
-        {
+        if ((CallAssignInLists == null || CallAssignInLists.Count == 0) && IdCall == 0)
             sb.AppendLine("No Assigned Calls.");
-        }
-
         return sb.ToString();
     }
 }

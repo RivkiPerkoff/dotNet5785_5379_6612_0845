@@ -90,9 +90,10 @@ public enum OpenCallInListFields
 }
 public enum CallTypes
 {
+    None,
     ManDriver,
-    WomanDriver,
-    None
+    WomanDriver
+    
 }
 public enum TreatmentEndType
 {

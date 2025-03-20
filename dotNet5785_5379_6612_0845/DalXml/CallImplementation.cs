@@ -9,8 +9,7 @@ using System.Xml.Linq;
 internal class CallImplementation : ICall
 {
     static Call GetCall(XElement c)
-    {
-       
+    {      
         return new DO.Call(
             IdCall: c.ToIntNullable("IdCall") ?? throw new FormatException("Can't convert IdCall"),
             CallDescription: (string?)c.Element("CallDescription") ?? "",
