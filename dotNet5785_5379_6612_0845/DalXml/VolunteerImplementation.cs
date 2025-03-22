@@ -59,10 +59,13 @@ internal class VolunteerImplementation : IVolunteer
     //    Volunteers.RemoveAll(it => it.VolunteerId == id);
     //    XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     //}
+
+
     public void Delete(int id)
     {
+
         XElement volunteersRoot = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
-        (volunteersRoot.Elements().FirstOrDefault(v => (int?)v.Element("Id") == id) ?? throw new DalDoesNotExistException($"Volunteer with ID={id} does Not exist")).Remove();
+        (volunteersRoot.Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == id) ?? throw new DalDoesNotExistException($"Volunteer with ID={id} does Not exist")).Remove();
         XMLTools.SaveListToXMLElement(volunteersRoot, Config.s_volunteers_xml);
     }
 
@@ -112,7 +115,7 @@ internal class VolunteerImplementation : IVolunteer
     => filter == null
     ? XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Where(v => v != null).Select(v => getVolunteer(v))
     : XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Where(v => v != null).Select(v => getVolunteer(v)).Where(filter);
-    
+
     //public void Update(Volunteer item)
     //{
     //    XElement VolunteerRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -126,7 +129,7 @@ internal class VolunteerImplementation : IVolunteer
     public void Update(Volunteer updatedVolunteer)
     {
         XElement volunteersRootElemement = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
-        (volunteersRootElemement.Elements().FirstOrDefault(v => (int?)v.Element("Id") == updatedVolunteer.VolunteerId) ?? throw new DalDoesNotExistException($"Volunteer with ID={updatedVolunteer.VolunteerId} does Not exist")).Remove();
+        (volunteersRootElemement.Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == updatedVolunteer.VolunteerId) ?? throw new DalDoesNotExistException($"Volunteer with ID={updatedVolunteer.VolunteerId} does Not exist")).Remove();
         volunteersRootElemement.Add(new XElement("Volunteer", createVolunteerElement(updatedVolunteer)));
         XMLTools.SaveListToXMLElement(volunteersRootElemement, Config.s_volunteers_xml);
     }
