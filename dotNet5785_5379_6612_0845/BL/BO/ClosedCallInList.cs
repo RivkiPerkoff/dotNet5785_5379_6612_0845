@@ -11,6 +11,14 @@ public class ClosedCallInList
   public DateTime EntryTimeForTreatment { get; set; }
   public DateTime? EndTimeForTreatment { get; set; }
   public FinishCallType? FinishCallType { get; set; }
+    public override string ToString()
+    {
+        return $"Id: {Id}, Call Type: {CallTypes}, Address: {Address}, " +
+               $"Opening Time: {OpeningTime}, Entry Time: {EntryTimeForTreatment}, " +
+               $"End Time: {(EndTimeForTreatment.HasValue ? EndTimeForTreatment.Value.ToString() : "N/A")}, " +
+               $"Finish Call Type: {(FinishCallType.HasValue ? FinishCallType.Value.ToString() : "N/A")}";
+    }
+
 
 }
 

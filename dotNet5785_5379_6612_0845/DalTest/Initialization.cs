@@ -108,7 +108,7 @@ public static class Initialization
             DateTime start = new DateTime(s_dal.Config.Clock.Year-1, s_dal.Config.Clock.Month, s_dal.Config.Clock.Day, s_dal.Config.Clock.Hour - 5, 0, 0);
             int range = (s_dal.Config.Clock - start).Days;
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days));
+            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days)+1);
 
             s_dal!.Call.Create(new Call(
                 callId,

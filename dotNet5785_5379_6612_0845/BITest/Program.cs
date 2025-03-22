@@ -14,27 +14,28 @@ namespace BlTest
         {
             try
             {
-                Console.WriteLine("Please log in.");
-                Console.Write("Username: ");
-                string username = Console.ReadLine()!;
+                //Console.WriteLine("Please log in.");
+                //Console.Write("Username: ");
+                //string username = Console.ReadLine()!;
 
-                Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
-                string password = Console.ReadLine()!;
+                //Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
+                //string password = Console.ReadLine()!;
 
-                string userRole = s_bl.Volunteer.Login(username, password);
-                Console.WriteLine($"Login successful! Your role is: {userRole}");
+                //string userRole = s_bl.Volunteer.Login(username, password);
+                //Console.WriteLine($"Login successful! Your role is: {userRole}");
 
-                //בדיקה אם התפקיד הוא Manager
-                if (userRole == "Manager")
-                {
-                    //הכניסה ללולאת התפריט רק אם התפקיד הוא Manager
-                    ShowMenu();
-                }
-                else
-                {
-                    Console.WriteLine("UpDate Volunteer");
-                    UpDateVolunteer();
-                }
+                ////בדיקה אם התפקיד הוא Manager
+                //if (userRole == "Manager")
+
+                //הכניסה ללולאת התפריט רק אם התפקיד הוא Manager
+                ShowMenu();
+
+
+                //else
+                //{
+                //    Console.WriteLine("UpDate Volunteer");
+                //    UpDateVolunteer();
+                //}
             }
             catch (BL.BO.BlDoesNotExistException ex)
             {
@@ -56,7 +57,7 @@ namespace BlTest
             try
             {
                 while (true)
-                { 
+                {
                     Console.WriteLine("\n--- BL Test System ---");
                     Console.WriteLine("1. Administration");
                     Console.WriteLine("2. Volunteers");
@@ -115,7 +116,7 @@ namespace BlTest
 
                 try
                 {
-                    
+
                     switch (choice)
                     {
                         case 1:
@@ -346,19 +347,19 @@ namespace BlTest
             {
                 VolunteerId = requesterId,
                 Name = name,
-                PhoneNumber = phoneNumber, 
-                EmailOfVolunteer = email, 
+                PhoneNumber = phoneNumber,
+                EmailOfVolunteer = email,
                 PasswordVolunteer = password,
-                AddressVolunteer = address, 
+                AddressVolunteer = address,
                 VolunteerLatitude = latitude,
-                VolunteerLongitude = longitude, 
-                IsAvailable = active, 
-                Role = role, 
-                DistanceType = myDistanceType, 
-                MaximumDistanceForReceivingCall = largestDistance, 
+                VolunteerLongitude = longitude,
+                IsAvailable = active,
+                Role = role,
+                DistanceType = myDistanceType,
+                MaximumDistanceForReceivingCall = largestDistance,
                 TotalCallsHandled = 0,
                 TotalCallsCanceled = 0,
-                SelectedAndExpiredCalls = 0, 
+                SelectedAndExpiredCalls = 0,
                 CallInProgress = null
             };
 
@@ -435,7 +436,6 @@ namespace BlTest
                             {
                                 int[] callQuantities = s_bl.Call.GetCallAmounts();
                                 Console.WriteLine("Call quantities by status:");
-
                                 foreach (BL.BO.StatusCallType status in Enum.GetValues(typeof(BL.BO.StatusCallType)))
                                 {
                                     Console.WriteLine($"{status}: {callQuantities[(int)status]}");
@@ -637,9 +637,14 @@ namespace BlTest
                                     var openCalls = s_bl.Call.GetOpenCallsForVolunteerSelection(volunteerId, callTypeFilter, sortField);
 
                                     Console.WriteLine("\nOpen Calls Available for Volunteer:");
-                                    foreach (var call in openCalls)
+                                    if (openCalls == null || !openCalls.Any())
+                                        Console.WriteLine("No calls available.");                                  
+                                    else
                                     {
-                                        Console.WriteLine(call);
+                                        foreach (var call in openCalls)
+                                        {
+                                            Console.WriteLine(call);
+                                        }
                                     }
                                 }
                                 else
@@ -670,7 +675,7 @@ namespace BlTest
                                 Console.Write("Enter call ID: ");
                                 if (!int.TryParse(Console.ReadLine(), out int assignmentId))
                                     throw new BlInvalidFormatException("Invalid input. call ID must be a number.");
-                             
+
                                 s_bl.Call.CancelCallTreatment(volunteerId, assignmentId);
                                 Console.WriteLine("The call was successfully canceled.");
                             }
@@ -775,12 +780,9 @@ namespace BlTest
         }
         static BL.BO.Call CreateCall(int id)
         {
-            Console.WriteLine("Enter the call type (0 for None, 1 for MusicPerformance, 2 for MusicTherapy, 3 for SingingAndEmotionalSupport, 4 for GroupActivities, 5 for PersonalizedMusicCare):");
+            Console.WriteLine("Enter the call type (0 for None, 1 for ManDriver, 2 for WomanDriver):");
             if (!Enum.TryParse(Console.ReadLine(), out BL.BO.CallTypes callType))
-            {
                 throw new FormatException("Invalid call type.");
-            }
-
             Console.WriteLine("Enter the verbal description:");
             string verbalDescription = Console.ReadLine();
 
@@ -803,7 +805,7 @@ namespace BlTest
             string maxFinishTimeInput = Console.ReadLine();
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);
 
-            Console.WriteLine("Enter the status (0 for InProgress, 1 for AtRisk, 2 for InProgressAtRisk, 3 for Opened, 4 for Closed, 5 for Expired):");
+            Console.WriteLine("Enter the status (0 for HandlingInRisk, 1 for inHandling, 2 for closed, 3 for Expired, 4 for openInRisk, 5 for open, 6 for Pending):");
             if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
             {
                 throw new FormatException("Invalid status.");
@@ -858,20 +860,6 @@ namespace BlTest
             {
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
-            //try
-            //{
-            //    Console.Write("Enter requester ID: ");
-            //    if (int.TryParse(Console.ReadLine(), out int requesterId))
-            //    {
-            //        //BO.Call boCall = CreateCall(requesterId);
-            //        //s_bl.Call.UpdateCallDetails(requesterId, boCall);
-            //        Console.WriteLine("Volunteer updated successfully.");
-            //    }
-            //    else
-            //        throw new FormatException("Invalid input. Volunteer ID must be a number.");
-            //}
-            //catch { }
-            //}
         }
     }
 }

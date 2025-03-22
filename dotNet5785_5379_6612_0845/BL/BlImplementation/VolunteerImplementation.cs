@@ -74,10 +74,6 @@ internal class VolunteerImplementation : IVolunteer
         }
     }
 
-
-
-
-
     public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
         try

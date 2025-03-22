@@ -12,13 +12,12 @@ public class VolunteerInList
     public CallTypes CallType { get; set; }
     public override string ToString()
     {
-        return $"VolunteerId: {VolunteerId}, " +
-               $"Name: {Name}, " +
-               $"IsAvailable: {IsAvailable}, " +
-               $"HandledCalls: {HandledCalls}, " +
-               $"CanceledCalls: {CanceledCalls}, " +
-               $"ExpiredCalls: {ExpiredCalls}, " +
-               $"CurrentCallId: {CurrentCallId}, " +
-               $"CallType: {CallType}, ";
+        return $"Volunteer ID: {VolunteerId}, Name: {Name}, " +
+               $"Available: {(IsAvailable ? "Yes" : "No")}, " +
+               $"Handled Calls: {HandledCalls}, Canceled Calls: {CanceledCalls}, " +
+               $"Expired Calls: {ExpiredCalls}, " +
+               $"Current Call ID: {(CurrentCallId.HasValue ? CurrentCallId.Value.ToString() : "N/A")}, " +
+               $"Call Type: {CallType}";
     }
+
 }
