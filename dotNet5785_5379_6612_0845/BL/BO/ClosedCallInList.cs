@@ -13,6 +13,8 @@ public class ClosedCallInList
   public FinishCallType? FinishCallType { get; set; }
     public override string ToString()
     {
+
+
         return $"Id: {Id}, Call Type: {CallTypes}, Address: {Address}, " +
                $"Opening Time: {OpeningTime}, Entry Time: {EntryTimeForTreatment}, " +
                $"End Time: {(EndTimeForTreatment.HasValue ? EndTimeForTreatment.Value.ToString() : "N/A")}, " +
