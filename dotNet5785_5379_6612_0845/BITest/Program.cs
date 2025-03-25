@@ -805,11 +805,11 @@ namespace BlTest
             string maxFinishTimeInput = Console.ReadLine();
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);
 
-            Console.WriteLine("Enter the status (0 for HandlingInRisk, 1 for inHandling, 2 for closed, 3 for Expired, 4 for openInRisk, 5 for open, 6 for Pending):");
-            if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
-            {
-                throw new FormatException("Invalid status.");
-            }
+            //Console.WriteLine("Enter the status (0 for HandlingInRisk, 1 for inHandling, 2 for closed, 3 for Expired, 4 for openInRisk, 5 for open, 6 for Pending):");
+            //if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
+            //{
+            //    throw new FormatException("Invalid status.");
+            //}
 
             return new BL.BO.Call
             {
@@ -821,6 +821,7 @@ namespace BlTest
                 CallLongitude = 0,
                 //האם זה הזמן הנוכחי?
                 OpeningTime = DateTime.Now,
+                //StatusCallType=StatusCallType.open
             };
 
 

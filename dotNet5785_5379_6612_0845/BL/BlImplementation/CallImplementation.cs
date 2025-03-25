@@ -67,6 +67,7 @@ internal class CallImplementation : BIApi.ICall
                     ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment
                     : null,
                 Status = Tools.GetCallStatus(call.IdCall),
+
                 TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
             };
         }).ToList();
@@ -91,7 +92,7 @@ internal class CallImplementation : BIApi.ICall
             var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
             var callStatus = Tools.GetCallStatus(call.IdCall);
             var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId);
-               //.Any(a => a.IdOfRunnerCall == callId);
+            //.Any(a => a.IdOfRunnerCall == callId);
             if (callStatus != StatusCallType.open || assignments.Any())
                 throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
             _dal.Call.Delete(callId);
@@ -107,6 +108,7 @@ internal class CallImplementation : BIApi.ICall
     }
     public void AddCall(BL.BO.Call callObject)
     {
+        Tools.SendEmailWhenCallOpened(callObject);
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
         if (string.IsNullOrWhiteSpace(callObject.AddressOfCall))
@@ -365,6 +367,7 @@ internal class CallImplementation : BIApi.ICall
 
         // ביצוע העדכון בשכבת הנתונים
         _dal.Call.Update(updatedCall);
+        
     }
 
 }
