@@ -14,27 +14,24 @@ namespace BlTest
         {
             try
             {
-                //Console.WriteLine("Please log in.");
-                //Console.Write("Username: ");
-                //string username = Console.ReadLine()!;
+                Console.WriteLine("Please log in.");
+                Console.Write("Username: ");
+                string username = Console.ReadLine()!;
 
-                //Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
-                //string password = Console.ReadLine()!;
+                Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
+                string password = Console.ReadLine()!;
 
-                //string userRole = s_bl.Volunteer.Login(username, password);
-                //Console.WriteLine($"Login successful! Your role is: {userRole}");
+                string userRole = s_bl.Volunteer.Login(username, password);
+                Console.WriteLine($"Login successful! Your role is: {userRole}");
 
-                ////בדיקה אם התפקיד הוא Manager
-                //if (userRole == "Manager")
-
-                //הכניסה ללולאת התפריט רק אם התפקיד הוא Manager
-                ShowMenu();
-
-                //else
-                //{
-                //    Console.WriteLine("UpDate Volunteer");
-                //    UpDateVolunteer();
-                //}
+                //בדיקה אם התפקיד הוא Manager
+                if (userRole == "Manager")
+                    ShowMenu();
+                else
+                {
+                    Console.WriteLine("UpDate Volunteer");
+                    UpDateVolunteer();
+                }
             }
             catch (BL.BO.BlDoesNotExistException ex)
             {
@@ -825,7 +822,7 @@ namespace BlTest
             //{
             //    throw new FormatException("Invalid status.");
             //}
-            //StatusCallType status = StatusCallType.open;
+
             return new BL.BO.Call
             {
                 IdCall = id,
@@ -836,7 +833,7 @@ namespace BlTest
                 CallLongitude = 0,
                 //האם זה הזמן הנוכחי?
                 OpeningTime = DateTime.Now,
-                StatusCallType = StatusCallType.open
+                //StatusCallType=StatusCallType.open
             };
         }
         static void UpDateCall()

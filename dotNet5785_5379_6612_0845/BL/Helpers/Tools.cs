@@ -1,6 +1,8 @@
 ﻿using BL.BO;
 using DalApi;
 using DO;
+using System.Net.Mail;
+using System.Net;
 using System.Text.Json;
 
 namespace BL.Helpers;
@@ -72,8 +74,118 @@ static internal class Tools
         return Math.Sqrt(dLat * dLat + dLon * dLon) * 111;
     }
 
+    //internal static void SendEmailToVolunteer(DO.Volunteer volunteer, DO.Assignment assignment)
+    //{
+    //    var call = s_dal.Call.Read(assignment.IdOfRunnerCall)!;
+    //    string subject = "הקצאה בוטלה";
+    //    string body = $"שלום {volunteer.Name},\n\n" +
+    //                  $"ההקצאה שלך לטיפול בקריאה {assignment.NextAssignmentId} בוטלה על ידי המנהל.\n" +
+    //                  $"פרטי הקריאה:\n" +
+    //                  $"קריאה: {assignment.IdOfRunnerCall}\n" +
+    //                  $"סוג הקריאה: {call.CallTypes}\n" +
+    //                  $"כתובת הקריאה: {call.CallAddress}\n" +
+    //                  $"זמן פתיחה: {call.OpeningTime}\n" +
+    //                  $"תאור מילולי: {call.CallDescription}\n" +
+    //                  $"זמן כניסה טיפול : {assignment.EntryTimeForTreatment}\n\n" +
+    //                  $"בברכה,\nמערכת ניהול קריאות";
+
+    //    Tools.SendEmail(volunteer.EmailOfVolunteer, subject, body);
+    //}
+    internal static void SendEmailWhenCallOpened(BO.Call call)
+    {
+        var volunteer = s_dal.Volunteer.ReadAll();
+        foreach (var item in volunteer)
+        {
+            //if (item.MaximumDistanceForReceivingCall == null)
+            //{ break; }
+            //else if (item.MaximumDistanceForReceivingCall >= Tools.DistanceCalculation(item.AddressVolunteer!, call.AddressOfCall))
+            //{
+                string subject = "Openning call";
+                string body = $@"
+      Hello {item.Name},
+
+     A new call has been opened in your area.
+      Call Details:
+      - Call ID: {call.IdCall}
+      - Call Type: {call.CallType}
+      - Call Address: {call.AddressOfCall}
+      - Opening Time: {call.OpeningTime}
+      - Description: {call.CallDescription}
+      - Entry Time for Treatment: {call.MaxFinishTime}
+      -call Status:{call.StatusCallType}
+
+      If you wish to handle this call, please log into the system.
+
+      Best regards,  
+     Call Management System Of TrampIst";
+
+                Tools.SendEmail(item.EmailOfVolunteer, subject, body);
+            
+        }
+    }
+    public static void SendEmail(string toEmail, string subject, string body)
+    {
+        var fromAddress = new MailAddress("trampist.noreply@gmail.com", "TrampIst");
+        var toAddress = new MailAddress(toEmail);
+
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+            Port = 587,
+            Credentials = new NetworkCredential("trampist.noreply@gmail.com", "jqnd csyy kbty rapl"),
+            EnableSsl = true,
+        };
+
+        using (var message = new MailMessage(fromAddress, toAddress)
+        {
+            Subject = subject,
+            Body = body,
+        })
+        {
+            smtpClient.Send(message);
+        }
+    }
+
+    //internal static int[] GetCallStatus(int callId)
+    //{
+    //    try
+    //    {
+    //        var calls = s_dal.Call.ReadAll();
+    //        var assignments = s_dal.Assignment.ReadAll();
+
+    //        var statusGroups =
+    //            from call in calls
+    //            let currentStatus = CallManager.CalculateCallStatus(call.IdCall)
+    //            group call by currentStatus into statusGroup
+    //            orderby statusGroup.Key
+    //            select new
+    //            {
+    //                Status = statusGroup.Key,
+    //                Count = statusGroup.Count()
+    //            };
+
+    //        // יצירת מערך בגודל מספר הערכים באינום CallStatus
+    //        int statusCount = Enum.GetValues<BO.StatusCallType>().Length;
+    //        int[] quantities = new int[statusCount];
+
+    //        statusGroups.ToList()
+    //                   .ForEach(group => quantities[(int)group.Status] = group.Count);
+
+    //        return quantities;
+    //    }
+
+    //    catch (DO.DalDoesNotExistException ex)
+    //    {
+    //        throw new BO.BlGeolocationNotFoundException("Required data was not found in the database", ex);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BO.BlGeneralDatabaseException("An unexpected error occurred while calculating call quantities", ex);
+    //    }
+    //}
+
     internal static StatusCallType GetCallStatus(int callId)
     {
+
         var call = s_dal.Call.Read(callId) ?? throw new ArgumentException($"Call with ID {callId} not found.");
         DateTime currentTime = ClockManager.Now;
         var assignments = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId).ToList();

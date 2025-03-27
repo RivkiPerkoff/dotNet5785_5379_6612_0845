@@ -18,6 +18,17 @@ static internal class VolunteerManager
     {
         return DateTime.Now;
     }
+    public static bool VerifyPassword(string inputPassword, string hashedPassword)
+    {
+        return EncryptPassword(inputPassword) == hashedPassword;
+    }
+    public static string EncryptPassword(string password)
+    {
+
+        using var sha256 = System.Security.Cryptography.SHA256.Create();
+        byte[] hashBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+    }
     public static void ValidateVolunteer(BO.Volunteer volunteer)
     {
         if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
@@ -95,7 +106,7 @@ static internal class VolunteerManager
                (DO.Role)volunteer.Role
                );
     }
- 
+
     public static List<BO.Volunteer> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
     {
         return volunteers.Select(MapToBO).ToList();
@@ -111,7 +122,7 @@ static internal class VolunteerManager
             CanceledCalls = 0,
             ExpiredCalls = 0,
             CurrentCallId = null,
-            CallType =BO.CallTypes.None
+            CallType = BO.CallTypes.None
         };
     }
 

@@ -11,22 +11,33 @@ namespace BL.BlImplementation;
 internal class VolunteerImplementation : IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+    //public string Login(string username, string password)
+    //{
+    //    try
+    //    {
+    //        var volunteer = _dal.Volunteer.ReadAll()
+    //            .FirstOrDefault(v => v.Name == username && v.PasswordVolunteer == password)
+    //            ?? throw new BlInvalidOperationException("Username or password is incorrect");
+
+    //        return (volunteer.Role).ToString();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
+    //    }
+    //}
     public string Login(string username, string password)
     {
-        try
-        {
-            var volunteer = _dal.Volunteer.ReadAll()
+
+        var volunteer = _dal.Volunteer.ReadAll()
                 .FirstOrDefault(v => v.Name == username && v.PasswordVolunteer == password)
-                ?? throw new BlInvalidOperationException("Username or password is incorrect");
+             ?? throw new BlInvalidOperationException("Username or password is incorrect");
 
-            return (volunteer.Role).ToString();
-        }
-        catch (Exception ex)
-        {
-            throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
-        }
+        //if (!VolunteerManager.VerifyPassword(password, volunteer.PasswordVolunteer!))
+        //    throw new BO.BlInvalidOperationException($"Invalid Password");
+
+        return (volunteer.Role).ToString();
     }
-
     public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy)
     {
         try
@@ -213,7 +224,7 @@ internal class VolunteerImplementation : IVolunteer
             BO.VolunteerInList volunteerInList = VolunteerManager.MapToVolunteerInList(volunteer);
             volunteerList.Add(volunteerInList);
         }
-         
+
         return volunteerList;
     }
 }

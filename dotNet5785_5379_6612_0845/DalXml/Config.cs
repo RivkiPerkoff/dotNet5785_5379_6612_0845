@@ -33,14 +33,14 @@ internal static class Config
         NextAssignmentId = 1000;
 
         Clock = DateTime.Now;
-}
+    }
     //internal static TimeSpan? RiskRange { get; set; } = new TimeSpan(1, 30, 0);
     internal static TimeSpan RiskRange
     {
         get
         {
             DateTime dateTime = XMLTools.GetConfigDateVal(s_data_config_xml, "RiskRange");
-            return dateTime.TimeOfDay; 
+            return dateTime.TimeOfDay;
         }
         set
         {
