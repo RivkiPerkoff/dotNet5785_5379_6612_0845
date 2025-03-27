@@ -30,7 +30,6 @@ namespace BlTest
                 //הכניסה ללולאת התפריט רק אם התפקיד הוא Manager
                 ShowMenu();
 
-
                 //else
                 //{
                 //    Console.WriteLine("UpDate Volunteer");
@@ -181,7 +180,7 @@ namespace BlTest
             {
                 Console.WriteLine("\n--- Volunteer Management ---");
                 Console.WriteLine("1. List Volunteers");
-                //Console.WriteLine("2. Get Filter/Sort volunteer");
+                Console.WriteLine("2. Get Filter/Sort volunteer");
                 Console.WriteLine("3. Read Volunteer by ID");
                 Console.WriteLine("4. Add Volunteer");
                 Console.WriteLine("5. Remove Volunteer");
@@ -193,7 +192,7 @@ namespace BlTest
                     //האם אפשר לעשות פה כזאת זריקה?
                     throw new FormatException("The volunteer menu choice is not valid.");
 
-                
+
                 switch (choice)
                 {
                     case 1:
@@ -211,12 +210,35 @@ namespace BlTest
                             Console.WriteLine($"System Error: {ex.Message}");
                         }
                         break;
+                    case 2:
+                        try
+                        {
+                            Console.Write("IsActive? (true/false): ");
+                            if (!bool.TryParse(Console.ReadLine(), out bool active))
+                                throw new FormatException("Invalid input for IsActive.");
+
+                            Console.Write("enter type sorting: ");
+                            if (!TypeSortingVolunteers.TryParse(Console.ReadLine(), out TypeSortingVolunteers type))
+                                throw new FormatException("Invalid input for type.");
+
+                            foreach (var volunteer in s_bl.Volunteer.GetVolunteers(active, type))
+                                Console.WriteLine(volunteer.ToString());
+                        }
+                        catch (BL.BO.BlDoesNotExistException ex)
+                        {
+                            Console.WriteLine($"Error: {ex.Message}");
+                        }
+                        catch (BL.BO.BlGeneralDatabaseException ex)
+                        {
+                            Console.WriteLine($"System Error: {ex.Message}");
+                        }
+                        break;
                     case 3:
                         try
                         {
                             Console.Write("Enter Volunteer ID: ");
                             if (int.TryParse(Console.ReadLine(), out int volunteerId))
-                            
+
                             {
                                 var volunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
                                 Console.WriteLine(volunteer);
@@ -362,11 +384,6 @@ namespace BlTest
                 SelectedAndExpiredCalls = 0,
                 CallInProgress = null
             };
-
-
-
-
-
         }
         static void UpDateVolunteer()
         {
@@ -381,7 +398,6 @@ namespace BlTest
                 }
                 else
                     throw new FormatException("Invalid input. Volunteer ID must be a number.");
-
             }
             catch (BL.BO.BlDoesNotExistException ex)
             {
@@ -408,7 +424,6 @@ namespace BlTest
         {
             try
             {
-
                 while (true)
                 {
                     Console.WriteLine("\n--- Call Management ---");
@@ -638,7 +653,7 @@ namespace BlTest
 
                                     Console.WriteLine("\nOpen Calls Available for Volunteer:");
                                     if (openCalls == null || !openCalls.Any())
-                                        Console.WriteLine("No calls available.");                                  
+                                        Console.WriteLine("No calls available.");
                                     else
                                     {
                                         foreach (var call in openCalls)
@@ -805,12 +820,12 @@ namespace BlTest
             string maxFinishTimeInput = Console.ReadLine();
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);
 
-            Console.WriteLine("Enter the status (0 for HandlingInRisk, 1 for inHandling, 2 for closed, 3 for Expired, 4 for openInRisk, 5 for open, 6 for Pending):");
-            if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
-            {
-                throw new FormatException("Invalid status.");
-            }
-
+            //Console.WriteLine("Enter the status (0 for HandlingInRisk, 1 for inHandling, 2 for closed, 3 for Expired, 4 for openInRisk, 5 for open, 6 for Pending):");
+            //if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
+            //{
+            //    throw new FormatException("Invalid status.");
+            //}
+            //StatusCallType status = StatusCallType.open;
             return new BL.BO.Call
             {
                 IdCall = id,
@@ -821,12 +836,9 @@ namespace BlTest
                 CallLongitude = 0,
                 //האם זה הזמן הנוכחי?
                 OpeningTime = DateTime.Now,
+                StatusCallType = StatusCallType.open
             };
-
-
         }
-        //אני באמצע הפונ
-        //למה היא לא מקבלת ID?
         static void UpDateCall()
         {
             Console.Write("Enter Call ID: ");

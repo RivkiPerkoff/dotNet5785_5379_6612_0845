@@ -53,7 +53,7 @@ internal class AdminImplementation : IAdmin
     {
         // שימוש במשתנה _dal במקום Factory.Get
         _dal.ResetDB();
-        DalTest.Initialization.DO();
+        //DalTest.Initialization.DO();
         ClockManager.UpdateClock(ClockManager.Now);
     }
 }
