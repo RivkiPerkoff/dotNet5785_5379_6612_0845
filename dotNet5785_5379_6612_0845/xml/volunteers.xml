@@ -42,33 +42,6 @@
 		<Role>Volunteer</Role>
 		<DistanceType>AirDistance</DistanceType>
 	</Volunteer>
-	<Volunteer>
-		<VolunteerId>1003</VolunteerId>
-		<Name>shoshana</Name>
-		<PhoneNumber>058-325-4134</PhoneNumber>
-		<EmailOfVolunteer>shoshgrilak@gmail.com </EmailOfVolunteer>
-		<PasswordVolunteer>Nazareth</PasswordVolunteer>
-		<AddressVolunteer>AerD8@G/H+)?</AddressVolunteer>
-		<VolunteerLatitude>0</VolunteerLatitude>
-		<VolunteerLongitude>0</VolunteerLongitude>
-		<IsAvailable>false</IsAvailable>
-		<MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-		<Role>Volunteer</Role>
-		<DistanceType>AirDistance</DistanceType>
-	</Volunteer>
-	<Volunteer>
-		<VolunteerId>1004</VolunteerId>
-		<Name>rivka</Name>
-		<PhoneNumber>058-325-4134</PhoneNumber>
-		<EmailOfVolunteer>minhahar610@gmail.com </EmailOfVolunteer>
-		<PasswordVolunteer>Nazareth</PasswordVolunteer>
-		<AddressVolunteer>AerD8@G/H+)?</AddressVolunteer>
-		<VolunteerLatitude>0</VolunteerLatitude>
-		<VolunteerLongitude>0</VolunteerLongitude>
-		<IsAvailable>false</IsAvailable>
-		<MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-		<Role>Volunteer</Role>
-		<DistanceType>AirDistance</DistanceType>
-	</Volunteer>
+	
  
 </ArrayOfVolunteer>

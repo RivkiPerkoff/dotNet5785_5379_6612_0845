@@ -21,6 +21,7 @@ public class Call
     public override string ToString()
     {
         var sb = new StringBuilder();
+        sb.AppendLine(new string('-', 30));
         sb.AppendLine($"ID: {IdCall}");
         sb.AppendLine($"Call Type: {CallType}");
         sb.AppendLine($"Description: {CallDescription ?? "N/A"}");
@@ -38,9 +39,14 @@ public class Call
                 sb.AppendLine($"  - {assign}");
             }
         }
-        if ((CallAssignInLists == null || CallAssignInLists.Count == 0) && IdCall == 0)
+        else if (IdCall == 0)
+        {
             sb.AppendLine("No Assigned Calls.");
+        }
+
+        sb.AppendLine(new string('-', 30));
         return sb.ToString();
     }
+
 }
 

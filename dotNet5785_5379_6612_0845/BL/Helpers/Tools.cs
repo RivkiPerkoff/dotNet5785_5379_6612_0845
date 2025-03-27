@@ -144,71 +144,66 @@ static internal class Tools
             smtpClient.Send(message);
         }
     }
-
-    //internal static int[] GetCallStatus(int callId)
-    //{
-    //    try
-    //    {
-    //        var calls = s_dal.Call.ReadAll();
-    //        var assignments = s_dal.Assignment.ReadAll();
-
-    //        var statusGroups =
-    //            from call in calls
-    //            let currentStatus = CallManager.CalculateCallStatus(call.IdCall)
-    //            group call by currentStatus into statusGroup
-    //            orderby statusGroup.Key
-    //            select new
-    //            {
-    //                Status = statusGroup.Key,
-    //                Count = statusGroup.Count()
-    //            };
-
-    //        // יצירת מערך בגודל מספר הערכים באינום CallStatus
-    //        int statusCount = Enum.GetValues<BO.StatusCallType>().Length;
-    //        int[] quantities = new int[statusCount];
-
-    //        statusGroups.ToList()
-    //                   .ForEach(group => quantities[(int)group.Status] = group.Count);
-
-    //        return quantities;
-    //    }
-
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BO.BlGeolocationNotFoundException("Required data was not found in the database", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlGeneralDatabaseException("An unexpected error occurred while calculating call quantities", ex);
-    //    }
-    //}
-
-    internal static StatusCallType GetCallStatus(int callId)
+    public static StatusCallType GetCallStatus(this DO.Call call)
     {
+        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.IdOfRunnerCall== call.IdCall).ToList()!;
+        var lastAssignment = assignments.LastOrDefault(a => a!.IdOfRunnerCall == call.IdCall);
 
-        var call = s_dal.Call.Read(callId) ?? throw new ArgumentException($"Call with ID {callId} not found.");
-        DateTime currentTime = ClockManager.Now;
-        var assignments = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId).ToList();
-        Assignment? activeAssignment = assignments.Find(a => a.EndTimeForTreatment == null);
-        Assignment? handledAssignments = assignments.Find(a => a.EndTimeForTreatment != null && a.FinishCallType == DO.FinishCallType.TakenCareof);
-
-        if (activeAssignment != null)
-        {
-            if (call.MaxFinishTime.HasValue && currentTime > call.MaxFinishTime.Value - s_dal.Config.RiskRange)
-                return StatusCallType.HandlingInRisk;
-
-            return StatusCallType.inHandling;
-        }
-
-        if (handledAssignments != null)
-            return StatusCallType.closed;
-
-        if (call.MaxFinishTime.HasValue && currentTime > call.MaxFinishTime.Value)
+        // If the maximum time for closing the call has passed
+        if (call.MaxFinishTime < ClockManager.Now)
             return StatusCallType.Expired;
 
-        if (call.MaxFinishTime.HasValue && currentTime > call.MaxFinishTime.Value - s_dal.Config.RiskRange)
-            return StatusCallType.openInRisk;
+        //---------------------------------------------------------------
+        //// If the call is open and is ending during the risk period
+        //if ((ClockManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
+        //    return StatusCallType.openInRisk;
 
+        // If the call is being treated
+        if (lastAssignment != null)
+        {
+            // Treated at risk
+            if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+                return StatusCallType.HandlingInRisk;
+
+            // Just treated
+            else
+                return StatusCallType.inHandling;
+        }
+
+        // If the call is closed (last assignment has an end time)
+        if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
+            return StatusCallType.closed;
+
+        // If the call is open
         return StatusCallType.open;
     }
+
+    //internal static StatusCallType GetCallStatus(int callId)
+    //{
+
+    //    var call = s_dal.Call.Read(callId) ?? throw new ArgumentException($"Call with ID {callId} not found.");
+    //    DateTime currentTime = ClockManager.Now;
+    //    var assignments = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId).ToList();
+    //    Assignment? activeAssignment = assignments.Find(a => a.EndTimeForTreatment == null);
+    //    Assignment? handledAssignments = assignments.Find(a => a.EndTimeForTreatment != null && a.FinishCallType == DO.FinishCallType.TakenCareof);
+
+    //    if (activeAssignment != null)
+    //    {
+    //        if (call.MaxFinishTime.HasValue && currentTime > call.MaxFinishTime.Value - s_dal.Config.RiskRange)
+    //            return StatusCallType.HandlingInRisk;
+
+    //        return StatusCallType.inHandling;
+    //    }
+
+    //    if (handledAssignments != null)
+    //        return StatusCallType.closed;
+
+    //    if (call.MaxFinishTime.HasValue && currentTime > call.MaxFinishTime.Value)
+    //        return StatusCallType.Expired;
+
+    //    if (call.MaxFinishTime.HasValue && currentTime > call.MaxFinishTime.Value - s_dal.Config.RiskRange)
+    //        return StatusCallType.openInRisk;
+
+    //    return StatusCallType.open;
+    //}
 }

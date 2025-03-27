@@ -22,9 +22,9 @@ internal class CallManager
             CallLongitude = doCall.CallLongitude,
             CallLatitude = doCall.CallLatitude,
             OpeningTime = (DateTime)doCall.OpeningTime,
-            MaxFinishTime = doCall.MaxFinishTime
+            MaxFinishTime = doCall.MaxFinishTime,
             //,
-            //StatusCallType = (StatusCallType)Tools.GetCallStatus(doCall.IdCall),
+            StatusCallType = (StatusCallType)Tools.GetCallStatus(doCall),
         });
     }
     internal static object? GetFieldValue(CallInList call, CallInListFields field)
