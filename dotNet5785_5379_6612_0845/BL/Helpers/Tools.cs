@@ -161,7 +161,7 @@ static internal class Tools
         //    return StatusCallType.openInRisk;
 
         // If the call is being treated
-         //**
+        //**
         //if (lastAssignment != null)
         //{
         //    // Treated at risk
@@ -179,7 +179,7 @@ static internal class Tools
         //    return StatusCallType.closed;
         //**
         // If the call is open
-        return StatusCallType.closed;
+        return StatusCallType.open;
     }
 
     //internal static StatusCallType GetCallStatus(int callId)

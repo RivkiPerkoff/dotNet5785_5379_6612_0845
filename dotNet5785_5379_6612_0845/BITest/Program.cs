@@ -358,7 +358,7 @@ namespace BlTest
             if (!double.TryParse(Console.ReadLine(), out double largestDistance))
                 throw new FormatException("Invalid largest distance format.");
 
-            Console.Write("Distance Type (Air, Drive or Walk): ");
+            Console.Write("Distance Type (AirDistance, RoadDistance, WalkingDistance): ");
             if (!Enum.TryParse(Console.ReadLine(), true, out BL.BO.DistanceType myDistanceType))
                 throw new FormatException("Invalid distance type.");
 
@@ -505,7 +505,8 @@ namespace BlTest
                         case 3:
                             try
                             {
-                                Console.WriteLine("Enter sort field (CallId, CallType, OpenTime, TimeRemainingToCall, LastVolunteer, CompletionTime, MyStatus, TotalAllocations) or press Enter to skip:");
+
+                                Console.WriteLine("Enter filter field (StartTime, TimeToCompleteTreatment, LastUpdateBy, Status) or press Enter to skip:");
                                 string? filterFieldInput = Console.ReadLine();
                                 BL.BO.CallInListFields? filterField = Enum.TryParse(filterFieldInput, out BL.BO.CallInListFields parsedFilterField) ? parsedFilterField : null;
 
@@ -516,7 +517,7 @@ namespace BlTest
                                     filterValue = Console.ReadLine();
                                 }
 
-                                Console.WriteLine("Enter sort field (CallId, CallType, OpenTime, TimeRemainingToCall, LastVolunteer, CompletionTime, MyStatus, TotalAllocations) or press Enter to skip:");
+                                Console.WriteLine("Enter sort field (StartTime, TimeToCompleteTreatment, LastUpdateBy, Status) or press Enter to skip:");
                                 string? sortFieldInput = Console.ReadLine();
                                 BL.BO.CallInListFields? sortField = Enum.TryParse(sortFieldInput, out BL.BO.CallInListFields parsedSortField) ? parsedSortField : null;
 
@@ -797,28 +798,12 @@ namespace BlTest
             Console.WriteLine("Enter the address:");
             string address = Console.ReadLine();
 
-            //Console.WriteLine("Enter the latitude:");
-            //if (!double.TryParse(Console.ReadLine(), out double latitude))
-            //{
-            //    throw new FormatException("Invalid latitude value.");
-            //}
-
-            //Console.WriteLine("Enter the longitude:");
-            //if (!double.TryParse(Console.ReadLine(), out double longitude))
-            //{
-            //    throw new FormatException("Invalid longitude value.");
-            //}
 
             Console.WriteLine("Enter the max finish time (yyyy-mm-dd) or leave empty:");
 
             string maxFinishTimeInput = Console.ReadLine();
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);
 
-            //Console.WriteLine("Enter the status (0 for HandlingInRisk, 1 for inHandling, 2 for closed, 3 for Expired, 4 for openInRisk, 5 for open, 6 for Pending):");
-            //if (!Enum.TryParse(Console.ReadLine(), out StatusCallType status))
-            //{
-            //    throw new FormatException("Invalid status.");
-            //}
 
             return new BL.BO.Call
             {
@@ -828,10 +813,8 @@ namespace BlTest
                 AddressOfCall = address,
                 CallLatitude = 0,
                 CallLongitude = 0,
-                //האם זה הזמן הנוכחי?
                 OpeningTime = DateTime.Now,
                 MaxFinishTime = maxFinishTime,
-                //StatusCallType=StatusCallType.open
             };
         }
         static void UpDateCall()

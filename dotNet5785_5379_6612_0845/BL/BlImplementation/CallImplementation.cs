@@ -4,6 +4,7 @@ using BL.Helpers;
 using DalApi;
 using DO;
 using NSubstitute.Core;
+using System.Net;
 
 namespace BL.BlImplementation;
 
@@ -46,91 +47,53 @@ internal class CallImplementation : BIApi.ICall
             StatusCallType= Tools.GetCallStatus(call)
         };
     }
-    public IEnumerable<BO.CallInList> GetFilteredAndSortedCalls(BO.CallInList? filterBy = null, object? filterValue = null, BO.CallInList? sortBy = null)
-    {
-        IEnumerable<DO.Call> allCalls = _dal.Call.ReadAll().ToList();
-        IEnumerable<DO.Assignment> allAssignments = _dal.Assignment.ReadAll().ToList();
+    //public IEnumerable<BO.CallInList> GetFilteredAndSortedCalls(BO.CallInListFields? filterBy = null, object? filterValue = null,BO.CallInListFields? sortBy = null)
+    //{
 
-        IEnumerable<BO.CallInList> callList = allCalls.Select(call =>
-        {
-            var latestAssignment = allAssignments
-                .Where(a => a.IdOfRunnerCall == call.IdCall)
-                .OrderByDescending(a => a.EntryTimeForTreatment)
-                .FirstOrDefault();
+    //}
 
-            return new BO.CallInList
-            {
-                Id = latestAssignment?.NextAssignmentId,
-                CallId = call.IdCall,
-                CallType = (BO.CallTypes)call.CallTypes,
-                StartTime = (DateTime)call.OpeningTime,
-                TimeToEnd = call.MaxFinishTime.HasValue? (call.MaxFinishTime.Value > DateTime.Now ? call.MaxFinishTime.Value - DateTime.Now : TimeSpan.Zero): null,
-                LastUpdateBy = latestAssignment != null? _dal.Volunteer.Read(latestAssignment.VolunteerId)?.Name : null,
-                TimeTocompleteTreatment = latestAssignment?.EndTimeForTreatment.HasValue == true ? latestAssignment.EndTimeForTreatment.Value - call.OpeningTime: null,
-                Status = Tools.GetCallStatus(call),
-                TotalAssignment = allAssignments.Count(a => a.IdOfRunnerCall == call.IdCall)
-            };
-        });
+    //public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
+    //{
+    //    var calls = _dal.Call.ReadAll();
+    //    var assignments = _dal.Assignment.ReadAll();
+    //    var volunteers = _dal.Volunteer.ReadAll().ToDictionary(v => v.VolunteerId, v => v.Name);
+    //    var callList = calls.Select(call =>
+    //    {
+    //        var lastAssignment = assignments
+    //            .Where(a => a.IdOfRunnerCall == call.IdCall)
+    //            .OrderByDescending(a => a.EntryTimeForTreatment)
+    //            .FirstOrDefault();
+    //        return new CallInList
+    //        {
+    //            Id = call.IdCall,
+    //            CallId = call.IdCall,
+    //            CallType = (BO.CallTypes)call.CallTypes,
+    //            StartTime = (DateTime)call.OpeningTime,
+    //            TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
+    //            //////////////////////////////////////////////////////////
+    //            //לשנות את החישוב הוא לא נכון
+    //            LastUpdateBy = lastAssignment?.VolunteerId != null && volunteers.TryGetValue(lastAssignment!.VolunteerId, out var name) ? name : null,
 
-        //filter by:
-        if (filterBy != null && filterValue != null)
-        {
-            callList = callList.Where(c => c.GetType().GetProperty(filterBy.ToString())?.GetValue(c)?.Equals(filterValue) == true);
-        }
+    //            TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment : null,
+    //            ///////////////////////////////////////////////////////////
+    //            Status = Tools.GetCallStatus(call),
+    //            TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
+    //        };
+    //    }).ToList();
 
-        //sort by:
-        callList = sortBy switch
-        {
-            BO.CallInListProperty.TimeOfOpeningCall => callList.OrderBy(c => c.TimeOfOpeningCall),
-            BO.CallInListProperty.TotalTimeOfHandling => callList.OrderBy(c => c.TotalTimeOfHandling ?? TimeSpan.Zero),
-            BO.CallInListProperty.NameOfLastVolunteer => callList.OrderBy(c => c.NameOfLastVolunteer ?? string.Empty),
-            BO.CallInListProperty.Status => callList.OrderBy(c => c.Status),
-            _ => callList.OrderBy(c => c.CallId)
-        };
-        return callList;
-    }
-    public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
-    {
-        var calls = _dal.Call.ReadAll();
-        var assignments = _dal.Assignment.ReadAll();
-        var volunteers = _dal.Volunteer.ReadAll().ToDictionary(v => v.VolunteerId, v => v.Name);
-        var callList = calls.Select(call =>
-        {
-            var lastAssignment = assignments
-                .Where(a => a.IdOfRunnerCall == call.IdCall)
-                .OrderByDescending(a => a.EntryTimeForTreatment)
-                .FirstOrDefault();
-            return new CallInList
-            {
-                Id = call.IdCall,
-                CallId = call.IdCall,
-                CallType = (BO.CallTypes)call.CallTypes,
-                StartTime = (DateTime)call.OpeningTime,
-                TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
-                //////////////////////////////////////////////////////////
-                //לשנות את החישוב הוא לא נכון
-                LastUpdateBy = lastAssignment?.VolunteerId != null && volunteers.TryGetValue(lastAssignment!.VolunteerId, out var name) ? name : null,
-
-                TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment : null,
-                ///////////////////////////////////////////////////////////
-                Status = Tools.GetCallStatus(call),
-                TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
-            };
-        }).ToList();
-
-        if (filterField != null && filterValue != null)
-        {
-            callList = callList.Where(call =>
-                CallManager.GetFieldValue(call, filterField.Value)?.Equals(filterValue) == true
-            ).ToList();
-        }
-        callList = sortField switch
-        {
-            null => callList.OrderBy(c => c.CallId).ToList(),
-            _ => callList.OrderBy(c => CallManager.GetFieldValue(c, sortField.Value)).ToList()
-        };
-        return callList;
-    }
+    //    if (filterField != null && filterValue != null)
+    //    {
+    //        callList = callList.Where(call =>
+    //            CallManager.GetFieldValue(call, filterField.Value)?.Equals(filterValue) == true
+    //        ).ToList();
+    //    }
+    //    callList = sortField switch
+    //    {
+    //        null => callList.OrderBy(c => c.CallId).ToList(),
+    //        _ => callList.OrderBy(c => CallManager.GetFieldValue(c, sortField.Value)).ToList()
+    //    };
+    //    return callList;
+    //}
     public void DeleteCall(int callId)
     {
         try
@@ -161,6 +124,7 @@ internal class CallImplementation : BIApi.ICall
             throw new InvalidOperationException("Address cannot be empty.");
         if (callObject.MaxFinishTime <= callObject.OpeningTime)
             throw new InvalidOperationException("Max finish time must be greater than opening time.");
+        var coordinates = Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
 
         // Generate DO object
         var callDO = new DO.Call
@@ -168,8 +132,8 @@ internal class CallImplementation : BIApi.ICall
             idCall: callObject.IdCall,
             callDescription: callObject.CallDescription,
             callAddress: callObject.AddressOfCall,
-            callLatitude: callObject.CallLatitude,
-            callLongitude: callObject.CallLongitude,
+            callLatitude: coordinates.Item1,
+            callLongitude: coordinates.Item2,
             openingTime: callObject.OpeningTime,
             maxFinishTime: callObject.MaxFinishTime ?? default,
             CallTypes: (DO.CallTypes)callObject.CallType
@@ -456,4 +420,48 @@ internal class CallImplementation : BIApi.ICall
         
     }
 
+    public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterBy = null, object? filterValue = null, CallInListFields? sortBy = null)
+    {
+
+        IEnumerable<DO.Call> allCalls = _dal.Call.ReadAll().ToList();
+        IEnumerable<DO.Assignment> allAssignments = _dal.Assignment.ReadAll().ToList();
+
+        IEnumerable<BO.CallInList> callList = allCalls.Select(call =>
+        {
+            var latestAssignment = allAssignments
+                .Where(a => a.IdOfRunnerCall == call.IdCall)
+                .OrderByDescending(a => a.EntryTimeForTreatment)
+                .FirstOrDefault();
+
+            return new BO.CallInList
+            {
+                Id = latestAssignment?.NextAssignmentId,
+                CallId = call.IdCall,
+                CallType = (BO.CallTypes)call.CallTypes,
+                StartTime = (DateTime)call.OpeningTime,
+                TimeToEnd = call.MaxFinishTime.HasValue ? (call.MaxFinishTime.Value > DateTime.Now ? call.MaxFinishTime.Value - DateTime.Now : TimeSpan.Zero) : null,
+                LastUpdateBy = latestAssignment != null ? _dal.Volunteer.Read(latestAssignment.VolunteerId)?.Name : null,
+                TimeTocompleteTreatment = latestAssignment?.EndTimeForTreatment.HasValue == true ? latestAssignment.EndTimeForTreatment.Value - call.OpeningTime : null,
+                Status = Tools.GetCallStatus(call),
+                TotalAssignment = allAssignments.Count(a => a.IdOfRunnerCall == call.IdCall)
+            };
+        });
+
+        //filter by:
+        if (filterBy != null && filterValue != null)
+        {
+            callList = callList.Where(c => c.GetType().GetProperty(filterBy.ToString())?.GetValue(c)?.Equals(filterValue) == true);
+        }
+
+        //sort by:
+        callList = sortBy switch
+        {
+            BO.CallInListFields.StartTime => callList.OrderBy(c => c.StartTime),
+            BO.CallInListFields.TimeToCompleteTreatment => callList.OrderBy(c => c.TimeTocompleteTreatment ?? TimeSpan.Zero),
+            BO.CallInListFields.LastUpdateBy => callList.OrderBy(c => c.LastUpdateBy ?? string.Empty),
+            BO.CallInListFields.Status => callList.OrderBy(c => c.Status),
+            _ => callList.OrderBy(c => c.CallId)
+        };
+        return callList;
+    }
 }
