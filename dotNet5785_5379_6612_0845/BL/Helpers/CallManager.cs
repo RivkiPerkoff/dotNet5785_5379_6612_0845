@@ -1,5 +1,6 @@
 ﻿using BL.BO;
 using DalApi;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,25 @@ internal class CallManager
             _ => null
         };
     }
+    public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
+    {
+        return calls.Select(call =>
+        {
+            var assignment = assignments.First(a => a.IdOfRunnerCall == call.IdCall);
+            return new BO.ClosedCallInList
+            {
+                Id = call.IdCall,
+                CallTypes = (DO.CallTypes)call.CallTypes,
+                OpeningTime = (DateTime)call.OpeningTime,
+                Address = call.CallAddress,
+                EntryTimeForTreatment = (DateTime)assignment.EntryTimeForTreatment,
+                EndTimeForTreatment = assignment.EntryTimeForTreatment,
+                FinishCallType = (DO.FinishCallType)assignment.FinishCallType
+            };
+        });
+    }
+
+
     //internal static BO.StatusCallType CalculateCallStatus(int callId)
     //{
     //    try

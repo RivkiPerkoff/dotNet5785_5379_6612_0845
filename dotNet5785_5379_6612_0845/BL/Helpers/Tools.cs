@@ -150,8 +150,10 @@ static internal class Tools
         var lastAssignment = assignments.LastOrDefault(a => a!.IdOfRunnerCall == call.IdCall);
 
         // If the maximum time for closing the call has passed
-        if (call.MaxFinishTime < ClockManager.Now)
-            return StatusCallType.Expired;
+        //**
+        //if (call.MaxFinishTime < ClockManager.Now)
+        //    return StatusCallType.Expired;
+        //**
 
         //---------------------------------------------------------------
         //// If the call is open and is ending during the risk period
@@ -159,23 +161,25 @@ static internal class Tools
             return StatusCallType.openInRisk;
 
         // If the call is being treated
-        if (lastAssignment != null)
-        {
-            // Treated at risk
-            if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
-                return StatusCallType.HandlingInRisk;
+         //**
+        //if (lastAssignment != null)
+        //{
+        //    // Treated at risk
+        //    if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+        //        return StatusCallType.HandlingInRisk;
 
-            // Just treated
-            else
-                return StatusCallType.inHandling;
-        }
-
+        //    // Just treated
+        //    else
+        //        return StatusCallType.inHandling;
+        //}
+        //**
         // If the call is closed (last assignment has an end time)
-        if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
-            return StatusCallType.closed;
-
+        //**
+        //if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
+        //    return StatusCallType.closed;
+        //**
         // If the call is open
-        return StatusCallType.open;
+        return StatusCallType.closed;
     }
 
     //internal static StatusCallType GetCallStatus(int callId)

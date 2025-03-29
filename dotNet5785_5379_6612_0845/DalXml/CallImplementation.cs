@@ -71,7 +71,7 @@ internal class CallImplementation : ICall
 
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
     {
-        var calls = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c => GetCall(c));
+        var calls = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c =>  GetCall(c));
         return filter is null ? calls : calls.Where(filter);
     }
    
