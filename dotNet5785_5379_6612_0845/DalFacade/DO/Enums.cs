@@ -18,13 +18,12 @@ public enum Role
     Manager,
     Volunteer
 }
-
 public enum CallTypes
-
 {
+    None,
     ManDriver,
-    WomanDriver,
-    None
+    WomanDriver
+
 }
 public enum MainMenuOptions
 {

@@ -46,6 +46,49 @@ internal class CallImplementation : BIApi.ICall
             StatusCallType= Tools.GetCallStatus(call)
         };
     }
+    public IEnumerable<BO.CallInList> GetFilteredAndSortedCalls(BO.CallInList? filterBy = null, object? filterValue = null, BO.CallInList? sortBy = null)
+    {
+        IEnumerable<DO.Call> allCalls = _dal.Call.ReadAll().ToList();
+        IEnumerable<DO.Assignment> allAssignments = _dal.Assignment.ReadAll().ToList();
+
+        IEnumerable<BO.CallInList> callList = allCalls.Select(call =>
+        {
+            var latestAssignment = allAssignments
+                .Where(a => a.IdOfRunnerCall == call.IdCall)
+                .OrderByDescending(a => a.EntryTimeForTreatment)
+                .FirstOrDefault();
+
+            return new BO.CallInList
+            {
+                Id = latestAssignment?.NextAssignmentId,
+                CallId = call.IdCall,
+                CallType = (BO.CallTypes)call.CallTypes,
+                StartTime = (DateTime)call.OpeningTime,
+                TimeToEnd = call.MaxFinishTime.HasValue? (call.MaxFinishTime.Value > DateTime.Now ? call.MaxFinishTime.Value - DateTime.Now : TimeSpan.Zero): null,
+                LastUpdateBy = latestAssignment != null? _dal.Volunteer.Read(latestAssignment.VolunteerId)?.Name : null,
+                TimeTocompleteTreatment = latestAssignment?.EndTimeForTreatment.HasValue == true ? latestAssignment.EndTimeForTreatment.Value - call.OpeningTime: null,
+                Status = Tools.GetCallStatus(call),
+                TotalAssignment = allAssignments.Count(a => a.IdOfRunnerCall == call.IdCall)
+            };
+        });
+
+        //filter by:
+        if (filterBy != null && filterValue != null)
+        {
+            callList = callList.Where(c => c.GetType().GetProperty(filterBy.ToString())?.GetValue(c)?.Equals(filterValue) == true);
+        }
+
+        //sort by:
+        callList = sortBy switch
+        {
+            BO.CallInListProperty.TimeOfOpeningCall => callList.OrderBy(c => c.TimeOfOpeningCall),
+            BO.CallInListProperty.TotalTimeOfHandling => callList.OrderBy(c => c.TotalTimeOfHandling ?? TimeSpan.Zero),
+            BO.CallInListProperty.NameOfLastVolunteer => callList.OrderBy(c => c.NameOfLastVolunteer ?? string.Empty),
+            BO.CallInListProperty.Status => callList.OrderBy(c => c.Status),
+            _ => callList.OrderBy(c => c.CallId)
+        };
+        return callList;
+    }
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
     {
         var calls = _dal.Call.ReadAll();
@@ -67,9 +110,7 @@ internal class CallImplementation : BIApi.ICall
                 //////////////////////////////////////////////////////////
                 //לשנות את החישוב הוא לא נכון
                 LastUpdateBy = lastAssignment?.VolunteerId != null && volunteers.TryGetValue(lastAssignment!.VolunteerId, out var name) ? name : null,
-                //LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
-                //TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true
-                //    ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment: null,
+
                 TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment : null,
                 ///////////////////////////////////////////////////////////
                 Status = Tools.GetCallStatus(call),
@@ -136,49 +177,89 @@ internal class CallImplementation : BIApi.ICall
         // Add call to data layer
         _dal.Call.Create(callDO);
     }
-
-    public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType, ClosedCallInListFields? sortField)
+    
+    public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
     {
-        var volunteerAssignments = _dal.Assignment.ReadAll()
-            .Where(a => a.VolunteerId == volunteerId)
-            .Select(a => a.IdOfRunnerCall);
-
-        var closedCalls = _dal.Call.ReadAll()
-            .Where(c => volunteerAssignments.Contains(c.IdCall))
-            .Join(_dal.Assignment.ReadAll(),
-                  call => call.IdCall,
-                  assignment => assignment.IdOfRunnerCall,
-                  (call, assignment) => new ClosedCallInList
-                  {
-                      Id = call.IdCall,
-                      CallTypes = call.CallTypes,
-                      Address = call.CallAddress ?? string.Empty,
-                      OpeningTime = (DateTime)call.OpeningTime,
-                      EntryTimeForTreatment = assignment.EntryTimeForTreatment ?? default,
-                      EndTimeForTreatment = assignment.EndTimeForTreatment,
-                      FinishCallType = assignment.FinishCallType
-                  })
-            .Where(c => c.FinishCallType != null);
-
-        if (filterType.HasValue)
+        try
         {
-            closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+            // Get all assignments for this volunteer
+            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
+
+            // Get all calls associated with these assignments
+            var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
+            var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
+
+            // Create ClosedCallInList objects using CallManager
+            var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
+            if (filterType.HasValue)
+            {
+                closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+            }
+
+
+            return sortField switch
+            {
+                BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
+                BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
+                BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
+                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
+                _ => closedCalls.OrderBy(c => c.Id)
+            };
         }
 
-        if (sortField.HasValue)
+        catch (DO.DalDoesNotExistException ex)
         {
-            closedCalls = closedCalls.OrderBy(c => c.GetType()
-                                                    .GetProperty(sortField.ToString())?
-                                                    .GetValue(c))
-                                     .ThenBy(c => c.Id);
+            throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
         }
-        else
+        catch (Exception ex)
         {
-            closedCalls = closedCalls.OrderBy(c => c.Id);
+            throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
         }
-
-        return closedCalls.ToList(); // הפיכת IEnumerable ל- List
     }
+    //public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType, ClosedCallInListFields? sortField)
+    //{
+    //    var volunteerAssignments = _dal.Assignment.ReadAll()
+    //        .Where(a => a.VolunteerId == volunteerId)
+    //        .Select(a => a.IdOfRunnerCall);
+
+    //    var closedCalls = _dal.Call.ReadAll()
+    //        .Where(c => volunteerAssignments.Contains(c.IdCall))
+    //        .Join(_dal.Assignment.ReadAll(),
+    //              call => call.IdCall,
+    //              assignment => assignment.IdOfRunnerCall,
+    //              (call, assignment) => new ClosedCallInList
+    //              {
+    //                  Id = call.IdCall,
+    //                  CallTypes = call.CallTypes,
+    //                  Address = call.CallAddress ?? string.Empty,
+    //                  OpeningTime = (DateTime)call.OpeningTime,
+    //                  EntryTimeForTreatment = assignment.EntryTimeForTreatment ?? default,
+    //                  EndTimeForTreatment = assignment.EndTimeForTreatment,
+    //                  FinishCallType = assignment.FinishCallType
+    //              })
+    //        .Where(c => c.FinishCallType != null);
+
+    //    if (filterType.HasValue)
+    //    {
+    //        closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+    //    }
+
+    //    if (sortField.HasValue)
+    //    {
+    //        closedCalls = closedCalls.OrderBy(c => c.GetType()
+    //                                                .GetProperty(sortField.ToString())?
+    //                                                .GetValue(c))
+    //                                 .ThenBy(c => c.Id);
+    //    }
+    //    else
+    //    {
+    //        closedCalls = closedCalls.OrderBy(c => c.Id);
+    //    }
+
+    //    return closedCalls.ToList(); // הפיכת IEnumerable ל- List
+    //}
     public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
     {
         try

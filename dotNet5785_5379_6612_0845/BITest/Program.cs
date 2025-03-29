@@ -26,7 +26,7 @@ namespace BlTest
 
                 ////בדיקה אם התפקיד הוא Manager
                 //if (userRole == "Manager")
-                    ShowMenu();
+                ShowMenu();
                 //else
                 //{
                 //    Console.WriteLine("UpDate Volunteer");
@@ -468,11 +468,11 @@ namespace BlTest
                                 Console.Write("Enter Volunteer ID: ");
                                 if (int.TryParse(Console.ReadLine(), out int volunteerId))
                                 {
-                                    Console.WriteLine("Enter Call Type filter (or press Enter to skip):");
+                                    Console.WriteLine("Enter Call Type filter: None, ManDriver, WomanDriver (or press Enter to skip):");
                                     string? callTypeInput = Console.ReadLine();
                                     BL.BO.CallTypes? callTypeFilter = Enum.TryParse(callTypeInput, out BL.BO.CallTypes parsedCallType) ? parsedCallType : null;
 
-                                    Console.WriteLine("Enter Sort Field (or press Enter to skip):");
+                                    Console.WriteLine("Enter Sort Field:    Id,\r\n    CallTypes,\r\n    Address,\r\n    OpeningTime,\r\n    EntryTimeForTreatment,\r\n    EndTimeForTreatment,\r\n    FinishCallType (or press Enter to skip):");
                                     string? sortFieldInput = Console.ReadLine();
                                     BL.BO.ClosedCallInListFields? sortField = Enum.TryParse(sortFieldInput, out BL.BO.ClosedCallInListFields parsedSortField) ? parsedSortField : null;
 
@@ -484,11 +484,14 @@ namespace BlTest
                                     else
                                     {
                                         foreach (var call in closedCalls)
+                                        {
                                             Console.WriteLine(call);
+                                            Console.WriteLine("-------------------");
+                                        }
                                     }
                                 }
                                 else
-                                    throw new BL.BO.BlInvalidOperationException("Invalid input. Volunteer ID must be a number.");  
+                                    throw new BL.BO.BlInvalidOperationException("Invalid input. Volunteer ID must be a number.");
                             }
                             catch (BL.BO.BlGeneralDatabaseException ex)
                             {
