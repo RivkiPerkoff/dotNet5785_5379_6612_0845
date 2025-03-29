@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using System.Text;
 
 namespace BL.BO;
 /// <summary>
@@ -52,13 +53,20 @@ public class CallInList
     public int TotalAssignment { get; set; }
     public override string ToString()
     {
-        return $"Call ID: {CallId}, Type: {CallType}, " +
-               $"Start Time: {StartTime:G}, Status: {Status}, " +
-               $"Time to End: {(TimeToEnd.HasValue ? TimeToEnd.Value.ToString(@"hh\:mm\:ss") : "N/A")}, " +
-               $"Last Updated By: {LastUpdateBy ?? "N/A"}, " +
-               $"Time to Complete Treatment: {(TimeTocompleteTreatment.HasValue ? TimeTocompleteTreatment.Value.ToString(@"hh\:mm\:ss") : "N/A")}, " +
-               $"Total Assignments: {TotalAssignment}";
+        var sb = new StringBuilder();
+        sb.AppendLine(new string('-', 40));
+        sb.AppendLine($"Call ID: {CallId}");
+        sb.AppendLine($"Type: {CallType}");
+        sb.AppendLine($"Start Time: {StartTime:G}");
+        sb.AppendLine($"Status: {Status}");
+        sb.AppendLine($"Time to End: {(TimeToEnd.HasValue ? TimeToEnd.Value.ToString(@"hh\:mm\:ss") : "N/A")}");
+        sb.AppendLine($"Last Updated By: {LastUpdateBy ?? "N/A"}");
+        sb.AppendLine($"Time to Complete Treatment: {(TimeTocompleteTreatment.HasValue ? TimeTocompleteTreatment.Value.ToString(@"hh\:mm\:ss") : "N/A")}");
+        sb.AppendLine($"Total Assignments: {TotalAssignment}");
+        sb.AppendLine(new string('-', 40));
+        return sb.ToString();
     }
+
 
 }
 

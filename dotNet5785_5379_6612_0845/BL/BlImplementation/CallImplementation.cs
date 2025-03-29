@@ -42,13 +42,15 @@ internal class CallImplementation : BIApi.ICall
             CallLatitude = call.CallLatitude,
             OpeningTime = (DateTime)call.OpeningTime,
             MaxFinishTime = call.MaxFinishTime,
-            CallAssignInLists = null
+            CallAssignInLists = null,
+            StatusCallType= Tools.GetCallStatus(call)
         };
     }
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
     {
         var calls = _dal.Call.ReadAll();
         var assignments = _dal.Assignment.ReadAll();
+        var volunteers = _dal.Volunteer.ReadAll().ToDictionary(v => v.VolunteerId, v => v.Name);
         var callList = calls.Select(call =>
         {
             var lastAssignment = assignments
@@ -62,12 +64,15 @@ internal class CallImplementation : BIApi.ICall
                 CallType = (BO.CallTypes)call.CallTypes,
                 StartTime = (DateTime)call.OpeningTime,
                 TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
-                LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
-                TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true
-                    ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment
-                    : null,
-                Status = Tools.GetCallStatus(call.IdCall),
-
+                //////////////////////////////////////////////////////////
+                //לשנות את החישוב הוא לא נכון
+                LastUpdateBy = lastAssignment?.VolunteerId != null && volunteers.TryGetValue(lastAssignment!.VolunteerId, out var name) ? name : null,
+                //LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
+                //TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true
+                //    ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment: null,
+                TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment : null,
+                ///////////////////////////////////////////////////////////
+                Status = Tools.GetCallStatus(call),
                 TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
             };
         }).ToList();
@@ -90,7 +95,7 @@ internal class CallImplementation : BIApi.ICall
         try
         {
             var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
-            var callStatus = Tools.GetCallStatus(call.IdCall);
+            var callStatus = Tools.GetCallStatus(call);
             var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId);
             //.Any(a => a.IdOfRunnerCall == callId);
             if (callStatus != StatusCallType.open || assignments.Any())
@@ -108,7 +113,7 @@ internal class CallImplementation : BIApi.ICall
     }
     public void AddCall(BL.BO.Call callObject)
     {
-        Tools.SendEmailWhenCallOpened(callObject);
+        //Tools.SendEmailWhenCallOpened(callObject);
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
         if (string.IsNullOrWhiteSpace(callObject.AddressOfCall))
@@ -187,7 +192,7 @@ internal class CallImplementation : BIApi.ICall
             // שלב 2: קריאה ל- DAL על מנת להחזיר את הקריאות הפתוחות עם סטטוס מתאים
             var openCalls = _dal.Call.ReadAll()
                 .Where(c => volunteerAssignments.Contains(c.IdCall) &&
-                            (Tools.GetCallStatus(c.IdCall) == StatusCallType.open || Tools.GetCallStatus(c.IdCall) == StatusCallType.openInRisk)) // סינון לפי סטטוס "פתוחה" או "פתוחה בסיכון"
+                            (Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)) // סינון לפי סטטוס "פתוחה" או "פתוחה בסיכון"
                 .Join(_dal.Assignment.ReadAll(), // ביצוע Join בין קריאות להקצאות
                       call => call.IdCall, // חיבור לפי IdCall
                       assignment => assignment.IdOfRunnerCall, // חיבור לפי IdOfRunnerCall בהקצאה
@@ -270,7 +275,7 @@ internal class CallImplementation : BIApi.ICall
                 ?? throw new BO.BlGeneralDatabaseException($"Call with ID={callId} does not exist.");
 
             // שלב 2: בדיקת סטטוס הקריאה
-            var callStatus = Tools.GetCallStatus(callId);
+            var callStatus = Tools.GetCallStatus(call);
             if (callStatus != StatusCallType.open && callStatus != StatusCallType.openInRisk)
                 throw new BO.BlInvalidOperationException("Call is already assigned or has expired.");
 

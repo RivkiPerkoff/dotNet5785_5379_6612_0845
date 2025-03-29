@@ -14,24 +14,24 @@ namespace BlTest
         {
             try
             {
-                Console.WriteLine("Please log in.");
-                Console.Write("Username: ");
-                string username = Console.ReadLine()!;
+                //Console.WriteLine("Please log in.");
+                //Console.Write("Username: ");
+                //string username = Console.ReadLine()!;
 
-                Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
-                string password = Console.ReadLine()!;
+                //Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
+                //string password = Console.ReadLine()!;
 
-                string userRole = s_bl.Volunteer.Login(username, password);
-                Console.WriteLine($"Login successful! Your role is: {userRole}");
+                //string userRole = s_bl.Volunteer.Login(username, password);
+                //Console.WriteLine($"Login successful! Your role is: {userRole}");
 
-                //בדיקה אם התפקיד הוא Manager
-                if (userRole == "Manager")
+                ////בדיקה אם התפקיד הוא Manager
+                //if (userRole == "Manager")
                     ShowMenu();
-                else
-                {
-                    Console.WriteLine("UpDate Volunteer");
-                    UpDateVolunteer();
-                }
+                //else
+                //{
+                //    Console.WriteLine("UpDate Volunteer");
+                //    UpDateVolunteer();
+                //}
             }
             catch (BL.BO.BlDoesNotExistException ex)
             {
@@ -480,22 +480,15 @@ namespace BlTest
 
                                     Console.WriteLine("\nClosed Calls Handled By Volunteer:");
                                     if (!closedCalls.Any())
-                                    {
-                                        Console.WriteLine("אין קריאות סגורות להצגה.");
-                                    }
+                                        Console.WriteLine("No closed calls to display.");
                                     else
                                     {
                                         foreach (var call in closedCalls)
-                                        {
                                             Console.WriteLine(call);
-                                        }
                                     }
-
                                 }
                                 else
-                                {
-                                    throw new BL.BO.BlInvalidOperationException("Invalid input. Volunteer ID must be a number.");
-                                }
+                                    throw new BL.BO.BlInvalidOperationException("Invalid input. Volunteer ID must be a number.");  
                             }
                             catch (BL.BO.BlGeneralDatabaseException ex)
                             {
@@ -814,6 +807,7 @@ namespace BlTest
             //}
 
             Console.WriteLine("Enter the max finish time (yyyy-mm-dd) or leave empty:");
+
             string maxFinishTimeInput = Console.ReadLine();
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);
 
@@ -833,6 +827,7 @@ namespace BlTest
                 CallLongitude = 0,
                 //האם זה הזמן הנוכחי?
                 OpeningTime = DateTime.Now,
+                MaxFinishTime = maxFinishTime,
                 //StatusCallType=StatusCallType.open
             };
         }
@@ -860,7 +855,8 @@ namespace BlTest
                     AddressOfCall = !string.IsNullOrWhiteSpace(address) ? address : /*callToUpdate. FullAddress*/"No Address",
                     OpeningTime = callToUpdate.OpeningTime,
                     MaxFinishTime = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.MaxFinishTime),
-                    CallType = callType ?? callToUpdate.CallType
+                    CallType = callType ?? callToUpdate.CallType,
+
                 };
                 s_bl.Call.UpdateCallDetails(newUpdatedCall);
                 Console.WriteLine("Call updated successfully.");

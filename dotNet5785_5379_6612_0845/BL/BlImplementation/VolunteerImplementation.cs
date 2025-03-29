@@ -113,7 +113,7 @@ internal class VolunteerImplementation : IVolunteer
 
 
                         CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
-                        Status = (RiskRangeStatus)Tools.GetCallStatus(currentAssignment.IdOfRunnerCall)
+                        Status = (RiskRangeStatus)Tools.GetCallStatus(callDetails)
                     };
                 }
             }
