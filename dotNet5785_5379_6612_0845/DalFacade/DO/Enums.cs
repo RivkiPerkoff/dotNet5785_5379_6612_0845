@@ -1,6 +1,7 @@
 ﻿namespace DO;
 public enum FinishCallType
 {
+    None,
     TakenCareof,
     CanceledByVolunteer,
     CanceledByManager,

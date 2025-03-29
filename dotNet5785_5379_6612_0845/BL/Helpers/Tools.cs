@@ -155,8 +155,8 @@ static internal class Tools
 
         //---------------------------------------------------------------
         //// If the call is open and is ending during the risk period
-        //if ((ClockManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
-        //    return StatusCallType.openInRisk;
+        if ((ClockManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
+            return StatusCallType.openInRisk;
 
         // If the call is being treated
         if (lastAssignment != null)

@@ -145,7 +145,7 @@ public static class Initialization
                     id,
                     calls[i].IdCall,
                     volunteerId,
-                    FinishCallType.TakenCareof,
+                    null,
                     randomTime,
                     (DateTime?)randomTime.AddHours(2)
                 ));

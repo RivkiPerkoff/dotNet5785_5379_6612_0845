@@ -43,7 +43,7 @@ internal class CallImplementation : BIApi.ICall
             OpeningTime = (DateTime)call.OpeningTime,
             MaxFinishTime = call.MaxFinishTime,
             CallAssignInLists = null,
-            StatusCallType= Tools.GetCallStatus(call)
+            StatusCallType = Tools.GetCallStatus(call)
         };
     }
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
@@ -64,14 +64,8 @@ internal class CallImplementation : BIApi.ICall
                 CallType = (BO.CallTypes)call.CallTypes,
                 StartTime = (DateTime)call.OpeningTime,
                 TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
-                //////////////////////////////////////////////////////////
-                //לשנות את החישוב הוא לא נכון
                 LastUpdateBy = lastAssignment?.VolunteerId != null && volunteers.TryGetValue(lastAssignment!.VolunteerId, out var name) ? name : null,
-                //LastUpdateBy = lastAssignment != null ? $"Volunteer {lastAssignment.VolunteerId}" : null,
-                //TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true
-                //    ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment: null,
                 TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment : null,
-                ///////////////////////////////////////////////////////////
                 Status = Tools.GetCallStatus(call),
                 TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
             };
@@ -188,7 +182,6 @@ internal class CallImplementation : BIApi.ICall
             var volunteerAssignments = _dal.Assignment.ReadAll()
                 .Where(a => a.VolunteerId == volunteerId) // סינון על פי ת.ז של המתנדב
                 .Select(a => a.IdOfRunnerCall); // קבלת IdOfRunnerCall מתוך ההקצאות
-
             // שלב 2: קריאה ל- DAL על מנת להחזיר את הקריאות הפתוחות עם סטטוס מתאים
             var openCalls = _dal.Call.ReadAll()
                 .Where(c => volunteerAssignments.Contains(c.IdCall) &&
@@ -206,8 +199,6 @@ internal class CallImplementation : BIApi.ICall
                           MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
                           CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
                       });
-
-            // שלב 3: סינון לפי סוג הקריאה אם הועבר filterField
             if (filterField.HasValue)
                 openCalls = openCalls.Where(c =>
                 {
@@ -239,19 +230,18 @@ internal class CallImplementation : BIApi.ICall
             if (assignment.VolunteerId != volunteerId)
                 throw new BO.BlPermissionException("Unauthorized: The volunteer is not assigned to this task.");
 
-            // שלב 3: בדיקה שההקצאה עדיין פתוחה (כלומר, לא טופלה או בוטלה)
-            if (assignment.FinishCallType.HasValue)
-                throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
-
-            // שלב 4: יצירת אובייקט מעודכן עם סטטוס "טופלה" וזמן סיום
-            var updatedAssignment = assignment with
+            if (assignment.FinishCallType == FinishCallType.None)
             {
-                FinishCallType = FinishCallType.TakenCareof,
-                EndTimeForTreatment = ClockManager.Now
-            };
+                var updatedAssignment = assignment with
+                {
+                    FinishCallType = FinishCallType.TakenCareof,
+                    EndTimeForTreatment = ClockManager.Now
+                };
+                _dal.Assignment.Update(updatedAssignment);
 
-            // שלב 5: ביצוע עדכון לשכבת הנתונים
-            _dal.Assignment.Update(updatedAssignment);
+            }
+            else throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -285,17 +275,8 @@ internal class CallImplementation : BIApi.ICall
 
             if (existingAssignment != null)
                 throw new BO.BlInvalidOperationException("Call is already being handled by another volunteer.");
-
-            // שלב 4: יצירת הקצאה חדשה
-            var newAssignment = new DO.Assignment(
-                NextAssignmentId: 0, // ישות חדשה - ה-DAL אמור לקבוע מזהה
-                IdOfRunnerCall: callId,
-                VolunteerId: volunteerId,
-                FinishCallType: null, // לא נקבע סוג סיום בשלב זה
-                EntryTimeForTreatment: ClockManager.Now,
-                EndTimeForTreatment: null
-            );
-
+            var newAssignment= new DO.Assignment(0, callId, volunteerId,  DO.FinishCallType.None, ClockManager.Now, null);
+         
             _dal.Assignment.Create(newAssignment); // הוספת ההקצאה למסד הנתונים
         }
         catch (DO.DalDoesNotExistException ex)
@@ -310,6 +291,7 @@ internal class CallImplementation : BIApi.ICall
 
     public void CancelCallTreatment(int requesterId, int assignmentId)
     {
+
         var assignment = _dal.Assignment.Read(assignmentId)
                          ?? throw new InvalidOperationException("Assignment not found.");
 
@@ -333,7 +315,7 @@ internal class CallImplementation : BIApi.ICall
 
         _dal.Assignment.Update(assignment);
     }
-    public  void UpdateCallDetails(BL.BO.Call callObject)
+    public void UpdateCallDetails(BL.BO.Call callObject)
     {
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
@@ -342,7 +324,7 @@ internal class CallImplementation : BIApi.ICall
         try
         {
 
-            var ( latitude,  longitude) = Helpers.Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
+            var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
             callObject.CallLatitude = latitude;
             callObject.CallLongitude = longitude;
         }
@@ -372,7 +354,7 @@ internal class CallImplementation : BIApi.ICall
 
         // ביצוע העדכון בשכבת הנתונים
         _dal.Call.Update(updatedCall);
-        
+
     }
 
 }

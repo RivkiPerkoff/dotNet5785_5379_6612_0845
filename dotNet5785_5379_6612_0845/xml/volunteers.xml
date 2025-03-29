@@ -3,10 +3,10 @@
   <Volunteer>
     <VolunteerId>1000</VolunteerId>
     <Name>Roni</Name>
-    <PhoneNumber>050-321-7845</PhoneNumber>
-    <EmailOfVolunteer>tamarminhahar@gmail.com</EmailOfVolunteer>
+    <PhoneNumber>Roni@gmail.com</PhoneNumber>
+    <EmailOfVolunteer>050-321-7845</EmailOfVolunteer>
     <PasswordVolunteer>Nazareth</PasswordVolunteer>
-    <AddressVolunteer>AerD8@G/H+)?</AddressVolunteer>
+    <AddressVolunteer>mTy$N4&gt;:g3(P</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>false</IsAvailable>
@@ -14,34 +14,19 @@
     <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
-	<Volunteer>
-		<VolunteerId>1001</VolunteerId>
-		<Name>Rivki</Name>
-		<PhoneNumber>050-321-7845</PhoneNumber>
-		<EmailOfVolunteer>rivki6434@gmail.com </EmailOfVolunteer>
-		<PasswordVolunteer>Nazareth</PasswordVolunteer>
-		<AddressVolunteer>AerD8@G/H+)?</AddressVolunteer>
-		<VolunteerLatitude>0</VolunteerLatitude>
-		<VolunteerLongitude>0</VolunteerLongitude>
-		<IsAvailable>false</IsAvailable>
-		<MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-		<Role>Volunteer</Role>
-		<DistanceType>AirDistance</DistanceType>
-	</Volunteer>
-	<Volunteer>
-		<VolunteerId>1002</VolunteerId>
-		<Name>Avi</Name>
-		<PhoneNumber>050-321-7845</PhoneNumber>
-		<EmailOfVolunteer>beckermanavigail@gmail.com </EmailOfVolunteer>
-		<PasswordVolunteer>Nazareth</PasswordVolunteer>
-		<AddressVolunteer>AerD8@G/H+)?</AddressVolunteer>
-		<VolunteerLatitude>0</VolunteerLatitude>
-		<VolunteerLongitude>0</VolunteerLongitude>
-		<IsAvailable>false</IsAvailable>
-		<MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-		<Role>Volunteer</Role>
-		<DistanceType>AirDistance</DistanceType>
-	</Volunteer>
-	
+  <Volunteer>
+    <VolunteerId>1001</VolunteerId>
+    <Name>Maya</Name>
+    <PhoneNumber>Maya@gmail.com</PhoneNumber>
+    <EmailOfVolunteer>052-987-1243</EmailOfVolunteer>
+    <PasswordVolunteer>Haifa</PasswordVolunteer>
+    <AddressVolunteer>pwtAwU8V*8C&gt;</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
  
 </ArrayOfVolunteer>
