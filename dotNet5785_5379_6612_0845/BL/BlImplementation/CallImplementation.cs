@@ -152,7 +152,6 @@ internal class CallImplementation : BIApi.ICall
     }
     public void AddCall(BL.BO.Call callObject)
     {
-        //Tools.SendEmailWhenCallOpened(callObject);
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
         if (string.IsNullOrWhiteSpace(callObject.AddressOfCall))
@@ -323,7 +322,6 @@ internal class CallImplementation : BIApi.ICall
                     EndTimeForTreatment = ClockManager.Now
                 };
                 _dal.Assignment.Update(updatedAssignment);
-
             }
             else throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
 
@@ -357,12 +355,12 @@ internal class CallImplementation : BIApi.ICall
             // שלב 3: בדיקה שאין הקצאה פתוחה על הקריאה
             var existingAssignment = _dal.Assignment.ReadAll()
                 .FirstOrDefault(a => a.IdOfRunnerCall == callId && a.EndTimeForTreatment == null);
-
+            var newAssignmentId = _dal.Config.CreateAssignmentId();
             if (existingAssignment != null)
                 throw new BO.BlInvalidOperationException("Call is already being handled by another volunteer.");
-            var newAssignment= new DO.Assignment(0, callId, volunteerId,  DO.FinishCallType.None, ClockManager.Now, null);
+            var newAssignment= new DO.Assignment(newAssignmentId, callId, volunteerId,  DO.FinishCallType.None, ClockManager.Now,null);
          
-            _dal.Assignment.Create(newAssignment); // הוספת ההקצאה למסד הנתונים
+            _dal.Assignment.Create(newAssignment); 
         }
         catch (DO.DalDoesNotExistException ex)
         {

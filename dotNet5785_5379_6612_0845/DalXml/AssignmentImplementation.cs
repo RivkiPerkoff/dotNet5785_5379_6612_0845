@@ -16,7 +16,7 @@ internal class AssignmentImplementation : IAssignment
             VolunteerId: (int?)a.Element("VolunteerId") ?? throw new FormatException("Can't convert VolunteerId"),
             FinishCallType: (FinishCallType)Enum.Parse(typeof(FinishCallType), a.Element("FinishCallType")?.Value ?? "TakenCareof"),
             EntryTimeForTreatment: DateTime.Parse(a.Element("EntryTimeForTreatment")?.Value ?? throw new FormatException("Can't parse EntryTimeForTreatment")),
-            EndTimeForTreatment: (DateTime?)a.Element("EndTimeForTreatment")
+            EndTimeForTreatment: DateTime.TryParse(a.Element("EndTimeForTreatment")?.Value, out DateTime endTime) ? (DateTime?)endTime : null
         );
     }
 

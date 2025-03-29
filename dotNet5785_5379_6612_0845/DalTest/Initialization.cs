@@ -76,7 +76,7 @@ public static class Initialization
         // Shuffling the characters to ensure randomness
         return new string(password.ToString().ToCharArray().OrderBy(_ => s_rand.Next()).ToArray());
     }
-   
+
 
     /// <summary>
     /// Creates a list of calls with random data and adds them to the call data source.
@@ -104,11 +104,17 @@ public static class Initialization
             string address = addresses[s_rand.Next(addresses.Length)];
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
-            ///////////////////////////////////////////////////////////////////לשים לב לשעה
-            DateTime start = new DateTime(s_dal.Config.Clock.Year-1, s_dal.Config.Clock.Month, s_dal.Config.Clock.Day, s_dal.Config.Clock.Hour - 5, 0, 0);
+            DateTime start = new DateTime(
+s_dal.Config.Clock.Year - 1,
+s_dal.Config.Clock.Month,
+s_dal.Config.Clock.Day,
+s_dal.Config.Clock.Hour,
+0,
+0
+).AddHours(-5);
             int range = (s_dal.Config.Clock - start).Days;
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days)+1);
+            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days) + 1);
 
             s_dal!.Call.Create(new Call(
                 callId,
@@ -147,7 +153,8 @@ public static class Initialization
                     volunteerId,
                     null,
                     randomTime,
-                    (DateTime?)randomTime.AddHours(2)
+                    //(DateTime?)randomTime.AddHours(2)
+                    null
                 ));
             }
             else
