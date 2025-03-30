@@ -374,7 +374,6 @@ internal class CallImplementation : BIApi.ICall
 
     public void CancelCallTreatment(int requesterId, int assignmentId)
     {
-
         var assignment = _dal.Assignment.Read(assignmentId)
                          ?? throw new InvalidOperationException("Assignment not found.");
 

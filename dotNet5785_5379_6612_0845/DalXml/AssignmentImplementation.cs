@@ -11,13 +11,23 @@ internal class AssignmentImplementation : IAssignment
     static Assignment GetAssignment(XElement a)
     {
         return new Assignment(
-            NextAssignmentId: (int?)a.Element("NextAssignmentId") ?? throw new FormatException("Can't convert NextAssignmentId"),
-            IdOfRunnerCall: (int?)a.Element("IdOfRunnerCall") ?? throw new FormatException("Can't convert IdOfRunnerCall"),
-            VolunteerId: (int?)a.Element("VolunteerId") ?? throw new FormatException("Can't convert VolunteerId"),
-            FinishCallType: (FinishCallType)Enum.Parse(typeof(FinishCallType), a.Element("FinishCallType")?.Value ?? "TakenCareof"),
-            EntryTimeForTreatment: DateTime.Parse(a.Element("EntryTimeForTreatment")?.Value ?? throw new FormatException("Can't parse EntryTimeForTreatment")),
-            EndTimeForTreatment: DateTime.TryParse(a.Element("EndTimeForTreatment")?.Value, out DateTime endTime) ? (DateTime?)endTime : null
-        );
+     NextAssignmentId: (int?)a.Element("NextAssignmentId") ?? throw new FormatException("Can't convert NextAssignmentId"),
+     IdOfRunnerCall: (int?)a.Element("IdOfRunnerCall") ?? throw new FormatException("Can't convert IdOfRunnerCall"),
+     VolunteerId: (int?)a.Element("VolunteerId") ?? throw new FormatException("Can't convert VolunteerId"),
+
+     // בדיקה אם FinishCallType קיים ורק אז להמיר אותו
+     FinishCallType: Enum.TryParse(a.Element("FinishCallType")?.Value, out FinishCallType finishType) ? finishType : FinishCallType.TakenCareof,
+
+     // בדיקה אם EntryTimeForTreatment קיים ורק אז להמיר אותו
+     EntryTimeForTreatment: DateTime.TryParse(a.Element("EntryTimeForTreatment")?.Value, out DateTime entryTime)
+         ? entryTime
+         : throw new FormatException("Can't parse EntryTimeForTreatment"),
+
+     // אם EndTimeForTreatment לא קיים או ריק, החזר null
+     EndTimeForTreatment: DateTime.TryParse(a.Element("EndTimeForTreatment")?.Value, out DateTime endTime)
+         ? (DateTime?)endTime
+         : null
+ );
     }
 
     static XElement CreateAssignmentElement(Assignment item)
