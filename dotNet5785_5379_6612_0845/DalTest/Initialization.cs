@@ -26,24 +26,49 @@ public static class Initialization
         string[] emails = { "Roni@gmail.com", "Maya@gmail.com", "Lior@gmail.com", "Noa@gmail.com", "Dani@gmail.com", "Tomer@gmail.com", "Liat@gmail.com", "Gal@gmail.com", "Yona@gmail.com", "Nir@gmail.com", "Omer@gmail.com", "Shira@gmail.com", "Erez@gmail.com", "Michal@gmail.com", "Hadar@gmail.com" };
         string[] phones = { "050-321-7845", "052-987-1243", "054-123-9876", "053-549-4567", "055-789-1234", "050-987-6789", "054-112-7654", "053-785-6543", "052-312-7890", "055-654-3210", "053-789-5647", "050-125-1234", "052-456-8765", "054-654-4321", "055-123-4567" };
         string[] addresses = { "Nazareth", "Haifa", "Beersheba", "Eilat", "Rosh Ha'ayin", "Afula", "Kiryat Shmona", "Karmiel", "Dimona", "Tiberias", "Safed", "Kiryat Gat", "Ashkelon", "Lod", "Ramat Gan" };
-
-        for (int i = 0; i < names.Length; i++)
+        int id = s_dal!.Config.CreateVolunteerId();
+        string name = names[0];
+        string email = emails[0];
+        string phone = phones[0];
+        string address = addresses[0];
+        double maximumDistance = s_rand.NextDouble() * 50;
+        string password = GenerateRandomPassword(12);
+        Role role = Role.Manager;
+        s_dal!.Volunteer.Create(new Volunteer(
+            id,
+            name,
+            email,
+            phone,
+            password,
+            address,
+            0,
+            0,
+            true,
+            0,
+            role
+        ));
+        for (int i = 1; i < names.Length; i++)
         {
-            int id = s_dal!.Config.CreateVolunteerId();
-            string name = names[i];
-            string email = emails[i];
-            string phone = phones[i];
-            string address = addresses[i];
-            double maximumDistance = s_rand.NextDouble() * 50;
-            string password = GenerateRandomPassword(12);
-
+            id = s_dal!.Config.CreateVolunteerId();
+            name = names[0];
+            email = emails[0];
+            phone = phones[0];
+            address = addresses[0];
+            maximumDistance = s_rand.NextDouble() * 50;
+            password = GenerateRandomPassword(12);
+            role = Role.Volunteer;
             s_dal!.Volunteer.Create(new Volunteer(
                 id,
                 name,
                 email,
                 phone,
+                password,
                 address,
-                password
+                0,
+                0,
+                true,
+                0,
+                role
             ));
         }
     }
@@ -105,7 +130,7 @@ public static class Initialization
             double latitude = s_rand.NextDouble() * (32.0 - 29.0) + 29.0;
             double longitude = s_rand.NextDouble() * (35.5 - 34.0) + 34.0;
             ///////////////////////////////////////////////////////////////////לשים לב לשעה
-            DateTime start = new DateTime(s_dal.Config.Clock.Year - 1,s_dal.Config.Clock.Month,s_dal.Config.Clock.Day,s_dal.Config.Clock.Hour,0,0).AddHours(-5);
+            DateTime start = new DateTime(s_dal.Config.Clock.Year - 1, s_dal.Config.Clock.Month, s_dal.Config.Clock.Day, s_dal.Config.Clock.Hour, 0, 0).AddHours(-5);
             int range = (s_dal.Config.Clock - start).Days;
             DateTime openingTime = start.AddDays(s_rand.Next(range));
             DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days) + 1);

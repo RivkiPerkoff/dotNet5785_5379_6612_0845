@@ -5,25 +5,25 @@
     <Name>Roni</Name>
     <PhoneNumber>Roni@gmail.com</PhoneNumber>
     <EmailOfVolunteer>050-321-7845</EmailOfVolunteer>
-    <PasswordVolunteer>Nazareth</PasswordVolunteer>
-    <AddressVolunteer>{SRiX#qb83xY</AddressVolunteer>
+    <PasswordVolunteer>+6[HT9MHvw]o</PasswordVolunteer>
+    <AddressVolunteer>Nazareth</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>false</IsAvailable>
+    <IsAvailable>true</IsAvailable>
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
+    <Role>Manager</Role>
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
     <VolunteerId>1001</VolunteerId>
-    <Name>Maya</Name>
-    <PhoneNumber>Maya@gmail.com</PhoneNumber>
-    <EmailOfVolunteer>052-987-1243</EmailOfVolunteer>
-    <PasswordVolunteer>Haifa</PasswordVolunteer>
-    <AddressVolunteer>&lt;;Y8Q3Z04C@l</AddressVolunteer>
+    <Name>Roni</Name>
+    <PhoneNumber>Roni@gmail.com</PhoneNumber>
+    <EmailOfVolunteer>050-321-7845</EmailOfVolunteer>
+    <PasswordVolunteer>EYLma2K/X-hN</PasswordVolunteer>
+    <AddressVolunteer>Nazareth</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>false</IsAvailable>
+    <IsAvailable>true</IsAvailable>
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>

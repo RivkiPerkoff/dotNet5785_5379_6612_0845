@@ -800,7 +800,7 @@ namespace BlTest
             string address = Console.ReadLine();
 
 
-            Console.WriteLine("Enter the max finish time (yyyy-mm-dd) or leave empty:");
+            Console.WriteLine("Enter the max finish time (yyyy-MM-dd HH:mm) or leave empty:");
 
             string maxFinishTimeInput = Console.ReadLine();
             DateTime? maxFinishTime = string.IsNullOrEmpty(maxFinishTimeInput) ? null : DateTime.Parse(maxFinishTimeInput);

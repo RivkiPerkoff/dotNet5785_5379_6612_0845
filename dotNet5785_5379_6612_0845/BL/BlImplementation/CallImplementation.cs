@@ -141,46 +141,6 @@ internal class CallImplementation : BIApi.ICall
         _dal.Call.Create(callDO);
     }
 
-    public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
-    {
-        try
-        {
-            // Get all assignments for this volunteer
-            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
-
-            // Get all calls associated with these assignments
-            var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
-            var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
-
-            // Create ClosedCallInList objects using CallManager
-            var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
-            if (filterType.HasValue)
-            {
-                closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
-            }
-
-
-            return sortField switch
-            {
-                BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
-                BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
-                BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
-                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
-                BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
-                BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
-                _ => closedCalls.OrderBy(c => c.Id)
-            };
-        }
-
-        catch (DO.DalDoesNotExistException ex)
-        {
-            throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
-        }
-    }
     //public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType, ClosedCallInListFields? sortField)
     //{
     //    var volunteerAssignments = _dal.Assignment.ReadAll()
@@ -448,5 +408,42 @@ internal class CallImplementation : BIApi.ICall
             _ => callList.OrderBy(c => c.CallId)
         };
         return callList;
+    }
+    public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
+    {
+        try
+        {
+            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
+
+            var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
+            var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
+
+            var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
+            if (filterType.HasValue)
+            {
+                closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+            }
+
+
+            return sortField switch
+            {
+                BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
+                BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
+                BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
+                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
+                _ => closedCalls.OrderBy(c => c.Id)
+            };
+        }
+
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
+        }
     }
 }
