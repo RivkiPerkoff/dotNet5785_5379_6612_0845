@@ -11,7 +11,12 @@ static internal class Tools
 {
     private static IDal s_dal = Factory.Get; //stage 4
 
-
+    /// <summary>
+    /// Retrieves the geographical coordinates (latitude and longitude) for a given address using LocationIQ API.
+    /// </summary>
+    /// <param name="address">The address to get coordinates for.</param>
+    /// <returns>A tuple containing latitude and longitude.</returns>
+    /// <exception cref="Exception">Thrown when the API response is invalid or the address is not found.</exception>
     public static (double, double) GetCoordinatesFromAddress(string address)
     {
         string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
@@ -23,13 +28,12 @@ static internal class Tools
             throw new Exception("Invalid address or API error.");
 
         var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
         using var doc = JsonDocument.Parse(json);
 
         if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
             throw new Exception("Address not found.");
 
-        var root = doc.RootElement[0]; 
+        var root = doc.RootElement[0];
 
         if (!root.TryGetProperty("lat", out var latProperty) || !root.TryGetProperty("lon", out var lonProperty))
             throw new Exception("Missing latitude or longitude in API response.");
@@ -41,7 +45,12 @@ static internal class Tools
         return (latitude, longitude);
     }
 
-
+    /// <summary>
+    /// Calculates the approximate distance (in km) between two addresses using their coordinates.
+    /// </summary>
+    /// <param name="address1">First address.</param>
+    /// <param name="address2">Second address.</param>
+    /// <returns>Estimated distance in kilometers.</returns>
     internal static double DistanceCalculation(string address1, string address2)
     {
         var (latitude1, longitude1) = GetCoordinatesFromAddress(address1);
@@ -52,18 +61,17 @@ static internal class Tools
         return Math.Sqrt(dLat * dLat + dLon * dLon) * 111;
     }
 
-
+    /// <summary>
+    /// Sends an email notification to volunteers when a new call is opened.
+    /// </summary>
+    /// <param name="call">The call details.</param>
     internal static void SendEmailWhenCallOpened(BO.Call call)
     {
-        var volunteer = s_dal.Volunteer.ReadAll();
-        foreach (var item in volunteer)
+        var volunteers = s_dal.Volunteer.ReadAll();
+        foreach (var item in volunteers)
         {
-            //if (item.MaximumDistanceForReceivingCall == null)
-            //{ break; }
-            //else if (item.MaximumDistanceForReceivingCall >= Tools.DistanceCalculation(item.AddressVolunteer!, call.AddressOfCall))
-            //{
-                string subject = "Openning call";
-                string body = $@"
+            string subject = "Opening call";
+            string body = $@"
       Hello {item.Name},
 
      A new call has been opened in your area.
@@ -74,16 +82,23 @@ static internal class Tools
       - Opening Time: {call.OpeningTime}
       - Description: {call.CallDescription}
       - Entry Time for Treatment: {call.MaxFinishTime}
-      -call Status:{call.StatusCallType}
+      - Call Status: {call.StatusCallType}
 
       If you wish to handle this call, please log into the system.
 
       Best regards,  
      Call Management System Of TrampIst";
 
-                Tools.SendEmail(item.EmailOfVolunteer, subject, body);           
+            Tools.SendEmail(item.EmailOfVolunteer, subject, body);
         }
     }
+
+    /// <summary>
+    /// Sends an email with the specified subject and body.
+    /// </summary>
+    /// <param name="toEmail">Recipient email address.</param>
+    /// <param name="subject">Email subject.</param>
+    /// <param name="body">Email body.</param>
     public static void SendEmail(string toEmail, string subject, string body)
     {
         var fromAddress = new MailAddress("trampist.noreply@gmail.com", "TrampIst");
@@ -105,14 +120,19 @@ static internal class Tools
             smtpClient.Send(message);
         }
     }
+
+    /// <summary>
+    /// Determines the status of a call based on assignments and elapsed time.
+    /// </summary>
+    /// <param name="call">The call to evaluate.</param>
+    /// <returns>The status of the call.</returns>
     public static StatusCallType GetCallStatus(this DO.Call call)
     {
-        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.IdOfRunnerCall== call.IdCall).ToList()!;
+        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.IdOfRunnerCall == call.IdCall).ToList()!;
         var lastAssignment = assignments.LastOrDefault(a => a!.IdOfRunnerCall == call.IdCall);
 
         if (call.MaxFinishTime < ClockManager.Now)
             return StatusCallType.Expired;
-
 
         if ((ClockManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
             return StatusCallType.openInRisk;
@@ -121,7 +141,6 @@ static internal class Tools
         {
             if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
                 return StatusCallType.HandlingInRisk;
-
             else
                 return StatusCallType.inHandling;
         }
@@ -129,6 +148,4 @@ static internal class Tools
             return StatusCallType.closed;
         return StatusCallType.open;
     }
-
-    
 }

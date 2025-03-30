@@ -12,22 +12,34 @@ namespace BL.Helpers;
 internal class CallManager
 {
     private static readonly DalApi.IDal s_dal = DalApi.Factory.Get;
+
+    /// <summary>
+    /// Converts a collection of DO.Call objects to BO.Call objects.
+    /// </summary>
+    /// <param name="doCalls">Collection of DO.Call objects.</param>
+    /// <returns>Collection of BO.Call objects.</returns>
     internal static IEnumerable<BO.Call> ConvertToBOCalls(IEnumerable<DO.Call> doCalls)
     {
         return doCalls.Select(doCall => new BO.Call
         {
             IdCall = doCall.IdCall,
-            CallType = (CallTypes)doCall.CallTypes, // המרת סוג קריאה
+            CallType = (CallTypes)doCall.CallTypes, // Convert call type
             CallDescription = doCall.CallDescription,
-            AddressOfCall = doCall.CallAddress != null ? doCall.CallAddress : throw new ArgumentNullException(nameof(doCall.CallAddress)),
+            AddressOfCall = doCall.CallAddress ?? throw new ArgumentNullException(nameof(doCall.CallAddress)),
             CallLongitude = doCall.CallLongitude,
             CallLatitude = doCall.CallLatitude,
             OpeningTime = (DateTime)doCall.OpeningTime,
             MaxFinishTime = doCall.MaxFinishTime,
-            //,
             StatusCallType = (StatusCallType)Tools.GetCallStatus(doCall),
         });
     }
+
+    /// <summary>
+    /// Retrieves the value of a specified field from a CallInList object.
+    /// </summary>
+    /// <param name="call">The CallInList object.</param>
+    /// <param name="field">The field to retrieve.</param>
+    /// <returns>The value of the specified field, or null if not found.</returns>
     internal static object? GetFieldValue(CallInList call, CallInListFields field)
     {
         return field switch
@@ -44,6 +56,13 @@ internal class CallManager
             _ => null
         };
     }
+
+    /// <summary>
+    /// Creates a list of ClosedCallInList objects from calls and assignments.
+    /// </summary>
+    /// <param name="calls">Collection of DO.Call objects.</param>
+    /// <param name="assignments">Collection of DO.Assignment objects.</param>
+    /// <returns>Collection of BO.ClosedCallInList objects.</returns>
     public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
     {
         return calls.Select(call =>
@@ -61,8 +80,4 @@ internal class CallManager
             };
         });
     }
-
-
-    
-
 }

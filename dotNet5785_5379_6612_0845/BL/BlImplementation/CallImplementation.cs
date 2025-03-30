@@ -10,8 +10,15 @@ namespace BL.BlImplementation;
 
 internal class CallImplementation : BIApi.ICall
 {
+
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
+    /// <summary>
+    /// Returns the count of calls grouped by their status (open, in progress, etc.).
+    /// </summary>
+    /// <returns>An array of integers representing the count of calls for each status.</returns>
     public int[] GetCallAmounts()
+
     {
         IEnumerable<DO.Call> doCalls = _dal.Call.ReadAll();
         IEnumerable<BO.Call> boCalls = CallManager.ConvertToBOCalls(doCalls);
@@ -26,7 +33,15 @@ internal class CallImplementation : BIApi.ICall
 
         return statusCounts;
     }
+
+    /// <summary>
+    /// Retrieves the detailed information of a specific call by its ID.
+    /// </summary>
+    /// <param name="CallId">The ID of the call to retrieve.</param>
+    /// <returns>A BO.Call object containing the details of the specified call.</returns>
+    /// <exception cref="Exception">Thrown if the call with the given ID is not found.</exception>
     public BO.Call GetCallDetails(int CallId)
+
     {
         var call = _dal.Call.Read(CallId);
 
@@ -47,6 +62,11 @@ internal class CallImplementation : BIApi.ICall
             StatusCallType = Tools.GetCallStatus(call)
         };
     }
+    /// <summary>
+    /// Deletes a specific call by its ID, only if the call is open and has no assignments.
+    /// </summary>
+    /// <param name="callId">The ID of the call to delete.</param>
+    /// <exception cref="BlGeneralDatabaseException">Thrown if the call cannot be deleted.</exception>
     public void DeleteCall(int callId)
     {
         try
@@ -67,7 +87,14 @@ internal class CallImplementation : BIApi.ICall
             throw new BO.BlGeneralDatabaseException("An unexpected error occurred while geting Volunteer details.", ex);
         }
     }
+    /// <summary>
+    /// Adds a new call to the system with the provided details.
+    /// </summary>
+    /// <param name="callObject">A BO.Call object containing the new call's information.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the callObject is null.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the address is empty or the max finish time is not valid.</exception>
     public void AddCall(BL.BO.Call callObject)
+
     {
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
@@ -90,7 +117,13 @@ internal class CallImplementation : BIApi.ICall
         );
         _dal.Call.Create(callDO);
     }
-
+    /// <summary>
+    /// Retrieves a list of closed calls assigned to a specific volunteer, optionally filtered and sorted.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer.</param>
+    /// <param name="filterType">An optional filter for the type of calls to return.</param>
+    /// <param name="sortField">An optional field to sort the returned calls by.</param>
+    /// <returns>A list of BO.ClosedCallInList objects representing the closed calls for the volunteer.</returns>
     public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
     {
         try
@@ -128,7 +161,13 @@ internal class CallImplementation : BIApi.ICall
             throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
         }
     }
-    
+    /// <summary>
+    /// Retrieves a list of open calls assigned to a specific volunteer, optionally filtered and sorted.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer.</param>
+    /// <param name="filterField">An optional filter for the type of calls to return.</param>
+    /// <param name="sortField">An optional field to sort the returned calls by.</param>
+    /// <returns>A list of OpenCallInList objects representing the open calls for the volunteer.</returns>
     public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
     {
         try
@@ -174,6 +213,13 @@ internal class CallImplementation : BIApi.ICall
             throw new BO.BlGeneralDatabaseException("An error occurred while retrieving the open calls list.", ex);
         }
     }
+    /// <summary>
+    /// Marks a call treatment as complete for a specific volunteer and assignment.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer completing the treatment.</param>
+    /// <param name="assignmentId">The ID of the assignment being completed.</param>
+    /// <exception cref="BlPermissionException">Thrown if the volunteer does not have permission to complete the assignment.</exception>
+    /// <exception cref="BlInvalidOperationException">Thrown if the assignment has already been completed or expired.</exception>
     public void CompleteCallTreatment(int volunteerId, int assignmentId)
     {
         try
@@ -207,7 +253,12 @@ internal class CallImplementation : BIApi.ICall
             throw new BO.BlGeneralDatabaseException("An error occurred while completing the call treatment.", ex);
         }
     }
-
+    /// <summary>
+    /// Assigns a call to a volunteer for treatment.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer being assigned the call.</param>
+    /// <param name="callId">The ID of the call to assign.</param>
+    /// <exception cref="BlInvalidOperationException">Thrown if the call is already assigned or expired.</exception>
     public void ChoosingCallForTreatment(int volunteerId, int callId)
     {
         try
@@ -240,7 +291,12 @@ internal class CallImplementation : BIApi.ICall
             throw new BO.BlGeneralDatabaseException("An error occurred while assigning the call.", ex);
         }
     }
-
+    /// <summary>
+    /// Cancels a call treatment for a specific assignment.
+    /// </summary>
+    /// <param name="requesterId">The ID of the volunteer or manager requesting the cancellation.</param>
+    /// <param name="assignmentId">The ID of the assignment to cancel.</param>
+    /// <exception cref="InvalidOperationException">Thrown if the assignment has already been completed or if the requester is unauthorized.</exception>
     public void CancelCallTreatment(int requesterId, int assignmentId)
     {
         var assignment = _dal.Assignment.Read(assignmentId)
@@ -265,6 +321,13 @@ internal class CallImplementation : BIApi.ICall
 
         _dal.Assignment.Update(assignment);
     }
+
+    /// <summary>
+    /// Updates the details of an existing call.
+    /// </summary>
+    /// <param name="callObject">A BO.Call object containing the updated call information.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the callObject is null.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the call is not found or the update is invalid.</exception>
     public void UpdateCallDetails(BL.BO.Call callObject)
     {
         if (callObject == null)
@@ -300,7 +363,13 @@ internal class CallImplementation : BIApi.ICall
         _dal.Call.Update(updatedCall);
         
     }
-
+    /// <summary>
+    /// Retrieves a filtered and sorted list of calls based on provided parameters.
+    /// </summary>
+    /// <param name="filterBy">An optional field to filter the calls by.</param>
+    /// <param name="filterValue">The value to filter by, corresponding to the filterBy parameter.</param>
+    /// <param name="sortBy">An optional field to sort the calls by.</param>
+    /// <returns>A list of BO.CallInList objects representing the filtered and sorted calls.</returns>
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterBy = null, object? filterValue = null, CallInListFields? sortBy = null)
     {
 
@@ -344,42 +413,5 @@ internal class CallImplementation : BIApi.ICall
             _ => callList.OrderBy(c => c.CallId)
         };
         return callList;
-    }
-    public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
-    {
-        try
-        {
-            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
-
-            var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
-            var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
-
-            var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
-            if (filterType.HasValue)
-            {
-                closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
-            }
-
-
-            return sortField switch
-            {
-                BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
-                BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
-                BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
-                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
-                BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
-                BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
-                _ => closedCalls.OrderBy(c => c.Id)
-            };
-        }
-
-        catch (DO.DalDoesNotExistException ex)
-        {
-            throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
-        }
     }
 }
