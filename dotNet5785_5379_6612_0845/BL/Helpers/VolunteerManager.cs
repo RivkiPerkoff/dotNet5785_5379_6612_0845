@@ -46,12 +46,8 @@ static internal class VolunteerManager
             throw new BO.BlValidationException("Phone must be a valid 10-digit number");
         }
 
-        //if (!IdValidator.IsValid(volunteer.VolunteerId)) // עדכון ל-VolunteerId
-        //{
-        //    throw new BO.BlValidationException("Invalid ID - check digit is incorrect");
-        //}
 
-        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) // עדכון ל-AddressVolunteer
+        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer)) 
         {
             try
             {
@@ -72,22 +68,19 @@ static internal class VolunteerManager
     {
         return new BO.Volunteer
         {
-            VolunteerId = doVolunteer.VolunteerId, // עדכון ל-VolunteerId
+            VolunteerId = doVolunteer.VolunteerId, 
             Name = doVolunteer.Name,
-            PhoneNumber = doVolunteer.PhoneNumber, // עדכון ל-PhoneNumber
-            EmailOfVolunteer = doVolunteer.EmailOfVolunteer, // עדכון ל-EmailOfVolunteer
-            PasswordVolunteer = doVolunteer.PasswordVolunteer, // עדכון ל-PasswordVolunteer
-            AddressVolunteer = doVolunteer.AddressVolunteer, // עדכון ל-AddressVolunteer
+            PhoneNumber = doVolunteer.PhoneNumber, 
+            EmailOfVolunteer = doVolunteer.EmailOfVolunteer,
+            PasswordVolunteer = doVolunteer.PasswordVolunteer,
+            AddressVolunteer = doVolunteer.AddressVolunteer, 
             VolunteerLatitude = doVolunteer.VolunteerLatitude,
             VolunteerLongitude = doVolunteer.VolunteerLongitude,
-            IsAvailable = doVolunteer.IsAvailable, // עדכון ל-IsAvailable
-            MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall, // עדכון ל-MaximumDistanceForReceivingCall
-            Role = (BO.Role)doVolunteer.Role, // המרה בין הטיפוסים
-            DistanceType = (BO.DistanceType)doVolunteer.DistanceType, // המרה בין הטיפוסים
-            //TotalCallsHandled = 0,
-            //TotalCallsCanceled = 0,
-            //SelectedAndExpiredCalls = 0,
-            //CallInProgress = null
+            IsAvailable = doVolunteer.IsAvailable, 
+            MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall, 
+            Role = (BO.Role)doVolunteer.Role, 
+            DistanceType = (BO.DistanceType)doVolunteer.DistanceType, 
+
         };
     }
     public static DO.Volunteer MapToDO(BO.Volunteer volunteer)
@@ -118,7 +111,7 @@ static internal class VolunteerManager
             VolunteerId = doVolunteer.VolunteerId,
             Name = doVolunteer.Name,
             IsAvailable = doVolunteer.IsAvailable,
-            HandledCalls = 0, // ערכים ברירת מחדל או לחשב מתוך הנתונים
+            HandledCalls = 0, 
             CanceledCalls = 0,
             ExpiredCalls = 0,
             CurrentCallId = null,

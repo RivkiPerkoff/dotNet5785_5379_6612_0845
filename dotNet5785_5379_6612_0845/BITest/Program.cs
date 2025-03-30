@@ -14,24 +14,24 @@ namespace BlTest
         {
             try
             {
-                //Console.WriteLine("Please log in.");
-                //Console.Write("Username: ");
-                //string username = Console.ReadLine()!;
+                Console.WriteLine("Please log in.");
+                Console.Write("Username: ");
+                string username = Console.ReadLine()!;
 
-                //Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
-                //string password = Console.ReadLine()!;
+                Console.Write("Enter Password (must be at least 8 characters, contain upper and lower case letters, a digit, and a special character): ");
+                string password = Console.ReadLine()!;
 
-                //string userRole = s_bl.Volunteer.Login(username, password);
-                //Console.WriteLine($"Login successful! Your role is: {userRole}");
+                string userRole = s_bl.Volunteer.Login(username, password);
+                Console.WriteLine($"Login successful! Your role is: {userRole}");
 
-                ////בדיקה אם התפקיד הוא Manager
-                //if (userRole == "Manager")
-                ShowMenu();
-                //else
-                //{
-                //    Console.WriteLine("UpDate Volunteer");
-                //    UpDateVolunteer();
-                //}
+                //בדיקה אם התפקיד הוא Manager
+                if (userRole == "Manager")
+                    ShowMenu();
+                else
+                {
+                    Console.WriteLine("UpDate Volunteer");
+                    UpDateVolunteer();
+                }
             }
             catch (BL.BO.BlDoesNotExistException ex)
             {
@@ -312,7 +312,6 @@ namespace BlTest
                     case 0:
                         return;
                     default:
-                        //כנל לבדיקה האם לזרוק פה
                         Console.WriteLine("Invalid choice. Try again.");
                         break;
                 }
@@ -617,10 +616,7 @@ namespace BlTest
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
                             }
-                            //catch (BlDeletionException ex)
-                            //{
-                            //    Console.WriteLine($"Error: {ex.Message}");
-                            //}
+
                             catch (BlGeneralDatabaseException ex)
                             {
                                 Console.WriteLine($"Error: {ex.Message}");
@@ -839,7 +835,7 @@ namespace BlTest
                 {
                     IdCall = callId,
                     CallDescription = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.CallDescription,
-                    AddressOfCall = !string.IsNullOrWhiteSpace(address) ? address : /*callToUpdate. FullAddress*/"No Address",
+                    AddressOfCall = !string.IsNullOrWhiteSpace(address) ? address :"No Address",
                     OpeningTime = callToUpdate.OpeningTime,
                     MaxFinishTime = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.MaxFinishTime),
                     CallType = callType ?? callToUpdate.CallType,
