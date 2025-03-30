@@ -20,7 +20,7 @@ public interface ICall
     /// <param name="filterValue">The value to filter by (nullable).</param>
     /// <param name="sortField">The enum field of the call entity to sort by (nullable).</param>
     /// <returns>A sorted and filtered collection of call entities.</returns>
-    IEnumerable<BO.CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField);
+    IEnumerable<BO.CallInList> GetFilteredAndSortedCallList(BO.CallInListFields? filterBy = null, object? filterValue = null,BO.CallInListFields? sortBy = null);
 
     /// <summary>
     /// Updates the details of an existing call.
