@@ -11,7 +11,6 @@ internal class AdminImplementation : IAdmin
     {
         DateTime currentClock = ClockManager.Now;
 
-        // יצירת הזמן החדש על פי יחידת הזמן
         DateTime newClock = timeUnit switch
         {
             BO.TimeUnit.Minute => currentClock.AddMinutes(1),
@@ -32,14 +31,12 @@ internal class AdminImplementation : IAdmin
 
     public TimeSpan GetRiskTimeRange()
     {
-        // שימוש במשתנה _dal במקום Factory.Get
         return _dal.Config.RiskRange
                ?? throw new BlInvalidOperationException("RiskRange is not set in the configuration.");
     }
 
     public void SetRiskTimeRange(TimeSpan timeRange)
     {
-        // שימוש במשתנה _dal במקום Factory.Get
         _dal.Config.RiskRange = timeRange;
     }
 
@@ -53,7 +50,6 @@ internal class AdminImplementation : IAdmin
     {
        
         _dal.ResetDB();
-        //DalTest.Initialization.DO();
         ClockManager.UpdateClock(ClockManager.Now);
     }
 }

@@ -5,39 +5,38 @@ using DO;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace BL.BlImplementation;
 
+/// <summary>
+/// Implements the IVolunteer interface to manage volunteer-related operations such as login, details retrieval, adding, updating, deleting, and listing volunteers.
+/// </summary>
 internal class VolunteerImplementation : IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    //public string Login(string username, string password)
-    //{
-    //    try
-    //    {
-    //        var volunteer = _dal.Volunteer.ReadAll()
-    //            .FirstOrDefault(v => v.Name == username && v.PasswordVolunteer == password)
-    //            ?? throw new BlInvalidOperationException("Username or password is incorrect");
 
-    //        return (volunteer.Role).ToString();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteers.", ex);
-    //    }
-    //}
+    /// <summary>
+    /// Allows a volunteer to log in by verifying their username and password.
+    /// </summary>
+    /// <param name="username">The volunteer's username.</param>
+    /// <param name="password">The volunteer's password.</param>
+    /// <returns>The role of the volunteer.</returns>
+    /// <exception cref="BlInvalidOperationException">Thrown when the username or password is incorrect.</exception>
     public string Login(string username, string password)
     {
-
         var volunteer = _dal.Volunteer.ReadAll()
                 .FirstOrDefault(v => v.Name == username && v.PasswordVolunteer == password)
              ?? throw new BlInvalidOperationException("Username or password is incorrect");
 
-        //if (!VolunteerManager.VerifyPassword(password, volunteer.PasswordVolunteer!))
-        //    throw new BO.BlInvalidOperationException($"Invalid Password");
-
         return (volunteer.Role).ToString();
     }
+
+    /// <summary>
+    /// Retrieves a list of volunteers, optionally filtered by availability and sorted based on specified parameters.
+    /// </summary>
+    /// <param name="isActive">If specified, filters the volunteers based on their availability status.</param>
+    /// <param name="sortBy">The sorting parameter for volunteers.</param>
+    /// <returns>A list of volunteers.</returns>
+    /// <exception cref="BlGeneralDatabaseException">Thrown if there is an error accessing data or an unexpected error occurs.</exception>
     public List<BO.VolunteerInList> GetVolunteers(bool? isActive, TypeSortingVolunteers? sortBy)
     {
         try
@@ -59,7 +58,6 @@ internal class VolunteerImplementation : IVolunteer
                 volunteerList.Add(volunteerInList);
             }
 
-            // מיון לפי פרמטרים שנבחרו
             volunteerList = sortBy.HasValue ? sortBy.Value switch
             {
                 BO.TypeSortingVolunteers.VolunteerId => volunteerList.OrderBy(v => v.VolunteerId).ToList(),
@@ -73,7 +71,7 @@ internal class VolunteerImplementation : IVolunteer
                 _ => volunteerList.OrderBy(v => v.VolunteerId).ToList()
             } : volunteerList.OrderBy(v => v.VolunteerId).ToList();
 
-            return volunteerList; // כבר רשימה של BO.VolunteerInList, אין צורך להמיר שוב
+            return volunteerList;
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -85,6 +83,13 @@ internal class VolunteerImplementation : IVolunteer
         }
     }
 
+    /// <summary>
+    /// Retrieves detailed information for a specific volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The volunteer's ID.</param>
+    /// <returns>The volunteer details, including assignments and current call information.</returns>
+    /// <exception cref="BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
+    /// <exception cref="BlGeneralDatabaseException">Thrown if there is an error retrieving volunteer details.</exception>
     public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
         try
@@ -110,8 +115,6 @@ internal class VolunteerImplementation : IVolunteer
                         OpeningTime = (DateTime)callDetails.OpeningTime,
                         MaxFinishTime = callDetails.MaxFinishTime,
                         EntryTimeForTreatment = (DateTime)currentAssignment.EntryTimeForTreatment,
-
-
                         CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
                         Status = (RiskRangeStatus)Tools.GetCallStatus(callDetails)
                     };
@@ -130,9 +133,17 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BlGeneralDatabaseException("An unexpected error occurred while geting Volunteer details.", ex);
+            throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteer details.", ex);
         }
     }
+
+    /// <summary>
+    /// Deletes a volunteer from the system.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer to be deleted.</param>
+    /// <exception cref="BlDoesNotExistException">Thrown if the volunteer does not exist.</exception>
+    /// <exception cref="BlDeletionImpossible">Thrown if the volunteer has active assignments or calls.</exception>
+    /// <exception cref="BlGeneralDatabaseException">Thrown if an error occurs during deletion.</exception>
     public void DeleteVolunteer(int volunteerId)
     {
         try
@@ -142,7 +153,7 @@ internal class VolunteerImplementation : IVolunteer
 
             IEnumerable<DO.Assignment> volunteerAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
             if (volunteerAssignments.Any())
-                throw new BlDeletionImpossible($"Volunteer with ID={volunteerId} cannot be deleted as they have treat/ed calls.");
+                throw new BlDeletionImpossible($"Volunteer with ID={volunteerId} cannot be deleted as they have treated/ed calls.");
 
             _dal.Volunteer.Delete(volunteerId);
         }
@@ -152,21 +163,28 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BlDeletionImpossible($"An unexpected error occurred while trying delete volunteer with ID={volunteerId} .", ex);
+            throw new BlDeletionImpossible($"An unexpected error occurred while trying to delete volunteer with ID={volunteerId} .", ex);
         }
     }
 
+    /// <summary>
+    /// Updates a volunteer's details in the system.
+    /// </summary>
+    /// <param name="requesterId">The ID of the requester who is trying to update the volunteer details.</param>
+    /// <param name="volunteer">The volunteer object containing the updated details.</param>
+    /// <exception cref="BlDoesNotExistException">Thrown if the volunteer or requester does not exist.</exception>
+    /// <exception cref="BlInvalidOperationException">Thrown if the requester does not have the required permissions to update the volunteer's details.</exception>
+    /// <exception cref="BlGeneralDatabaseException">Thrown if an unexpected error occurs during the update operation.</exception>
     public void UpdateVolunteer(int requesterId, BO.Volunteer volunteer)
     {
         try
         {
-
-            var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId) // עדכון ל-VolunteerId
+            var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId)
                                    ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist");
             var requester = _dal.Volunteer.Read(requesterId)
                         ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
 
-            if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId) // עדכון ל-VolunteerId
+            if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId)
             {
                 throw new BlInvalidOperationException("Only admins or the volunteer themselves can update details");
             }
@@ -177,35 +195,39 @@ internal class VolunteerImplementation : IVolunteer
             }
 
             var doVolunteer = VolunteerManager.MapToDO(volunteer);
-
-
             _dal.Volunteer.Update(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist", ex); // עדכון ל-VolunteerId
+            throw new BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist", ex);
         }
         catch (Exception ex)
         {
             throw new BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
-
     }
-    public void AddVolunteer(BO.Volunteer Volunteer)
+
+    /// <summary>
+    /// Adds a new volunteer to the system.
+    /// </summary>
+    /// <param name="volunteer">The volunteer to be added.</param>
+    /// <exception cref="BlDoesNotExistException">Thrown if the volunteer already exists.</exception>
+    /// <exception cref="BlGeneralDatabaseException">Thrown if an unexpected error occurs while adding the volunteer.</exception>
+    public void AddVolunteer(BO.Volunteer volunteer)
     {
         try
         {
-            var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == Volunteer.VolunteerId);
+            var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == volunteer.VolunteerId);
             if (existingVolunteer != null)
-                throw new DO.DalDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists.");
-            VolunteerManager.ValidateVolunteer(Volunteer);
+                throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} already exists.");
+            VolunteerManager.ValidateVolunteer(volunteer);
 
-            DO.Volunteer doVolunteer = VolunteerManager.MapToDO(Volunteer);
+            DO.Volunteer doVolunteer = VolunteerManager.MapToDO(volunteer);
             _dal.Volunteer.Create(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BlDoesNotExistException($"Volunteer with ID={Volunteer.VolunteerId} already exists", ex);
+            throw new BlDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} already exists", ex);
         }
         catch (Exception ex)
         {
@@ -213,6 +235,10 @@ internal class VolunteerImplementation : IVolunteer
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of all volunteers.
+    /// </summary>
+    /// <returns>A list of all volunteers.</returns>
     public IEnumerable<VolunteerInList?> GetVolunteers()
     {
         var volunteers = _dal.Volunteer.ReadAll();

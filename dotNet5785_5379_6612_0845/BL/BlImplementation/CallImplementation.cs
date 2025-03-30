@@ -16,12 +16,12 @@ internal class CallImplementation : BIApi.ICall
         IEnumerable<DO.Call> doCalls = _dal.Call.ReadAll();
         IEnumerable<BO.Call> boCalls = CallManager.ConvertToBOCalls(doCalls);
 
-        int enumSize = Enum.GetValues(typeof(StatusCallType)).Length; // Get the number of enum values
-        int[] statusCounts = new int[enumSize]; // Create an array matching the enum size
+        int enumSize = Enum.GetValues(typeof(StatusCallType)).Length; 
+        int[] statusCounts = new int[enumSize]; 
 
         foreach (var group in boCalls.GroupBy(call => (int)call.StatusCallType))
         {
-            statusCounts[group.Key] = group.Count(); // Using GroupBy.
+            statusCounts[group.Key] = group.Count(); 
         }
 
         return statusCounts;
@@ -47,53 +47,6 @@ internal class CallImplementation : BIApi.ICall
             StatusCallType = Tools.GetCallStatus(call)
         };
     }
-    //public IEnumerable<BO.CallInList> GetFilteredAndSortedCalls(BO.CallInListFields? filterBy = null, object? filterValue = null,BO.CallInListFields? sortBy = null)
-    //{
-
-    //}
-
-    //public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterField, object? filterValue, CallInListFields? sortField)
-    //{
-    //    var calls = _dal.Call.ReadAll();
-    //    var assignments = _dal.Assignment.ReadAll();
-    //    var volunteers = _dal.Volunteer.ReadAll().ToDictionary(v => v.VolunteerId, v => v.Name);
-    //    var callList = calls.Select(call =>
-    //    {
-    //        var lastAssignment = assignments
-    //            .Where(a => a.IdOfRunnerCall == call.IdCall)
-    //            .OrderByDescending(a => a.EntryTimeForTreatment)
-    //            .FirstOrDefault();
-    //        return new CallInList
-    //        {
-    //            Id = call.IdCall,
-    //            CallId = call.IdCall,
-    //            CallType = (BO.CallTypes)call.CallTypes,
-    //            StartTime = (DateTime)call.OpeningTime,
-    //            TimeToEnd = call.MaxFinishTime.HasValue ? call.MaxFinishTime - DateTime.Now : null,
-    //            //////////////////////////////////////////////////////////
-    //            //לשנות את החישוב הוא לא נכון
-    //            LastUpdateBy = lastAssignment?.VolunteerId != null && volunteers.TryGetValue(lastAssignment!.VolunteerId, out var name) ? name : null,
-
-    //            TimeTocompleteTreatment = lastAssignment?.EndTimeForTreatment.HasValue == true ? lastAssignment.EndTimeForTreatment - lastAssignment.EntryTimeForTreatment : null,
-    //            ///////////////////////////////////////////////////////////
-    //            Status = Tools.GetCallStatus(call),
-    //            TotalAssignment = assignments.Count(a => a.IdOfRunnerCall == call.IdCall)
-    //        };
-    //    }).ToList();
-
-    //    if (filterField != null && filterValue != null)
-    //    {
-    //        callList = callList.Where(call =>
-    //            CallManager.GetFieldValue(call, filterField.Value)?.Equals(filterValue) == true
-    //        ).ToList();
-    //    }
-    //    callList = sortField switch
-    //    {
-    //        null => callList.OrderBy(c => c.CallId).ToList(),
-    //        _ => callList.OrderBy(c => CallManager.GetFieldValue(c, sortField.Value)).ToList()
-    //    };
-    //    return callList;
-    //}
     public void DeleteCall(int callId)
     {
         try
@@ -101,7 +54,6 @@ internal class CallImplementation : BIApi.ICall
             var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
             var callStatus = Tools.GetCallStatus(call);
             var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId);
-            //.Any(a => a.IdOfRunnerCall == callId);
             if (callStatus != StatusCallType.open || assignments.Any())
                 throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
             _dal.Call.Delete(callId);
@@ -125,7 +77,6 @@ internal class CallImplementation : BIApi.ICall
             throw new InvalidOperationException("Max finish time must be greater than opening time.");
         var coordinates = Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
 
-        // Generate DO object
         var callDO = new DO.Call
         (
             idCall: callObject.IdCall,
@@ -137,52 +88,47 @@ internal class CallImplementation : BIApi.ICall
             maxFinishTime: callObject.MaxFinishTime ?? default,
             CallTypes: (DO.CallTypes)callObject.CallType
         );
-        // Add call to data layer
         _dal.Call.Create(callDO);
     }
 
-    //public IEnumerable<ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType, ClosedCallInListFields? sortField)
-    //{
-    //    var volunteerAssignments = _dal.Assignment.ReadAll()
-    //        .Where(a => a.VolunteerId == volunteerId)
-    //        .Select(a => a.IdOfRunnerCall);
+    public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
+    {
+        try
+        {
+            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
 
-    //    var closedCalls = _dal.Call.ReadAll()
-    //        .Where(c => volunteerAssignments.Contains(c.IdCall))
-    //        .Join(_dal.Assignment.ReadAll(),
-    //              call => call.IdCall,
-    //              assignment => assignment.IdOfRunnerCall,
-    //              (call, assignment) => new ClosedCallInList
-    //              {
-    //                  Id = call.IdCall,
-    //                  CallTypes = call.CallTypes,
-    //                  Address = call.CallAddress ?? string.Empty,
-    //                  OpeningTime = (DateTime)call.OpeningTime,
-    //                  EntryTimeForTreatment = assignment.EntryTimeForTreatment ?? default,
-    //                  EndTimeForTreatment = assignment.EndTimeForTreatment,
-    //                  FinishCallType = assignment.FinishCallType
-    //              })
-    //        .Where(c => c.FinishCallType != null);
+            var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
+            var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
 
-    //    if (filterType.HasValue)
-    //    {
-    //        closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
-    //    }
+            var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
+            if (filterType.HasValue)
+            {
+                closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+            }
 
-    //    if (sortField.HasValue)
-    //    {
-    //        closedCalls = closedCalls.OrderBy(c => c.GetType()
-    //                                                .GetProperty(sortField.ToString())?
-    //                                                .GetValue(c))
-    //                                 .ThenBy(c => c.Id);
-    //    }
-    //    else
-    //    {
-    //        closedCalls = closedCalls.OrderBy(c => c.Id);
-    //    }
 
-    //    return closedCalls.ToList(); // הפיכת IEnumerable ל- List
-    //}
+            return sortField switch
+            {
+                BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
+                BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
+                BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
+                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
+                _ => closedCalls.OrderBy(c => c.Id)
+            };
+        }
+
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
+        }
+    }
+    
     public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
     {
         try
@@ -266,19 +212,16 @@ internal class CallImplementation : BIApi.ICall
     {
         try
         {
-            // שלב 1: שליפת נתוני המתנדב והקריאה מה-DAL
             var volunteer = _dal.Volunteer.Read(volunteerId)
                 ?? throw new BO.BlGeneralDatabaseException($"Volunteer with ID={volunteerId} does not exist.");
 
             var call = _dal.Call.Read(callId)
                 ?? throw new BO.BlGeneralDatabaseException($"Call with ID={callId} does not exist.");
 
-            // שלב 2: בדיקת סטטוס הקריאה
             var callStatus = Tools.GetCallStatus(call);
             if (callStatus != StatusCallType.open && callStatus != StatusCallType.openInRisk)
                 throw new BO.BlInvalidOperationException("Call is already assigned or has expired.");
 
-            // שלב 3: בדיקה שאין הקצאה פתוחה על הקריאה
             var existingAssignment = _dal.Assignment.ReadAll()
                 .FirstOrDefault(a => a.IdOfRunnerCall == callId && a.EndTimeForTreatment == null);
             var newAssignmentId = _dal.Config.CreateAssignmentId();
@@ -312,7 +255,6 @@ internal class CallImplementation : BIApi.ICall
         if ((assignment.VolunteerId != requesterId) && (requester.Role != DO.Role.Manager))
             throw new InvalidOperationException("Unauthorized cancellation.");
 
-        // יצירת עותק חדש עם השדות המעודכנים
         assignment = assignment with
         {
             EndTimeForTreatment = ClockManager.Now,
@@ -328,7 +270,6 @@ internal class CallImplementation : BIApi.ICall
         if (callObject == null)
             throw new ArgumentNullException(nameof(callObject));
 
-        // ניסיון להשיג קואורדינטות מהכתובת
         try
         {
 
@@ -341,26 +282,21 @@ internal class CallImplementation : BIApi.ICall
             throw new InvalidOperationException("Invalid address: Unable to retrieve coordinates.");
         }
 
-        // בדיקה לוגית: יש לוודא ש־MaxFinishTime קיים ושזמן סיום גדול מזמן הפתיחה
         if (!callObject.MaxFinishTime.HasValue || callObject.MaxFinishTime.Value <= callObject.OpeningTime)
             throw new InvalidOperationException("Invalid time range: Max finish time must be after opening time.");
 
-        // שליפת הקריאה מה-DAL (שכבת הנתונים)
         var existingCall = _dal.Call.Read(callObject.IdCall)
                             ?? throw new InvalidOperationException("Call not found.");
 
-        // יצירת אובייקט DO חדש עם הערכים המעודכנים באמצעות with-expression
         var updatedCall = existingCall with
         {
             CallAddress = callObject.AddressOfCall,
             CallLatitude = callObject.CallLatitude,
             CallLongitude = callObject.CallLongitude,
             MaxFinishTime = callObject.MaxFinishTime,
-            // המרת סוג הקריאה מ-BO ל-DO. יש לוודא ששני ה-enum תואמים:
             CallTypes = (DO.CallTypes)callObject.CallType
         };
 
-        // ביצוע העדכון בשכבת הנתונים
         _dal.Call.Update(updatedCall);
         
     }
