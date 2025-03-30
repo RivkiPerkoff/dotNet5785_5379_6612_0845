@@ -76,7 +76,7 @@ public static class Initialization
         // Shuffling the characters to ensure randomness
         return new string(password.ToString().ToCharArray().OrderBy(_ => s_rand.Next()).ToArray());
     }
-   
+
 
     /// <summary>
     /// Creates a list of calls with random data and adds them to the call data source.
@@ -108,7 +108,7 @@ public static class Initialization
             DateTime start = new DateTime(s_dal.Config.Clock.Year - 1,s_dal.Config.Clock.Month,s_dal.Config.Clock.Day,s_dal.Config.Clock.Hour,0,0).AddHours(-5);
             int range = (s_dal.Config.Clock - start).Days;
             DateTime openingTime = start.AddDays(s_rand.Next(range));
-            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days)+1);
+            DateTime maxTimeToFinish = openingTime.AddDays(s_rand.Next((s_dal.Config.Clock - openingTime).Days) + 1);
 
             s_dal!.Call.Create(new Call(
                 callId,
@@ -145,9 +145,10 @@ public static class Initialization
                     id,
                     calls[i].IdCall,
                     volunteerId,
-                    FinishCallType.TakenCareof,
+                    null,
                     randomTime,
-                    (DateTime?)randomTime.AddHours(2)
+                    //(DateTime?)randomTime.AddHours(2)
+                    null
                 ));
             }
             else

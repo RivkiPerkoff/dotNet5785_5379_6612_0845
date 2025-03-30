@@ -724,6 +724,7 @@ namespace BlTest
 
                                 s_bl.Call.CompleteCallTreatment(volunteerId, assignmentId);
 
+
                                 Console.WriteLine("Call completion updated successfully!");
                             }
                             catch (BL.BO.BlDoesNotExistException ex)
