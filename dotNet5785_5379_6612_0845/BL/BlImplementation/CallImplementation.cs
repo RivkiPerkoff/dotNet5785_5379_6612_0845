@@ -11,21 +11,23 @@ namespace BL.BlImplementation;
 internal class CallImplementation : BIApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
     public int[] GetCallAmounts()
     {
         IEnumerable<DO.Call> doCalls = _dal.Call.ReadAll();
         IEnumerable<BO.Call> boCalls = CallManager.ConvertToBOCalls(doCalls);
 
-        int enumSize = Enum.GetValues(typeof(StatusCallType)).Length; 
-        int[] statusCounts = new int[enumSize]; 
+        int enumSize = Enum.GetValues(typeof(StatusCallType)).Length;
+        int[] statusCounts = new int[enumSize];
 
         foreach (var group in boCalls.GroupBy(call => (int)call.StatusCallType))
         {
-            statusCounts[group.Key] = group.Count(); 
+            statusCounts[group.Key] = group.Count();
         }
 
         return statusCounts;
     }
+
     public BO.Call GetCallDetails(int CallId)
     {
         var call = _dal.Call.Read(CallId);
@@ -136,38 +138,35 @@ internal class CallImplementation : BIApi.ICall
             var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
 
             var volunteerAssignments = _dal.Assignment.ReadAll()
-                .Where(a => a.VolunteerId == volunteerId) // סינון על פי ת.ז של המתנדב
-                .Select(a => a.IdOfRunnerCall); // קבלת IdOfRunnerCall מתוך ההקצאות
-            // שלב 2: קריאה ל- DAL על מנת להחזיר את הקריאות הפתוחות עם סטטוס מתאים
+                .Where(a => a.VolunteerId == volunteerId) 
+                .Select(a => a.IdOfRunnerCall); 
             var openCalls = _dal.Call.ReadAll()
                 .Where(c => volunteerAssignments.Contains(c.IdCall) &&
-                            (Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)) // סינון לפי סטטוס "פתוחה" או "פתוחה בסיכון"
-                .Join(_dal.Assignment.ReadAll(), // ביצוע Join בין קריאות להקצאות
-                      call => call.IdCall, // חיבור לפי IdCall
-                      assignment => assignment.IdOfRunnerCall, // חיבור לפי IdOfRunnerCall בהקצאה
-                      (call, assignment) => new OpenCallInList // יצירת אובייקטים מסוג OpenCallInList
+                            (Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)) 
+                .Join(_dal.Assignment.ReadAll(), 
+                      call => call.IdCall, 
+                      assignment => assignment.IdOfRunnerCall,
+                      (call, assignment) => new OpenCallInList 
                       {
-                          Id = call.IdCall, // ID של הקריאה
-                          CallTypes = call.CallTypes, // מיפוי CallTypes ל-BO
-                          CallDescription = call.CallDescription, // תיאור הקריאה
-                          Address = call.CallAddress, // כתובת הקריאה
-                          OpeningTime = (DateTime)call.OpeningTime, // זמן פתיחת הקריאה
-                          MaxFinishTime = call.MaxFinishTime, // זמן סיום מקסימלי לקריאה
-                          CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress) // חישוב המרחק בין המתנדב לקריאה
+                          Id = call.IdCall, 
+                          CallTypes = call.CallTypes, 
+                          CallDescription = call.CallDescription, 
+                          Address = call.CallAddress, 
+                          OpeningTime = (DateTime)call.OpeningTime,
+                          MaxFinishTime = call.MaxFinishTime,
+                          CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress)
                       });
             if (filterField.HasValue)
                 openCalls = openCalls.Where(c =>
                 {
                     return (BO.CallTypes)c.CallTypes == filterField.Value;
-                }); // סינון לפי סוג הקריאה
+                }); 
 
-            // שלב 4: מיון הקריאות לפי שדה הסדר (sortField), ברירת מחדל לפי ID של הקריאה
             openCalls = sortField.HasValue
-                ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c)) // מיון לפי השדה שנבחר
-                : openCalls.OrderBy(c => c.Id); // אם לא הועבר sortField, מיון לפי ID של הקריאה
+                ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c)) 
+                : openCalls.OrderBy(c => c.Id); 
 
-            // החזרת רשימת הקריאות הממוינת והמסוננת בצורה מוחלטת
-            return openCalls.ToList(); // יש להמיר את ה- IEnumerable ל- List
+            return openCalls.ToList(); 
         }
         catch (Exception ex)
         {
@@ -178,11 +177,9 @@ internal class CallImplementation : BIApi.ICall
     {
         try
         {
-            // שלב 1: קריאת ההקצאה משכבת הנתונים
             var assignment = _dal.Assignment.Read(assignmentId)
                 ?? throw new DO.DalDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
 
-            // שלב 2: בדיקת הרשאה - האם המתנדב שמבקש הוא זה שעליו רשומה ההקצאה
             if (assignment.VolunteerId != volunteerId)
                 throw new BO.BlPermissionException("Unauthorized: The volunteer is not assigned to this task.");
 
