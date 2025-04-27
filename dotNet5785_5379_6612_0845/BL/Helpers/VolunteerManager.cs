@@ -10,6 +10,7 @@ using BL.BO;
 using BL.Helpers;
 using DO;
 using BL.BIApi;
+using Helpers;
 
 namespace BL.Helpers;
 
@@ -18,6 +19,7 @@ namespace BL.Helpers;
 /// </summary>
 static internal class VolunteerManager
 {
+    internal static ObserverManager Observers = new();
     private static IDal s_dal = Factory.Get;
 
     /// <summary>
@@ -28,6 +30,32 @@ static internal class VolunteerManager
     /// <returns>Updated DateTime value.</returns>
     public static DateTime PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
     {
+        bool studentUpdated; //stage 5
+                             //if a specific student info is changed - then call NotifyItemUpdated(id, false)
+                             //and after all - call NotifyListUpdated();
+        lock (AdminManager.blMutex) //stage 7
+        {
+            studentUpdated = false; //stage 5
+            var list = s_dal.Volunteer.ReadAll().ToList(); //stage 4
+            foreach (var doStudent in list) //stage 4
+            {
+                //if student study for more than MaxRange years
+                //then student should be automatically updated to 'not active'
+                if (AdminManager.Now.Year - doStudent.RegistrationDate?.Year >=
+                s_dal.Config.RiskRange) //stage 4
+                {
+                    studentUpdated = true; //stage 5
+                    s_dal.Volunteer.Update(doStudent with { IsActive = false }); //stage 4
+                    Observers.NotifyItemUpdated(doStudent.VolunteerId); //stage 5
+                }
+            }
+        }
+        //if the current year was changed
+        //it means that we need to announce that the whole list of student was updated
+        bool yearChanged = oldClock.Year != newClock.Year; //stage 5
+        if (yearChanged || studentUpdated) //stage 5
+            Observers.NotifyListUpdated(); //stage 5
+
         return DateTime.Now;
     }
 

@@ -1,9 +1,11 @@
 ﻿using BL.BO;
+using BlApi;
 using DO;
+using System;
 
 namespace BL.BIApi;
 
-public interface ICall
+public interface ICall : IObservable
 {
     /// <summary>
     /// Retrieves an array of call amounts grouped by their status.

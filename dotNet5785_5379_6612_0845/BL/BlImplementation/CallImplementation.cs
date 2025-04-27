@@ -3,6 +3,7 @@ using BL.BO;
 using BL.Helpers;
 using DalApi;
 using DO;
+using Helpers;
 using NSubstitute.Core;
 using System.Net;
 
@@ -77,6 +78,8 @@ internal class CallImplementation : BIApi.ICall
             if (callStatus != StatusCallType.open || assignments.Any())
                 throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
             _dal.Call.Delete(callId);
+            CallManager.Observers.NotifyListUpdated(); //stage 5
+
         }
         catch (DO.DalDeletionImpossible ex)
         {
@@ -116,6 +119,8 @@ internal class CallImplementation : BIApi.ICall
             CallTypes: (DO.CallTypes)callObject.CallType
         );
         _dal.Call.Create(callDO);
+        CallManager.Observers.NotifyListUpdated(); //stage 5
+
     }
     /// <summary>
     /// Retrieves a list of closed calls assigned to a specific volunteer, optionally filtered and sorted.
@@ -232,9 +237,11 @@ internal class CallImplementation : BIApi.ICall
                 var updatedAssignment = assignment with
                 {
                     FinishCallType = FinishCallType.TakenCareof,
-                    EndTimeForTreatment = ClockManager.Now
+                    EndTimeForTreatment = AdminManager.Now
                 };
                 _dal.Assignment.Update(updatedAssignment);
+                CallManager.Observers.NotifyItemUpdated(updatedAssignment.IdOfRunnerCall); //stage 5
+                CallManager.Observers.NotifyListUpdated();
             }
             else throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
 
@@ -273,7 +280,7 @@ internal class CallImplementation : BIApi.ICall
             var newAssignmentId = _dal.Config.CreateAssignmentId();
             if (existingAssignment != null)
                 throw new BO.BlInvalidOperationException("Call is already being handled by another volunteer.");
-            var newAssignment= new DO.Assignment(newAssignmentId, callId, volunteerId,  DO.FinishCallType.None, ClockManager.Now,null);
+            var newAssignment= new DO.Assignment(newAssignmentId, callId, volunteerId,  DO.FinishCallType.None, AdminManager.Now,null);
          
             _dal.Assignment.Create(newAssignment); 
         }
@@ -308,13 +315,15 @@ internal class CallImplementation : BIApi.ICall
 
         assignment = assignment with
         {
-            EndTimeForTreatment = ClockManager.Now,
+            EndTimeForTreatment = AdminManager.Now,
             FinishCallType = (assignment.VolunteerId == requesterId)
                 ? DO.FinishCallType.CanceledByVolunteer
                 : DO.FinishCallType.CanceledByManager
         };
 
         _dal.Assignment.Update(assignment);
+        CallManager.Observers.NotifyItemUpdated(assignment.IdOfRunnerCall); //stage 5
+        CallManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -356,7 +365,10 @@ internal class CallImplementation : BIApi.ICall
         };
 
         _dal.Call.Update(updatedCall);
-        
+        CallManager.Observers.NotifyItemUpdated(updatedCall.IdCall); //stage 5
+        CallManager.Observers.NotifyListUpdated(); //stage 5
+
+
     }
     /// <summary>
     /// Retrieves a filtered and sorted list of calls based on provided parameters.
@@ -409,4 +421,12 @@ internal class CallImplementation : BIApi.ICall
         };
         return callList;
     }
+    public void AddObserver(Action listObserver) =>
+    VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
 }

@@ -1,5 +1,6 @@
 ﻿using BL.BO;
 using DalApi;
+using Helpers;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace BL.Helpers;
 
 internal class CallManager
 {
+    internal static ObserverManager Observers = new();
     private static readonly DalApi.IDal s_dal = DalApi.Factory.Get;
 
     /// <summary>

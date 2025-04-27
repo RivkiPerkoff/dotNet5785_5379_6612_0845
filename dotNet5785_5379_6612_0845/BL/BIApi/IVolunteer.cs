@@ -1,4 +1,6 @@
 ﻿using BL.BO;
+using BlApi;
+using System;
 
 namespace BL.BIApi;
 
@@ -6,7 +8,7 @@ namespace BL.BIApi;
 /// Interface for Volunteer service logic.
 /// Contains methods required for managing and interacting with volunteers.
 /// </summary>
-public interface IVolunteer
+public interface IVolunteer : IObservable
 {
     /// <summary>
     /// Login method for the system.

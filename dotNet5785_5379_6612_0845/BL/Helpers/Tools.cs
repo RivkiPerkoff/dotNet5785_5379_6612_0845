@@ -4,6 +4,7 @@ using DO;
 using System.Net.Mail;
 using System.Net;
 using System.Text.Json;
+using Helpers;
 
 namespace BL.Helpers;
 
@@ -131,15 +132,15 @@ static internal class Tools
         List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.IdOfRunnerCall == call.IdCall).ToList()!;
         var lastAssignment = assignments.LastOrDefault(a => a!.IdOfRunnerCall == call.IdCall);
 
-        if (call.MaxFinishTime < ClockManager.Now)
+        if (call.MaxFinishTime < AdminManager.Now)
             return StatusCallType.Expired;
 
-        if ((ClockManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
+        if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
             return StatusCallType.openInRisk;
 
         if (lastAssignment != null)
         {
-            if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+            if ((AdminManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
                 return StatusCallType.HandlingInRisk;
             else
                 return StatusCallType.inHandling;

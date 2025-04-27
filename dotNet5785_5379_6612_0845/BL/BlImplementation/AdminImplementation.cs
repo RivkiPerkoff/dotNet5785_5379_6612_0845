@@ -1,6 +1,7 @@
 ﻿using BL.BIApi;
 using BL.BO;
 using BL.Helpers;
+using Helpers;
 
 namespace BL.BlImplementation;
 /// <summary>
@@ -18,7 +19,7 @@ internal class AdminImplementation : IAdmin
     /// <exception cref="BlDoesNotExistException">Thrown when an invalid time unit is provided.</exception>
     public void AdvanceClock(BO.TimeUnit timeUnit)
     {
-        DateTime currentClock = ClockManager.Now;
+        DateTime currentClock = AdminManager.Now;
 
         DateTime newClock = timeUnit switch
         {
@@ -30,7 +31,7 @@ internal class AdminImplementation : IAdmin
             _ => throw new BlDoesNotExistException($"Invalid time unit {nameof(timeUnit)}")
         };
 
-        ClockManager.UpdateClock(newClock);
+        AdminManager.UpdateClock(newClock);
     }
 
     /// <summary>
@@ -39,7 +40,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current date and time.</returns>
     public DateTime GetClock()
     {
-        return ClockManager.Now;
+        return AdminManager.Now;
     }
 
     /// <summary>
@@ -49,7 +50,7 @@ internal class AdminImplementation : IAdmin
     /// <exception cref="BlInvalidOperationException">Thrown when RiskRange is not set.</exception>
     public TimeSpan GetRiskTimeRange()
     {
-        return _dal.Config.RiskRange
+        return AdminManager.MaxRange
                ?? throw new BlInvalidOperationException("RiskRange is not set in the configuration.");
     }
 
@@ -59,7 +60,7 @@ internal class AdminImplementation : IAdmin
     /// <param name="timeRange">The time span to set as the new risk range.</param>
     public void SetRiskTimeRange(TimeSpan timeRange)
     {
-        _dal.Config.RiskRange = timeRange;
+        AdminManager.MaxRange = timeRange;
     }
 
     /// <summary>
@@ -67,8 +68,10 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void InitializeDatabase()
     {
-        DalTest.Initialization.DO();
-        ClockManager.UpdateClock(ClockManager.Now);
+        //DalTest.Initialization.DO();
+        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.InitializeDB();
+
     }
 
     /// <summary>
@@ -76,7 +79,19 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDatabase()
     {
-        _dal.ResetDB();
-        ClockManager.UpdateClock(ClockManager.Now);
+        //_dal.ResetDB();
+        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.ResetDB();
     }
+    #region Stage 5
+    public void AddClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers += clockObserver;
+    public void RemoveClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers -= clockObserver;
+    public void AddConfigObserver(Action configObserver) =>
+    AdminManager.ConfigUpdatedObservers += configObserver;
+    public void RemoveConfigObserver(Action configObserver) =>
+    AdminManager.ConfigUpdatedObservers -= configObserver;
+    #endregion Stage 5
+
 }

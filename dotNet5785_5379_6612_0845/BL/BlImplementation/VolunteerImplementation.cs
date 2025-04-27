@@ -156,6 +156,8 @@ internal class VolunteerImplementation : IVolunteer
                 throw new BlDeletionImpossible($"Volunteer with ID={volunteerId} cannot be deleted as they have treated/ed calls.");
 
             _dal.Volunteer.Delete(volunteerId);
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
+
         }
         catch (DO.DalDoesNotExistException)
         {
@@ -196,6 +198,8 @@ internal class VolunteerImplementation : IVolunteer
 
             var doVolunteer = VolunteerManager.MapToDO(volunteer);
             _dal.Volunteer.Update(doVolunteer);
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id); //stage 5
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -224,6 +228,7 @@ internal class VolunteerImplementation : IVolunteer
 
             DO.Volunteer doVolunteer = VolunteerManager.MapToDO(volunteer);
             _dal.Volunteer.Create(doVolunteer);
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -253,4 +258,14 @@ internal class VolunteerImplementation : IVolunteer
 
         return volunteerList;
     }
+    public void AddObserver(Action listObserver) =>
+    VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+
 }
+
