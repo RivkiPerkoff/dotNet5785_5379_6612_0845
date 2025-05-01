@@ -30,12 +30,12 @@ static internal class VolunteerManager
     /// <returns>Updated DateTime value.</returns>
     public static DateTime PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
     {
-        bool studentUpdated; //stage 5
+        bool volunteerUpdated; //stage 5
                              //if a specific student info is changed - then call NotifyItemUpdated(id, false)
                              //and after all - call NotifyListUpdated();
         lock (AdminManager.blMutex) //stage 7
         {
-            studentUpdated = false; //stage 5
+            volunteerUpdated = false; //stage 5
             var list = s_dal.Volunteer.ReadAll().ToList(); //stage 4
             foreach (var doStudent in list) //stage 4
             {
@@ -44,7 +44,7 @@ static internal class VolunteerManager
                 if (AdminManager.Now.Year - doStudent.RegistrationDate?.Year >=
                 s_dal.Config.RiskRange) //stage 4
                 {
-                    studentUpdated = true; //stage 5
+                    volunteerUpdated = true; //stage 5
                     s_dal.Volunteer.Update(doStudent with { IsActive = false }); //stage 4
                     Observers.NotifyItemUpdated(doStudent.VolunteerId); //stage 5
                 }
@@ -53,7 +53,7 @@ static internal class VolunteerManager
         //if the current year was changed
         //it means that we need to announce that the whole list of student was updated
         bool yearChanged = oldClock.Year != newClock.Year; //stage 5
-        if (yearChanged || studentUpdated) //stage 5
+        if (yearChanged || volunteerUpdated) //stage 5
             Observers.NotifyListUpdated(); //stage 5
 
         return DateTime.Now;

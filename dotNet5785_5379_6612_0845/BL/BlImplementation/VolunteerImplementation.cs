@@ -198,7 +198,7 @@ internal class VolunteerImplementation : IVolunteer
 
             var doVolunteer = VolunteerManager.MapToDO(volunteer);
             _dal.Volunteer.Update(doVolunteer);
-            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id); //stage 5
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.VolunteerId); //stage 5
             VolunteerManager.Observers.NotifyListUpdated(); //stage 5
         }
         catch (DO.DalDoesNotExistException ex)

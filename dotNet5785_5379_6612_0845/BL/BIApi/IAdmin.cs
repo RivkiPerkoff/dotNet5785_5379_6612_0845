@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BL.BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,7 @@ public interface IAdmin
     void RemoveConfigObserver(Action configObserver);
     void AddClockObserver(Action clockObserver);
     void RemoveClockObserver(Action clockObserver);
+    void AddClockObserver(TimeUnit minute);
     #endregion Stage 5
 
 }
