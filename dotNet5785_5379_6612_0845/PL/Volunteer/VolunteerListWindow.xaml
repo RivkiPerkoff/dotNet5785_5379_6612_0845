@@ -25,6 +25,7 @@
             <ComboBox Grid.Column="1" HorizontalAlignment="Left" Width="400"/>
         </Grid>
         <DataGrid Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+
     </Grid>
 </Window>
