@@ -13,6 +13,8 @@ namespace BL.BIApi;
 /// </summary>
 public interface IAdmin
 {
+    public event Action ClockUpdatedObservers;
+
     /// <summary>
     /// Gets the current system clock value.
     /// </summary>

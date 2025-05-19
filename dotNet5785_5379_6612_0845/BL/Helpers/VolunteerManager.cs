@@ -37,16 +37,16 @@ static internal class VolunteerManager
     //    {
     //        volunteerUpdated = false; //stage 5
     //        var list = s_dal.Volunteer.ReadAll().ToList(); //stage 4
-    //        foreach (var doVolunteer in list) //stage 4
+    //        foreach (var doStudent in list) //stage 4
     //        {
     //            //if student study for more than MaxRange years
     //            //then student should be automatically updated to 'not active'
-    //            if (AdminManager.Now.Year - doVolunteer.MaximumDistanceForReceivingCall?.Year >=
+    //            if (AdminManager.Now.Year - s_dal.Volunteer..RegistrationDate?.Year >=
     //            s_dal.Config.RiskRange) //stage 4
     //            {
     //                volunteerUpdated = true; //stage 5
-    //                s_dal.Volunteer.Update(doVolunteer with { IsAvailable= false }); //stage 4
-    //                Observers.NotifyItemUpdated(doVolunteer.VolunteerId); //stage 5
+    //                s_dal.Volunteer.Update(doStudent with { IsActive = false }); //stage 4
+    //                Observers.NotifyItemUpdated(doStudent.VolunteerId); //stage 5
     //            }
     //        }
     //    }

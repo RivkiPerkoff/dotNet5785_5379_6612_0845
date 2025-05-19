@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        Loaded="MainWindow_Loaded"
+ Closed="MainWindow_Closed"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -51,7 +53,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Text="hi!" Width="200" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                <TextBox Grid.Row="0"         Text="{Binding RiskTimeRangeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Center" Margin="0,0,0,5"/>
                 <Button Grid.Row="1" Content="עדכן משתנה תצורה" Width="200" HorizontalAlignment="Center"/>
             </Grid>
         </Border>
@@ -68,5 +70,21 @@
             <Button Grid.Row="1" Content="אתחול בסיס נתונים" Width="200" Margin="0,5"/>
             <Button Grid.Row="2" Content="איפוס בסיס נתונים" Width="200" Margin="0,5"/>
         </Grid>
+        <StackPanel Margin="20">
+
+            <!-- כפתור לפתיחת תצוגת קורסים -->
+            <!-- Button to open course list screen -->
+            <Button Content="Handle Courses" Click="btnCourses_Click" Margin="5"/>
+
+            <!-- כפתור לאתחול בסיס הנתונים -->
+            <!-- Button to initialize database -->
+            <Button Content="Initialize DB" Click="btnInitializeDB_Click" Margin="5"/>
+
+            <!-- כפתור לאיפוס בסיס הנתונים -->
+            <!-- Button to reset database -->
+            <Button Content="Reset DB" Click="btnResetDB_Click" Margin="5"/>
+
+        </StackPanel>
+
     </Grid>
 </Window>

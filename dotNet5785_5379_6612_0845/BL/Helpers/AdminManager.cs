@@ -61,7 +61,7 @@ internal static class AdminManager //stage 4
         //Go through all students to update properties that are affected by the clock update
         //(students becomes not active after 5 years etc.)
 
-        VolunteerManager.PeriodicVolunteersUpdates(oldClock, newClock); //stage 4
+        //VolunteerManager.PeriodicVolunteersUpdates(oldClock, newClock); //stage 4////////////////////////לשים לב שזה לא צריך להיות מיורק
         //etc ...
 
         //Calling all the observers of clock update
