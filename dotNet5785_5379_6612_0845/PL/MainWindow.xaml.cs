@@ -8,31 +8,63 @@ namespace PL
 {
     public partial class MainWindow : Window
     {
-        private static readonly IBL s_bl = BlApi.Factory.Get();
+        //private static readonly IBL s_bl = BlApi.Factory.Get();
 
-        // משתנים לשמירת המשקיפים
-        private readonly Action clockObserver;
-        private readonly Action configObserver;
+        //// משתנים לשמירת המשקיפים
+        //private readonly Action clockObserver;
+        //private readonly Action configObserver;
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            CurrentTime = s_bl.Admin.GetClock();
-
-            // הצגת הזמן הנוכחי הראשוני
-            s_bl.Admin.AddClockObserver(clockObserver);
-            s_bl.Admin.AddConfigObserver(configObserver);
-
-            // לקרוא אותן בפעם הראשונה כדי לקבל את הערכים ההתחלתיים
-            clockObserver();
-            configObserver();
-        }
- 
-        //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        //public MainWindow()
         //{
+        //    InitializeComponent();
+        //    CurrentTime = s_bl.Admin.GetClock();
 
+        //    // הצגת הזמן הנוכחי הראשוני
+        //    s_bl.Admin.AddClockObserver(clockObserver);
+        //    s_bl.Admin.AddConfigObserver(configObserver);
+
+        //    // לקרוא אותן בפעם הראשונה כדי לקבל את הערכים ההתחלתיים
+        //    clockObserver();
+        //    configObserver();
         //}
-        public DateTime CurrentTime
+            private static readonly IBL s_bl = BlApi.Factory.Get();
+
+            // משתנים לשמירת המשקיפים
+            private readonly Action clockObserver;
+            private readonly Action configObserver;
+
+            public MainWindow()
+            {
+                InitializeComponent();
+
+                // === הפונקציות האנונימיות משויכות כאן ===
+                clockObserver = () =>
+                {
+                    CurrentTime = s_bl.Admin.GetClock();
+                };
+
+                configObserver = () =>
+                {
+                    MaxYearRange = s_bl.Admin.GetRiskTimeRange().Days / 365;
+                };
+
+                // התחלה
+                CurrentTime = s_bl.Admin.GetClock();
+
+                s_bl.Admin.AddClockObserver(clockObserver);
+                s_bl.Admin.AddConfigObserver(configObserver);
+
+                // קריאה ראשונית
+                clockObserver();
+                configObserver();
+            }
+
+
+            //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+            //{
+
+            //}
+            public DateTime CurrentTime
         {
             get { return (DateTime)GetValue(CurrentTimeProperty); }
             set { SetValue(CurrentTimeProperty, value); }
@@ -112,22 +144,19 @@ namespace PL
             DependencyProperty.Register("MaxYearRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
 
-        private void clockObserver()
-        {
-            // מקבל את הזמן מה- BL ומעדכן את ה- CurrentTime
-            CurrentTime = s_bl.Admin.GetClock();
-        }
+        //private void clockObserver()
+        //{
+        //    // מקבל את הזמן מה- BL ומעדכן את ה- CurrentTime
+        //    CurrentTime = s_bl.Admin.GetClock();
+        //}
 
-        private void configObserver()
-        {
-            // מקבל את ערך משתנה התצורה ומעדכן אותו
-            MaxYearRange = s_bl.Admin.GetRiskTimeRange().Days / 365;
-        }
+        //private void configObserver()
+        //{
+        //    // מקבל את ערך משתנה התצורה ומעדכן אותו
+        //    MaxYearRange = s_bl.Admin.GetRiskTimeRange().Days / 365;
+        //}
 
-        private void clockObserver(object sender, EventArgs e)
-        {
-            s_bl.Admin.GetClock();
-        }
+
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -148,7 +177,7 @@ namespace PL
         // === כפתור פתיחת תצוגת קורסים ===
         private void btnCourses_Click(object sender, RoutedEventArgs e)
         {
-            new CourseListWindow().Show(); // חשוב שהחלון הזה קיים בפרויקט
+            //new CourseListWindow().Show(); // חשוב שהחלון הזה קיים בפרויקט
         }
 
         // === אתחול בסיס הנתונים ===
@@ -171,7 +200,7 @@ namespace PL
                             win.Close();
                     }
 
-                    s_bl.Admin.InitializeDB();
+                    s_bl.Admin.InitializeDatabase();
                     MessageBox.Show("בסיס הנתונים אותחל בהצלחה.", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 finally
@@ -201,7 +230,7 @@ namespace PL
                             win.Close();
                     }
 
-                    s_bl.Admin.ResetDB();
+                    s_bl.Admin.ResetDatabase();
                     MessageBox.Show("בסיס הנתונים אופס בהצלחה.", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 finally
