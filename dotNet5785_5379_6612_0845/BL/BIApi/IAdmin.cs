@@ -13,6 +13,8 @@ namespace BL.BIApi;
 /// </summary>
 public interface IAdmin
 {
+    public event Action ClockUpdatedObservers;
+
     /// <summary>
     /// Gets the current system clock value.
     /// </summary>
@@ -51,7 +53,7 @@ public interface IAdmin
     void RemoveConfigObserver(Action configObserver);
     void AddClockObserver(Action clockObserver);
     void RemoveClockObserver(Action clockObserver);
-    void AddClockObserver(TimeUnit minute);
+    //void AddClockObserver(TimeUnit minute);
     #endregion Stage 5
 
 }

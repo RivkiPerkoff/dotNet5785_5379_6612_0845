@@ -12,6 +12,8 @@ internal class AdminImplementation : IAdmin
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
+    public event Action ClockUpdatedObservers;
+
     /// <summary>
     /// Advances the system clock based on the specified time unit.
     /// </summary>
@@ -32,6 +34,8 @@ internal class AdminImplementation : IAdmin
         };
 
         AdminManager.UpdateClock(newClock);
+        ClockUpdatedObservers?.Invoke();
+
     }
 
     /// <summary>
@@ -92,6 +96,11 @@ internal class AdminImplementation : IAdmin
     AdminManager.ConfigUpdatedObservers += configObserver;
     public void RemoveConfigObserver(Action configObserver) =>
     AdminManager.ConfigUpdatedObservers -= configObserver;
+
+    //public void AddClockObserver(TimeUnit minute)
+    //{
+    //    throw new NotImplementedException();
+    //}
     #endregion Stage 5
 
 }

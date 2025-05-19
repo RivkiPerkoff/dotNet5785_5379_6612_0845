@@ -22,8 +22,17 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
-        }
 
+            // רישום מתודה שתופעל כאשר השעון משתנה
+            s_bl.Admin.AddClockObserver(UpdateClockDisplay);
+
+            // הצגת הזמן הנוכחי הראשוני
+            CurrentTime = s_bl.Admin.GetClock();
+        }
+        private void UpdateClockDisplay()
+        {
+            CurrentTime = s_bl.Admin.GetClock();
+        }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -37,19 +46,39 @@ namespace PL
         DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Minute);
+            s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Minute);
         }
+
         private void btnAddOneHour_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Hour);
+            s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Hour);
         }
+
         private void btnAddOneDay_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Day);
+            s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Day);
         }
+
         private void btnAddOneYear_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Year);
+            s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Year);
         }
+
+        //private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
+        //{
+        //    s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Minute);
+        //}
+        //private void btnAddOneHour_Click(object sender, RoutedEventArgs e)
+        //{
+        //    s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Hour);
+        //}
+        //private void btnAddOneDay_Click(object sender, RoutedEventArgs e)
+        //{
+        //    s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Day);
+        //}
+        //private void btnAddOneYear_Click(object sender, RoutedEventArgs e)
+        //{
+        //    s_bl.Admin.AddClockObserver(BL.BO.TimeUnit.Year);
+        //}
     }
 }
