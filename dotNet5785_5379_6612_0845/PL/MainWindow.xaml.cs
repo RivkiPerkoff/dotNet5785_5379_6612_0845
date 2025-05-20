@@ -106,10 +106,10 @@ namespace PL
         }
 
         // === כפתור פתיחת תצוגת קורסים ===
-        private void btnCourses_Click(object sender, RoutedEventArgs e)
-        {
-            new CourseListWindow().Show(); // חשוב שהחלון הזה קיים בפרויקט
-        }
+        //private void btnCourses_Click(object sender, RoutedEventArgs e)
+        //{
+        //    new CourseListWindow().Show(); // חשוב שהחלון הזה קיים בפרויקט
+        //}
 
         // === אתחול בסיס הנתונים ===
         private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
@@ -131,7 +131,7 @@ namespace PL
                             win.Close();
                     }
 
-                    s_bl.Admin.InitializeDB();
+                    //s_bl.Admin.InitializeDB();
                     MessageBox.Show("בסיס הנתונים אותחל בהצלחה.", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 finally
@@ -161,7 +161,7 @@ namespace PL
                             win.Close();
                     }
 
-                    s_bl.Admin.ResetDB();
+                    //s_bl.Admin.ResetDB();
                     MessageBox.Show("בסיס הנתונים אופס בהצלחה.", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 finally

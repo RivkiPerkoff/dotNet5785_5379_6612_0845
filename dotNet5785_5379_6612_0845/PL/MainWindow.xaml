@@ -73,9 +73,9 @@
         <StackPanel Margin="20">
 
             <!-- כפתור לפתיחת תצוגת קורסים -->
-            <!-- Button to open course list screen -->
+            <!-- Button to open course list screen 
             <Button Content="Handle Courses" Click="btnCourses_Click" Margin="5"/>
-
+-->
             <!-- כפתור לאתחול בסיס הנתונים -->
             <!-- Button to initialize database -->
             <Button Content="Initialize DB" Click="btnInitializeDB_Click" Margin="5"/>
