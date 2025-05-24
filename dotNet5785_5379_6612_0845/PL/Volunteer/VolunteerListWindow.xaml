@@ -3,29 +3,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.Volunteer"
+       xmlns:local="clr-namespace:PL.Volunteer"
+         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="VolunteerListWindow" Height="640" Width="800">
-    <!--External Grid-->
+        Title="VolunteerListWindow" Height="640" Width="800"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Window.Resources>
+        <pl:VolunteerFieldsCollection x:Key="VolunteerFieldsCollection"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!--Internal, Upper Grid-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+
+        <!-- שורת ComboBox לסינון -->
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <!-- ComboBox in the second column (Column 1) -->
-            <ComboBox Grid.Column="1" HorizontalAlignment="Left" Width="400"/>
+            <Label Grid.Column="0" Content="Select:" VerticalAlignment="Center" Margin="10"/>
+            <ComboBox Grid.Column="1" Margin="10"
+                      ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollection}}"
+                      SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
+                      SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
-        <DataGrid Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" />
 
+        <!-- טבלת מתנדבים -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding VolunteerList}"
+                  AutoGenerateColumns="True"
+                  Margin="10"/>
+
+        <!-- כפתור הוספה -->
+        <Button Grid.Row="2" Content="Add" Height="50" Width="100" Margin="10"
+                HorizontalAlignment="Center"/>
     </Grid>
 </Window>

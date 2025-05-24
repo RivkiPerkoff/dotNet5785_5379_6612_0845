@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using BL.BO;
 
-namespace PL.Volunteer
+namespace BO.Volunteer
 {
     public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {

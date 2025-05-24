@@ -100,4 +100,23 @@ public enum TreatmentEndType
 
 }
 
-
+public enum VolunteerFields
+{
+    All,
+    VolunteerId,
+    Name,
+    PhoneNumber,
+    EmailOfVolunteer,
+    PasswordVolunteer,
+    AddressVolunteer,
+    VolunteerLatitude,
+    VolunteerLongitude,
+    IsAvailable,
+    MaximumDistanceForReceivingCall,
+    Role,
+    DistanceType,
+    TotalCallsHandled,
+    TotalCallsCanceled,
+    SelectedAndExpiredCalls,
+    CallInProgress
+}

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800"
         Loaded="MainWindow_Loaded"
- Closed="MainWindow_Closed"
+        Closed="MainWindow_Closed"
     DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -89,18 +89,18 @@
         <StackPanel Margin="20,144,20,10" Grid.Row="2">
 
             <!-- כפתור לפתיחת תצוגת קורסים -->
-            <!-- Button to open course list screen -->
+            <!-- Button to open course list screen 
             <Button Content="Handle Courses" Click="btnCourses_Click" Margin="5"/>
-
-            <!-- כפתור לאתחול בסיס הנתונים -->
+-->
             <!-- Button to initialize database -->
             <Button Content="Initialize DB" Click="btnInitializeDB_Click" Margin="5"/>
 
-            <!-- כפתור לאיפוס בסיס הנתונים -->
             <!-- Button to reset database -->
             <Button Content="Reset DB" Click="btnResetDB_Click" Margin="5"/>
-
+            <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollectionKey}}"
+         Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <DataGrid Grid.Row="2" Margin="5" ItemsSource="{Binding Path=CallList}" AutoGenerateColumns="True"/>
         </StackPanel>
-
     </Grid>
+
 </Window>
