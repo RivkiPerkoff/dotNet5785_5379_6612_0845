@@ -16,27 +16,30 @@ public partial class VolunteerListWindow : Window
 
     // תכונה רגילה לסינון – לא DependencyProperty
     public BL.BO.VolunteerInList? SelectedVolunteer { get; set; }
-    public List<BL.BO.VolunteerFields> SortFields { get; set; }
-    public IEnumerable<BL.BO.Volunteer> VolunteerList
+    public List<BL.BO.TypeSortingVolunteers> SortFields { get; set; }
+    public IEnumerable<VolunteerInList?> VolunteerList
     {
-        get { return (IEnumerable<BL.BO.Volunteer>)GetValue(VolunteerListProperty); }
+        get { return (IEnumerable<VolunteerInList?>)GetValue(VolunteerListProperty); }
         set { SetValue(VolunteerListProperty, value); }
     }
 
     public static readonly DependencyProperty VolunteerListProperty =
-        DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BL.BO.Volunteer>), typeof(VolunteerListWindow));
+        DependencyProperty.Register("VolunteerList", typeof(IEnumerable<VolunteerInList?>), typeof(VolunteerListWindow));
+
 
     public VolunteerListWindow()
     {
         InitializeComponent();
-        SortFields = Enum.GetValues(typeof(BL.BO.VolunteerFields)).Cast<BL.BO.VolunteerFields>().ToList();
+        SortFields = Enum.GetValues(typeof(BL.BO.TypeSortingVolunteers)).Cast<BL.BO.TypeSortingVolunteers>().ToList();
         RefreshVolunteerList();
         s_bl?.Volunteer.AddObserver(RefreshVolunteerList);
     }
 
     private void RefreshVolunteerList()
     {
-        VolunteerList = (IEnumerable<BL.BO.Volunteer>)s_bl.Volunteer.GetVolunteers(false, SelectedSortField == VolunteerFields.All ? null : BL.Helpers.VolunteerManager.ConvertToTypeSorting(SelectedSortField));
+        VolunteerList = s_bl.Volunteer.GetVolunteers();
+
+        //VolunteerList = (IEnumerable<BL.BO.Volunteer>)s_bl.Volunteer.GetVolunteers(false, SelectedSortField == VolunteerFields.All ? null : BL.Helpers.VolunteerManager.ConvertToTypeSorting(SelectedSortField));
         //isActive: null,
         //sortBy: SelectedSortField == BL.BO.VolunteerFields.All ? null : SelectedSortField
         //filterField: SelectedCallType == BL.BO.CallTypes.None ? null : SelectedCallType);
@@ -53,9 +56,9 @@ public partial class VolunteerListWindow : Window
         s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
     }
 
-    private BL.BO.VolunteerFields _selectedSortField = BL.BO.VolunteerFields.All;
+    private BL.BO.TypeSortingVolunteers _selectedSortField = BL.BO.TypeSortingVolunteers.ALL;
 
-    public BL.BO.VolunteerFields SelectedSortField
+    public BL.BO.TypeSortingVolunteers SelectedSortField
     {
         get => _selectedSortField;
         set

@@ -196,19 +196,19 @@ static public class VolunteerManager
             CallType = BO.CallTypes.None
         };
     }
-    public static TypeSortingVolunteers? ConvertToTypeSorting(VolunteerFields field)
-    {
-        return field switch
-        {
-            VolunteerFields.VolunteerId => TypeSortingVolunteers.VolunteerId,
-            VolunteerFields.Name => TypeSortingVolunteers.Name,
-            VolunteerFields.IsAvailable => TypeSortingVolunteers.IsAvailable,
-            VolunteerFields.TotalCallsHandled => TypeSortingVolunteers.HandledCalls,
-            VolunteerFields.TotalCallsCanceled => TypeSortingVolunteers.CanceledCalls,
-            VolunteerFields.SelectedAndExpiredCalls => TypeSortingVolunteers.ExpiredCalls,
-            VolunteerFields.CallInProgress => TypeSortingVolunteers.CurrentCallId,
-            // הוסף עוד לפי הצורך
-            _ => null
-        };
-    }
+    //public static TypeSortingVolunteers? ConvertToTypeSorting(VolunteerFields field)
+    //{
+    //    return field switch
+    //    {
+    //        VolunteerFields.VolunteerId => TypeSortingVolunteers.VolunteerId,
+    //        VolunteerFields.Name => TypeSortingVolunteers.Name,
+    //        VolunteerFields.IsAvailable => TypeSortingVolunteers.IsAvailable,
+    //        VolunteerFields.TotalCallsHandled => TypeSortingVolunteers.HandledCalls,
+    //        VolunteerFields.TotalCallsCanceled => TypeSortingVolunteers.CanceledCalls,
+    //        VolunteerFields.SelectedAndExpiredCalls => TypeSortingVolunteers.ExpiredCalls,
+    //        VolunteerFields.CallInProgress => TypeSortingVolunteers.CurrentCallId,
+    //        // הוסף עוד לפי הצורך
+    //        _ => null
+    //    };
+    //}
 }

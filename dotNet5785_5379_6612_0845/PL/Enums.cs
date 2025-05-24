@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace PL
 {
-    public class VolunteerFieldsCollection : IEnumerable<VolunteerFields>
+    public class VolunteerFieldsCollection : IEnumerable<TypeSortingVolunteers>
     {
-        private static readonly VolunteerFields[] s_enums =
-            (VolunteerFields[])Enum.GetValues(typeof(VolunteerFields));
+        private static readonly TypeSortingVolunteers[] s_enums =
+            (TypeSortingVolunteers[])Enum.GetValues(typeof(TypeSortingVolunteers));
 
-        public IEnumerator<VolunteerFields> GetEnumerator() => ((IEnumerable<VolunteerFields>)s_enums).GetEnumerator();
+        public IEnumerator<TypeSortingVolunteers> GetEnumerator() => ((IEnumerable<TypeSortingVolunteers>)s_enums).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

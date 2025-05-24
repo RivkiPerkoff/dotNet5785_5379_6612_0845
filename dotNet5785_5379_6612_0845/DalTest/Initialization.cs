@@ -50,10 +50,10 @@ public static class Initialization
         for (int i = 1; i < names.Length; i++)
         {
             id = s_dal!.Config.CreateVolunteerId();
-            name = names[0];
-            email = emails[0];
-            phone = phones[0];
-            address = addresses[0];
+            name = names[i];
+            email = emails[i];
+            phone = phones[i];
+            address = addresses[i];
             maximumDistance = s_rand.NextDouble() * 50;
             password = GenerateRandomPassword(12);
             role = Role.Volunteer;
