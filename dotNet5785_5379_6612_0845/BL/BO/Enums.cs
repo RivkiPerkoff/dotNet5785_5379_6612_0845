@@ -19,7 +19,7 @@ public enum RiskRangeStatus
 }
 public enum TypeSortingVolunteers
 {
-    ALL,
+    All,
     VolunteerId,
     Name,
     IsAvailable,

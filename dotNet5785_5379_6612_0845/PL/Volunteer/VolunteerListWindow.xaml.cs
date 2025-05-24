@@ -1,9 +1,11 @@
 ﻿using BL.BIApi;
 using BL.BO;
+using BO.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PL.Volunteer;
 
@@ -26,26 +28,22 @@ public partial class VolunteerListWindow : Window
     public static readonly DependencyProperty VolunteerListProperty =
         DependencyProperty.Register("VolunteerList", typeof(IEnumerable<VolunteerInList?>), typeof(VolunteerListWindow));
 
-
     public VolunteerListWindow()
     {
         InitializeComponent();
+        DataContext = this; 
+
         SortFields = Enum.GetValues(typeof(BL.BO.TypeSortingVolunteers)).Cast<BL.BO.TypeSortingVolunteers>().ToList();
         RefreshVolunteerList();
         s_bl?.Volunteer.AddObserver(RefreshVolunteerList);
     }
-
     private void RefreshVolunteerList()
     {
-        VolunteerList = s_bl.Volunteer.GetVolunteers();
-
-        //VolunteerList = (IEnumerable<BL.BO.Volunteer>)s_bl.Volunteer.GetVolunteers(false, SelectedSortField == VolunteerFields.All ? null : BL.Helpers.VolunteerManager.ConvertToTypeSorting(SelectedSortField));
-        //isActive: null,
-        //sortBy: SelectedSortField == BL.BO.VolunteerFields.All ? null : SelectedSortField
-        //filterField: SelectedCallType == BL.BO.CallTypes.None ? null : SelectedCallType);
+        VolunteerList = s_bl.Volunteer.GetVolunteers(
+            sortBy: SelectedSortField == TypeSortingVolunteers.All ? null : SelectedSortField,
+            isActive: null
+        );
     }
-
-
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         s_bl.Volunteer.AddObserver(VolunteerListObserver);
@@ -56,7 +54,7 @@ public partial class VolunteerListWindow : Window
         s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
     }
 
-    private BL.BO.TypeSortingVolunteers _selectedSortField = BL.BO.TypeSortingVolunteers.ALL;
+    private BL.BO.TypeSortingVolunteers _selectedSortField = BL.BO.TypeSortingVolunteers.All;
 
     public BL.BO.TypeSortingVolunteers SelectedSortField
     {
@@ -88,23 +86,56 @@ public partial class VolunteerListWindow : Window
     private void VolunteerListObserver()
 => RefreshVolunteerList();
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    //public BL.BO.CallInList? SelectedCall { get; set; }
+    //private void VolunteerDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    //{
+    //    if (SelectedVolunteer != null)
+    //    {
+    //        // פתיחת חלון חדש עם ה-Id של המתנדב
+    //        new VolunteerWindow(SelectedVolunteer.VolunteerId).Show();
+    //    }
+    //}
+    //private void AddButton_Click(object sender, RoutedEventArgs e)
+    //{
+    //    // יצירת חלון חדש של VolunteerWindow במצב הוספה
+    //    var addWindow = new VolunteerWindow(); // בלי פרמטר - מצב הוספה
+    //    addWindow.ShowDialog(); // ShowDialog כדי שהחלון הנוכחי "יחכה"
+    //}
+    private async void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
-        // לחצן "Add" – ניתן להוסיף כאן פתיחה של חלון חדש להוספת מתנדב
+        if (sender is Button btn && btn.Tag is int volunteerId)
+        {
+            var volunteer = VolunteerList?.FirstOrDefault(v => v?.VolunteerId == volunteerId);
+            if (volunteer == null)
+                return;
+
+            // 1. אישור מחיקה מהמשתמש
+            var result = MessageBox.Show($"Are you sure you want to delete volunteer '{volunteer.Name}'?",
+                                         "Confirm Deletion",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                // 2. קריאה ל-Delete ב-BL
+                s_bl.Volunteer.DeleteVolunteer(volunteerId);
+
+                // 3. אם המחיקה הצליחה, רשימת המתנדבים תתעדכן אוטומטית בזכות המנגנון של observers.
+                // כאן אין צורך לקרוא ל-RefreshVolunteerList כי ה-Observer יעשה את זה.
+            }
+            catch (Exception ex)
+            {
+                // 4. טיפול בשגיאה - הצגת הודעה למשתמש
+                MessageBox.Show($"Failed to delete volunteer:\n{ex.Message}",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
+        }
     }
 
-    private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        // שינוי מתנדב נבחר – אפשר להשתמש בזה להצגת פרטים
-    }
-    //public BL.BO.VolunteerFields SelectedVolunteerField { get; set; } = BL.BO.VolunteerFields;
-    //// C#
-    //private void VolunteerFieldComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    //{
-    //    // ערך SelectedVolunteerField כבר התעדכן אוטומטית
-    //    // עכשיו עדכן את הרשימה לפי הערך החדש
-    //    CallList = s_bl.Call.GetFilteredAndSortedCallList(
-    //        filterBy: (BO.CallInListFields?)SelectedVolunteerField,
-    //    );
-    //}
+
+
 }
