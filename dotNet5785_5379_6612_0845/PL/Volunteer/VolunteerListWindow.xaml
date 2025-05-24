@@ -17,15 +17,14 @@
 
 
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- שורת ComboBox לסינון -->
-        <Grid Grid.Row="0">
+        <!-- ComboBox למיון -->
+        <Grid Grid.Row="0" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -43,15 +42,43 @@
             </ComboBox>
 
         </Grid>
-
-        <!-- טבלת מתנדבים -->
+        <!-- 
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding VolunteerList}"
-                  AutoGenerateColumns="True"
-                  Margin="10"/>
+          ItemsSource="{Binding VolunteerList}"
+          SelectedItem="{Binding SelectedVolunteer, Mode=OneWayToSource}"
+          AutoGenerateColumns="True"
+          Margin="10"
+         />טבלת מתנדבים -->
+        <!--    MouseDoubleClick="VolunteerDataGrid_MouseDoubleClick"-->
+        <DataGrid Grid.Row="1"
+          ItemsSource="{Binding VolunteerList}"
+          SelectedItem="{Binding SelectedVolunteer, Mode=OneWayToSource}"
+          AutoGenerateColumns="False"
+          Margin="10"
+          CanUserAddRows="False"
+          >
+            <DataGrid.Columns>
+                <!-- עמודות קיימות - נניח פשוט Name ו-VolunteerId לדוגמה -->
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Id" Binding="{Binding VolunteerId}" Width="100"/>
+
+                <!-- עמודת כפתור מחיקה -->
+                <DataGridTemplateColumn Header="Delete" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" Click="DeleteButton_Click" Tag="{Binding VolunteerId}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
 
         <!-- כפתור הוספה -->
         <Button Grid.Row="2" Content="Add" Height="50" Width="100" Margin="10"
-                HorizontalAlignment="Center"/>
+                HorizontalAlignment="Center"
+            />
+        <!--   Click="AddButton_Click"-->
+
     </Grid>
 </Window>
