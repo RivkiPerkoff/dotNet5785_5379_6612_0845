@@ -58,9 +58,14 @@
           CanUserAddRows="False"
           >
             <DataGrid.Columns>
-                <!-- עמודות קיימות - נניח פשוט Name ו-VolunteerId לדוגמה -->
+                <DataGridTextColumn Header="Id" Binding="{Binding VolunteerId}" Width="Auto"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                <DataGridTextColumn Header="Id" Binding="{Binding VolunteerId}" Width="100"/>
+                <DataGridCheckBoxColumn Header="Available" Binding="{Binding IsAvailable}" Width="Auto"/>
+                <DataGridTextColumn Header="Handled Calls" Binding="{Binding HandledCalls}" Width="Auto"/>
+                <DataGridTextColumn Header="Canceled Calls" Binding="{Binding CanceledCalls}" Width="Auto"/>
+                <DataGridTextColumn Header="Expired Calls" Binding="{Binding ExpiredCalls}" Width="Auto"/>
+                <DataGridTextColumn Header="Current Call Id" Binding="{Binding CurrentCallId}" Width="Auto"/>
+                <DataGridTextColumn Header="Call Type" Binding="{Binding CallType}" Width="Auto"/>
 
                 <!-- עמודת כפתור מחיקה -->
                 <DataGridTemplateColumn Header="Delete" Width="80">

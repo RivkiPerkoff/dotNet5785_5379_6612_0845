@@ -101,7 +101,7 @@ public partial class VolunteerListWindow : Window
     //    var addWindow = new VolunteerWindow(); // בלי פרמטר - מצב הוספה
     //    addWindow.ShowDialog(); // ShowDialog כדי שהחלון הנוכחי "יחכה"
     //}
-    private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+    private  void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn && btn.Tag is int volunteerId)
         {
@@ -127,7 +127,6 @@ public partial class VolunteerListWindow : Window
             }
             catch (Exception ex)
             {
-                // 4. טיפול בשגיאה - הצגת הודעה למשתמש
                 MessageBox.Show($"Failed to delete volunteer:\n{ex.Message}",
                                 "Error",
                                 MessageBoxButton.OK,
