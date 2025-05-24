@@ -17,7 +17,7 @@ namespace BL.Helpers;
 /// <summary>
 /// Manages volunteer-related operations such as validation, mapping, and authentication.
 /// </summary>
-static internal class VolunteerManager
+static public class VolunteerManager
 {
     internal static ObserverManager Observers = new();
     private static IDal s_dal = Factory.Get;
@@ -194,6 +194,21 @@ static internal class VolunteerManager
             ExpiredCalls = 0,
             CurrentCallId = null,
             CallType = BO.CallTypes.None
+        };
+    }
+    public static TypeSortingVolunteers? ConvertToTypeSorting(VolunteerFields field)
+    {
+        return field switch
+        {
+            VolunteerFields.VolunteerId => TypeSortingVolunteers.VolunteerId,
+            VolunteerFields.Name => TypeSortingVolunteers.Name,
+            VolunteerFields.IsAvailable => TypeSortingVolunteers.IsAvailable,
+            VolunteerFields.TotalCallsHandled => TypeSortingVolunteers.HandledCalls,
+            VolunteerFields.TotalCallsCanceled => TypeSortingVolunteers.CanceledCalls,
+            VolunteerFields.SelectedAndExpiredCalls => TypeSortingVolunteers.ExpiredCalls,
+            VolunteerFields.CallInProgress => TypeSortingVolunteers.CurrentCallId,
+            // הוסף עוד לפי הצורך
+            _ => null
         };
     }
 }

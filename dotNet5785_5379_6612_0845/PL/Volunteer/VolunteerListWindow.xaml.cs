@@ -1,4 +1,5 @@
 ﻿using BL.BIApi;
+using BL.BO;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -35,11 +36,13 @@ public partial class VolunteerListWindow : Window
 
     private void RefreshVolunteerList()
     {
-        VolunteerList = s_bl.Volunteer.GetVolunteers(
-            isActive: null,
-            sortBy: SelectedSortField == BL.BO.VolunteerFields.All ? null : SelectedSortField
-            //filterField: SelectedCallType == BL.BO.CallTypes.None ? null : SelectedCallType);
+        VolunteerList = (IEnumerable<BL.BO.Volunteer>)s_bl.Volunteer.GetVolunteers(false, SelectedSortField == VolunteerFields.All ? null : BL.Helpers.VolunteerManager.ConvertToTypeSorting(SelectedSortField));
+        //isActive: null,
+        //sortBy: SelectedSortField == BL.BO.VolunteerFields.All ? null : SelectedSortField
+        //filterField: SelectedCallType == BL.BO.CallTypes.None ? null : SelectedCallType);
     }
+
+
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         s_bl.Volunteer.AddObserver(VolunteerListObserver);
@@ -91,4 +94,14 @@ public partial class VolunteerListWindow : Window
     {
         // שינוי מתנדב נבחר – אפשר להשתמש בזה להצגת פרטים
     }
+    //public BL.BO.VolunteerFields SelectedVolunteerField { get; set; } = BL.BO.VolunteerFields;
+    //// C#
+    //private void VolunteerFieldComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //{
+    //    // ערך SelectedVolunteerField כבר התעדכן אוטומטית
+    //    // עכשיו עדכן את הרשימה לפי הערך החדש
+    //    CallList = s_bl.Call.GetFilteredAndSortedCallList(
+    //        filterBy: (BO.CallInListFields?)SelectedVolunteerField,
+    //    );
+    //}
 }

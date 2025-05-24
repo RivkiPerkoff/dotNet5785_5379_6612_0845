@@ -12,10 +12,12 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
-        <pl:VolunteerFieldsCollection x:Key="VolunteerFieldsCollection"/>
+        <pl:VolunteerFieldsCollection x:Key="VolunteerFieldsCollectionKey"/>
     </Window.Resources>
 
+
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -31,15 +33,15 @@
 
             <Label Grid.Column="0" Content="Select:" VerticalAlignment="Center" Margin="10"/>
             <ComboBox Grid.Column="1" Margin="10"
-                      ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollection}}"
-                      SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"
-                      SelectionChanged="ComboBox_SelectionChanged">
+                ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollectionKey}}"
+                SelectedValue="{Binding SelectedSortField, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}"/>
+                        <TextBlock Text="{Binding}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+
         </Grid>
 
         <!-- טבלת מתנדבים -->

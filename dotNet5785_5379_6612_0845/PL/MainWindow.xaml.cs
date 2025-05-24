@@ -253,15 +253,11 @@ public partial class MainWindow : Window
             typeof(MainWindow),
             new PropertyMetadata(null));
 
-    public BO.VolunteerFieldsCollection SelectedVolunteerField { get; set; } = BO.VolunteerFieldsCollection.;
-    // C#
-    private void VolunteerFieldComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void btnShowVolunteerList_Click(object sender, RoutedEventArgs e)
     {
-        // ערך SelectedVolunteerField כבר התעדכן אוטומטית
-        // עכשיו עדכן את הרשימה לפי הערך החדש
-        CallList = s_bl.Call.GetFilteredAndSortedCallList(
-            filterBy: (BO.CallInListFields?)SelectedVolunteerField,
-        );
+        var window = new Volunteer.VolunteerListWindow();
+        window.Show(); // אם אתה רוצה לפתוח אותו כחלון חדש בלי לסגור את הראשי
     }
+
 
 }
