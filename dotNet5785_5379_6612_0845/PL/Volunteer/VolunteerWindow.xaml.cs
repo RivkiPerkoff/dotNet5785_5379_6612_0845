@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows;
-using BL.BO;
+﻿using System.Windows;
+using System.Windows.Controls;
+using BL.BO; // וודא שיש reference לפרויקט שבו נמצאת המחלקה Volunteer
 
-namespace BO.Volunteer;
+namespace PL.Volunteer;
 
 //public partial class VolunteerWindow : Window, INotifyPropertyChanged
 //{

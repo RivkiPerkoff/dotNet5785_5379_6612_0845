@@ -8,25 +8,6 @@ using BL.BIApi;
 namespace PL;
 public partial class MainWindow : Window
 {
-    //private static readonly IBL s_bl = BlApi.Factory.Get();
-
-    //// משתנים לשמירת המשקיפים
-    //private readonly Action clockObserver;
-    //private readonly Action configObserver;
-
-    //public MainWindow()
-    //{
-    //    InitializeComponent();
-    //    CurrentTime = s_bl.Admin.GetClock();
-
-    //    // הצגת הזמן הנוכחי הראשוני
-    //    s_bl.Admin.AddClockObserver(clockObserver);
-    //    s_bl.Admin.AddConfigObserver(configObserver);
-
-    //    // לקרוא אותן בפעם הראשונה כדי לקבל את הערכים ההתחלתיים
-    //    clockObserver();
-    //    configObserver();
-    //}
     private static readonly IBL s_bl = BlApi.Factory.Get();
     // משתנים לשמירת המשקיפים
     private readonly Action clockObserver;
@@ -36,15 +17,31 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        // === הפונקציות האנונימיות משויכות כאן ===
         clockObserver = () =>
         {
             CurrentTime = s_bl.Admin.GetClock();
         };
 
+        //configObserver = () =>
+        //{
+        //    //// במקום לחשב שנים מתוך ימים, קבל את הטווח ישירות כ-TimeSpan
+        //    //var riskTimeRange = s_bl.Admin.GetRiskTimeRange();
+        //    //// אם ברצונך לשמור כערך מספרי בשנים (או שעות) אפשר להוסיף כאן המרה בהתאם
+
+        //    //// לדוגמה, אם MaxYearRange צריך להיות מספר של שעות:
+        //    //MaxYearRange = (int)riskTimeRange.TotalHours;
+
+        //    //// אם עדיין רוצה לשמור בשנים, אז תעשה המרה:
+        //    //// MaxYearRange = riskTimeRange.Days / 365;
+        //    ///
+        //};
+
         configObserver = () =>
         {
-            MaxYearRange = s_bl.Admin.GetRiskTimeRange().Days / 365;
+            RiskTimeRange = s_bl.Admin.GetRiskTimeRange();
+            // אם אתה לא רוצה לחשב שנים בכלל, פשוט אל תשתמש ב-MaxYearRange
+            // ואם כן צריך, ניתן לעדכן לשעות למשל:
+            // MaxYearRange = (int)RiskTimeRange.TotalHours;
         };
 
         // התחלה
@@ -53,18 +50,12 @@ public partial class MainWindow : Window
         s_bl.Admin.AddClockObserver(clockObserver);
         s_bl.Admin.AddConfigObserver(configObserver);
 
-        // קריאה ראשונית
         clockObserver();
         configObserver();
         CallList = s_bl.Call.GetFilteredAndSortedCallList();
 
     }
 
-
-    //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-    //{
-
-    //}
     public DateTime CurrentTime
     {
         get { return (DateTime)GetValue(CurrentTimeProperty); }
@@ -92,16 +83,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private void UpdateClockDisplay()
-    {
-        CurrentTime = s_bl.Admin.GetClock();
-    }
-
-    private void UpdateConfigDisplay()
-    {
-        RiskTimeRange = s_bl.Admin.GetRiskTimeRange();
-    }
-
     private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
     {
         s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Minute);
@@ -121,43 +102,52 @@ public partial class MainWindow : Window
     {
         s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Year);
     }
-    private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            TimeSpan range = TimeSpan.FromDays(MaxYearRange * 365);
-            s_bl.Admin.SetRiskTimeRange(range);
+    //  private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        TimeSpan range = TimeSpan.FromDays(MaxYearRange * 365);
+    //        s_bl.Admin.SetRiskTimeRange(range);
 
-            MessageBox.Show("משתנה התצורה עודכן בהצלחה!", "עדכון", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        catch (Exception ex)
+    //        // הוסף את השורה הבאה:
+    //        configObserver(); // כדי לעדכן את MaxYearRange שוב לפי הערך החדש מה-BL
+
+    //        MessageBox.Show("משתנה התצורה עודכן בהצלחה!", "עדכון", MessageBoxButton.OK, MessageBoxImage.Information);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show($"אירעה שגיאה בעת עדכון משתנה התצורה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+    //    }
+    //}
+    private void UpdateRiskRange_Click(object sender, RoutedEventArgs e)
+    {
+        if (int.TryParse(MaxRange.ToString(), out int minutes))
         {
-            MessageBox.Show($"אירעה שגיאה בעת עדכון משתנה התצורה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            try
+            {
+                RiskTimeRange = TimeSpan.FromMinutes(minutes);
+                s_bl.Admin.SetRiskTimeRange(RiskTimeRange);
+
+                MessageBox.Show($"Risk range updated to: {minutes} minutes.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while updating the risk range: {ex.Message}");
+            }
+        }
+        else
+        {
+            MessageBox.Show("Please enter a valid numeric value for the risk range.");
         }
     }
-    public int MaxYearRange
+    public int MaxRange
     {
-        get { return (int)GetValue(MaxYearRangeProperty); }
-        set { SetValue(MaxYearRangeProperty, value); }
+        get { return (int)GetValue(MaxRangeProperty); }
+        set { SetValue(MaxRangeProperty, value); }
     }
 
-    public static readonly DependencyProperty MaxYearRangeProperty =
-        DependencyProperty.Register("MaxYearRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
-
-
-    //private void clockObserver()
-    //{
-    //    // מקבל את הזמן מה- BL ומעדכן את ה- CurrentTime
-    //    CurrentTime = s_bl.Admin.GetClock();
-    //}
-
-    //private void configObserver()
-    //{
-    //    // מקבל את ערך משתנה התצורה ומעדכן אותו
-    //    MaxYearRange = s_bl.Admin.GetRiskTimeRange().Days / 365;
-    //}
-
-
+    public static readonly DependencyProperty MaxRangeProperty =
+        DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
@@ -168,17 +158,6 @@ public partial class MainWindow : Window
     {
         s_bl.Admin.RemoveClockObserver(clockObserver);
         s_bl.Admin.RemoveConfigObserver(configObserver);
-    }
-
-    private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        // ללא מימוש כרגע
-    }
-
-    // === כפתור פתיחת תצוגת קורסים ===
-    private void btnCourses_Click(object sender, RoutedEventArgs e)
-    {
-        //new CourseListWindow().Show(); // חשוב שהחלון הזה קיים בפרויקט
     }
 
     // === אתחול בסיס הנתונים ===
@@ -256,7 +235,7 @@ public partial class MainWindow : Window
     private void btnShowVolunteerList_Click(object sender, RoutedEventArgs e)
     {
         var window = new Volunteer.VolunteerListWindow();
-        window.Show(); // אם אתה רוצה לפתוח אותו כחלון חדש בלי לסגור את הראשי
+        window.Show(); 
     }
 
 

@@ -5,102 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800"
+        Title="Main Window"
+        Height="500"
+        Width="800"
         Loaded="MainWindow_Loaded"
         Closed="MainWindow_Closed"
-    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <Grid Margin="10">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Grid Margin="10" Background="#FAFAFA">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- אזור שעון המערכת -->
             <RowDefinition Height="Auto"/>
-            <!-- אזור משתני תצורה -->
             <RowDefinition Height="*"/>
-            <!-- אזור כפתורי ניווט ופעולות -->
         </Grid.RowDefinitions>
 
-        <!-- אזור שעון המערכת -->
-        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Padding="10" Margin="0,0,0,10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <!-- Label שמציג את השעה הנוכחית -->
-                <Label Grid.Row="0" Content="{Binding CurrentTime}" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" />
-
-                <!-- Grid עם כפתורי קידום זמן -->
-                <Grid Grid.Row="1" Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Button Content="Add One Minute" Click="btnAddOneMinute_Click" Grid.Column="0" Margin="5" Padding="10,5"/>
-                    <Button Content="Add One Hour" Click="btnAddOneHour_Click" Grid.Column="1" Margin="5" Padding="10,5"/>
-                    <Button Content="Add One Day" Click="btnAddOneDay_Click" Grid.Column="2" Margin="5" Padding="10,5"/>
-                    <Button Content="Add One Year" Click="btnAddOneYear_Click" Grid.Column="3" Margin="5" Padding="10,5"/>
-                </Grid>
-            </Grid>
+        <!-- Clock Section -->
+        <Border Grid.Row="0" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+            <StackPanel>
+                <Label Content="{Binding CurrentTime}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+                <UniformGrid Columns="4" Margin="0,10,0,0" HorizontalAlignment="Center">
+                    <Button Content="+1 Minute" Click="btnAddOneMinute_Click" Margin="5" Padding="10,5" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                    <Button Content="+1 Hour"   Click="btnAddOneHour_Click"   Margin="5" Padding="10,5" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                    <Button Content="+1 Day"    Click="btnAddOneDay_Click"    Margin="5" Padding="10,5" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                    <Button Content="+1 Year"   Click="btnAddOneYear_Click"   Margin="5" Padding="10,5" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                </UniformGrid>
+            </StackPanel>
         </Border>
 
-        <!-- אזור משתני תצורה -->
-        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10">
-            <Grid>
-                <!--  <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Text="hi!" Width="200" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                 <Button Grid.Row="1" Content="עדכן משתנה תצורה" Width="200" HorizontalAlignment="Center" Click="UpdateConfigButton_Click"/>-->
-                <StackPanel>
-                    <TextBox Width="200" Margin="10">
-                        <TextBox.Text>
-                            <Binding Path="MaxYearRange"
-                     Mode="TwoWay"
-                     UpdateSourceTrigger="PropertyChanged"
-                     RelativeSource="{RelativeSource AncestorType=Window}" />
-                        </TextBox.Text>
-                    </TextBox>
-
-                    <Button Content="עדכן משתנה תצורה"
-            Width="200"
-            HorizontalAlignment="Center"
-            Click="UpdateConfigButton_Click"/>
-                </StackPanel>
-
-            </Grid>
+        <!-- Configuration Section -->
+        <Border Grid.Row="1" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Max Risk Range:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Width="200" Margin="0,0,0,10" Text="{Binding MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Content="Update Config" Width="200" Click="UpdateConfigButton_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+            </StackPanel>
         </Border>
 
-        <!-- אזור כפתורי פעולות -->
-        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,33,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Button Grid.Row="0" Content="הצג רשימה" Width="200" Margin="0,5" Click="btnShowVolunteerList_Click"/>
-            <!--    <Button Grid.Row="1" Content="אתחול בסיס נתונים" Width="200" Margin="0,5"/>
-            <Button Grid.Row="2" Content="איפוס בסיס נתונים" Width="200" Margin="0,5"/> -->
-        </Grid>
-        <StackPanel Margin="20,97,20,57" Grid.Row="2">
-
-            <!-- כפתור לפתיחת תצוגת קורסים -->
-            <!-- Button to open course list screen 
-            <Button Content="Handle Courses" Click="btnCourses_Click" Margin="5"/>
--->
-            <!-- Button to initialize database -->
-            <Button Content="Initialize DB" Click="btnInitializeDB_Click" Margin="5"/>
-
-            <!-- Button to reset database -->
-            <Button Content="Reset DB" Click="btnResetDB_Click" Margin="5"/>
-          <!-- <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollectionKey}}" 
-         Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <DataGrid Grid.Row="2" Margin="5" ItemsSource="{Binding Path=CallList}" AutoGenerateColumns="True"/> -->
+        <!-- Navigation Section -->
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10">
+            <Button Content="Show Volunteers" Width="200" Margin="5" Click="btnShowVolunteerList_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+            <Button Content="Initialize DB"  Width="200" Margin="5" Click="btnInitializeDB_Click"    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+            <Button Content="Reset DB"       Width="200" Margin="5" Click="btnResetDB_Click"         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
         </StackPanel>
     </Grid>
-
 </Window>

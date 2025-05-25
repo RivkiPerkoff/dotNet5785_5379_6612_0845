@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-       xmlns:local="clr-namespace:PL.Volunteer"
-         xmlns:pl="clr-namespace:PL"
+        xmlns:local="clr-namespace:PL.Volunteer"
+        xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="VolunteerListWindow" Height="640" Width="800"
+        Title="Volunteer List"
+        Height="640"
+        Width="800"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -15,75 +17,109 @@
         <pl:VolunteerFieldsCollection x:Key="VolunteerFieldsCollectionKey"/>
     </Window.Resources>
 
-
-    <Grid>
+    <Grid Background="#F9F9F9">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ComboBox למיון -->
-        <Grid Grid.Row="0" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Column="0" Content="Select:" VerticalAlignment="Center" Margin="10"/>
-            <ComboBox Grid.Column="1" Margin="10"
-                ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollectionKey}}"
-                SelectedValue="{Binding SelectedSortField, Mode=TwoWay}">
+        <!-- Sorting -->
+        <DockPanel Grid.Row="0" Margin="10">
+            <Label Content="Sort by:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="200"
+                      ItemsSource="{Binding Source={StaticResource VolunteerFieldsCollectionKey}}"
+                      SelectedValue="{Binding SelectedSortField, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" />
+                        <TextBlock Text="{Binding}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+        </DockPanel>
 
-        </Grid>
-        <!-- 
-        <DataGrid Grid.Row="1"
-          ItemsSource="{Binding VolunteerList}"
-          SelectedItem="{Binding SelectedVolunteer, Mode=OneWayToSource}"
-          AutoGenerateColumns="True"
-          Margin="10"
-         />טבלת מתנדבים -->
-        <!--    MouseDoubleClick="VolunteerDataGrid_MouseDoubleClick"-->
+        <!-- DataGrid -->
         <DataGrid Grid.Row="1"
           ItemsSource="{Binding VolunteerList}"
           SelectedItem="{Binding SelectedVolunteer, Mode=OneWayToSource}"
           AutoGenerateColumns="False"
           Margin="10"
           CanUserAddRows="False"
-          >
+          IsReadOnly="True"
+          HeadersVisibility="Column"
+          RowBackground="White"
+          AlternatingRowBackground="#F2F2F2"
+          GridLinesVisibility="Horizontal"
+          BorderBrush="#CCCCCC"
+          BorderThickness="1"
+          RowHeaderWidth="0"
+          ColumnHeaderHeight="35"
+          FontSize="14"
+          FontFamily="Segoe UI"
+          EnableRowVirtualization="True">
+
+            <DataGrid.Resources>
+                <!-- Highlight selected row -->
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
+                    <Setter Property="ToolTip" Value="{Binding Name}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#D0E8FF"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#B0D6FF"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+                <!-- Header Style -->
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#EAEAEA"/>
+                    <Setter Property="Foreground" Value="#333"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Height" Value="35"/>
+                    <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="Padding" Value="5,0"/>
+                </Style>
+            </DataGrid.Resources>
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding VolunteerId}" Width="Auto"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding VolunteerId}" Width="Auto"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                 <DataGridCheckBoxColumn Header="Available" Binding="{Binding IsAvailable}" Width="Auto"/>
-                <DataGridTextColumn Header="Handled Calls" Binding="{Binding HandledCalls}" Width="Auto"/>
-                <DataGridTextColumn Header="Canceled Calls" Binding="{Binding CanceledCalls}" Width="Auto"/>
-                <DataGridTextColumn Header="Expired Calls" Binding="{Binding ExpiredCalls}" Width="Auto"/>
-                <DataGridTextColumn Header="Current Call Id" Binding="{Binding CurrentCallId}" Width="Auto"/>
+                <DataGridTextColumn Header="Handled" Binding="{Binding HandledCalls}" Width="Auto"/>
+                <DataGridTextColumn Header="Canceled" Binding="{Binding CanceledCalls}" Width="Auto"/>
+                <DataGridTextColumn Header="Expired" Binding="{Binding ExpiredCalls}" Width="Auto"/>
+                <DataGridTextColumn Header="Current Call" Binding="{Binding CurrentCallId}" Width="Auto"/>
                 <DataGridTextColumn Header="Call Type" Binding="{Binding CallType}" Width="Auto"/>
-
-                <!-- עמודת כפתור מחיקה -->
-                <DataGridTemplateColumn Header="Delete" Width="80">
+                <DataGridTemplateColumn Header="" Width="80">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete" Click="DeleteButton_Click" Tag="{Binding VolunteerId}" />
+                            <Button Content="Delete"
+                            Click="DeleteButton_Click"
+                            Tag="{Binding VolunteerId}"
+                          
+                            Foreground="White"
+                            Padding="5,2"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            FontWeight="Bold"
+                            Width="65"
+                            HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
-
-        <!-- כפתור הוספה -->
-        <Button Grid.Row="2" Content="Add" Height="50" Width="100" Margin="10"
-                HorizontalAlignment="Center"
-            />
-        <!--   Click="AddButton_Click"-->
-
+        <!-- Add Button -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Add Volunteer" Width="150" Height="40" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+        </StackPanel>
     </Grid>
 </Window>
