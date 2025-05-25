@@ -102,33 +102,38 @@ public partial class MainWindow : Window
     {
         s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Year);
     }
-    //  private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
+  
+    //private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
     //{
-    //    try
+    //    if (int.TryParse(MaxRange.ToString(), out int minutes))
     //    {
-    //        TimeSpan range = TimeSpan.FromDays(MaxYearRange * 365);
-    //        s_bl.Admin.SetRiskTimeRange(range);
+    //        try
+    //        {
+    //            RiskTimeRange = TimeSpan.FromMinutes(minutes);
+    //            s_bl.Admin.SetRiskTimeRange(RiskTimeRange);
 
-    //        // הוסף את השורה הבאה:
-    //        configObserver(); // כדי לעדכן את MaxYearRange שוב לפי הערך החדש מה-BL
-
-    //        MessageBox.Show("משתנה התצורה עודכן בהצלחה!", "עדכון", MessageBoxButton.OK, MessageBoxImage.Information);
+    //            MessageBox.Show($"Risk range updated to: {minutes} minutes.");
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            MessageBox.Show($"An error occurred while updating the risk range: {ex.Message}");
+    //        }
     //    }
-    //    catch (Exception ex)
+    //    else
     //    {
-    //        MessageBox.Show($"אירעה שגיאה בעת עדכון משתנה התצורה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+    //        MessageBox.Show("Please enter a valid numeric value for the risk range.");
     //    }
     //}
-    private void UpdateRiskRange_Click(object sender, RoutedEventArgs e)
+    private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
     {
-        if (int.TryParse(MaxRange.ToString(), out int minutes))
+        if (TimeSpan.TryParse(RiskTimeRangeText, out TimeSpan ts))
         {
             try
             {
-                RiskTimeRange = TimeSpan.FromMinutes(minutes);
+                RiskTimeRange = ts;
                 s_bl.Admin.SetRiskTimeRange(RiskTimeRange);
 
-                MessageBox.Show($"Risk range updated to: {minutes} minutes.");
+                MessageBox.Show($"Risk range updated to: {RiskTimeRange}.");
             }
             catch (Exception ex)
             {
@@ -137,15 +142,11 @@ public partial class MainWindow : Window
         }
         else
         {
-            MessageBox.Show("Please enter a valid numeric value for the risk range.");
+            MessageBox.Show("Please enter a valid time in the format hh:mm:ss.");
         }
     }
-    public int MaxRange
-    {
-        get { return (int)GetValue(MaxRangeProperty); }
-        set { SetValue(MaxRangeProperty, value); }
-    }
 
+ 
     public static readonly DependencyProperty MaxRangeProperty =
         DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
