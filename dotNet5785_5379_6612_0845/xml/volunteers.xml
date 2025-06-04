@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Volunteer>
     <VolunteerId>1000</VolunteerId>
@@ -21,20 +21,6 @@
     <EmailOfVolunteer>052-987-1243</EmailOfVolunteer>
     <PasswordVolunteer>2o;o?(f!5Hm[</PasswordVolunteer>
     <AddressVolunteer>Haifa</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1002</VolunteerId>
-    <Name>Lior</Name>
-    <PhoneNumber>Lior@gmail.com</PhoneNumber>
-    <EmailOfVolunteer>054-123-9876</EmailOfVolunteer>
-    <PasswordVolunteer>XLN7[.9j}&lt;XG</PasswordVolunteer>
-    <AddressVolunteer>Beersheba</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
@@ -209,5 +195,35 @@
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>0</VolunteerId>
+    <Name>tamar</Name>
+    <PhoneNumber>0583257228</PhoneNumber>
+    <EmailOfVolunteer>t@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>111</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>11</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <Volunteer>
+      <VolunteerId>1002</VolunteerId>
+      <Name>Lior</Name>
+      <PhoneNumber>Lior@gmail.com</PhoneNumber>
+      <EmailOfVolunteer>054-123-9876</EmailOfVolunteer>
+      <PasswordVolunteer>1212</PasswordVolunteer>
+      <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+      <VolunteerLatitude>0</VolunteerLatitude>
+      <VolunteerLongitude>0</VolunteerLongitude>
+      <IsAvailable>true</IsAvailable>
+      <MaximumDistanceForReceivingCall>10</MaximumDistanceForReceivingCall>
+      <Role>Volunteer</Role>
+      <DistanceType>AirDistance</DistanceType>
+    </Volunteer>
   </Volunteer>
 </ArrayOfVolunteer>
