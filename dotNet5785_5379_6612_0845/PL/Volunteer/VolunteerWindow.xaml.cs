@@ -113,4 +113,18 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    private string _password = string.Empty;
+
+    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+    {
+        var passwordBox = sender as PasswordBox;
+        if (passwordBox != null)
+        {
+            _password = passwordBox.Password;
+        }
+    }
+    private void ShowPassword_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show($"הסיסמה היא: {_password}", "👁");
+    }
 }

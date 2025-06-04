@@ -153,10 +153,11 @@
         <Label Grid.Row="3" Grid.Column="0" Content="Email:"/>
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding EmailOfVolunteer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-         
+
         <Label Grid.Row="4" Grid.Column="0" Content="Password:"/>
-        <!--
-        <PasswordBox Grid.Row="4" Grid.Column="1" PasswordChanged="PasswordBox_PasswordChanged"/>Password -->
+
+        <PasswordBox Grid.Row="4" Grid.Column="1" PasswordChanged="PasswordBox_PasswordChanged"/>
+        <Button Grid.Row="4" Content="👁" Width="21" Margin="196,4,0,6" Click="ShowPassword_Click" Grid.Column="1" HorizontalAlignment="Left"/>
 
         <!-- Address -->
         <Label Grid.Row="5" Grid.Column="0" Content="Address:"/>
@@ -202,10 +203,10 @@
         <Label Grid.Row="14" Grid.Column="0" Content="Selected and Expired Calls:"/>
         <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding SelectedAndExpiredCalls, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Add / Update button 
+        <!-- Add / Update button -->
         <Button Grid.Row="14" Margin="5,59,0,24"
                 Content="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=Window}}"
-                Click="BtnAddUpdate_Click" HorizontalAlignment="Left" Grid.Column="1"/>-->
+                Click="BtnAddUpdate_Click" HorizontalAlignment="Left" Grid.Column="1"/>
     </Grid>
 
 </Window>

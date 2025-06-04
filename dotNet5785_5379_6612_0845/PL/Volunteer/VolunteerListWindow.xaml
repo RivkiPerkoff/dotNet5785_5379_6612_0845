@@ -56,7 +56,8 @@
           ColumnHeaderHeight="35"
           FontSize="14"
           FontFamily="Segoe UI"
-          EnableRowVirtualization="True">
+          EnableRowVirtualization="True"
+            MouseDoubleClick="DataGrid_MouseDoubleClick">
 
             <DataGrid.Resources>
                 <!-- Highlight selected row -->
@@ -119,14 +120,11 @@
 
         <!-- Add Button 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Add Volunteer" Width="150" Height="40" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
-        </StackPanel>-->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
             <Button Content="Add Volunteer"
-            Width="150"
-            Height="40"
-            Click="AddButton_Click"
-            Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
-        </StackPanel>
+        Width="150"
+        Height="40"
+        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+        Click="AddButton_Click"/>
+        </StackPanel>-->
     </Grid>
 </Window>
