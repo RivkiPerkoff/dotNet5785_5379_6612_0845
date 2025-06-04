@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using BL.BIApi;
 using BL.BO;
 
@@ -113,6 +115,20 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         if (sender is PasswordBox passwordBox)
         {
             CurrentVolunteer.PasswordVolunteer = passwordBox.Password;
+        }
+    }
+    public class VolunteerIdToButtonTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int id && id > 0)
+                return "עדכן מתנדב";
+            return "הוסף מתנדב";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
