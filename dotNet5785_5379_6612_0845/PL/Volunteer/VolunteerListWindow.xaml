@@ -119,7 +119,11 @@
 
         <!-- Add Button -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Add Volunteer" Width="150" Height="40" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+            <Button Content="Add Volunteer"
+        Width="150"
+        Height="40"
+        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+        Click="AddButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

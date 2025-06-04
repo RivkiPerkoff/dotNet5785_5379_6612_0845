@@ -132,6 +132,14 @@ public partial class VolunteerListWindow : Window
             }
         }
     }
+    private void AddButton_Click(object sender, RoutedEventArgs e)
+    {
+        var addWindow = new VolunteerWindow(); // פותח את חלון ההוספה
+        addWindow.ShowDialog(); // משתמש ב-ShowDialog כדי לחכות לסיום החלון
+
+        // לאחר שהחלון נסגר, אפשר לרענן את הרשימה אם צריך (אם אין Observer)
+        // RefreshVolunteerList(); // לא נדרש אם אתה משתמש ב־Observer כמו שכבר עשית
+    }
 
 
 
