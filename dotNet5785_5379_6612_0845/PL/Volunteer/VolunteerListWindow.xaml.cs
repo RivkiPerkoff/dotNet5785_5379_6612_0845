@@ -133,6 +133,50 @@ public partial class VolunteerListWindow : Window
         }
     }
 
+    //private void AddButton_Click(object sender, RoutedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        var volunteer = VolunteerList?.FirstOrDefault(v => v?.VolunteerId == volunteerId);
+
+    //        // 1. ודא שכל השדות הנדרשים מולאו
+    //        if (CurrentVolunteer == null || string.IsNullOrWhiteSpace(CurrentVolunteer.Name))
+    //        {
+    //            MessageBox.Show("נא למלא את כל שדות המתנדב לפני ההוספה.",
+    //                            "שדות חסרים",
+    //                            MessageBoxButton.OK,
+    //                            MessageBoxImage.Warning);
+    //            return;
+    //        }
+
+    //        // 2. הוספת המתנדב דרך ה-BL
+    //        s_bl.Volunteer.AddVolunteer(CurrentVolunteer);
+
+    //        // 3. הצגת הודעת הצלחה
+    //        MessageBox.Show("המתנדב נוסף בהצלחה!",
+    //                        "הצלחה",
+    //                        MessageBoxButton.OK,
+    //                        MessageBoxImage.Information);
+
+    //        // 4. סגירת החלון (אם רלוונטי)
+    //        this.Close();
+    //    }
+    //    catch (BL.BO.BlAlreadyExistsException ex)
+    //    {
+    //        MessageBox.Show($"Volunteer already exists:\n{ex.Message}",
+    //                        "שגיאה",
+    //                        MessageBoxButton.OK,
+    //                        MessageBoxImage.Error);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show($"שגיאה כללית:\n{ex.Message}",
+    //                        "שגיאה",
+    //                        MessageBoxButton.OK,
+    //                        MessageBoxImage.Error);
+    //    }
+    //}
+
 
 
 }

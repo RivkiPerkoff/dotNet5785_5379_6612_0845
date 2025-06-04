@@ -202,10 +202,10 @@
         <Label Grid.Row="14" Grid.Column="0" Content="Selected and Expired Calls:"/>
         <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding SelectedAndExpiredCalls, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Add / Update button -->
+        <!-- Add / Update button 
         <Button Grid.Row="14" Margin="5,59,0,24"
                 Content="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=Window}}"
-                Click="btnAddUpdate_Click" HorizontalAlignment="Left" Grid.Column="1"/>
+                Click="BtnAddUpdate_Click" HorizontalAlignment="Left" Grid.Column="1"/>-->
     </Grid>
 
 </Window>
