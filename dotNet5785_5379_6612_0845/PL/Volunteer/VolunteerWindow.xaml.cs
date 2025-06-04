@@ -1,5 +1,4 @@
-﻿// VolunteerWindow.xaml.cs
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using BL.BIApi;
@@ -32,6 +31,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             OnPropertyChanged(nameof(ButtonText));
         }
     }
+
     public VolunteerWindow(int id = 0)
     {
         InitializeComponent();
@@ -39,9 +39,9 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
 
         CurrentVolunteer = id != 0 ? s_bl.Volunteer.GetVolunteerDetails(id) : new BL.BO.Volunteer();
 
-        if (CurrentVolunteer!.VolunteerId != 0)
+        if (CurrentVolunteer?.VolunteerId != 0)
         {
-            s_bl.Volunteer.AddObserver(CurrentVolunteer!.VolunteerId, RefreshCurrentStudent);
+            s_bl.Volunteer.AddObserver(CurrentVolunteer.VolunteerId, RefreshCurrentVolunteer);
         }
 
         ButtonText = id == 0 ? "Add" : "Update";
@@ -49,11 +49,12 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         this.Loaded += VolunteerWindow_Loaded;
         this.Closing += VolunteerWindow_Closing;
     }
+
     private void VolunteerWindow_Loaded(object sender, RoutedEventArgs e)
     {
         if (CurrentVolunteer != null && CurrentVolunteer.VolunteerId != 0)
         {
-            s_bl.Volunteer.AddObserver(CurrentVolunteer.VolunteerId, RefreshCurrentStudent);
+            s_bl.Volunteer.AddObserver(CurrentVolunteer.VolunteerId, RefreshCurrentVolunteer);
         }
     }
 
@@ -61,17 +62,16 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
         if (CurrentVolunteer != null && CurrentVolunteer.VolunteerId != 0)
         {
-            s_bl.Volunteer.RemoveObserver(CurrentVolunteer.VolunteerId, RefreshCurrentStudent);
+            s_bl.Volunteer.RemoveObserver(CurrentVolunteer.VolunteerId, RefreshCurrentVolunteer);
         }
     }
 
-    private void RefreshCurrentStudent()
+    private void RefreshCurrentVolunteer()
     {
-        int id = CurrentVolunteer!.VolunteerId;
+        int id = CurrentVolunteer.VolunteerId;
         CurrentVolunteer = null;
         CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
     }
-
 
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
@@ -105,25 +105,14 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         }
     }
 
-
-
     public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged(string propertyName)
-    {
+    protected void OnPropertyChanged(string propertyName) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-    private string _password = string.Empty;
-
     private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
     {
-        var passwordBox = sender as PasswordBox;
-        if (passwordBox != null)
+        if (sender is PasswordBox passwordBox)
         {
-            _password = passwordBox.Password;
+            CurrentVolunteer.PasswordVolunteer = passwordBox.Password;
         }
-    }
-    private void ShowPassword_Click(object sender, RoutedEventArgs e)
-    {
-        MessageBox.Show($"הסיסמה היא: {_password}", "👁");
     }
 }
