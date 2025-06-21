@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Volunteer>
     <VolunteerId>1000</VolunteerId>
     <Name>Roni</Name>
     <PhoneNumber>Roni@gmail.com</PhoneNumber>
     <EmailOfVolunteer>050-321-7845</EmailOfVolunteer>
-    <PasswordVolunteer>[q62}dz$;EMJ</PasswordVolunteer>
+    <PasswordVolunteer>O3zF|bg}D@!6</PasswordVolunteer>
     <AddressVolunteer>Nazareth</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -19,22 +19,8 @@
     <Name>Maya</Name>
     <PhoneNumber>Maya@gmail.com</PhoneNumber>
     <EmailOfVolunteer>052-987-1243</EmailOfVolunteer>
-    <PasswordVolunteer>2iKtr+Gv98/)</PasswordVolunteer>
+    <PasswordVolunteer>2o;o?(f!5Hm[</PasswordVolunteer>
     <AddressVolunteer>Haifa</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1002</VolunteerId>
-    <Name>Lior</Name>
-    <PhoneNumber>Lior@gmail.com</PhoneNumber>
-    <EmailOfVolunteer>054-123-9876</EmailOfVolunteer>
-    <PasswordVolunteer>C4os5HJ([0oD</PasswordVolunteer>
-    <AddressVolunteer>Beersheba</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
@@ -47,7 +33,7 @@
     <Name>Noa</Name>
     <PhoneNumber>Noa@gmail.com</PhoneNumber>
     <EmailOfVolunteer>053-549-4567</EmailOfVolunteer>
-    <PasswordVolunteer>y?0!}t|qF;=[</PasswordVolunteer>
+    <PasswordVolunteer>xedFy$0&amp;T].G</PasswordVolunteer>
     <AddressVolunteer>Eilat</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -61,7 +47,7 @@
     <Name>Dani</Name>
     <PhoneNumber>Dani@gmail.com</PhoneNumber>
     <EmailOfVolunteer>055-789-1234</EmailOfVolunteer>
-    <PasswordVolunteer>WD&gt;{x{5zB=B|</PasswordVolunteer>
+    <PasswordVolunteer>NIMNNm1$|B_g</PasswordVolunteer>
     <AddressVolunteer>Rosh Ha'ayin</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -75,7 +61,7 @@
     <Name>Tomer</Name>
     <PhoneNumber>Tomer@gmail.com</PhoneNumber>
     <EmailOfVolunteer>050-987-6789</EmailOfVolunteer>
-    <PasswordVolunteer>.ftG1!Kc2z&gt;p</PasswordVolunteer>
+    <PasswordVolunteer>@xEgTj5b65IG</PasswordVolunteer>
     <AddressVolunteer>Afula</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -89,7 +75,7 @@
     <Name>Liat</Name>
     <PhoneNumber>Liat@gmail.com</PhoneNumber>
     <EmailOfVolunteer>054-112-7654</EmailOfVolunteer>
-    <PasswordVolunteer>oZ/sx901H_Y4</PasswordVolunteer>
+    <PasswordVolunteer>s9j&amp;8ULR}y6}</PasswordVolunteer>
     <AddressVolunteer>Kiryat Shmona</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -103,7 +89,7 @@
     <Name>Gal</Name>
     <PhoneNumber>Gal@gmail.com</PhoneNumber>
     <EmailOfVolunteer>053-785-6543</EmailOfVolunteer>
-    <PasswordVolunteer>8s5&gt;Vj#qGHw{</PasswordVolunteer>
+    <PasswordVolunteer>HL3yD(zl;?j?</PasswordVolunteer>
     <AddressVolunteer>Karmiel</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -117,7 +103,7 @@
     <Name>Yona</Name>
     <PhoneNumber>Yona@gmail.com</PhoneNumber>
     <EmailOfVolunteer>052-312-7890</EmailOfVolunteer>
-    <PasswordVolunteer>u_2f|JJWpkEP</PasswordVolunteer>
+    <PasswordVolunteer>3Nbib3i#dlGL</PasswordVolunteer>
     <AddressVolunteer>Dimona</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -131,7 +117,7 @@
     <Name>Nir</Name>
     <PhoneNumber>Nir@gmail.com</PhoneNumber>
     <EmailOfVolunteer>055-654-3210</EmailOfVolunteer>
-    <PasswordVolunteer>,[)S5n9iuGEd</PasswordVolunteer>
+    <PasswordVolunteer>&amp;)64bc,lc&gt;PR</PasswordVolunteer>
     <AddressVolunteer>Tiberias</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -145,7 +131,7 @@
     <Name>Omer</Name>
     <PhoneNumber>Omer@gmail.com</PhoneNumber>
     <EmailOfVolunteer>053-789-5647</EmailOfVolunteer>
-    <PasswordVolunteer>U,C@Iq4&lt;qWdd</PasswordVolunteer>
+    <PasswordVolunteer>k=i5V)Ah[:A3</PasswordVolunteer>
     <AddressVolunteer>Safed</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -159,7 +145,7 @@
     <Name>Shira</Name>
     <PhoneNumber>Shira@gmail.com</PhoneNumber>
     <EmailOfVolunteer>050-125-1234</EmailOfVolunteer>
-    <PasswordVolunteer>neVp,Jy8*.sr</PasswordVolunteer>
+    <PasswordVolunteer>kR2UROi!)g(1</PasswordVolunteer>
     <AddressVolunteer>Kiryat Gat</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -173,7 +159,7 @@
     <Name>Erez</Name>
     <PhoneNumber>Erez@gmail.com</PhoneNumber>
     <EmailOfVolunteer>052-456-8765</EmailOfVolunteer>
-    <PasswordVolunteer>J5T*oRwa#&gt;wn</PasswordVolunteer>
+    <PasswordVolunteer>1=rd]h}@KLQ^</PasswordVolunteer>
     <AddressVolunteer>Ashkelon</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -187,7 +173,7 @@
     <Name>Michal</Name>
     <PhoneNumber>Michal@gmail.com</PhoneNumber>
     <EmailOfVolunteer>054-654-4321</EmailOfVolunteer>
-    <PasswordVolunteer>,z(S%^V,0k3*</PasswordVolunteer>
+    <PasswordVolunteer>g%}vX-3--r4R</PasswordVolunteer>
     <AddressVolunteer>Lod</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -201,7 +187,7 @@
     <Name>Hadar</Name>
     <PhoneNumber>Hadar@gmail.com</PhoneNumber>
     <EmailOfVolunteer>055-123-4567</EmailOfVolunteer>
-    <PasswordVolunteer>6gj&gt;Q!osO_A:</PasswordVolunteer>
+    <PasswordVolunteer>..]2&amp;mJji]&amp;&gt;</PasswordVolunteer>
     <AddressVolunteer>Ramat Gan</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -209,5 +195,35 @@
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>0</VolunteerId>
+    <Name>tamar</Name>
+    <PhoneNumber>0583257228</PhoneNumber>
+    <EmailOfVolunteer>t@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>111</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>11</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <Volunteer>
+      <VolunteerId>1002</VolunteerId>
+      <Name>Lior</Name>
+      <PhoneNumber>Lior@gmail.com</PhoneNumber>
+      <EmailOfVolunteer>054-123-9876</EmailOfVolunteer>
+      <PasswordVolunteer>1212</PasswordVolunteer>
+      <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+      <VolunteerLatitude>0</VolunteerLatitude>
+      <VolunteerLongitude>0</VolunteerLongitude>
+      <IsAvailable>true</IsAvailable>
+      <MaximumDistanceForReceivingCall>10</MaximumDistanceForReceivingCall>
+      <Role>Volunteer</Role>
+      <DistanceType>AirDistance</DistanceType>
+    </Volunteer>
   </Volunteer>
 </ArrayOfVolunteer>

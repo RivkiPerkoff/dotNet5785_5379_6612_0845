@@ -77,6 +77,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
 
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
+
         try
         {
             if (ButtonText == "Add")

@@ -52,9 +52,26 @@
         <Label Grid.Row="0" Grid.Column="0" Content="Volunteer Id:"/>
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding VolunteerId}" VerticalAlignment="Center" Foreground="#555555" FontWeight="SemiBold"/>
 
-        <!-- Name -->
-        <Label Grid.Row="1" Grid.Column="0" Content="Name:"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="1"
+          ItemsSource="{Binding VolunteerList}"
+          SelectedItem="{Binding SelectedVolunteer, Mode=OneWayToSource}"
+          AutoGenerateColumns="False"
+          Margin="10"
+          CanUserAddRows="False"
+          IsReadOnly="True"
+          HeadersVisibility="Column"
+          RowBackground="White"
+          AlternatingRowBackground="#F2F2F2"
+          GridLinesVisibility="Horizontal"
+          BorderBrush="#CCCCCC"
+          BorderThickness="1"
+          RowHeaderWidth="0"
+          ColumnHeaderHeight="35"
+          FontSize="14"
+          FontFamily="Segoe UI"
+          EnableRowVirtualization="True"
+            MouseDoubleClick="DataGrid_MouseDoubleClick">
 
         <!-- PhoneNumber -->
         <Label Grid.Row="2" Grid.Column="0" Content="Phone Number:"/>
