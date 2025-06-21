@@ -37,6 +37,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     public VolunteerWindow(int id = 0)
     {
         InitializeComponent();
+
         DataContext = this;
 
         CurrentVolunteer = id != 0 ? s_bl.Volunteer.GetVolunteerDetails(id) : new BL.BO.Volunteer();
@@ -118,18 +119,5 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             CurrentVolunteer.PasswordVolunteer = passwordBox.Password;
         }
     }
-    public class VolunteerIdToButtonTextConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is int id && id > 0)
-                return "עדכן מתנדב";
-            return "הוסף מתנדב";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+   
 }

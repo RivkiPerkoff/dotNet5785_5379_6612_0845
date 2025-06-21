@@ -71,7 +71,7 @@
           FontSize="14"
           FontFamily="Segoe UI"
           EnableRowVirtualization="True"
-            MouseDoubleClick="DataGrid_MouseDoubleClick">
+            MouseDoubleClick="DataGrid_MouseDoubleClick"/>
 
         <!-- PhoneNumber -->
         <Label Grid.Row="2" Grid.Column="0" Content="Phone Number:"/>
