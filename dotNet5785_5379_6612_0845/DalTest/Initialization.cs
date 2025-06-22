@@ -10,11 +10,6 @@ public static class Initialization
 {
     public static IDal? s_dal;
 
-    //private static IVolunteer? s_dalVolunteer;
-    //private static IAssignment? s_dalAssignment;
-    //private static ICall? s_dalCall;
-    //private static IConfig? s_dalConfig;
-
     private static readonly Random s_rand = new();
 
     /// <summary>
@@ -37,8 +32,8 @@ public static class Initialization
         s_dal!.Volunteer.Create(new Volunteer(
             id,
             name,
-            email,
             phone,
+            email,        
             password,
             address,
             0,

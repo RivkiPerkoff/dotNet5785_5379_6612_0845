@@ -1,4 +1,4 @@
-﻿<Window x:Class="PL.MainWindow"
+﻿<!--<Window x:Class="PL.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,6 @@
         Title="Main Window"
         Height="500"
         Width="800"
-        Loaded="MainWindow_Loaded"
         Closed="MainWindow_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
@@ -19,7 +18,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Clock Section -->
         <Border Grid.Row="0" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
             <StackPanel>
                 <Label Content="{Binding CurrentTime}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
@@ -32,7 +30,6 @@
             </StackPanel>
         </Border>
         
-        <!-- Configuration Section -->
         <Border Grid.Row="1" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
             <StackPanel HorizontalAlignment="Center">
                 <TextBlock Text="Risk Time Range (hh:mm:ss):" FontWeight="SemiBold" Margin="0,0,0,5"/>
@@ -41,11 +38,115 @@
             </StackPanel>
         </Border>
 
-        <!-- Navigation Section -->
         <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10">
             <Button Content="Show Volunteers" Width="200" Margin="5" Click="btnShowVolunteerList_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
             <Button Content="Initialize DB"  Width="200" Margin="5" Click="btnInitializeDB_Click"    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
             <Button Content="Reset DB"       Width="200" Margin="5" Click="btnResetDB_Click"         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
         </StackPanel>
+    </Grid>
+</Window>
+-->
+<Window x:Class="PL.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="Main Window"
+        Height="600"
+        Width="850"
+        WindowStartupLocation="CenterScreen"
+        Background="#F0F2F5"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Grid Margin="20" Background="#FAFAFA">
+
+        <!-- Grid layout divided into four main sections -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Main Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Clock Section -->
+            <RowDefinition Height="Auto"/>
+            <!-- Configuration Section -->
+            <RowDefinition Height="*"/>
+            <!-- Buttons Section -->
+        </Grid.RowDefinitions>
+
+        <!-- Main Window Title -->
+        <TextBlock Text="System Control Panel"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="#333"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"
+                   Grid.Row="0"/>
+
+        <!-- Clock Section with Time Display and Time Adjustment Buttons -->
+        <Border Grid.Row="1" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+            <StackPanel HorizontalAlignment="Center">
+                <Label Content="{Binding CurrentTime}" 
+                       FontSize="26" 
+                       FontWeight="Bold" 
+                       Foreground="#444" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,10"/>
+
+                <UniformGrid Columns="4" HorizontalAlignment="Center">
+                    <Button Content="+1 Minute" Click="btnAddOneMinute_Click" Margin="5" Padding="8,5" Width="120" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                    <Button Content="+1 Hour"   Click="btnAddOneHour_Click"   Margin="5" Padding="8,5" Width="120" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                    <Button Content="+1 Day"    Click="btnAddOneDay_Click"    Margin="5" Padding="8,5" Width="120" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                    <Button Content="+1 Year"   Click="btnAddOneYear_Click"   Margin="5" Padding="8,5" Width="120" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                </UniformGrid>
+            </StackPanel>
+        </Border>
+
+        <!-- Configuration Section with Risk Time Range Input -->
+        <Border Grid.Row="2" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Risk Time Range (hh:mm:ss):" 
+                           FontWeight="SemiBold" 
+                           FontSize="16" 
+                           Margin="0,0,0,8" 
+                           Foreground="#555"/>
+
+                <TextBox Width="250" 
+                         Height="28" 
+                         Margin="0,0,0,15" 
+                         Text="{Binding RiskTimeRangeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Content="Update Config" 
+                        Width="250" 
+                        Height="35" 
+                        Click="UpdateConfigButton_Click" 
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Navigation Buttons Section -->
+        <StackPanel Grid.Row="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Button Content="Show Volunteers" 
+                    Width="220" 
+                    Height="35" 
+                    Margin="5" 
+                    Click="btnShowVolunteerList_Click" 
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+
+            <Button Content="Initialize DB"  
+                    Width="220" 
+                    Height="35" 
+                    Margin="5" 
+                    Click="btnInitializeDB_Click"    
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+
+            <Button Content="Reset DB"       
+                    Width="220" 
+                    Height="35" 
+                    Margin="5" 
+                    Click="btnResetDB_Click"         
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+        </StackPanel>
+
     </Grid>
 </Window>

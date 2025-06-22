@@ -82,4 +82,32 @@ internal class CallManager
             };
         });
     }
+    public static int GetCountOfCompletedCalls(int volunteerId)
+    {
+        var assignments = s_dal.Assignment.ReadAll();
+        if (assignments is null) return 0;
+        return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.TakenCareof);
+    }
+    public static int GetCountOfSelfCancelledCalls(int volunteerId)
+    {
+        var assignments = s_dal.Assignment.ReadAll();
+        if (assignments is null) return 0;
+        return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
+    }
+    public static int GetCountOfExpiredCalls(int volunteerId)
+    {
+        var assignments = s_dal.Assignment.ReadAll();
+        if (assignments is null) return 0;
+        return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.Expired);
+    }
+
+    public static int? GetCallInTreatment(int volunteerId)
+    {
+        var assignments = s_dal.Assignment.ReadAll();
+        if (assignments is null) return 0;
+        return assignments
+            .Where(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment == null)
+            .Select(a => (int?)a.IdOfRunnerCall)
+            .FirstOrDefault();
+    }
 }

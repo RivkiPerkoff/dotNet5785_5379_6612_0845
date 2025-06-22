@@ -82,45 +82,6 @@ static public class VolunteerManager
         return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
     }
 
-    /// <summary>
-    /// Validates a volunteer's details, ensuring proper formatting and correctness.
-    /// </summary>
-    /// <param name="volunteer">Volunteer object to validate.</param>
-    /// <exception cref="BO.BlValidationException">Thrown if validation fails.</exception>
-    //public static void ValidateVolunteer(BO.Volunteer volunteer)
-    //{
-    //    if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
-    //    {
-    //        throw new BO.BlValidationException("Name must be at least 2 characters long");
-    //    }
-
-    //    if (!string.IsNullOrWhiteSpace(volunteer.EmailOfVolunteer) &&
-    //        !Regex.IsMatch(volunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-    //    {
-    //        throw new BO.BlValidationException("Invalid email format");
-    //    }
-
-    //    if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) &&
-    //        !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
-    //    {
-    //        throw new BO.BlValidationException("Phone must be a valid 10-digit number");
-    //    }
-
-    //    if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer))
-    //    {
-    //        try
-    //        {
-    //            (double latitude, double longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
-    //            volunteer.VolunteerLatitude = latitude;
-    //            volunteer.VolunteerLongitude = longitude;
-    //        }
-    //        catch
-    //        {
-    //            throw new BO.BlValidationException("Invalid address - unable to find coordinates");
-    //        }
-    //    }
-
-    //}
     public static void ValidateVolunteer(BO.Volunteer volunteer)
     {
         try
@@ -158,12 +119,10 @@ static public class VolunteerManager
         }
         catch (BO.BlValidationException)
         {
-            // כבר שגיאה ממוקדת – פשוט להעביר הלאה
             throw;
         }
         catch (Exception ex)
         {
-            // עטיפת כל שגיאה אחרת
             throw new BO.BlValidationException($"Unexpected validation error: {ex.Message}", ex);
         }
     }
@@ -237,26 +196,17 @@ static public class VolunteerManager
             VolunteerId = doVolunteer.VolunteerId,
             Name = doVolunteer.Name,
             IsAvailable = doVolunteer.IsAvailable,
-            HandledCalls = 0,
-            CanceledCalls = 0,
-            ExpiredCalls = 0,
-            CurrentCallId = null,
+            HandledCalls = CallManager.GetCountOfCompletedCalls(doVolunteer.VolunteerId),
+            CanceledCalls = CallManager.GetCountOfSelfCancelledCalls(doVolunteer.VolunteerId),
+            ExpiredCalls = CallManager.GetCountOfExpiredCalls(doVolunteer.VolunteerId),
+            CurrentCallId = CallManager.GetCallInTreatment(doVolunteer.VolunteerId),
             CallType = BO.CallTypes.None
         };
     }
-    //public static TypeSortingVolunteers? ConvertToTypeSorting(VolunteerFields field)
-    //{
-    //    return field switch
-    //    {
-    //        VolunteerFields.VolunteerId => TypeSortingVolunteers.VolunteerId,
-    //        VolunteerFields.Name => TypeSortingVolunteers.Name,
-    //        VolunteerFields.IsAvailable => TypeSortingVolunteers.IsAvailable,
-    //        VolunteerFields.TotalCallsHandled => TypeSortingVolunteers.HandledCalls,
-    //        VolunteerFields.TotalCallsCanceled => TypeSortingVolunteers.CanceledCalls,
-    //        VolunteerFields.SelectedAndExpiredCalls => TypeSortingVolunteers.ExpiredCalls,
-    //        VolunteerFields.CallInProgress => TypeSortingVolunteers.CurrentCallId,
-    //        // הוסף עוד לפי הצורך
-    //        _ => null
-    //    };
-    //}
+ 
+
+
+
+
+
 }

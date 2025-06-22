@@ -9,7 +9,6 @@ namespace PL;
 public partial class MainWindow : Window
 {
     private static readonly IBL s_bl = BlApi.Factory.Get();
-    // משתנים לשמירת המשקיפים
     private readonly Action clockObserver;
     private readonly Action configObserver;
 
@@ -109,10 +108,10 @@ public partial class MainWindow : Window
     public static readonly DependencyProperty MaxRangeProperty =
         DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        // לא דרוש אם עושים הכל בבנאי
-    }
+    //private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    //{
+    //    // לא דרוש אם עושים הכל בבנאי
+    //}
 
     private void MainWindow_Closed(object sender, EventArgs e)
     {
@@ -120,7 +119,6 @@ public partial class MainWindow : Window
         s_bl.Admin.RemoveConfigObserver(configObserver);
     }
 
-    // === אתחול בסיס הנתונים ===
     private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show("האם אתה בטוח שברצונך לאתחל את בסיס הנתונים?",
