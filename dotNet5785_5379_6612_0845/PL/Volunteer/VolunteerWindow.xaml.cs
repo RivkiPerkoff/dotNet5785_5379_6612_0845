@@ -13,7 +13,6 @@ namespace PL.Volunteer;
 public partial class VolunteerWindow : Window, INotifyPropertyChanged
 {
    private static readonly IBL volunteer_bl = BlApi.Factory.Get();
-
     public string ButtonText
     {
         get => (string)GetValue(ButtonTextProperty);

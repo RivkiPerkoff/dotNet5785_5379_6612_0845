@@ -22,29 +22,11 @@ public partial class MainWindow : Window
             CurrentTime = s_bl.Admin.GetClock();
         };
 
-        //configObserver = () =>
-        //{
-        //    //// במקום לחשב שנים מתוך ימים, קבל את הטווח ישירות כ-TimeSpan
-        //    //var riskTimeRange = s_bl.Admin.GetRiskTimeRange();
-        //    //// אם ברצונך לשמור כערך מספרי בשנים (או שעות) אפשר להוסיף כאן המרה בהתאם
-
-        //    //// לדוגמה, אם MaxYearRange צריך להיות מספר של שעות:
-        //    //MaxYearRange = (int)riskTimeRange.TotalHours;
-
-        //    //// אם עדיין רוצה לשמור בשנים, אז תעשה המרה:
-        //    //// MaxYearRange = riskTimeRange.Days / 365;
-        //    ///
-        //};
-
         configObserver = () =>
         {
             RiskTimeRange = s_bl.Admin.GetRiskTimeRange();
-            // אם אתה לא רוצה לחשב שנים בכלל, פשוט אל תשתמש ב-MaxYearRange
-            // ואם כן צריך, ניתן לעדכן לשעות למשל:
-            // MaxYearRange = (int)RiskTimeRange.TotalHours;
-        };
 
-        // התחלה
+        };
         CurrentTime = s_bl.Admin.GetClock();
 
         s_bl.Admin.AddClockObserver(clockObserver);
@@ -53,7 +35,6 @@ public partial class MainWindow : Window
         clockObserver();
         configObserver();
         CallList = s_bl.Call.GetFilteredAndSortedCallList();
-
     }
 
     public DateTime CurrentTime
@@ -64,7 +45,6 @@ public partial class MainWindow : Window
     public static readonly DependencyProperty CurrentTimeProperty =
         DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
 
-    // תכונת טווח סיכון
     public TimeSpan RiskTimeRange
     {
         get { return (TimeSpan)GetValue(RiskTimeRangeProperty); }
@@ -103,27 +83,6 @@ public partial class MainWindow : Window
         s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Year);
     }
   
-    //private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
-    //{
-    //    if (int.TryParse(MaxRange.ToString(), out int minutes))
-    //    {
-    //        try
-    //        {
-    //            RiskTimeRange = TimeSpan.FromMinutes(minutes);
-    //            s_bl.Admin.SetRiskTimeRange(RiskTimeRange);
-
-    //            MessageBox.Show($"Risk range updated to: {minutes} minutes.");
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            MessageBox.Show($"An error occurred while updating the risk range: {ex.Message}");
-    //        }
-    //    }
-    //    else
-    //    {
-    //        MessageBox.Show("Please enter a valid numeric value for the risk range.");
-    //    }
-    //}
     private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
     {
         if (TimeSpan.TryParse(RiskTimeRangeText, out TimeSpan ts))

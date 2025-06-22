@@ -130,7 +130,10 @@ internal class VolunteerImplementation : IVolunteer
     {
         XElement volunteersRootElemement = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
         (volunteersRootElemement.Elements().FirstOrDefault(v => (int?)v.Element("VolunteerId") == updatedVolunteer.VolunteerId) ?? throw new DalDoesNotExistException($"Volunteer with ID={updatedVolunteer.VolunteerId} does Not exist")).Remove();
-        volunteersRootElemement.Add(new XElement("Volunteer", createVolunteerElement(updatedVolunteer)));
+        //volunteersRootElemement.Add(new XElement("Volunteer", createVolunteerElement(updatedVolunteer)));
+        volunteersRootElemement.Add(createVolunteerElement(updatedVolunteer));
         XMLTools.SaveListToXMLElement(volunteersRootElemement, Config.s_volunteers_xml);
+
+
     }
 }

@@ -87,37 +87,84 @@ static public class VolunteerManager
     /// </summary>
     /// <param name="volunteer">Volunteer object to validate.</param>
     /// <exception cref="BO.BlValidationException">Thrown if validation fails.</exception>
+    //public static void ValidateVolunteer(BO.Volunteer volunteer)
+    //{
+    //    if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
+    //    {
+    //        throw new BO.BlValidationException("Name must be at least 2 characters long");
+    //    }
+
+    //    if (!string.IsNullOrWhiteSpace(volunteer.EmailOfVolunteer) &&
+    //        !Regex.IsMatch(volunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+    //    {
+    //        throw new BO.BlValidationException("Invalid email format");
+    //    }
+
+    //    if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) &&
+    //        !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
+    //    {
+    //        throw new BO.BlValidationException("Phone must be a valid 10-digit number");
+    //    }
+
+    //    if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer))
+    //    {
+    //        try
+    //        {
+    //            (double latitude, double longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
+    //            volunteer.VolunteerLatitude = latitude;
+    //            volunteer.VolunteerLongitude = longitude;
+    //        }
+    //        catch
+    //        {
+    //            throw new BO.BlValidationException("Invalid address - unable to find coordinates");
+    //        }
+    //    }
+
+    //}
     public static void ValidateVolunteer(BO.Volunteer volunteer)
     {
-        if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
+        try
         {
-            throw new BO.BlValidationException("Name must be at least 2 characters long");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.EmailOfVolunteer) &&
-            !Regex.IsMatch(volunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-        {
-            throw new BO.BlValidationException("Invalid email format");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) &&
-            !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
-        {
-            throw new BO.BlValidationException("Phone must be a valid 10-digit number");
-        }
-
-        if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer))
-        {
-            try
+            if (string.IsNullOrWhiteSpace(volunteer.Name) || volunteer.Name.Length < 2)
             {
-                (double latitude, double longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
-                volunteer.VolunteerLatitude = latitude;
-                volunteer.VolunteerLongitude = longitude;
+                throw new BO.BlValidationException("Name must be at least 2 characters long");
             }
-            catch
+
+            if (!string.IsNullOrWhiteSpace(volunteer.EmailOfVolunteer) &&
+                !Regex.IsMatch(volunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                throw new BO.BlValidationException("Invalid address - unable to find coordinates");
+                throw new BO.BlValidationException("Invalid email format");
             }
+
+            if (!string.IsNullOrWhiteSpace(volunteer.PhoneNumber) &&
+                !Regex.IsMatch(volunteer.PhoneNumber, @"^\d{10}$"))
+            {
+                throw new BO.BlValidationException("Phone must be a valid 10-digit number");
+            }
+
+            if (!string.IsNullOrWhiteSpace(volunteer.AddressVolunteer))
+            {
+                try
+                {
+                    (double latitude, double longitude) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
+                    volunteer.VolunteerLatitude = latitude;
+                    volunteer.VolunteerLongitude = longitude;
+                }
+                catch
+                {
+                    throw new BO.BlValidationException("Invalid address - unable to find coordinates");
+                }
+            }
+        }
+        catch (BO.BlValidationException)
+        {
+            // כבר שגיאה ממוקדת – פשוט להעביר הלאה
+            throw;
+        }
+        catch (Exception ex)
+        {
+            // עטיפת כל שגיאה אחרת
+            throw new BO.BlValidationException($"Unexpected validation error: {ex.Message}", ex);
         }
     }
 
@@ -163,7 +210,8 @@ static public class VolunteerManager
                volunteer.VolunteerLongitude,
                volunteer.IsAvailable,
                volunteer.MaximumDistanceForReceivingCall,
-               (DO.Role)volunteer.Role
+               (DO.Role)volunteer.Role,
+               (DO.DistanceType)volunteer.DistanceType
                );
     }
 
