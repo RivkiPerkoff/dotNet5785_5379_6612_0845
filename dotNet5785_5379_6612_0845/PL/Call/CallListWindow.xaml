@@ -1,12 +1,98 @@
 ﻿<Window x:Class="PL.Call.CallListWindow"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:bo="clr-namespace:BL.BO;assembly=BL"
         xmlns:local="clr-namespace:PL.Call"
-        mc:Ignorable="d"
-        Title="CallListWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Call List"
+        Height="640"
+        Width="800"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Window.Resources>
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="StatusCallTypeCollection">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="bo:StatusCallType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="CallFieldsCollection">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="bo:CallInListFields"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid Background="#F9F9F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Filters -->
+        <DockPanel Grid.Row="0" Margin="10">
+            <Label Content="Sort by:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="180"
+                      ItemsSource="{Binding Source={StaticResource CallFieldsCollection}}"
+                      SelectedValue="{Binding SelectedSortField, Mode=TwoWay}"/>
+
+            <Label Content="Status Filter:" VerticalAlignment="Center" Margin="20,0,10,0"/>
+            <ComboBox Width="150"
+                      ItemsSource="{Binding Source={StaticResource StatusCallTypeCollection}}"
+                      SelectedValue="{Binding SelectedStatusFilter, Mode=TwoWay}"/>
+        </DockPanel>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding CallList}"
+                  SelectedItem="{Binding SelectedCall, Mode=OneWayToSource}"
+                  AutoGenerateColumns="False"
+                  Margin="10"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  HeadersVisibility="Column"
+                  MouseDoubleClick="DataGrid_MouseDoubleClick">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Call ID" Binding="{Binding CallId}" Width="Auto"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding CallType}" Width="Auto"/>
+                <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="Auto"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="Auto"/>
+                <DataGridTextColumn Header="Last Update By" Binding="{Binding LastUpdateBy}" Width="*"/>
+                <DataGridTextColumn Header="Assignments" Binding="{Binding TotalAssignment}" Width="Auto"/>
+                <DataGridTemplateColumn Header="" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete"
+                                    Click="DeleteButton_Click"
+                                    Tag="{Binding CallId}"
+                                    Foreground="White"
+                                    Padding="5,2"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    FontWeight="Bold"
+                                    Width="65"
+                                    HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Add Call -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="Add Call"
+                    Width="150"
+                    Height="40"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                    Click="AddButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

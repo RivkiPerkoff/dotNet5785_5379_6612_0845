@@ -195,6 +195,11 @@ public partial class MainWindow : Window
         var window = new Volunteer.VolunteerListWindow();
         window.Show(); 
     }
+    private void btnShowCallList_Click(object sender, RoutedEventArgs e)
+    {
+        var window = new Call.CallListWindow();
+        window.Show();
+    }
 
 
 }

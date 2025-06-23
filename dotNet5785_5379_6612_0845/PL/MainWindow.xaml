@@ -54,7 +54,7 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Main Window"
-        Height="600"
+        Height="650"
         Width="850"
         WindowStartupLocation="CenterScreen"
         Background="#F0F2F5"
@@ -131,6 +131,13 @@
                     Height="35" 
                     Margin="5" 
                     Click="btnShowVolunteerList_Click" 
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+            
+            <Button Content="Show Calls"
+                    Width="220"
+                    Height="35"
+                    Margin="5"
+                    Click="btnShowCallList_Click"
                     Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
 
             <Button Content="Initialize DB"  
