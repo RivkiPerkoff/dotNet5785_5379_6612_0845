@@ -1,4 +1,5 @@
 ﻿namespace DO;
+
 /// <summary>
 /// Represents a volunteer with personal details, availability, and preferences for call assignments.
 /// </summary>
@@ -15,26 +16,29 @@
 /// <param name="Role">The role of the volunteer, indicating whether they are a regular volunteer or a manager.</param>
 /// <param name="DistanceType">The type of distance measurement used (e.g., air distance, walking distance, or road distance).</param>
 public record Volunteer(
-int VolunteerId,
-string Name = "",
-string PhoneNumber = "",
-string EmailOfVolunteer = "",
-string? PasswordVolunteer = "",
-string AddressVolunteer = "",
-double? VolunteerLatitude = 0,
-double? VolunteerLongitude = 0,
-bool IsAvailable = false,
-double? MaximumDistanceForReceivingCall = 0,
-Role Role = Role.Volunteer,
-DistanceType DistanceType= DistanceType.AirDistance
- )
-
+    int VolunteerId,
+    string Name = "",
+    string PhoneNumber = "",
+    string EmailOfVolunteer = "",
+    string? PasswordVolunteer = "",
+    string AddressVolunteer = "",
+    double? VolunteerLatitude = 0,
+    double? VolunteerLongitude = 0,
+    bool IsAvailable = false,
+    double? MaximumDistanceForReceivingCall = 0,
+    Role Role = Role.Volunteer,
+    DistanceType DistanceType = DistanceType.AirDistance
+)
 {
-    public Volunteer(int volunteerId, string name, string emailOfVolunteer, string phoneNumber, string addressVolunteer, Role Role)
-        : this(volunteerId, name, phoneNumber, emailOfVolunteer, "", addressVolunteer, 0, 0, false, 0, Role)
-    {}
+    public Volunteer(
+        int volunteerId,
+        string name,
+        string emailOfVolunteer,
+        string phoneNumber,
+        string addressVolunteer,
+        Role role)
+        : this(volunteerId, name, phoneNumber, emailOfVolunteer, "", addressVolunteer, 0, 0, false, 0, role)
+    { }
+
     public Volunteer() : this(0) { }
-
 }
-
-
