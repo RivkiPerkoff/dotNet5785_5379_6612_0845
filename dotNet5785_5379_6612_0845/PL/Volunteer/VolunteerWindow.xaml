@@ -21,10 +21,7 @@
                 <x:Type TypeName="bo:DistanceType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <!-- 
-        <local:InverseBooleanConverter x:Key="InverseBool"/>
-
-      ממיר בוליאני ל-Visibility -->
+        <!--  -Visibility -->
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
@@ -51,17 +48,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- VolunteerId  
-        <Label Grid.Row="0" Grid.Column="0" Content="Volunteer Id:"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding VolunteerId, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Foreground="#555555" FontWeight="SemiBold"/>
--->
+        <!-- VolunteerId  -->
         <Label Content="ID:" Grid.Row="0" Grid.Column="0"  />
         <TextBox Grid.Row="0" Grid.Column="1"
-Text="{Binding VolunteerId, Mode=TwoWay}"
- IsReadOnly="{Binding IsEditMode}" />
-
-
-
+         Text="{Binding VolunteerId, Mode=TwoWay}"
+         IsReadOnly="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}" />
 
         <!-- Name -->
         <Label Grid.Row="1" Grid.Column="0" Content="Name:"/>
@@ -94,9 +85,12 @@ Text="{Binding VolunteerId, Mode=TwoWay}"
 
         <!-- DistanceType -->
         <Label Grid.Row="11" Grid.Column="0" Content="Distance Type:"/>
-        <ComboBox Grid.Row="11" Grid.Column="1"
-                  ItemsSource="{Binding Source={StaticResource DistanceTypeCollection}}"
-                  SelectedItem="{Binding DistanceType, Mode=TwoWay}"/>
+
+
+        <ComboBox  Grid.Row="11" Grid.Column="1"
+    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DistanceTypeCollection}"
+    SelectedItem="{Binding DistanceType, Mode=TwoWay}" />
+
 
 
         <!-- Add / Update button -->

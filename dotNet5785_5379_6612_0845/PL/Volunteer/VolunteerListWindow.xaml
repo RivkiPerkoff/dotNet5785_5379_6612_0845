@@ -36,6 +36,15 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Label Content="Filter by Active:" VerticalAlignment="Center" Margin="20,0,10,0"/>
+            <ComboBox Width="120"
+          SelectedValue="{Binding SelectedIsActive, Mode=TwoWay}"
+          SelectedValuePath="Tag">
+                <ComboBoxItem Content="All" Tag="{x:Null}"/>
+                <ComboBoxItem Content="Active" Tag="True"/>
+                <ComboBoxItem Content="Inactive" Tag="False"/>
+            </ComboBox>
+
         </DockPanel>
 
         <!-- DataGrid -->
