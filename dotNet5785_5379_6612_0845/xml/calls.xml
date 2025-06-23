@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
     <IdCall>1000</IdCall>
@@ -499,5 +499,14 @@
     <OpeningTime>2025-03-10T09:00:00</OpeningTime>
     <MaxFinishTime>2025-04-13T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>123</IdCall>
+    <CallDescription>add call</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-23T14:51:10.6552664+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-24T00:00:00</MaxFinishTime>
   </Call>
 </ArrayOfCall>

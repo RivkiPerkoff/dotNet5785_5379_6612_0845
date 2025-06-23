@@ -1,12 +1,84 @@
 ﻿<Window x:Class="PL.Call.CallWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.Call"
-        mc:Ignorable="d"
-        Title="CallWindow" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:bo="clr-namespace:BL.BO;assembly=BL"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="CallWindow"
+        Height="500"
+        Width="500"
+        Background="#FAFAFA"
+        FontFamily="Segoe UI"
+        FontSize="14">
+
+    <Window.Resources>
+        <ObjectDataProvider x:Key="CallTypesEnum"
+                            MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="bo:CallTypes"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid Margin="10" DataContext="{Binding CurrentCall}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ID -->
+        <Label Grid.Row="0" Grid.Column="0" Content="Call ID:"/>
+        <TextBox Grid.Row="0" Grid.Column="1"
+                 Text="{Binding IdCall}"
+                 IsReadOnly="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+        <!-- Description -->
+        <Label Grid.Row="1" Grid.Column="0" Content="Description:"/>
+        <TextBox Grid.Row="1" Grid.Column="1"
+                 Text="{Binding CallDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Address -->
+        <Label Grid.Row="2" Grid.Column="0" Content="Address:"/>
+        <TextBox Grid.Row="2" Grid.Column="1"
+                 Text="{Binding AddressOfCall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Opening Time -->
+        <Label Grid.Row="3" Grid.Column="0" Content="Opening Time:"/>
+        <DatePicker Grid.Row="3" Grid.Column="1"
+                    SelectedDate="{Binding OpeningTime, Mode=TwoWay}"/>
+
+        <!-- Max Finish Time -->
+        <Label Grid.Row="4" Grid.Column="0" Content="Max Finish Time:"/>
+        <DatePicker Grid.Row="4" Grid.Column="1"
+                    SelectedDate="{Binding MaxFinishTime, Mode=TwoWay}"/>
+
+        <!-- Call Type -->
+        <Label Grid.Row="5" Grid.Column="0" Content="Call Type:"/>
+        <ComboBox Grid.Row="5" Grid.Column="1"
+                  ItemsSource="{Binding Source={StaticResource CallTypesEnum}}"
+                  SelectedItem="{Binding CallType, Mode=TwoWay}"/>
+
+        <!-- Status (readonly) -->
+        <Label Grid.Row="6" Grid.Column="0" Content="Status:"/>
+        <TextBlock Grid.Row="6" Grid.Column="1"
+                   Text="{Binding StatusCallType}"
+                   Foreground="Gray"/>
+
+        <!-- Add / Update -->
+        <Button Grid.Row="7" Grid.Column="1"
+                Content="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=Window}}"
+                Click="btnAddUpdate_Click"
+                HorizontalAlignment="Left"
+                Margin="0,10,0,0"/>
     </Grid>
 </Window>
