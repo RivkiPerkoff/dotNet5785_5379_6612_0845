@@ -2,502 +2,502 @@
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
     <IdCall>1000</IdCall>
-    <CallDescription>Ride to the airport</CallDescription>
-    <CallAddress>HaGalil 15 Petah Tikva</CallAddress>
-    <CallLatitude>30.537943004362717</CallLatitude>
-    <CallLongitude>35.16645044873289</CallLongitude>
-    <OpeningTime>2025-05-31T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-02T21:00:00</MaxFinishTime>
+    <CallDescription>Business meeting ride</CallDescription>
+    <CallAddress>Herzl 22 Eilat</CallAddress>
+    <CallLatitude>30.912600211714718</CallLatitude>
+    <CallLongitude>35.16619083885256</CallLongitude>
+    <OpeningTime>2024-08-19T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-01-28T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1001</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>Herzl 22 Eilat</CallAddress>
-    <CallLatitude>31.989401880115704</CallLatitude>
-    <CallLongitude>35.41181237487207</CallLongitude>
-    <OpeningTime>2025-03-12T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-13T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>HaHored 3 Haifa</CallAddress>
+    <CallLatitude>29.8240080808984</CallLatitude>
+    <CallLongitude>35.45658557637504</CallLongitude>
+    <OpeningTime>2024-08-26T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-02-14T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1002</IdCall>
-    <CallDescription>Business meeting ride</CallDescription>
-    <CallAddress>HaHored 3 Haifa</CallAddress>
-    <CallLatitude>31.705534954531633</CallLatitude>
-    <CallLongitude>34.11483186590624</CallLongitude>
-    <OpeningTime>2025-01-10T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-02-26T21:00:00</MaxFinishTime>
+    <CallDescription>Ride for shopping</CallDescription>
+    <CallAddress>HaChoma 7 Be'er Sheva</CallAddress>
+    <CallLatitude>29.855590594741017</CallLatitude>
+    <CallLongitude>34.789698216484844</CallLongitude>
+    <OpeningTime>2025-06-03T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-07T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1003</IdCall>
-    <CallDescription>Ride for shopping</CallDescription>
-    <CallAddress>Herzl 22 Eilat</CallAddress>
-    <CallLatitude>29.55745367035268</CallLatitude>
-    <CallLongitude>34.19940861448128</CallLongitude>
-    <OpeningTime>2024-08-24T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-10-02T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to a family event</CallDescription>
+    <CallAddress>Chaim Ozer 5 Haifa</CallAddress>
+    <CallLatitude>30.223835831847644</CallLatitude>
+    <CallLongitude>34.21788477059311</CallLongitude>
+    <OpeningTime>2025-04-25T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-11T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1004</IdCall>
-    <CallDescription>Ride to the airport</CallDescription>
-    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
-    <CallLatitude>30.360404940559178</CallLatitude>
-    <CallLongitude>34.398383337658316</CallLongitude>
-    <OpeningTime>2025-06-18T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-21T21:00:00</MaxFinishTime>
+    <CallDescription>Business meeting ride</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>31.29766468273413</CallLatitude>
+    <CallLongitude>34.283559540002294</CallLongitude>
+    <OpeningTime>2025-01-16T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-03-31T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1005</IdCall>
-    <CallDescription>Business meeting ride</CallDescription>
-    <CallAddress>Har Tzion 22 Jerusalem</CallAddress>
-    <CallLatitude>30.40601541596703</CallLatitude>
-    <CallLongitude>34.56374566048749</CallLongitude>
-    <OpeningTime>2024-11-06T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-02-07T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to the train station</CallDescription>
+    <CallAddress>Tel Aviv 10 Ibn Gvirol</CallAddress>
+    <CallLatitude>30.931192122081107</CallLatitude>
+    <CallLongitude>34.68986329134471</CallLongitude>
+    <OpeningTime>2024-07-05T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-25T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1006</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
-    <CallLatitude>29.805559733025664</CallLatitude>
-    <CallLongitude>34.66966988293382</CallLongitude>
-    <OpeningTime>2025-03-29T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-25T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at a group trip</CallDescription>
+    <CallAddress>HaChoma 7 Be'er Sheva</CallAddress>
+    <CallLatitude>31.640484511918494</CallLatitude>
+    <CallLongitude>34.586266529035505</CallLongitude>
+    <OpeningTime>2025-06-05T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-06T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1007</IdCall>
-    <CallDescription>Ride to the hospital</CallDescription>
-    <CallAddress>HaNamal 3 Ashdod</CallAddress>
-    <CallLatitude>29.698377833436556</CallLatitude>
-    <CallLongitude>34.27592536578309</CallLongitude>
-    <OpeningTime>2025-01-10T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-01T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at a group trip</CallDescription>
+    <CallAddress>Agrat Moshe 9 Ramat Shlomo Jerusalem</CallAddress>
+    <CallLatitude>31.32044727419387</CallLatitude>
+    <CallLongitude>34.18838816493231</CallLongitude>
+    <OpeningTime>2025-01-05T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-02-16T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1008</IdCall>
-    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
-    <CallAddress>Chaim Ozer 5 Haifa</CallAddress>
-    <CallLatitude>30.467025057941477</CallLatitude>
-    <CallLongitude>34.71233376732868</CallLongitude>
-    <OpeningTime>2024-08-09T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-01-21T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to a family event</CallDescription>
+    <CallAddress>Har Tzion 22 Jerusalem</CallAddress>
+    <CallLatitude>30.95289943792238</CallLatitude>
+    <CallLongitude>35.0891909350205</CallLongitude>
+    <OpeningTime>2025-01-25T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-02-15T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1009</IdCall>
-    <CallDescription>Arrival at volunteer conference</CallDescription>
-    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
-    <CallLatitude>30.977554231957146</CallLatitude>
-    <CallLongitude>34.65401136548509</CallLongitude>
-    <OpeningTime>2024-10-25T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-28T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to a birthday party</CallDescription>
+    <CallAddress>HaHored 3 Haifa</CallAddress>
+    <CallLatitude>31.48788200919095</CallLatitude>
+    <CallLongitude>34.27153673024563</CallLongitude>
+    <OpeningTime>2024-12-26T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-25T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1010</IdCall>
-    <CallDescription>Ride to work</CallDescription>
-    <CallAddress>HaHored 3 Haifa</CallAddress>
-    <CallLatitude>31.968090625254476</CallLatitude>
-    <CallLongitude>35.25216454587713</CallLongitude>
-    <OpeningTime>2024-11-24T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-02-16T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to the airport</CallDescription>
+    <CallAddress>HaSivuv 10 Petah Tikva</CallAddress>
+    <CallLatitude>31.456813388009355</CallLatitude>
+    <CallLongitude>35.42852939706976</CallLongitude>
+    <OpeningTime>2025-01-10T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-09T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1011</IdCall>
-    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
-    <CallAddress>HaCarmel 8 Netanya</CallAddress>
-    <CallLatitude>30.27949722230717</CallLatitude>
-    <CallLongitude>34.652957171198956</CallLongitude>
-    <OpeningTime>2024-09-30T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-21T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to work</CallDescription>
+    <CallAddress>HaNasi 12 Tel Aviv</CallAddress>
+    <CallLatitude>30.0764717442803</CallLatitude>
+    <CallLongitude>34.59140626549125</CallLongitude>
+    <OpeningTime>2024-07-28T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-01-24T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1012</IdCall>
-    <CallDescription>Arrival at volunteer conference</CallDescription>
-    <CallAddress>Har Tzion 22 Jerusalem</CallAddress>
-    <CallLatitude>30.6923417737475</CallLatitude>
-    <CallLongitude>34.12041780446066</CallLongitude>
-    <OpeningTime>2024-07-17T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-10-18T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>30.12716134704456</CallLatitude>
+    <CallLongitude>35.39115244515075</CallLongitude>
+    <OpeningTime>2024-12-04T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-14T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1013</IdCall>
-    <CallDescription>Ride to the hospital</CallDescription>
-    <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
-    <CallLatitude>31.409432406257125</CallLatitude>
-    <CallLongitude>34.266898512707115</CallLongitude>
-    <OpeningTime>2025-04-17T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-06T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
+    <CallLatitude>29.47897226847998</CallLatitude>
+    <CallLongitude>34.239413438380375</CallLongitude>
+    <OpeningTime>2024-08-30T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-10-04T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1014</IdCall>
-    <CallDescription>Ride for shopping</CallDescription>
-    <CallAddress>Herzl 22 Eilat</CallAddress>
-    <CallLatitude>30.358619176555646</CallLatitude>
-    <CallLongitude>34.5193586768461</CallLongitude>
-    <OpeningTime>2025-02-18T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-13T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
+    <CallAddress>HaHermon 7 Tiberias</CallAddress>
+    <CallLatitude>29.648819888584047</CallLatitude>
+    <CallLongitude>34.18652637550239</CallLongitude>
+    <OpeningTime>2025-02-06T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-28T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1015</IdCall>
-    <CallDescription>Return from the city</CallDescription>
-    <CallAddress>Chaim Ozer 5 Haifa</CallAddress>
-    <CallLatitude>29.058658516579182</CallLatitude>
-    <CallLongitude>34.311123264760326</CallLongitude>
-    <OpeningTime>2024-08-10T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-12-26T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to work</CallDescription>
+    <CallAddress>Shderot Jerusalem 15 Hadera</CallAddress>
+    <CallLatitude>29.238473865464293</CallLatitude>
+    <CallLongitude>34.57058017066867</CallLongitude>
+    <OpeningTime>2025-03-06T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-14T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1016</IdCall>
-    <CallDescription>Ride to visit family</CallDescription>
-    <CallAddress>HaSivuv 10 Petah Tikva</CallAddress>
-    <CallLatitude>29.843138003507427</CallLatitude>
-    <CallLongitude>35.44545825433248</CallLongitude>
-    <OpeningTime>2024-12-25T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-12T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at a group trip</CallDescription>
+    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
+    <CallLatitude>29.006928658870507</CallLatitude>
+    <CallLongitude>35.334594857269515</CallLongitude>
+    <OpeningTime>2024-12-09T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-12-11T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1017</IdCall>
-    <CallDescription>Business meeting ride</CallDescription>
-    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
-    <CallLatitude>29.23556208370616</CallLatitude>
-    <CallLongitude>34.19826442244376</CallLongitude>
-    <OpeningTime>2025-04-21T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-28T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>Har Tzion 22 Jerusalem</CallAddress>
+    <CallLatitude>30.03870981461845</CallLatitude>
+    <CallLongitude>35.19774735647631</CallLongitude>
+    <OpeningTime>2024-12-29T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-29T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1018</IdCall>
-    <CallDescription>Business meeting ride</CallDescription>
-    <CallAddress>HaSivuv 10 Petah Tikva</CallAddress>
-    <CallLatitude>29.29024197847347</CallLatitude>
-    <CallLongitude>35.2297262932671</CallLongitude>
-    <OpeningTime>2024-12-21T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-28T21:00:00</MaxFinishTime>
+    <CallDescription>Ride for shopping</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>29.32668546839187</CallLatitude>
+    <CallLongitude>34.68950271790254</CallLongitude>
+    <OpeningTime>2025-04-19T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-02T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1019</IdCall>
-    <CallDescription>Ride to the train station</CallDescription>
-    <CallAddress>HaAtzmaut 3 Netanya</CallAddress>
-    <CallLatitude>31.278626701685916</CallLatitude>
-    <CallLongitude>35.11606415268209</CallLongitude>
-    <OpeningTime>2025-01-09T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-08T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to a family event</CallDescription>
+    <CallAddress>Chaim Ozer 5 Haifa</CallAddress>
+    <CallLatitude>30.871064331921975</CallLatitude>
+    <CallLongitude>35.14271068795887</CallLongitude>
+    <OpeningTime>2024-10-08T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-01-30T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1020</IdCall>
-    <CallDescription>Ride to the train station</CallDescription>
-    <CallAddress>HaCarmel 8 Netanya</CallAddress>
-    <CallLatitude>30.891282962321498</CallLatitude>
-    <CallLongitude>35.394290576340325</CallLongitude>
-    <OpeningTime>2025-02-17T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-20T21:00:00</MaxFinishTime>
+    <CallDescription>Ride for shopping</CallDescription>
+    <CallAddress>Tel Aviv 10 Ibn Gvirol</CallAddress>
+    <CallLatitude>30.440888093427386</CallLatitude>
+    <CallLongitude>34.55104147219307</CallLongitude>
+    <OpeningTime>2024-09-20T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-11-20T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1021</IdCall>
-    <CallDescription>Ride to the hospital</CallDescription>
-    <CallAddress>Chaim Ozer 5 Haifa</CallAddress>
-    <CallLatitude>30.724412519084826</CallLatitude>
-    <CallLongitude>34.26162435701327</CallLongitude>
-    <OpeningTime>2025-06-14T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-21T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to work</CallDescription>
+    <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
+    <CallLatitude>31.18929793244819</CallLatitude>
+    <CallLongitude>34.229839061518554</CallLongitude>
+    <OpeningTime>2024-12-15T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-08T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1022</IdCall>
-    <CallDescription>Arrival at a group trip</CallDescription>
-    <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
-    <CallLatitude>30.528965443730357</CallLatitude>
-    <CallLongitude>34.55969617605608</CallLongitude>
-    <OpeningTime>2025-02-16T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-07T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>HaGalil 15 Petah Tikva</CallAddress>
+    <CallLatitude>31.923823318889294</CallLatitude>
+    <CallLongitude>34.56466709978088</CallLongitude>
+    <OpeningTime>2024-07-22T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-10-25T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1023</IdCall>
-    <CallDescription>Ride to the airport</CallDescription>
+    <CallDescription>Ride to visit family</CallDescription>
     <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
-    <CallLatitude>30.83422267819526</CallLatitude>
-    <CallLongitude>34.671997291352994</CallLongitude>
-    <OpeningTime>2024-09-24T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-05-09T21:00:00</MaxFinishTime>
+    <CallLatitude>30.221107707187084</CallLatitude>
+    <CallLongitude>34.797851949148026</CallLongitude>
+    <OpeningTime>2024-08-18T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-28T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1024</IdCall>
-    <CallDescription>Ride to an evening class</CallDescription>
-    <CallAddress>HaCarmel 8 Netanya</CallAddress>
-    <CallLatitude>30.112949201079903</CallLatitude>
-    <CallLongitude>34.87594144176178</CallLongitude>
-    <OpeningTime>2025-02-12T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-08T21:00:00</MaxFinishTime>
+    <CallDescription>Return from the city</CallDescription>
+    <CallAddress>HaAtzmaut 3 Netanya</CallAddress>
+    <CallLatitude>31.546149891535755</CallLatitude>
+    <CallLongitude>34.26937346668345</CallLongitude>
+    <OpeningTime>2025-01-20T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-03-03T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1025</IdCall>
-    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
-    <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
-    <CallLatitude>31.48189376477347</CallLatitude>
-    <CallLongitude>35.077819169294536</CallLongitude>
-    <OpeningTime>2024-09-04T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-12-26T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to a family event</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>29.926503440541687</CallLatitude>
+    <CallLongitude>34.089584514252145</CallLongitude>
+    <OpeningTime>2024-08-28T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-10-04T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1026</IdCall>
-    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
-    <CallAddress>HaHored 3 Haifa</CallAddress>
-    <CallLatitude>30.37713326588132</CallLatitude>
-    <CallLongitude>34.70489638162055</CallLongitude>
-    <OpeningTime>2025-02-22T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-04T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to the airport</CallDescription>
+    <CallAddress>HaAtzmaut 3 Netanya</CallAddress>
+    <CallLatitude>31.33800461062304</CallLatitude>
+    <CallLongitude>34.767059369428196</CallLongitude>
+    <OpeningTime>2025-05-08T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-20T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1027</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>HaGalil 15 Petah Tikva</CallAddress>
-    <CallLatitude>31.605974669121338</CallLatitude>
-    <CallLongitude>35.08449901529799</CallLongitude>
-    <OpeningTime>2025-05-06T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-01T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
+    <CallLatitude>30.916411136467502</CallLatitude>
+    <CallLongitude>35.052883835132285</CallLongitude>
+    <OpeningTime>2024-08-24T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-09-28T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1028</IdCall>
     <CallDescription>Arrival at a group trip</CallDescription>
-    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
-    <CallLatitude>29.03750479702053</CallLatitude>
-    <CallLongitude>35.41348644457768</CallLongitude>
-    <OpeningTime>2025-03-15T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-21T21:00:00</MaxFinishTime>
+    <CallAddress>HaHermon 7 Tiberias</CallAddress>
+    <CallLatitude>29.091581164816308</CallLatitude>
+    <CallLongitude>34.60548957931367</CallLongitude>
+    <OpeningTime>2024-10-18T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-12-14T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1029</IdCall>
-    <CallDescription>Ride to a family event</CallDescription>
-    <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
-    <CallLatitude>31.308724102954457</CallLatitude>
-    <CallLongitude>34.26610991874081</CallLongitude>
-    <OpeningTime>2024-08-29T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-11-06T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at a group trip</CallDescription>
+    <CallAddress>HaGolan 14 Rishon LeZion</CallAddress>
+    <CallLatitude>29.313362730474523</CallLatitude>
+    <CallLongitude>34.9597675554176</CallLongitude>
+    <OpeningTime>2025-03-10T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-05T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1030</IdCall>
-    <CallDescription>Business meeting ride</CallDescription>
-    <CallAddress>Agrat Moshe 9 Ramat Shlomo Jerusalem</CallAddress>
-    <CallLatitude>30.872906567342522</CallLatitude>
-    <CallLongitude>34.31092764382807</CallLongitude>
-    <OpeningTime>2025-01-29T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-02T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>HaAtzmaut 3 Netanya</CallAddress>
+    <CallLatitude>31.476216681048747</CallLatitude>
+    <CallLongitude>35.30170917903111</CallLongitude>
+    <OpeningTime>2025-03-22T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-03-26T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1031</IdCall>
-    <CallDescription>Ride to work</CallDescription>
-    <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
-    <CallLatitude>29.29233294088167</CallLatitude>
-    <CallLongitude>35.337511715646286</CallLongitude>
-    <OpeningTime>2024-08-26T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-08-27T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to the hospital</CallDescription>
+    <CallAddress>HaGolan 14 Rishon LeZion</CallAddress>
+    <CallLatitude>31.866253191583073</CallLatitude>
+    <CallLongitude>34.81855099933454</CallLongitude>
+    <OpeningTime>2025-05-28T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-16T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1032</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>HaHermon 7 Tiberias</CallAddress>
-    <CallLatitude>30.00887855514702</CallLatitude>
-    <CallLongitude>34.04512150496159</CallLongitude>
-    <OpeningTime>2024-10-17T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-16T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at volunteer conference</CallDescription>
+    <CallAddress>HaHored 3 Haifa</CallAddress>
+    <CallLatitude>29.95094310973566</CallLatitude>
+    <CallLongitude>34.79438664804218</CallLongitude>
+    <OpeningTime>2025-03-09T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-12T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1033</IdCall>
     <CallDescription>Ride for shopping</CallDescription>
     <CallAddress>HaSivuv 10 Petah Tikva</CallAddress>
-    <CallLatitude>30.19723355643052</CallLatitude>
-    <CallLongitude>34.68379838499407</CallLongitude>
-    <OpeningTime>2024-09-15T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-10-25T21:00:00</MaxFinishTime>
+    <CallLatitude>31.50981231648938</CallLatitude>
+    <CallLongitude>35.46956354095584</CallLongitude>
+    <OpeningTime>2025-01-07T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-01-24T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1034</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
+    <CallDescription>Ride to the airport</CallDescription>
     <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
-    <CallLatitude>30.74741993288671</CallLatitude>
-    <CallLongitude>34.556929390000725</CallLongitude>
-    <OpeningTime>2024-07-21T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-01-08T21:00:00</MaxFinishTime>
+    <CallLatitude>31.073371727921455</CallLatitude>
+    <CallLongitude>34.724209555182334</CallLongitude>
+    <OpeningTime>2024-08-03T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-06T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1035</IdCall>
-    <CallDescription>Ride to the airport</CallDescription>
-    <CallAddress>Agrat Moshe 9 Ramat Shlomo Jerusalem</CallAddress>
-    <CallLatitude>29.273609797476738</CallLatitude>
-    <CallLongitude>34.966309298778974</CallLongitude>
-    <OpeningTime>2024-12-14T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-01T21:00:00</MaxFinishTime>
+    <CallDescription>Return from school</CallDescription>
+    <CallAddress>HaSivuv 10 Petah Tikva</CallAddress>
+    <CallLatitude>30.583035123015627</CallLatitude>
+    <CallLongitude>35.452334452429184</CallLongitude>
+    <OpeningTime>2025-02-06T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-07T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1036</IdCall>
-    <CallDescription>Ride to an evening class</CallDescription>
-    <CallAddress>Har Tzion 22 Jerusalem</CallAddress>
-    <CallLatitude>29.32403576364693</CallLatitude>
-    <CallLongitude>34.25739857075439</CallLongitude>
-    <OpeningTime>2024-09-04T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-29T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at volunteer conference</CallDescription>
+    <CallAddress>HaHadarim 4 Modi'in</CallAddress>
+    <CallLatitude>29.459175314901398</CallLatitude>
+    <CallLongitude>34.10552507197562</CallLongitude>
+    <OpeningTime>2024-08-17T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-10-07T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1037</IdCall>
-    <CallDescription>Ride to work</CallDescription>
-    <CallAddress>HaGalil 15 Petah Tikva</CallAddress>
-    <CallLatitude>30.05607967840901</CallLatitude>
-    <CallLongitude>34.05878508424436</CallLongitude>
-    <OpeningTime>2024-12-07T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-05-23T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to the hospital</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>31.450867309644398</CallLatitude>
+    <CallLongitude>34.91161321548248</CallLongitude>
+    <OpeningTime>2024-11-26T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-17T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1038</IdCall>
-    <CallDescription>Ride to the hospital</CallDescription>
-    <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
-    <CallLatitude>30.50493809969861</CallLatitude>
-    <CallLongitude>34.8554849341183</CallLongitude>
-    <OpeningTime>2024-09-29T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-12-23T21:00:00</MaxFinishTime>
+    <CallDescription>Return from the city</CallDescription>
+    <CallAddress>HaHermon 7 Tiberias</CallAddress>
+    <CallLatitude>30.461040531638623</CallLatitude>
+    <CallLongitude>35.16899511321566</CallLongitude>
+    <OpeningTime>2024-07-11T09:00:00</OpeningTime>
+    <MaxFinishTime>2024-08-31T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1039</IdCall>
-    <CallDescription>Ride to an evening class</CallDescription>
-    <CallAddress>Tel Aviv 10 Ibn Gvirol</CallAddress>
-    <CallLatitude>30.78141905428572</CallLatitude>
-    <CallLongitude>35.4649010373848</CallLongitude>
-    <OpeningTime>2024-08-21T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-10-07T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at volunteer conference</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>31.87059767035376</CallLatitude>
+    <CallLongitude>34.868924069305855</CallLongitude>
+    <OpeningTime>2025-04-21T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-12T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1040</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>HaMaor 11 Safed</CallAddress>
-    <CallLatitude>31.879884939340954</CallLatitude>
-    <CallLongitude>35.306679558804106</CallLongitude>
-    <OpeningTime>2025-01-13T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-20T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to an evening class</CallDescription>
+    <CallAddress>Agrat Moshe 9 Ramat Shlomo Jerusalem</CallAddress>
+    <CallLatitude>29.802644855451682</CallLatitude>
+    <CallLongitude>35.27526058787582</CallLongitude>
+    <OpeningTime>2024-08-10T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-03-07T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1041</IdCall>
-    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
-    <CallAddress>Tel Aviv 10 Ibn Gvirol</CallAddress>
-    <CallLatitude>30.329317485568957</CallLatitude>
-    <CallLongitude>34.652804687517694</CallLongitude>
-    <OpeningTime>2025-04-01T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-17T21:00:00</MaxFinishTime>
+    <CallDescription>Return from the city</CallDescription>
+    <CallAddress>Herzliya 19 Kiryat Shmona</CallAddress>
+    <CallLatitude>30.00858944173945</CallLatitude>
+    <CallLongitude>34.73543058223412</CallLongitude>
+    <OpeningTime>2024-10-16T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-03-25T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1042</IdCall>
-    <CallDescription>Ride for shopping</CallDescription>
-    <CallAddress>HaCarmel 8 Netanya</CallAddress>
-    <CallLatitude>31.750006763728457</CallLatitude>
-    <CallLongitude>34.53118122001376</CallLongitude>
-    <OpeningTime>2025-05-04T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-06-22T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to visit family</CallDescription>
+    <CallAddress>HaGolan 14 Rishon LeZion</CallAddress>
+    <CallLatitude>31.937177259512268</CallLatitude>
+    <CallLongitude>34.204075526383185</CallLongitude>
+    <OpeningTime>2025-01-06T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-15T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1043</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
-    <CallLatitude>30.31419737924499</CallLatitude>
-    <CallLongitude>34.96928542847268</CallLongitude>
-    <OpeningTime>2024-08-19T21:00:00</OpeningTime>
-    <MaxFinishTime>2024-11-30T21:00:00</MaxFinishTime>
+    <CallDescription>Return from the city</CallDescription>
+    <CallAddress>HaAtzmaut 3 Netanya</CallAddress>
+    <CallLatitude>29.63082326141901</CallLatitude>
+    <CallLongitude>34.04832624602063</CallLongitude>
+    <OpeningTime>2024-12-29T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-23T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1044</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>Herzl 22 Eilat</CallAddress>
-    <CallLatitude>30.162843305626375</CallLatitude>
-    <CallLongitude>35.07165906870312</CallLongitude>
-    <OpeningTime>2025-01-24T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-18T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to an evening class</CallDescription>
+    <CallAddress>Tel Aviv 10 Ibn Gvirol</CallAddress>
+    <CallLatitude>31.374532656051688</CallLatitude>
+    <CallLongitude>34.192901955619156</CallLongitude>
+    <OpeningTime>2024-09-14T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-01-16T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1045</IdCall>
-    <CallDescription>Ride to Ben Gurion Airport</CallDescription>
-    <CallAddress>HaMeretz 5 Ra'anana</CallAddress>
-    <CallLatitude>29.686837206501416</CallLatitude>
-    <CallLongitude>34.097219255296864</CallLongitude>
-    <OpeningTime>2025-03-31T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-04-08T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at volunteer conference</CallDescription>
+    <CallAddress>HaNamal 3 Ashdod</CallAddress>
+    <CallLatitude>31.898974165281402</CallLatitude>
+    <CallLongitude>35.19720219152528</CallLongitude>
+    <OpeningTime>2024-10-14T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-03T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1046</IdCall>
-    <CallDescription>Business meeting ride</CallDescription>
-    <CallAddress>HaGolan 14 Rishon LeZion</CallAddress>
-    <CallLatitude>29.50435732925696</CallLatitude>
-    <CallLongitude>34.284465644150195</CallLongitude>
-    <OpeningTime>2025-03-04T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-05-29T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to an evening class</CallDescription>
+    <CallAddress>HaAtzmaut 3 Netanya</CallAddress>
+    <CallLatitude>30.50407965783836</CallLatitude>
+    <CallLongitude>34.00063551495139</CallLongitude>
+    <OpeningTime>2024-07-19T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-07T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1047</IdCall>
-    <CallDescription>Ride to the hospital</CallDescription>
+    <CallDescription>Return from school</CallDescription>
     <CallAddress>HaChoma 7 Be'er Sheva</CallAddress>
-    <CallLatitude>30.89691449935158</CallLatitude>
-    <CallLongitude>34.7548366636697</CallLongitude>
-    <OpeningTime>2024-10-20T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-02-14T21:00:00</MaxFinishTime>
+    <CallLatitude>31.139041567428347</CallLatitude>
+    <CallLongitude>35.24711310732296</CallLongitude>
+    <OpeningTime>2025-05-05T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-06-01T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1048</IdCall>
-    <CallDescription>Ride to a birthday party</CallDescription>
-    <CallAddress>HaChoma 7 Be'er Sheva</CallAddress>
-    <CallLatitude>29.963333117709496</CallLatitude>
-    <CallLongitude>34.53607528353275</CallLongitude>
-    <OpeningTime>2024-12-15T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-03-16T21:00:00</MaxFinishTime>
+    <CallDescription>Arrival at volunteer conference</CallDescription>
+    <CallAddress>Herzl 22 Eilat</CallAddress>
+    <CallLatitude>30.10343515680965</CallLatitude>
+    <CallLongitude>34.143633677466276</CallLongitude>
+    <OpeningTime>2025-04-01T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-05-21T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
   <Call>
     <IdCall>1049</IdCall>
-    <CallDescription>Ride to an evening class</CallDescription>
-    <CallAddress>HaGalil 15 Petah Tikva</CallAddress>
-    <CallLatitude>31.159564106559976</CallLatitude>
-    <CallLongitude>34.994785562245056</CallLongitude>
-    <OpeningTime>2024-07-07T21:00:00</OpeningTime>
-    <MaxFinishTime>2025-02-28T21:00:00</MaxFinishTime>
+    <CallDescription>Ride to the airport</CallDescription>
+    <CallAddress>HaCarmel 8 Netanya</CallAddress>
+    <CallLatitude>30.415518341199473</CallLatitude>
+    <CallLongitude>34.09301326943361</CallLongitude>
+    <OpeningTime>2025-03-10T09:00:00</OpeningTime>
+    <MaxFinishTime>2025-04-13T09:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
 </ArrayOfCall>
