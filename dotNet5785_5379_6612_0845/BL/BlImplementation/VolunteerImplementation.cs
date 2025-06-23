@@ -195,6 +195,12 @@ internal class VolunteerImplementation : IVolunteer
             {
                 throw new BlGeneralDatabaseException("Only admins can update the role");
             }
+            // שלב 1: שליפת קואורדינטות לפי כתובת
+            (double lat, double lon) = Tools.GetCoordinatesFromAddress(volunteer!.AddressVolunteer);
+
+            // שלב 2: עדכון השדות באובייקט ה־BO
+            volunteer.VolunteerLatitude = lat;
+            volunteer.VolunteerLongitude = lon;
 
             var doVolunteer = VolunteerManager.MapToDO(volunteer);
             _dal.Volunteer.Update(doVolunteer);

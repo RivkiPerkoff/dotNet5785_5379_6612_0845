@@ -35,13 +35,35 @@ public partial class VolunteerListWindow : Window
         RefreshVolunteerList();
         s_bl?.Volunteer.AddObserver(RefreshVolunteerList);
     }
+    //private void RefreshVolunteerList()
+    //{
+    //    VolunteerList = s_bl.Volunteer.GetVolunteers(
+    //        sortBy: SelectedSortField == TypeSortingVolunteers.All ? null : SelectedSortField, isActive: null
+    //    );
+    //    foreach (var volunteer in VolunteerList.Where(v => v != null))
+    //    {
+    //        s_bl.Volunteer.AddObserver(volunteer!.VolunteerId, RefreshVolunteerList);
+    //    }
+
+    //}
+    private HashSet<int> observedVolunteerIds = new();
+
     private void RefreshVolunteerList()
     {
         VolunteerList = s_bl.Volunteer.GetVolunteers(
             sortBy: SelectedSortField == TypeSortingVolunteers.All ? null : SelectedSortField,
             isActive: null
         );
+
+        foreach (var volunteer in VolunteerList.Where(v => v != null))
+        {
+            if (observedVolunteerIds.Add(volunteer!.VolunteerId)) // רק אם עוד לא הוספנו
+            {
+                s_bl.Volunteer.AddObserver(volunteer.VolunteerId, RefreshVolunteerList);
+            }
+        }
     }
+
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         s_bl.Volunteer.AddObserver(VolunteerListObserver);
@@ -113,15 +135,13 @@ public partial class VolunteerListWindow : Window
                                          MessageBoxButton.YesNo,
                                          MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes)
+
                 return;
 
             try
             {
-                // 2. קריאה ל-Delete ב-BL
                 s_bl.Volunteer.DeleteVolunteer(volunteerId);
-
-                // 3. אם המחיקה הצליחה, רשימת המתנדבים תתעדכן אוטומטית בזכות המנגנון של observers.
-                // כאן אין צורך לקרוא ל-RefreshVolunteerList כי ה-Observer יעשה את זה.
+                MessageBox.Show("Volunteer deleted successfully.");
             }
             catch (Exception ex)
             {
@@ -149,50 +169,6 @@ public partial class VolunteerListWindow : Window
             win.ShowDialog();
         }
     }
-
-    //private void AddButton_Click(object sender, RoutedEventArgs e)
-    //{
-    //    try
-    //    {
-    //        var volunteer = VolunteerList?.FirstOrDefault(v => v?.VolunteerId == volunteerId);
-
-    //        // 1. ודא שכל השדות הנדרשים מולאו
-    //        if (CurrentVolunteer == null || string.IsNullOrWhiteSpace(CurrentVolunteer.Name))
-    //        {
-    //            MessageBox.Show("נא למלא את כל שדות המתנדב לפני ההוספה.",
-    //                            "שדות חסרים",
-    //                            MessageBoxButton.OK,
-    //                            MessageBoxImage.Warning);
-    //            return;
-    //        }
-
-    //        // 2. הוספת המתנדב דרך ה-BL
-    //        s_bl.Volunteer.AddVolunteer(CurrentVolunteer);
-
-    //        // 3. הצגת הודעת הצלחה
-    //        MessageBox.Show("המתנדב נוסף בהצלחה!",
-    //                        "הצלחה",
-    //                        MessageBoxButton.OK,
-    //                        MessageBoxImage.Information);
-
-    //        // 4. סגירת החלון (אם רלוונטי)
-    //        this.Close();
-    //    }
-    //    catch (BL.BO.BlAlreadyExistsException ex)
-    //    {
-    //        MessageBox.Show($"Volunteer already exists:\n{ex.Message}",
-    //                        "שגיאה",
-    //                        MessageBoxButton.OK,
-    //                        MessageBoxImage.Error);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        MessageBox.Show($"שגיאה כללית:\n{ex.Message}",
-    //                        "שגיאה",
-    //                        MessageBoxButton.OK,
-    //                        MessageBoxImage.Error);
-    //    }
-    //}
 
 
 
