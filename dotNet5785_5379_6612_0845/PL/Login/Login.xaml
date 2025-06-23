@@ -1,0 +1,23 @@
+﻿<Window x:Class="PL.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Login" Height="250" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Username (ID or Name):" />
+        <TextBox Text="{Binding Username, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" Grid.Row="1" Height="25" Margin="0,5,0,10"/>
+
+        <TextBlock Text="Password:" Grid.Row="2" />
+        <PasswordBox Grid.Row="3" Height="25" Margin="0,5,0,0" PasswordChanged="PasswordBox_PasswordChanged"/>
+
+        <Button Content="Login" Grid.Row="4" Height="30" Width="100" HorizontalAlignment="Center" Margin="0,20,0,0" Click="LoginButton_Click"/>
+    </Grid>
+</Window>
