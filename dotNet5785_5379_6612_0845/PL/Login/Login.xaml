@@ -12,12 +12,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Username (ID or Name):" />
+        <TextBlock Text="ID:" />
         <TextBox Text="{Binding Username, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" Grid.Row="1" Height="25" Margin="0,5,0,10"/>
 
         <TextBlock Text="Password:" Grid.Row="2" />
         <PasswordBox Grid.Row="3" Height="25" Margin="0,5,0,0" PasswordChanged="PasswordBox_PasswordChanged"/>
 
-        <Button Content="Login" Grid.Row="4" Height="30" Width="100" HorizontalAlignment="Center" Margin="0,20,0,0" Click="LoginButton_Click"/>
+        <Button Content="Login" Grid.Row="3" Height="30" Width="100" HorizontalAlignment="Left" Margin="118,65,0,-45" Click="LoginButton_Click"/>
     </Grid>
 </Window>

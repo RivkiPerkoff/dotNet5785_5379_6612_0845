@@ -148,7 +148,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.InnerException.Message}");
+            MessageBox.Show($"Error: {ex?.InnerException?.Message}");
         }
     }
     private PasswordBox? lastPasswordBox;

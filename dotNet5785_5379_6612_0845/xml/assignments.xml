@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfAssignment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Assignment>
     <NextAssignmentId>1000</NextAssignmentId>
@@ -105,14 +105,6 @@
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
-    <NextAssignmentId>1013</NextAssignmentId>
-    <IdOfRunnerCall>1013</IdOfRunnerCall>
-    <VolunteerId>1013</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2024-09-12T02:09:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
     <NextAssignmentId>1014</NextAssignmentId>
     <IdOfRunnerCall>1014</IdOfRunnerCall>
     <VolunteerId>1011</VolunteerId>
@@ -126,14 +118,6 @@
     <VolunteerId>1007</VolunteerId>
     <FinishCallType xsi:nil="true" />
     <EntryTimeForTreatment>2025-03-25T15:24:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>1016</NextAssignmentId>
-    <IdOfRunnerCall>1016</IdOfRunnerCall>
-    <VolunteerId>1004</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2024-12-09T09:10:00</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
@@ -158,14 +142,6 @@
     <VolunteerId>1004</VolunteerId>
     <FinishCallType xsi:nil="true" />
     <EntryTimeForTreatment>2025-01-13T22:39:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>1020</NextAssignmentId>
-    <IdOfRunnerCall>1020</IdOfRunnerCall>
-    <VolunteerId>1013</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2024-10-14T09:21:00</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
@@ -225,27 +201,11 @@
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
-    <NextAssignmentId>1028</NextAssignmentId>
-    <IdOfRunnerCall>1028</IdOfRunnerCall>
-    <VolunteerId>1013</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2024-12-13T06:32:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
     <NextAssignmentId>1029</NextAssignmentId>
     <IdOfRunnerCall>1029</IdOfRunnerCall>
     <VolunteerId>1006</VolunteerId>
     <FinishCallType xsi:nil="true" />
     <EntryTimeForTreatment>2025-03-19T22:46:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>1030</NextAssignmentId>
-    <IdOfRunnerCall>1030</IdOfRunnerCall>
-    <VolunteerId>1013</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2025-03-22T20:13:00</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
@@ -377,14 +337,6 @@
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
-    <NextAssignmentId>1047</NextAssignmentId>
-    <IdOfRunnerCall>1047</IdOfRunnerCall>
-    <VolunteerId>1013</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2025-05-23T21:51:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
     <NextAssignmentId>1048</NextAssignmentId>
     <IdOfRunnerCall>1048</IdOfRunnerCall>
     <VolunteerId>1002</VolunteerId>
@@ -399,5 +351,13 @@
     <FinishCallType xsi:nil="true" />
     <EntryTimeForTreatment>2025-03-12T21:11:00</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1016</NextAssignmentId>
+    <IdOfRunnerCall>1016</IdOfRunnerCall>
+    <VolunteerId>1004</VolunteerId>
+    <FinishCallType>CanceledByVolunteer</FinishCallType>
+    <EntryTimeForTreatment>2024-12-09T09:10:00</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-23T14:11:20</EndTimeForTreatment>
   </Assignment>
 </ArrayOfAssignment>
