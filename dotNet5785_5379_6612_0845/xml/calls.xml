@@ -520,4 +520,34 @@
     <MaxFinishTime>2025-07-01T00:00:00</MaxFinishTime>
     <CallTypes>ManDriver</CallTypes>
   </Call>
+  <Call>
+    <IdCall>123456789</IdCall>
+    <CallDescription>kkkk</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-29T00:51:38.9829034+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-02T00:00:00</MaxFinishTime>
+    <CallTypes>WomanDriver</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>456123</IdCall>
+    <CallDescription>ררררר</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-29T01:34:09.4878422+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-30T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>45698525</IdCall>
+    <CallDescription>לנסוע לע</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-29T01:39:53.3492926+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-30T00:00:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
 </ArrayOfCall>

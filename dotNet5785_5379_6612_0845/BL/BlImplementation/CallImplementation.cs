@@ -471,5 +471,5 @@ internal class CallImplementation : BIApi.ICall
     public void RemoveObserver(Action listObserver) =>
     VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
-    VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+    CallManager.Observers.RemoveObserver(id, observer); //stage 5
 }

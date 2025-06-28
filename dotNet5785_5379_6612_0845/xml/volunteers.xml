@@ -15,34 +15,6 @@
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
-    <VolunteerId>1002</VolunteerId>
-    <Name>Lior</Name>
-    <PhoneNumber>Lior@gmail.com</PhoneNumber>
-    <EmailOfVolunteer>054-123-9876</EmailOfVolunteer>
-    <PasswordVolunteer>#J*9858]D)dS</PasswordVolunteer>
-    <AddressVolunteer>Beersheba</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1003</VolunteerId>
-    <Name>Noa</Name>
-    <PhoneNumber>Noa@gmail.com</PhoneNumber>
-    <EmailOfVolunteer>053-549-4567</EmailOfVolunteer>
-    <PasswordVolunteer>r2IF:}ZJ21x)</PasswordVolunteer>
-    <AddressVolunteer>Eilat</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
     <VolunteerId>1004</VolunteerId>
     <Name>Dani</Name>
     <PhoneNumber>Dani@gmail.com</PhoneNumber>
@@ -205,6 +177,34 @@
     <AddressVolunteer>Haifa</AddressVolunteer>
     <VolunteerLatitude>32.8191218</VolunteerLatitude>
     <VolunteerLongitude>34.9983856</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>50</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1002</VolunteerId>
+    <Name>Lior</Name>
+    <PhoneNumber>Lior@gmail.com</PhoneNumber>
+    <EmailOfVolunteer>054-123-9876</EmailOfVolunteer>
+    <PasswordVolunteer>#J*9858]D)dS</PasswordVolunteer>
+    <AddressVolunteer>Beersheba</AddressVolunteer>
+    <VolunteerLatitude>31.2457442</VolunteerLatitude>
+    <VolunteerLongitude>34.7925181</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>100</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1003</VolunteerId>
+    <Name>Noa</Name>
+    <PhoneNumber>Noa@gmail.com</PhoneNumber>
+    <EmailOfVolunteer>053-549-4567</EmailOfVolunteer>
+    <PasswordVolunteer>r2IF:}ZJ21x)</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
     <MaximumDistanceForReceivingCall>50</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
