@@ -116,6 +116,8 @@ public partial class ChooseCallWindow : Window
                 _bl.Call.ChoosingCallForTreatment(_volunteer.VolunteerId, selectedCall.Id);
                 MessageBox.Show("Call successfully assigned to you.", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadCalls();
+                this.DialogResult = true;
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -128,8 +130,8 @@ public partial class ChooseCallWindow : Window
     {
         if (((DataGrid)sender).SelectedItem is OpenCallInList selectedCall)
         {
-            txtDescription.Text = selectedCall.CallDescription;
-            ShowMap(selectedCall);
+            //txtDescription.Text = selectedCall.CallDescription;
+            //ShowMap(selectedCall);
         }
     }
 
@@ -138,18 +140,18 @@ public partial class ChooseCallWindow : Window
         LoadCalls();
     }
 
-    private void ShowMap(OpenCallInList call)
-    {
-        try
-        {
-            string mapsUrl = $"https://www.google.com/maps/dir/{_volunteer.AddressVolunteer}/{call.Address}";
-            mapBrowser.Navigate(mapsUrl);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error loading map: " + ex.Message);
-        }
-    }
+    //private void ShowMap(OpenCallInList call)
+    //{
+    //    try
+    //    {
+    //        string mapsUrl = $"https://www.google.com/maps/dir/{_volunteer.AddressVolunteer}/{call.Address}";
+    //        mapBrowser.Navigate(mapsUrl);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show("Error loading map: " + ex.Message);
+    //    }
+    //}
 
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)
     {

@@ -177,44 +177,87 @@ internal class CallImplementation : BIApi.ICall
     {
         try
         {
-            var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+            var volunteer = _dal.Volunteer.Read(volunteerId)
+                            ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
 
-            var volunteerAssignments = _dal.Assignment.ReadAll()
-                .Where(a => a.VolunteerId == volunteerId) 
-                .Select(a => a.IdOfRunnerCall); 
             var openCalls = _dal.Call.ReadAll()
-                .Where(c => volunteerAssignments.Contains(c.IdCall) &&
-                            (Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)) 
-                .Join(_dal.Assignment.ReadAll(), 
-                      call => call.IdCall, 
-                      assignment => assignment.IdOfRunnerCall,
-                      (call, assignment) => new OpenCallInList 
-                      {
-                          Id = call.IdCall, 
-                          CallTypes = call.CallTypes, 
-                          CallDescription = call.CallDescription, 
-                          Address = call.CallAddress, 
-                          OpeningTime = (DateTime)call.OpeningTime,
-                          MaxFinishTime = call.MaxFinishTime,
-                          CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress)
-                      });
-            if (filterField.HasValue)
-                openCalls = openCalls.Where(c =>
+                .Where(c => Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)
+                .Select(c => new OpenCallInList
                 {
-                    return (BO.CallTypes)c.CallTypes == filterField.Value;
-                }); 
+                    Id = c.IdCall,
+                    CallTypes = c.CallTypes,
+                    CallDescription = c.CallDescription,
+                    Address = c.CallAddress,
+                    OpeningTime = (DateTime)c.OpeningTime,
+                    MaxFinishTime = c.MaxFinishTime,
+                    CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, c.CallAddress)
+                });
 
-            openCalls = sortField.HasValue
-                ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c)) 
-                : openCalls.OrderBy(c => c.Id); 
+            if (filterField.HasValue)
+                openCalls = openCalls.Where(c => (BO.CallTypes)c.CallTypes == filterField.Value);
 
-            return openCalls.ToList(); 
+            openCalls = sortField switch
+            {
+                BO.OpenCallInListFields.CallTypes => openCalls.OrderBy(c => c.CallTypes),
+                BO.OpenCallInListFields.CallDescription => openCalls.OrderBy(c => c.CallDescription),
+                BO.OpenCallInListFields.Address => openCalls.OrderBy(c => c.Address),
+                BO.OpenCallInListFields.OpeningTime => openCalls.OrderBy(c => c.OpeningTime),
+                BO.OpenCallInListFields.MaxFinishTime => openCalls.OrderBy(c => c.MaxFinishTime),
+                BO.OpenCallInListFields.Calldistance => openCalls.OrderBy(c => c.CallDistance),
+                _ => openCalls.OrderBy(c => c.Id)
+            };
+
+            return openCalls.ToList();
         }
         catch (Exception ex)
         {
             throw new BO.BlGeneralDatabaseException("An error occurred while retrieving the open calls list.", ex);
         }
     }
+
+
+    //public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
+    //{
+    //    try
+    //    {
+    //        var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+
+    //        var volunteerAssignments = _dal.Assignment.ReadAll()
+    //            .Where(a => a.VolunteerId == volunteerId) 
+    //            .Select(a => a.IdOfRunnerCall); 
+    //        var openCalls = _dal.Call.ReadAll()
+    //            .Where(c => volunteerAssignments.Contains(c.IdCall) &&
+    //                        (Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)) 
+    //            .Join(_dal.Assignment.ReadAll(), 
+    //                  call => call.IdCall, 
+    //                  assignment => assignment.IdOfRunnerCall,
+    //                  (call, assignment) => new OpenCallInList 
+    //                  {
+    //                      Id = call.IdCall, 
+    //                      CallTypes = call.CallTypes, 
+    //                      CallDescription = call.CallDescription, 
+    //                      Address = call.CallAddress, 
+    //                      OpeningTime = (DateTime)call.OpeningTime,
+    //                      MaxFinishTime = call.MaxFinishTime,
+    //                      CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, call.CallAddress)
+    //                  });
+    //        if (filterField.HasValue)
+    //            openCalls = openCalls.Where(c =>
+    //            {
+    //                return (BO.CallTypes)c.CallTypes == filterField.Value;
+    //            }); 
+
+    //        openCalls = sortField.HasValue
+    //            ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c)) 
+    //            : openCalls.OrderBy(c => c.Id); 
+
+    //        return openCalls.ToList(); 
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BO.BlGeneralDatabaseException("An error occurred while retrieving the open calls list.", ex);
+    //    }
+    //}
     /// <summary>
     /// Marks a call treatment as complete for a specific volunteer and assignment.
     /// </summary>

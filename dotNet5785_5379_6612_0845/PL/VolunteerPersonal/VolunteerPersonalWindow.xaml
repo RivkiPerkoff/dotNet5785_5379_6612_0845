@@ -54,12 +54,12 @@
                 <TextBlock Text="Active:" Width="120"/>
                 <CheckBox IsChecked="{Binding CurrentVolunteer.IsAvailable}" IsEnabled="{Binding CanChangeActiveStatus}"/>
             </StackPanel>
-
             <Button Content="Choose Call"
-                    Width="150"
-                    Margin="0,10,0,0"
-                    Click="btnChooseCall_Click"
-                    Visibility="{Binding ChooseCallButtonVisibility}"/>
+        Width="150"
+        Margin="0,10,0,0"
+        Click="btnChooseCall_Click"
+        IsEnabled="{Binding CanChooseCall}"/>
+
         </StackPanel>
 
         <!-- קריאה נוכחית -->
@@ -70,12 +70,10 @@
                 <Button Content="Cancel Call" Margin="5" Click="btnCancelCall_Click" IsEnabled="{Binding IsCallInProgress}"/>
 
                 <!-- מפה דמי -->
-                <Border BorderBrush="Black" BorderThickness="1" Height="200" Margin="0,10">
-                    <TextBlock Text="Map Placeholder - Volunteer &amp;
- Call location" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Border>
             </StackPanel>
+
         </GroupBox>
+        
 
         <!-- כפתורי תחתית -->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10">

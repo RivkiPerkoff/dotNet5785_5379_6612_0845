@@ -86,12 +86,13 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- פירוט ומפה -->
+        <!-- פירוט ומפה
         <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,0">
             <TextBlock Text="Call Details:" FontWeight="Bold"/>
             <TextBlock x:Name="txtDescription" TextWrapping="Wrap" Height="80" Margin="0,5"/>
         </StackPanel>
 
         <WebBrowser x:Name="mapBrowser" Grid.Row="3" Margin="0,10,0,0"/>
+         -->
     </Grid>
 </Window>
