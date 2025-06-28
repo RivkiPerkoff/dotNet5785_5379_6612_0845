@@ -130,23 +130,27 @@ static internal class Tools
     public static StatusCallType GetCallStatus(this DO.Call call)
     {
         List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.IdOfRunnerCall == call.IdCall).ToList()!;
-        var lastAssignment = assignments.LastOrDefault(a => a!.IdOfRunnerCall == call.IdCall);
+        var lastAssignment = assignments
+            .Where(a => a != null)
+            .OrderByDescending(a => a!.EntryTimeForTreatment)
+            .FirstOrDefault();
+
+        if (lastAssignment != null && lastAssignment.EndTimeForTreatment.HasValue)
+            return StatusCallType.closed;
 
         if (call.MaxFinishTime < AdminManager.Now)
             return StatusCallType.Expired;
 
-        if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
+        if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange && lastAssignment == null)
             return StatusCallType.openInRisk;
 
         if (lastAssignment != null)
         {
-            if ((AdminManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+            if ((AdminManager.Now - lastAssignment.EntryTimeForTreatment) > s_dal.Config.RiskRange)
                 return StatusCallType.HandlingInRisk;
             else
                 return StatusCallType.inHandling;
         }
-        if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
-            return StatusCallType.closed;
         return StatusCallType.open;
     }
 }

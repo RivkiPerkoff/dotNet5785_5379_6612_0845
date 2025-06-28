@@ -93,6 +93,7 @@ public partial class CallListWindow : Window
     {
         var win = new CallWindow();
         win.ShowDialog();
+        RefreshCallList();
     }
 
     // Edit call
@@ -102,6 +103,7 @@ public partial class CallListWindow : Window
         {
             var win = new CallWindow(SelectedCall.CallId);
             win.ShowDialog();
+            RefreshCallList();
         }
     }
 
@@ -126,6 +128,7 @@ public partial class CallListWindow : Window
             {
                 s_bl.Call.DeleteCall(callId);
                 MessageBox.Show("Call deleted successfully.");
+                RefreshCallList(); 
             }
             catch (Exception ex)
             {
@@ -134,6 +137,7 @@ public partial class CallListWindow : Window
                     msg += $"\nInner: {ex.InnerException.Message}";
                 MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
     }
 }

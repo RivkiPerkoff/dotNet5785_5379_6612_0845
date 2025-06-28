@@ -75,7 +75,7 @@ internal class CallImplementation : BIApi.ICall
             var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
             var callStatus = Tools.GetCallStatus(call);
             var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId);
-            if (callStatus != StatusCallType.open || assignments.Any())
+            if ((callStatus != StatusCallType.open && callStatus != StatusCallType.openInRisk) || assignments.Any())
                 throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
             _dal.Call.Delete(callId);
             CallManager.Observers.NotifyListUpdated(); //stage 5
@@ -422,11 +422,11 @@ internal class CallImplementation : BIApi.ICall
         return callList;
     }
     public void AddObserver(Action listObserver) =>
-    VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    CallManager.Observers.AddListObserver(listObserver); //stage 5
     public void AddObserver(int id, Action observer) =>
-    VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    CallManager.Observers.AddObserver(id, observer); //stage 5
     public void RemoveObserver(Action listObserver) =>
-    VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    CallManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
-    VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+    CallManager.Observers.RemoveObserver(id, observer); //stage 5
 }
