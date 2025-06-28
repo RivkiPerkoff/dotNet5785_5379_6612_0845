@@ -76,8 +76,6 @@ namespace PL
                     VolunteerPersonalWindow volunteerWindow = new VolunteerPersonalWindow(volunteerId);
                     volunteerWindow.Show();
                 }
-
-                this.Close();
             }
             catch
             {
@@ -94,6 +92,7 @@ namespace PL
         }
     }
 }
+
 
 //using BL.BIApi;
 //using PL.Volunteer;
