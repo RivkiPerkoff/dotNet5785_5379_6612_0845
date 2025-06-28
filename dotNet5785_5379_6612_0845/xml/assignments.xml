@@ -129,14 +129,6 @@
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
-    <NextAssignmentId>1018</NextAssignmentId>
-    <IdOfRunnerCall>1018</IdOfRunnerCall>
-    <VolunteerId>1008</VolunteerId>
-    <FinishCallType xsi:nil="true" />
-    <EntryTimeForTreatment>2025-05-22T16:14:00</EntryTimeForTreatment>
-    <EndTimeForTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
     <NextAssignmentId>1019</NextAssignmentId>
     <IdOfRunnerCall>1019</IdOfRunnerCall>
     <VolunteerId>1004</VolunteerId>
@@ -358,6 +350,14 @@
     <VolunteerId>1004</VolunteerId>
     <FinishCallType>CanceledByVolunteer</FinishCallType>
     <EntryTimeForTreatment>2024-12-09T09:10:00</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-23T14:11:20</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1018</NextAssignmentId>
+    <IdOfRunnerCall>1018</IdOfRunnerCall>
+    <VolunteerId>1008</VolunteerId>
+    <FinishCallType>CanceledByVolunteer</FinishCallType>
+    <EntryTimeForTreatment>2025-05-22T16:14:00</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-23T14:11:20</EndTimeForTreatment>
   </Assignment>
 </ArrayOfAssignment>
