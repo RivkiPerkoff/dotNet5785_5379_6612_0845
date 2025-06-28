@@ -14,4 +14,14 @@ namespace PL
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
+    public class DistanceTypeCollection : IEnumerable<DistanceType>
+    {
+        private static readonly DistanceType[] s_enums =
+            (DistanceType[])Enum.GetValues(typeof(DistanceType));
+
+        public IEnumerator<DistanceType> GetEnumerator() => ((IEnumerable<DistanceType>)s_enums).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
 }

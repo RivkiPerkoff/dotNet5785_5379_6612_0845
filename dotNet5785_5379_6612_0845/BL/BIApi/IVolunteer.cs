@@ -18,8 +18,10 @@ public interface IVolunteer : IObservable
     /// <param name="password">The password of the user.</param>
     /// <returns>The role of the user.</returns>
     /// <exception cref="UnauthorizedAccessException">Thrown if the username or password is incorrect.</exception>
-    string Login(string username, string password);
 
+
+    //string Login(string username, string password);
+    string Login(string idString, string password);
     /// <summary>
     /// Retrieves a list of volunteers, optionally filtered by their active status and sorted by a specific field.
     /// </summary>
