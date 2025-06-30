@@ -25,7 +25,7 @@ internal class CallManager
         return doCalls.Select(doCall => new BO.Call
         {
             IdCall = doCall.IdCall,
-            CallType = (CallTypes)doCall.CallTypes, // Convert call type
+            CallType = ToBOCallType(doCall.CallTypes),
             CallDescription = doCall.CallDescription,
             AddressOfCall = doCall.CallAddress ?? throw new ArgumentNullException(nameof(doCall.CallAddress)),
             CallLongitude = doCall.CallLongitude,
@@ -96,17 +96,44 @@ internal class CallManager
             return new BO.ClosedCallInList
             {
                 Id = call.IdCall,
-                CallTypes = (DO.CallTypes)call.CallTypes,
+                CallTypes = ToBOCallType(call.CallTypes),
                 OpeningTime = (DateTime)call.OpeningTime,
                 Address = call.CallAddress,
                 EntryTimeForTreatment = assignment?.EntryTimeForTreatment ?? DateTime.MinValue,
                 EndTimeForTreatment = assignment?.EndTimeForTreatment,
+                FinishCallType = assignment?.FinishCallType != null
+    ? ToBOTreatmentEndType(assignment.FinishCallType.Value)
+    : null
                 //FinishCallType = assignment?.FinishCallType
                 FinishCallType = assignment == null ? DO.FinishCallType.None : assignment.FinishCallType.Value
 
             };
         });
     }
+    public static DO.CallTypes ToDOCallType(BO.CallTypes type) =>
+       type switch
+       {
+           BO.CallTypes.ManDriver => DO.CallTypes.ManDriver,
+           BO.CallTypes.WomanDriver => DO.CallTypes.WomanDriver,
+           _ => DO.CallTypes.None
+       };
+
+    public static BO.CallTypes ToBOCallType(DO.CallTypes type) =>
+        type switch
+        {
+            DO.CallTypes.ManDriver => BO.CallTypes.ManDriver,
+            DO.CallTypes.WomanDriver => BO.CallTypes.WomanDriver,
+            _ => BO.CallTypes.None
+        };
+    public static TreatmentEndType ToBOTreatmentEndType(DO.FinishCallType type) =>
+    type switch
+    {
+        DO.FinishCallType.TakenCareof => TreatmentEndType.TakenCareof,
+        DO.FinishCallType.CanceledByVolunteer => TreatmentEndType.CanceledByVolunteer,
+        DO.FinishCallType.CanceledByManager => TreatmentEndType.CanceledByManager,
+        DO.FinishCallType.Expired => TreatmentEndType.Expired,
+        _ => TreatmentEndType.None
+    };
 
     public static int GetCountOfCompletedCalls(int volunteerId)
     {

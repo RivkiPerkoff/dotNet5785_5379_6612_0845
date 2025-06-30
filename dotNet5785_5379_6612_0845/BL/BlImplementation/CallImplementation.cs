@@ -88,7 +88,7 @@ internal class CallImplementation : BIApi.ICall
         return new BO.Call
         {
             IdCall = call.IdCall,
-            CallType = (BO.CallTypes)call.CallTypes,
+            CallType = CallManager.ToBOCallType(call.CallTypes),
             CallDescription = call.CallDescription,
             AddressOfCall = call.CallAddress,
             CallLongitude = call.CallLongitude,
