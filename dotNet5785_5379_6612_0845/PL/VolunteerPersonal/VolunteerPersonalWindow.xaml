@@ -26,27 +26,27 @@
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Name:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                <TextBox Text="{Binding CurrentVolunteer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Phone:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.PhoneNumber, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                <TextBox Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Email:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.EmailOfVolunteer, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                <TextBox Text="{Binding CurrentVolunteer.EmailOfVolunteer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Address:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.AddressVolunteer, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                <TextBox Text="{Binding CurrentVolunteer.AddressVolunteer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Max Distance:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.MaximumDistanceForReceivingCall, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                <TextBox Text="{Binding CurrentVolunteer.MaximumDistanceForReceivingCall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
@@ -57,12 +57,12 @@
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Distance Type:" Width="120"/>
                 <ComboBox ItemsSource="{Binding DistanceTypeCollection}"
-                          SelectedItem="{Binding CurrentVolunteer.DistanceType}" Width="200"/>
+                          SelectedItem="{Binding CurrentVolunteer.DistanceType, Mode=TwoWay}" Width="200"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Active:" Width="120"/>
-                <CheckBox IsChecked="{Binding CurrentVolunteer.IsAvailable, UpdateSourceTrigger=PropertyChanged}"
+                <CheckBox IsChecked="{Binding CurrentVolunteer.IsAvailable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           IsEnabled="{Binding CanChangeActiveStatus}"
                           Checked="ActiveChanged"
                           Unchecked="ActiveChanged"/>
