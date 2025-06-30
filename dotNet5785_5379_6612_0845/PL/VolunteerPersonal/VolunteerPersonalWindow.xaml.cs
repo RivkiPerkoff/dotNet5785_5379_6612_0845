@@ -52,7 +52,9 @@ namespace PL.VolunteerPersonal
         private void LoadVolunteer(int id)
         {
             CurrentVolunteer = bl.Volunteer.GetVolunteerDetails(id) ?? throw new Exception("Volunteer not found");
-            PasswordBoxVolunteer.Password = ""; // לא מציגים סיסמה קיימת
+            PasswordBoxVolunteer.Password = "";
+            OnPropertyChanged(nameof(CurrentCallInfo));
+            OnPropertyChanged(nameof(IsCallInProgress));
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
