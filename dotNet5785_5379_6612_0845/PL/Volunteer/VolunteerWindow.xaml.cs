@@ -12,13 +12,20 @@ namespace PL.Volunteer;
 
 public partial class VolunteerWindow : Window, INotifyPropertyChanged
 {
-   private static readonly IBL volunteer_bl = BlApi.Factory.Get();
+    private static readonly IBL volunteer_bl = BlApi.Factory.Get();
+    public string CurrentCallInfo =>
+    CurrentVolunteer?.CallInProgress == null
+        ? "No active call"
+        : $"Address: {CurrentVolunteer.CallInProgress.CallingAddress}\n" +
+          $"Status: {CurrentVolunteer.CallInProgress.Status}\n" +
+          $"Distance: {CurrentVolunteer.CallInProgress.CallingDistanceFromVolunteer} km";
+
     public string ButtonText
     {
         get => (string)GetValue(ButtonTextProperty);
         set
         {
-            SetValue(ButtonTextProperty, value); 
+            SetValue(ButtonTextProperty, value);
             OnPropertyChanged(nameof(ButtonText));
             OnPropertyChanged(nameof(IsEditMode));
         }
@@ -121,6 +128,36 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         DataContext = this;
     }
 
+    //private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        if (CurrentVolunteer == null)
+    //            return;
+
+    //        CurrentVolunteer.PasswordVolunteer = Password;
+
+
+    //        if (ButtonText == "Add")
+    //        {
+    //            volunteer_bl.Volunteer.AddVolunteer(CurrentVolunteer);
+    //            MessageBox.Show("Volunteer added successfully.");
+    //        }
+    //        else
+    //        {
+    //            volunteer_bl.Volunteer.UpdateVolunteer(CurrentVolunteer.VolunteerId, CurrentVolunteer);
+    //            MessageBox.Show("Volunteer updated successfully.");
+    //        }
+
+    //        Password = "";
+    //        lastPasswordBox?.Clear();
+    //        Close();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show($"Error: {ex?.InnerException?.Message}");
+    //    }
+    //}
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -130,6 +167,10 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
 
             CurrentVolunteer.PasswordVolunteer = Password;
 
+            bool isSelfDemotion =
+                ButtonText == "Update" &&
+                volunteer_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.VolunteerId).Role == BL.BO.Role.Manager &&
+                CurrentVolunteer.Role == BL.BO.Role.Volunteer;
 
             if (ButtonText == "Add")
             {
@@ -144,13 +185,32 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
 
             Password = "";
             lastPasswordBox?.Clear();
-            Close();
+
+            if (isSelfDemotion)
+            {
+                // פותחים את חלון הלוגין לפני שסוגרים
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+
+                // סוגרים את כל שאר החלונות פרט ללוגין
+                foreach (Window w in Application.Current.Windows.OfType<Window>().ToList())
+                {
+                    if (w != loginWindow)
+                        w.Close();
+                }
+
+                return; // לא להמשיך הלאה
+            }
+
+            Close(); // סגירת חלון אם לא היה שינוי תפקיד
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex?.InnerException?.Message}");
+            MessageBox.Show($"Error: {ex?.InnerException?.Message ?? ex.Message}");
         }
     }
+
+
     private PasswordBox? lastPasswordBox;
 
     private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -173,6 +233,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         CurrentVolunteer = volunteer_bl.Volunteer.GetVolunteerDetails(id);
         DataContext = null;
         DataContext = this;
+        OnPropertyChanged(nameof(CurrentCallInfo));
     }
-    
+
 }

@@ -97,7 +97,11 @@ public enum CallTypes
 }
 public enum TreatmentEndType
 {
-
+    None,
+    TakenCareof,
+    CanceledByVolunteer,
+    CanceledByManager,
+    Expired
 }
 
 public enum VolunteerFields

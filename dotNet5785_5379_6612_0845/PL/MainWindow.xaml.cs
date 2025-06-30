@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BL.BIApi;
+using BL.BO;
 
 namespace PL;
+
 public partial class MainWindow : Window
 {
     private static readonly IBL s_bl = BlApi.Factory.Get();
     private readonly Action clockObserver;
     private readonly Action configObserver;
+    private readonly int _currentUserId;
 
-    public MainWindow()
+    private readonly Role _currentUserRole;
+
+    public MainWindow(Role currentUserRole, int currentUserId)
     {
         InitializeComponent();
+        _currentUserRole = currentUserRole;
+        _currentUserId = currentUserId;
 
         clockObserver = () =>
         {
@@ -24,8 +32,8 @@ public partial class MainWindow : Window
         configObserver = () =>
         {
             RiskTimeRange = s_bl.Admin.GetRiskTimeRange();
-
         };
+
         CurrentTime = s_bl.Admin.GetClock();
 
         s_bl.Admin.AddClockObserver(clockObserver);
@@ -38,19 +46,19 @@ public partial class MainWindow : Window
 
     public DateTime CurrentTime
     {
-        get { return (DateTime)GetValue(CurrentTimeProperty); }
-        set { SetValue(CurrentTimeProperty, value); }
+        get => (DateTime)GetValue(CurrentTimeProperty);
+        set => SetValue(CurrentTimeProperty, value);
     }
     public static readonly DependencyProperty CurrentTimeProperty =
-        DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
+        DependencyProperty.Register(nameof(CurrentTime), typeof(DateTime), typeof(MainWindow));
 
     public TimeSpan RiskTimeRange
     {
-        get { return (TimeSpan)GetValue(RiskTimeRangeProperty); }
-        set { SetValue(RiskTimeRangeProperty, value); }
+        get => (TimeSpan)GetValue(RiskTimeRangeProperty);
+        set => SetValue(RiskTimeRangeProperty, value);
     }
     public static readonly DependencyProperty RiskTimeRangeProperty =
-        DependencyProperty.Register("RiskTimeRange", typeof(TimeSpan), typeof(MainWindow));
+        DependencyProperty.Register(nameof(RiskTimeRange), typeof(TimeSpan), typeof(MainWindow));
 
     public string RiskTimeRangeText
     {
@@ -62,26 +70,11 @@ public partial class MainWindow : Window
         }
     }
 
-    private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
-    {
-        s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Minute);
-    }
+    private void btnAddOneMinute_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Minute);
+    private void btnAddOneHour_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Hour);
+    private void btnAddOneDay_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Day);
+    private void btnAddOneYear_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Year);
 
-    private void btnAddOneHour_Click(object sender, RoutedEventArgs e)
-    {
-        s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Hour);
-    }
-
-    private void btnAddOneDay_Click(object sender, RoutedEventArgs e)
-    {
-        s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Day);
-    }
-
-    private void btnAddOneYear_Click(object sender, RoutedEventArgs e)
-    {
-        s_bl.Admin.AdvanceClock(BL.BO.TimeUnit.Year);
-    }
-  
     private void UpdateConfigButton_Click(object sender, RoutedEventArgs e)
     {
         if (TimeSpan.TryParse(RiskTimeRangeText, out TimeSpan ts))
@@ -90,7 +83,6 @@ public partial class MainWindow : Window
             {
                 RiskTimeRange = ts;
                 s_bl.Admin.SetRiskTimeRange(RiskTimeRange);
-
                 MessageBox.Show($"Risk range updated to: {RiskTimeRange}.");
             }
             catch (Exception ex)
@@ -103,15 +95,16 @@ public partial class MainWindow : Window
             MessageBox.Show("Please enter a valid time in the format hh:mm:ss.");
         }
     }
-
- 
     public static readonly DependencyProperty MaxRangeProperty =
-        DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+    DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+    public IEnumerable<CallInList> CallList
+    {
+        get => (IEnumerable<CallInList>)GetValue(CallListProperty);
+        set => SetValue(CallListProperty, value);
+    }
 
-    //private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    //{
-    //    // לא דרוש אם עושים הכל בבנאי
-    //}
+    public static readonly DependencyProperty CallListProperty =
+        DependencyProperty.Register(nameof(CallList), typeof(IEnumerable<CallInList>), typeof(MainWindow), new PropertyMetadata(null));
 
     private void MainWindow_Closed(object sender, EventArgs e)
     {
@@ -119,6 +112,33 @@ public partial class MainWindow : Window
         s_bl.Admin.RemoveConfigObserver(configObserver);
     }
 
+    //private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
+    //{
+    //    var result = MessageBox.Show("האם אתה בטוח שברצונך לאתחל את בסיס הנתונים?",
+    //                                 "אישור אתחול",
+    //                                 MessageBoxButton.YesNo,
+    //                                 MessageBoxImage.Warning);
+
+    //    if (result == MessageBoxResult.Yes)
+    //    {
+    //        try
+    //        {
+    //            Mouse.OverrideCursor = Cursors.Wait;
+    //            foreach (Window win in Application.Current.Windows)
+    //            {
+    //                if (win != this)
+    //                    win.Close();
+    //            }
+
+    //            s_bl.Admin.InitializeDatabase();
+    //            MessageBox.Show("בסיס הנתונים אותחל בהצלחה.", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+    //        }
+    //        finally
+    //        {
+    //            Mouse.OverrideCursor = null;
+    //        }
+    //    }
+    //}
     private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show("האם אתה בטוח שברצונך לאתחל את בסיס הנתונים?",
@@ -132,9 +152,14 @@ public partial class MainWindow : Window
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                foreach (Window win in Application.Current.Windows)
+                // פתח את חלון הלוגין לפני שסוגרים הכל
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+
+                // סגור את כל החלונות פרט ללוגין
+                foreach (Window win in Application.Current.Windows.OfType<Window>().ToList())
                 {
-                    if (win != this)
+                    if (win != loginWindow)
                         win.Close();
                 }
 
@@ -148,7 +173,9 @@ public partial class MainWindow : Window
         }
     }
 
-    // === איפוס בסיס הנתונים ===
+
+
+
     private void btnResetDB_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show("האם אתה בטוח שברצונך לאפס את בסיס הנתונים?",
@@ -161,7 +188,6 @@ public partial class MainWindow : Window
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-
                 foreach (Window win in Application.Current.Windows)
                 {
                     if (win != this)
@@ -177,29 +203,40 @@ public partial class MainWindow : Window
             }
         }
     }
-    public IEnumerable<BL.BO.CallInList> CallList
-    {
-        get { return (IEnumerable<BL.BO.CallInList>)GetValue(CallListProperty); }
-        set { SetValue(CallListProperty, value); }
-    }
-
-    public static readonly DependencyProperty CallListProperty =
-        DependencyProperty.Register(
-            nameof(CallList),
-            typeof(IEnumerable<BL.BO.CallInList>),
-            typeof(MainWindow),
-            new PropertyMetadata(null));
 
     private void btnShowVolunteerList_Click(object sender, RoutedEventArgs e)
     {
-        var window = new Volunteer.VolunteerListWindow();
-        window.Show(); 
+        var existingWindow = Application.Current.Windows
+            .OfType<Volunteer.VolunteerListWindow>()
+            .FirstOrDefault();
+
+        if (existingWindow != null)
+        {
+            existingWindow.Activate();
+            existingWindow.Focus();
+        }
+        else
+        {
+            var window = new Volunteer.VolunteerListWindow();
+            window.Show();
+        }
     }
+
     private void btnShowCallList_Click(object sender, RoutedEventArgs e)
     {
-        var window = new Call.CallListWindow();
-        window.Show();
+        var existingWindow = Application.Current.Windows
+            .OfType<Call.CallListWindow>()
+            .FirstOrDefault();
+
+        if (existingWindow != null)
+        {
+            existingWindow.Activate();
+            existingWindow.Focus();
+        }
+        else
+        {
+            var window = new Call.CallListWindow(_currentUserRole, _currentUserId);
+            window.Show();
+        }
     }
-
-
 }

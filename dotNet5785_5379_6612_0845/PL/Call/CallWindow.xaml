@@ -3,24 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:bo="clr-namespace:BL.BO;assembly=BL"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="CallWindow"
-        Height="500"
-        Width="500"
-        Background="#FAFAFA"
-        FontFamily="Segoe UI"
-        FontSize="14">
+        xmlns:conv="clr-namespace:PL.Converters"
+        Title="Call Details" Height="580" Width="600"
+        Background="#FAFAFA" FontFamily="Segoe UI" FontSize="14"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <ObjectDataProvider x:Key="CallTypesEnum"
-                            MethodName="GetValues"
+        <ObjectDataProvider x:Key="CallTypesEnum" MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="bo:CallTypes"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <conv:ListCountToVisibilityConverter x:Key="ListVis"/>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
 
-    <Grid Margin="10" DataContext="{Binding CurrentCall}">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -30,55 +29,99 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- ID -->
         <Label Grid.Row="0" Grid.Column="0" Content="Call ID:"/>
         <TextBox Grid.Row="0" Grid.Column="1"
-                 Text="{Binding IdCall}"
-                 IsReadOnly="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                 Text="{Binding CurrentCall.IdCall}"
+                 IsReadOnly="True"/>
 
         <!-- Description -->
         <Label Grid.Row="1" Grid.Column="0" Content="Description:"/>
         <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding CallDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding CurrentCall.CallDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsEditable}"/>
 
         <!-- Address -->
         <Label Grid.Row="2" Grid.Column="0" Content="Address:"/>
         <TextBox Grid.Row="2" Grid.Column="1"
-                 Text="{Binding AddressOfCall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding CurrentCall.AddressOfCall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsEditable}"/>
 
         <!-- Opening Time -->
         <Label Grid.Row="3" Grid.Column="0" Content="Opening Time:"/>
-        <DatePicker Grid.Row="3" Grid.Column="1"
-                    SelectedDate="{Binding OpeningTime, Mode=TwoWay}"/>
+        <TextBox Grid.Row="3" Grid.Column="1"
+                 Text="{Binding CurrentCall.OpeningTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"
+                 IsReadOnly="True"/>
 
         <!-- Max Finish Time -->
         <Label Grid.Row="4" Grid.Column="0" Content="Max Finish Time:"/>
-        <DatePicker Grid.Row="4" Grid.Column="1"
-                    SelectedDate="{Binding MaxFinishTime, Mode=TwoWay}"/>
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+            <DatePicker SelectedDate="{Binding CurrentCall.MaxFinishTime, Mode=TwoWay}" 
+                        IsEnabled="{Binding IsEditable}"/>
+            <TextBox Text="{Binding MaxFinishTimeTimePart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Width="60" Margin="5,0,0,0"
+                     VerticalAlignment="Center" ToolTip="שעה בפורמט HH:mm"
+                     IsEnabled="{Binding IsEditable}"/>
+        </StackPanel>
 
         <!-- Call Type -->
         <Label Grid.Row="5" Grid.Column="0" Content="Call Type:"/>
         <ComboBox Grid.Row="5" Grid.Column="1"
                   ItemsSource="{Binding Source={StaticResource CallTypesEnum}}"
-                  SelectedItem="{Binding CallType, Mode=TwoWay}"/>
+                  SelectedItem="{Binding CurrentCall.CallType, Mode=TwoWay}"
+                  IsEnabled="{Binding IsEditable}"/>
 
-        <!-- Status (readonly) -->
+        <!-- Status -->
         <Label Grid.Row="6" Grid.Column="0" Content="Status:"/>
         <TextBlock Grid.Row="6" Grid.Column="1"
-                   Text="{Binding StatusCallType}"
-                   Foreground="Gray"/>
+                   Text="{Binding CurrentCall.StatusCallType}" Foreground="Gray"/>
 
-        <!-- Add / Update -->
-        <Button Grid.Row="7" Grid.Column="1"
-                Content="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=Window}}"
-                Click="btnAddUpdate_Click"
-                HorizontalAlignment="Left"
-                Margin="0,10,0,0"/>
+        <!-- Assignments -->
+        <GroupBox Grid.Row="7" Grid.ColumnSpan="2" Header="Assignments History" Margin="0,10">
+            <Grid>
+                <DataGrid ItemsSource="{Binding CurrentCall.CallAssignInLists}"
+                          AutoGenerateColumns="False" IsReadOnly="True"
+                          Visibility="{Binding CurrentCall.CallAssignInLists, Converter={StaticResource ListVis}}"
+                          HeadersVisibility="Column"
+                          AlternatingRowBackground="LightGray" GridLinesVisibility="None"
+                          CanUserResizeRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Width="100"/>
+                        <DataGridTextColumn Header="Volunteer Name" Binding="{Binding VolunteerName}" Width="150"/>
+                        <DataGridTextColumn Header="Entry Time" Binding="{Binding EntryTimeForTreatment}" Width="150"/>
+                        <DataGridTextColumn Header="End Time" Binding="{Binding EndTimeForTreatment}" Width="150"/>
+                        <DataGridTextColumn Header="End Type" Binding="{Binding TreatmentEndType}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock Text="אין הקצאות לקריאה זו."
+                           Visibility="{Binding CurrentCall.CallAssignInLists, Converter={StaticResource ListVis}, ConverterParameter=invert}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="Gray" FontStyle="Italic"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Button -->
+        <Button Grid.Row="8" Grid.ColumnSpan="2"
+                Content="{Binding ButtonText}" Click="btnAddUpdate_Click"
+                Visibility="{Binding IsEditable, Converter={StaticResource BoolToVisibilityConverter}}"
+                Margin="0,0,0,10"
+                Width="140" Height="40" HorizontalAlignment="Center"
+                Background="CadetBlue" Foreground="White" FontWeight="SemiBold" BorderBrush="CadetBlue" BorderThickness="1">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Window>

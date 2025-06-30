@@ -28,37 +28,7 @@ static public class VolunteerManager
     /// <param name="oldClock">Previous clock timestamp.</param>
     /// <param name="newClock">New clock timestamp.</param>
     /// <returns>Updated DateTime value.</returns>
-    //public static DateTime PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    //{
-    //    bool volunteerUpdated; //stage 5
-    //                         //if a specific student info is changed - then call NotifyItemUpdated(id, false)
-    //                         //and after all - call NotifyListUpdated();
-    //    lock (AdminManager.blMutex) //stage 7
-    //    {
-    //        volunteerUpdated = false; //stage 5
-    //        var list = s_dal.Volunteer.ReadAll().ToList(); //stage 4
-    //        foreach (var doStudent in list) //stage 4
-    //        {
-    //            //if student study for more than MaxRange years
-    //            //then student should be automatically updated to 'not active'
-    //            if (AdminManager.Now.Year - s_dal.Volunteer..RegistrationDate?.Year >=
-    //            s_dal.Config.RiskRange) //stage 4
-    //            {
-    //                volunteerUpdated = true; //stage 5
-    //                s_dal.Volunteer.Update(doStudent with { IsActive = false }); //stage 4
-    //                Observers.NotifyItemUpdated(doStudent.VolunteerId); //stage 5
-    //            }
-    //        }
-    //    }
-    //    //if the current year was changed
-    //    //it means that we need to announce that the whole list of student was updated
-    //    bool yearChanged = oldClock.Year != newClock.Year; //stage 5
-    //    if (yearChanged || volunteerUpdated) //stage 5
-    //        Observers.NotifyListUpdated(); //stage 5
-
-    //    return DateTime.Now;
-    //}
-
+    
     /// <summary>
     /// Verifies if the input password matches the stored hashed password.
     /// </summary>
@@ -203,10 +173,5 @@ static public class VolunteerManager
             CallType = BO.CallTypes.None
         };
     }
- 
-
-
-
-
 
 }
