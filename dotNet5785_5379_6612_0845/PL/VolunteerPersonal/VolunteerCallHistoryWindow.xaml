@@ -11,13 +11,14 @@
 
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
             <TextBlock Text="Filter by Call Type:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <ComboBox ItemsSource="{Binding CallTypeOptions}" 
-                      SelectedItem="{Binding SelectedFilterType, Mode=TwoWay}" Width="150" Margin="0,0,20,0"/>
+            <ComboBox ItemsSource="{Binding CallTypeOptions}"
+              SelectedItem="{Binding SelectedFilterType, Mode=TwoWay}" Width="150" Margin="0,0,20,0"/>
 
             <TextBlock Text="Sort by:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <ComboBox ItemsSource="{Binding SortFieldOptions}" 
-                      SelectedItem="{Binding SelectedSortField, Mode=TwoWay}" Width="150"/>
+            <ComboBox ItemsSource="{Binding SortFieldOptions}"
+              SelectedItem="{Binding SelectedSortField, Mode=TwoWay}" Width="150"/>
         </StackPanel>
+
 
         <DataGrid ItemsSource="{Binding CallList}" AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True">
             <DataGrid.Columns>

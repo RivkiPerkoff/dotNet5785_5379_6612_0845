@@ -104,8 +104,6 @@ internal class CallManager
                 FinishCallType = assignment?.FinishCallType != null
     ? ToBOTreatmentEndType(assignment.FinishCallType.Value)
     : null
-                //FinishCallType = assignment?.FinishCallType
-                FinishCallType = assignment == null ? DO.FinishCallType.None : assignment.FinishCallType.Value
 
             };
         });

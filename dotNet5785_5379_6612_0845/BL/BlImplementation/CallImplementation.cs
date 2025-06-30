@@ -155,7 +155,7 @@ internal class CallImplementation : BIApi.ICall
             callLongitude: coordinates.Item2,
             openingTime: callObject.OpeningTime,
             maxFinishTime: callObject.MaxFinishTime ?? default,
-            CallTypes: (DO.CallTypes)callObject.CallType
+            CallTypes: CallManager.ToDOCallType(callObject.CallType)
         );
         _dal.Call.Create(callDO);
         CallManager.Observers.NotifyListUpdated(); //stage 5
@@ -471,7 +471,7 @@ internal class CallImplementation : BIApi.ICall
             CallLatitude = callObject.CallLatitude,
             CallLongitude = callObject.CallLongitude,
             MaxFinishTime = callObject.MaxFinishTime,
-            CallTypes = (DO.CallTypes)callObject.CallType
+            CallTypes = CallManager.ToDOCallType(callObject.CallType)
         };
 
         _dal.Call.Update(updatedCall);

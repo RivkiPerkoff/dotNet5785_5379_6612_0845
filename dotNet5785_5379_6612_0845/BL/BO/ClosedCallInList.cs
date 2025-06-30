@@ -1,12 +1,11 @@
-﻿using DO;
-
+﻿
 namespace BL.BO;
 
 public class ClosedCallInList
 {
   public int Id { get; init; }
     public CallTypes CallTypes { get; set; }
-  public string Address { get; set; }
+    public string Address { get; set; }
   public DateTime OpeningTime { get; set; }
   public DateTime EntryTimeForTreatment { get; set; }
   public DateTime? EndTimeForTreatment { get; set; }

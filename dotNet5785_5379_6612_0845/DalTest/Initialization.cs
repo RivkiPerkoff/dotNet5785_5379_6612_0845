@@ -19,8 +19,8 @@ public static class Initialization
     {
         string[] names = { "Roni", "Maya", "Lior", "Noa", "Dani", "Tomer", "Liat", "Gal", "Yona", "Nir", "Omer", "Shira", "Erez", "Michal", "Hadar" };
         string[] emails = { "Roni@gmail.com", "Maya@gmail.com", "Lior@gmail.com", "Noa@gmail.com", "Dani@gmail.com", "Tomer@gmail.com", "Liat@gmail.com", "Gal@gmail.com", "Yona@gmail.com", "Nir@gmail.com", "Omer@gmail.com", "Shira@gmail.com", "Erez@gmail.com", "Michal@gmail.com", "Hadar@gmail.com" };
-        string[] phones = { "050-321-7845", "052-987-1243", "054-123-9876", "053-549-4567", "055-789-1234", "050-987-6789", "054-112-7654", "053-785-6543", "052-312-7890", "055-654-3210", "053-789-5647", "050-125-1234", "052-456-8765", "054-654-4321", "055-123-4567" };
-        string[] addresses = { "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "Dimona", "Tiberias", "Safed", "Kiryat Gat", "Ashkelon", "Lod", "Ramat Gan" };
+        string[] phones = { "0503217845", "0529871243", "0541239876", "0535494567", "0557891234", "0509876789", "0541127654", "0537856543", "0523127890", "0556543210", "0537895647", "0501251234", "0524568765", "0546544321", "0551234567" };
+        string[] addresses = { "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "רחוב הגפן 3, מודיעין, 7173311", "רחוב הנרייטה סולד 6, טבריה, 1448123", "רחוב רוטשילד 15, פתח תקווה, 4925138", "רחוב דוד המלך 22, ראשון לציון, 7521007", "רחוב הנביאים 10, באר שבע, 8421234", "רחוב ויצמן 7, כפר סבא, 4423027", "רחוב יפו 35, ירושלים, 9434125" };
         int id = s_dal!.Config.CreateVolunteerId();
         string name = names[0];
         string email = emails[0];
@@ -79,17 +79,15 @@ public static class Initialization
         const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const string lowerCase = "abcdefghijklmnopqrstuvwxyz";
         const string digits = "0123456789";
-        const string specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?/";
 
         // Ensuring at least one character from each required category
         StringBuilder password = new();
         password.Append(upperCase[s_rand.Next(upperCase.Length)]);
         password.Append(lowerCase[s_rand.Next(lowerCase.Length)]);
         password.Append(digits[s_rand.Next(digits.Length)]);
-        password.Append(specialChars[s_rand.Next(specialChars.Length)]);
 
         // Filling the rest of the password with a mix of all characters
-        string allChars = upperCase + lowerCase + digits + specialChars;
+        string allChars = upperCase + lowerCase + digits ;
         for (int i = password.Length; i < length; i++)
         {
             password.Append(allChars[s_rand.Next(allChars.Length)]);
