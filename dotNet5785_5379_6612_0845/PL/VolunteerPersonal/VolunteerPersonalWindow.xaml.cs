@@ -85,10 +85,19 @@ public partial class VolunteerPersonalWindow : Window, INotifyPropertyChanged
             LoadVolunteer(CurrentVolunteer.VolunteerId);
             RefreshBindings();
         }
+        //catch (Exception ex)
+        //{
+        //    MessageBox.Show($"Error: {ex.Message}");
+        //}
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.Message}");
+            string fullMessage = ex.Message;
+            if (ex.InnerException != null)
+                fullMessage += "\nDetails: " + ex.InnerException.Message;
+
+            MessageBox.Show("Error loading calls: " + fullMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
     }
 
     private void btnCancelCall_Click(object sender, RoutedEventArgs e)
@@ -101,20 +110,123 @@ public partial class VolunteerPersonalWindow : Window, INotifyPropertyChanged
             LoadVolunteer(CurrentVolunteer.VolunteerId);
             RefreshBindings();
         }
+        //catch (Exception ex)
+        //{
+        //    MessageBox.Show($"Error: {ex.Message}");
+        //}
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.Message}");
+            string fullMessage = ex.Message;
+            if (ex.InnerException != null)
+                fullMessage += "\nDetails: " + ex.InnerException.Message;
+
+            MessageBox.Show("Error loading calls: " + fullMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
     }
 
+    //private void btnChooseCall_Click(object sender, RoutedEventArgs e)
+    //{
+    //    var chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
+    //    if (chooseCallWindow.ShowDialog() == true)
+    //    {
+    //        LoadVolunteer(CurrentVolunteer.VolunteerId);
+    //        RefreshBindings();
+    //        //DrawMap();
+    //    }
+    //}
+    //private void btnChooseCall_Click(object sender, RoutedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        var chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
+    //        if (chooseCallWindow.ShowDialog() == true)
+    //        {
+    //            LoadVolunteer(CurrentVolunteer.VolunteerId);
+    //            RefreshBindings();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        string fullMessage = ex.Message;
+    //        if (ex.InnerException != null)
+    //            fullMessage += "\nDetails: " + ex.InnerException.Message;
+
+    //        MessageBox.Show("Error opening Choose Call window: " + fullMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    //    }
+    //}
+    //private void btnChooseCall_Click(object sender, RoutedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        if (CurrentVolunteer == null)
+    //        {
+    //            MessageBox.Show("Volunteer data is not loaded properly.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    //            return;
+    //        }
+    //        if (string.IsNullOrWhiteSpace(CurrentVolunteer.AddressVolunteer))
+    //        {
+    //            MessageBox.Show("Cannot choose a call - your address is missing or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+    //            return;
+    //        }
+
+    //        var chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
+    //        if (chooseCallWindow.ShowDialog() == true)
+    //        {
+    //            LoadVolunteer(CurrentVolunteer.VolunteerId);
+    //            RefreshBindings();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        string fullMessage = ex.Message;
+    //        if (ex.InnerException != null)
+    //            fullMessage += "\nDetails: " + ex.InnerException.Message;
+
+    //        MessageBox.Show("Error opening Choose Call window: " + fullMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    //    }
+    //}
     private void btnChooseCall_Click(object sender, RoutedEventArgs e)
     {
-        var chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
-        if (chooseCallWindow.ShowDialog() == true)
+        try
         {
-            LoadVolunteer(CurrentVolunteer.VolunteerId);
-            RefreshBindings();
-            //DrawMap();
+            if (CurrentVolunteer == null)
+            {
+                MessageBox.Show("Volunteer data is not loaded properly.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentVolunteer.AddressVolunteer))
+            {
+                MessageBox.Show("Cannot choose a call - your address is missing or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            PL.Call.ChooseCallWindow chooseCallWindow;
+            try
+            {
+                chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error creating Choose Call window:\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (chooseCallWindow.ShowDialog() == true)
+            {
+                CurrentVolunteer = chooseCallWindow.GetUpdatedVolunteer();
+                LoadVolunteer(CurrentVolunteer.VolunteerId);
+                RefreshBindings();
+            }
+        }
+        catch (Exception ex)
+        {
+            string fullMessage = ex.Message;
+            if (ex.InnerException != null)
+                fullMessage += "\nDetails: " + ex.InnerException.Message;
+
+            MessageBox.Show("Error opening Choose Call window: " + fullMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -124,11 +236,7 @@ public partial class VolunteerPersonalWindow : Window, INotifyPropertyChanged
         historyWindow.ShowDialog();
     }
 
-    private void btnAllCalls_Click(object sender, RoutedEventArgs e)
-    {
-        new Call.CallListWindow().ShowDialog();
-    }
-
+  
     private void RefreshBindings()
     {
         OnPropertyChanged(nameof(CanChooseCall));
@@ -142,6 +250,7 @@ public partial class VolunteerPersonalWindow : Window, INotifyPropertyChanged
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        LoadVolunteer(CurrentVolunteer.VolunteerId);
         RefreshBindings();
     }
 }
