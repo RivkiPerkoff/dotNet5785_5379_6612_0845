@@ -135,43 +135,35 @@ static internal class Tools
             .OrderByDescending(a => a!.EntryTimeForTreatment)
             .ToList();
 
+        var activeAssignment = assignments.FirstOrDefault(a => !a.EndTimeForTreatment.HasValue);
         var lastAssignment = assignments.FirstOrDefault();
 
-        // 1. אם יש הקצאה שבוטלה ע"י מתנדב או מנהל
-        if (lastAssignment != null &&
-            lastAssignment.EndTimeForTreatment.HasValue &&
-            (lastAssignment.FinishCallType == FinishCallType.CanceledByVolunteer ||
-             lastAssignment.FinishCallType == FinishCallType.CanceledByManager))
+        // 1. אם יש הקצאה פעילה (טרם הסתיימה)
+        if (activeAssignment != null)
         {
-            return StatusCallType.open; // ← נחשב עדיין כקריאה פתוחה
-        }
-
-        // 2. אם הקריאה הושלמה
-        if (lastAssignment != null &&
-            lastAssignment.EndTimeForTreatment.HasValue &&
-            lastAssignment.FinishCallType == FinishCallType.TakenCareof)
-        {
-            return StatusCallType.closed;
-        }
-
-        // 3. פג תוקף
-        if (call.MaxFinishTime < AdminManager.Now)
-            return StatusCallType.Expired;
-
-        // 4. פתוחה בסיכון
-        if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange && lastAssignment == null)
-            return StatusCallType.openInRisk;
-
-        // 5. בטיפול רגיל או בסיכון
-        if (lastAssignment != null)
-        {
-            if ((AdminManager.Now - lastAssignment.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+            var duration = AdminManager.Now - activeAssignment.EntryTimeForTreatment;
+            if (duration > s_dal.Config.RiskRange)
                 return StatusCallType.HandlingInRisk;
             else
                 return StatusCallType.inHandling;
         }
 
-        // 6. פתוחה רגילה
+        // 2. אם הקריאה הסתיימה בטיפול מוצלח
+        if (lastAssignment?.EndTimeForTreatment.HasValue == true &&
+            lastAssignment.FinishCallType == FinishCallType.TakenCareof)
+        {
+            return StatusCallType.closed;
+        }
+
+        // 3. אם פג זמן סיום
+        if (call.MaxFinishTime < AdminManager.Now)
+            return StatusCallType.Expired;
+
+        // 4. פתוחה בסיכון (ללא הקצאה אבל עבר זמן סיכון)
+        if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
+            return StatusCallType.openInRisk;
+
+        // 5. פתוחה רגילה
         return StatusCallType.open;
     }
 

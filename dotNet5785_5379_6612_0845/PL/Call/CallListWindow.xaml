@@ -67,7 +67,6 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Call ID" Binding="{Binding CallId}" Width="Auto"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding CallType}" Width="Auto"/>
 
                 <DataGridTextColumn Header="Time Left" Width="Auto">
                     <DataGridTextColumn.Binding>

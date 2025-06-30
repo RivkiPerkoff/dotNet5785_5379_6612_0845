@@ -149,17 +149,17 @@ public partial class CallListWindow : Window
             if (call == null)
                 return;
 
-            if (call.Status != StatusCallType.open || call.TotalAssignment > 0)
+            if (call.Status != StatusCallType.inHandling && call.Status != StatusCallType.HandlingInRisk)
             {
-                MessageBox.Show("Cannot delete assignment. Either call is not open or it was already assigned.",
-                                "Delete Assignment Error",
+                MessageBox.Show("ניתן למחוק הקצאה רק כאשר הקריאה בטיפול או בטיפול בסיכון.",
+                                "שגיאה",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Warning);
                 return;
             }
 
-            var result = MessageBox.Show($"Are you sure you want to delete the assignment for call #{call.CallId}?",
-                                         "Confirm Assignment Deletion",
+            var result = MessageBox.Show($"האם אתה בטוח שברצונך למחוק את ההקצאה של קריאה מספר #{call.CallId}?",
+                                         "אישור מחיקה",
                                          MessageBoxButton.YesNo,
                                          MessageBoxImage.Question);
 
@@ -168,11 +168,19 @@ public partial class CallListWindow : Window
 
             try
             {
-                s_bl.Call.CancelCallTreatment(
-                    requesterId: _currentUserId,
-                    assignmentId: call.Id ?? throw new InvalidOperationException("Assignment ID is missing")
-                );
-                MessageBox.Show("Assignment deleted successfully.");
+                // שליפת ההקצאה האחרונה הפעילה לקריאה זו
+                var assignments = s_bl.Call.GetCallDetails(callId).CallAssignInLists;
+                var activeAssignment = assignments?
+                    .Where(a => a.EndTimeForTreatment == null)
+                    .OrderByDescending(a => a.EntryTimeForTreatment)
+                    .FirstOrDefault();
+
+                if (activeAssignment == null)
+                    throw new Exception("לא נמצאה הקצאה פעילה למחיקה.");
+
+                s_bl.Call.CancelCallTreatment(_currentUserId, call.Id.Value);
+
+                MessageBox.Show("ההקצאה בוטלה בהצלחה.");
                 RefreshCallList();
             }
             catch (Exception ex)
@@ -180,8 +188,9 @@ public partial class CallListWindow : Window
                 string msg = ex.Message;
                 if (ex.InnerException != null)
                     msg += $"\nInner: {ex.InnerException.Message}";
-                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(msg, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
+
 }
