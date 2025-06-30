@@ -65,23 +65,47 @@ internal class CallManager
     /// <param name="calls">Collection of DO.Call objects.</param>
     /// <param name="assignments">Collection of DO.Assignment objects.</param>
     /// <returns>Collection of BO.ClosedCallInList objects.</returns>
+    //public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
+    //{
+    //    return calls.Select(call =>
+    //    {
+    //        var assignment = assignments.First(a => a.IdOfRunnerCall == call.IdCall);
+    //        return new BO.ClosedCallInList
+    //        {
+    //            Id = call.IdCall,
+    //            CallTypes = (DO.CallTypes)call.CallTypes,
+    //            OpeningTime = (DateTime)call.OpeningTime,
+    //            Address = call.CallAddress,
+    //            EntryTimeForTreatment = (DateTime)assignment.EntryTimeForTreatment,
+    //            EndTimeForTreatment = assignment.EntryTimeForTreatment,
+    //            FinishCallType = (DO.FinishCallType)assignment.FinishCallType
+    //        };
+    //    });
+    //}
+
     public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
     {
         return calls.Select(call =>
         {
-            var assignment = assignments.First(a => a.IdOfRunnerCall == call.IdCall);
+            // לוקח את ההקצאה האחרונה של הקריאה לפי זמן כניסה
+            var assignment = assignments
+                .Where(a => a.IdOfRunnerCall == call.IdCall)
+                .OrderByDescending(a => a.EntryTimeForTreatment)
+                .FirstOrDefault();
+
             return new BO.ClosedCallInList
             {
                 Id = call.IdCall,
                 CallTypes = (DO.CallTypes)call.CallTypes,
                 OpeningTime = (DateTime)call.OpeningTime,
                 Address = call.CallAddress,
-                EntryTimeForTreatment = (DateTime)assignment.EntryTimeForTreatment,
-                EndTimeForTreatment = assignment.EntryTimeForTreatment,
-                FinishCallType = (DO.FinishCallType)assignment.FinishCallType
+                EntryTimeForTreatment = assignment?.EntryTimeForTreatment ?? DateTime.MinValue,
+                EndTimeForTreatment = assignment?.EndTimeForTreatment,
+                FinishCallType = assignment?.FinishCallType
             };
         });
     }
+
     public static int GetCountOfCompletedCalls(int volunteerId)
     {
         var assignments = s_dal.Assignment.ReadAll();

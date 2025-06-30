@@ -1,8 +1,7 @@
 ﻿<Window x:Class="PL.VolunteerPersonal.VolunteerPersonalWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Volunteer Details" Height="750" Width="850"
-        >
+        Title="Volunteer Details" Height="750" Width="850">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -36,6 +35,11 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Email:" Width="120"/>
+                <TextBox Text="{Binding CurrentVolunteer.EmailOfVolunteer, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Address:" Width="120"/>
                 <TextBox Text="{Binding CurrentVolunteer.AddressVolunteer, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
             </StackPanel>
@@ -46,31 +50,29 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Password:" Width="120"/>
+                <PasswordBox Name="PasswordBoxVolunteer" Width="200"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Distance Type:" Width="120"/>
                 <ComboBox ItemsSource="{Binding DistanceTypeCollection}"
                           SelectedItem="{Binding CurrentVolunteer.DistanceType}" Width="200"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Email:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.EmailOfVolunteer, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Password:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.PasswordVolunteer, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-            </StackPanel>
-
 
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Active:" Width="120"/>
-                <CheckBox IsChecked="{Binding CurrentVolunteer.IsAvailable}" IsEnabled="{Binding CanChangeActiveStatus}"/>
+                <CheckBox IsChecked="{Binding CurrentVolunteer.IsAvailable, UpdateSourceTrigger=PropertyChanged}"
+                          IsEnabled="{Binding CanChangeActiveStatus}"
+                          Checked="ActiveChanged"
+                          Unchecked="ActiveChanged"/>
             </StackPanel>
-            <Button Content="Choose Call"
-        Width="150"
-        Margin="0,10,0,0"
-        Click="btnChooseCall_Click"
-        IsEnabled="{Binding CanChooseCall}"/>
 
+            <Button Content="Choose Call"
+                    Width="150"
+                    Margin="0,10,0,0"
+                    Click="btnChooseCall_Click"
+                    IsEnabled="{Binding CanChooseCall}"/>
         </StackPanel>
 
         <!-- קריאה נוכחית -->
@@ -79,12 +81,8 @@
                 <TextBlock Text="{Binding CurrentCallInfo}" TextWrapping="Wrap"/>
                 <Button Content="End Call" Margin="5" Click="btnEndCall_Click" IsEnabled="{Binding IsCallInProgress}"/>
                 <Button Content="Cancel Call" Margin="5" Click="btnCancelCall_Click" IsEnabled="{Binding IsCallInProgress}"/>
-
-                <!-- מפה דמי -->
             </StackPanel>
-
         </GroupBox>
-        
 
         <!-- כפתורי תחתית -->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10">

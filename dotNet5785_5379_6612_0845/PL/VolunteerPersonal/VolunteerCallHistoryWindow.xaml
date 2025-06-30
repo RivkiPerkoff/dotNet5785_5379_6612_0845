@@ -24,7 +24,7 @@
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Call Type" Binding="{Binding CallTypes}"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
-                <DataGridTextColumn Header="Opening Time" Binding="{Binding OpeningTime}"/>
+
                 <DataGridTextColumn Header="Entry Time" Binding="{Binding EntryTimeForTreatment}"/>
                 <DataGridTextColumn Header="End Time" Binding="{Binding EndTimeForTreatment}"/>
                 <DataGridTextColumn Header="Finish Type" Binding="{Binding FinishCallType}"/>

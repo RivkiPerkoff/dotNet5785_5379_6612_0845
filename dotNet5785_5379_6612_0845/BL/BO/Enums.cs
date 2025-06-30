@@ -14,8 +14,8 @@ public enum DistanceType
 
 public enum RiskRangeStatus
 {
-    InTreatment,
-    InRiskTreatment
+    inHandling,
+    HandlingInRisk
 }
 public enum TypeSortingVolunteers
 {

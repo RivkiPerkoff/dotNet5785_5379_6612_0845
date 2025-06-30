@@ -45,25 +45,7 @@ namespace PL.Call
             DataContext = this;
             LoadCalls();
         }
-
-        //private void LoadCalls()
-        //{
-        //    try
-        //    {
-        //        var allCalls = _bl.Call.GetOpenCallsForVolunteerSelection(_volunteer.VolunteerId, SelectedFilterType, SelectedSortField);
-
-        //        if (_volunteer.MaximumDistanceForReceivingCall.HasValue)
-        //            CallsList = allCalls.Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value).ToList();
-        //        else
-        //            CallsList = allCalls.ToList();
-
-        //        OnPropertyChanged(nameof(CallsList));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error loading calls: " + ex.Message);
-        //    }
-        //}
+  
         private void LoadCalls()
         {
             try
@@ -94,6 +76,7 @@ namespace PL.Call
                 MessageBox.Show("Error loading calls: " + ex.Message);
             }
         }
+        public CallInProgress? SelectedCallInProgress { get; private set; }
 
         private void ChooseCall_Click(object sender, RoutedEventArgs e)
         {
@@ -102,6 +85,8 @@ namespace PL.Call
                 try
                 {
                     _bl.Call.ChoosingCallForTreatment(_volunteer.VolunteerId, selectedCall.Id);
+                    SelectedCallInProgress = _bl.Volunteer.GetVolunteerDetails(_volunteer.VolunteerId).CallInProgress;
+
                     MessageBox.Show("Call assigned to you.");
                     DialogResult = true;
                     Close();

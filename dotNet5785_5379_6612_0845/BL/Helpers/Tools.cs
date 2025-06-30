@@ -174,4 +174,5 @@ static internal class Tools
         // 6. פתוחה רגילה
         return StatusCallType.open;
     }
+
 }
