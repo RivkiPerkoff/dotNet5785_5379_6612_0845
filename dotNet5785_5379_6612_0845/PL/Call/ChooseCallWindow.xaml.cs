@@ -14,33 +14,15 @@ namespace PL.Call
     public partial class ChooseCallWindow : Window, INotifyPropertyChanged
     {
         private readonly BL.BO.Volunteer _volunteer;
-        private readonly IBL _bl = BlApi.Factory.Get();
+        private readonly BL.BIApi.IBL _bl = BlApi.Factory.Get();
+        public BL.BO.Volunteer GetUpdatedVolunteer() => _volunteer;
 
         public IEnumerable<OpenCallInList> CallsList { get; set; } = new List<OpenCallInList>();
         public IEnumerable<CallTypes> CallTypeOptions { get; set; }
         public IEnumerable<OpenCallInListFields> SortFieldOptions { get; set; }
 
-        private CallTypes? _selectedFilterType;
-        public CallTypes? SelectedFilterType
-        {
-            get => _selectedFilterType;
-            set
-            {
-                _selectedFilterType = value;
-                OnPropertyChanged(nameof(SelectedFilterType));
-            }
-        }
-
-        private OpenCallInListFields? _selectedSortField;
-        public OpenCallInListFields? SelectedSortField
-        {
-            get => _selectedSortField;
-            set
-            {
-                _selectedSortField = value;
-                OnPropertyChanged(nameof(SelectedSortField));
-            }
-        }
+        public CallTypes? SelectedFilterType { get; set; }
+        public OpenCallInListFields? SelectedSortField { get; set; }
 
         private string _selectedCallDescription = string.Empty;
         public string SelectedCallDescription
@@ -53,22 +35,36 @@ namespace PL.Call
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
         public ChooseCallWindow(BL.BO.Volunteer volunteer)
         {
             InitializeComponent();
             _volunteer = volunteer;
 
-            CallTypeOptions = Enum.GetValues(typeof(CallTypes)).Cast<CallTypes>();
-            SortFieldOptions = Enum.GetValues(typeof(OpenCallInListFields)).Cast<OpenCallInListFields>();
+            CallTypeOptions = Enum.GetValues(typeof(CallTypes)).Cast<CallTypes>().ToList();
+            SortFieldOptions = Enum.GetValues(typeof(OpenCallInListFields)).Cast<OpenCallInListFields>().ToList();
 
-            LoadCalls();
             DataContext = this;
+            LoadCalls();
         }
 
+        //private void LoadCalls()
+        //{
+        //    try
+        //    {
+        //        var allCalls = _bl.Call.GetOpenCallsForVolunteerSelection(_volunteer.VolunteerId, SelectedFilterType, SelectedSortField);
+
+        //        if (_volunteer.MaximumDistanceForReceivingCall.HasValue)
+        //            CallsList = allCalls.Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value).ToList();
+        //        else
+        //            CallsList = allCalls.ToList();
+
+        //        OnPropertyChanged(nameof(CallsList));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error loading calls: " + ex.Message);
+        //    }
+        //}
         private void LoadCalls()
         {
             try
@@ -79,22 +75,25 @@ namespace PL.Call
                     SelectedSortField
                 );
 
-                CallsList = _volunteer.MaximumDistanceForReceivingCall.HasValue
-                    ? allCalls.Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value).ToList()
-                    : allCalls.ToList();
+                // סינון לפי מרחק מקסימלי של המתנדב
+                if (_volunteer.MaximumDistanceForReceivingCall.HasValue && _volunteer.MaximumDistanceForReceivingCall > 0)
+                {
+                    CallsList = allCalls
+                        .Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value)
+                        .ToList();
+                }
+                else
+                {
+                    // אם לא מוגדר מרחק, מציגים את כל הקריאות
+                    CallsList = allCalls.ToList();
+                }
 
                 OnPropertyChanged(nameof(CallsList));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading calls: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error loading calls: " + ex.Message);
             }
-        }
-
-        // ✅ זו המתודה שחסרה וגרמה לשגיאה
-        private void Filter_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            LoadCalls();
         }
 
         private void ChooseCall_Click(object sender, RoutedEventArgs e)
@@ -104,13 +103,13 @@ namespace PL.Call
                 try
                 {
                     _bl.Call.ChoosingCallForTreatment(_volunteer.VolunteerId, selectedCall.Id);
-                    MessageBox.Show("Call successfully assigned to you.", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.DialogResult = true;
-                    this.Close();
+                    MessageBox.Show("Call assigned to you.");
+                    DialogResult = true;
+                    Close();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error assigning call: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Error assigning call: " + ex.Message);
                 }
             }
         }
@@ -118,18 +117,19 @@ namespace PL.Call
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (((DataGrid)sender).SelectedItem is OpenCallInList selectedCall)
-            {
                 SelectedCallDescription = selectedCall.CallDescription;
-            }
+        }
+
+        private void Filter_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            LoadCalls();
         }
 
         private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var row = FindVisualParent<DataGridRow>(e.OriginalSource as DependencyObject);
-            if (row?.Item is OpenCallInList selectedCall)
-            {
+            if (row != null && row.Item is OpenCallInList selectedCall)
                 SelectedCallDescription = selectedCall.CallDescription;
-            }
         }
 
         private void UpdateAddress_Click(object sender, RoutedEventArgs e)
@@ -142,12 +142,12 @@ namespace PL.Call
                 {
                     _volunteer.AddressVolunteer = newAddress;
                     _bl.Volunteer.UpdateVolunteer(_volunteer.VolunteerId, _volunteer);
-                    MessageBox.Show("Address updated successfully.");
+                    MessageBox.Show("Address updated.");
                     LoadCalls();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error updating address: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Error updating address: " + ex.Message);
                 }
             }
         }
@@ -163,5 +163,9 @@ namespace PL.Call
             }
             return null;
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

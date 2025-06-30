@@ -32,8 +32,8 @@ public static class Initialization
         s_dal!.Volunteer.Create(new Volunteer(
             id,
             name,
-            phone,
-            email,        
+             phone,
+            email,          
             password,
             address,
             0,
@@ -46,8 +46,9 @@ public static class Initialization
         {
             id = s_dal!.Config.CreateVolunteerId();
             name = names[i];
-            email = emails[i];
             phone = phones[i];
+            email = emails[i];
+
             address = addresses[i];
             maximumDistance = s_rand.NextDouble() * 50;
             password = GenerateRandomPassword(12);
@@ -55,8 +56,9 @@ public static class Initialization
             s_dal!.Volunteer.Create(new Volunteer(
                 id,
                 name,
-                email,
+                
                 phone,
+                email,
                 password,
                 address,
                 0,

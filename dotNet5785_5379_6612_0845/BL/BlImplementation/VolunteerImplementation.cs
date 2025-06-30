@@ -102,51 +102,118 @@ internal class VolunteerImplementation : IVolunteer
     /// <returns>The volunteer details, including assignments and current call information.</returns>
     /// <exception cref="BlDoesNotExistException">Thrown when the volunteer does not exist.</exception>
     /// <exception cref="BlGeneralDatabaseException">Thrown if there is an error retrieving volunteer details.</exception>
+    //public BO.Volunteer GetVolunteerDetails(int volunteerId)
+    //{
+    //    try
+    //    {
+    //        var doVolunteer = _dal.Volunteer.Read(volunteerId) ??
+    //           throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
+    //        var volunteer = VolunteerManager.MapToBO(doVolunteer);
+    //        var assigments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+    //        var currentAssignment = assigments.FirstOrDefault(a => a.EndTimeForTreatment == null);
+    //        BO.CallInProgress? callInProgress = null;
+    //        if (currentAssignment != null)
+    //        {
+    //            var callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
+    //            if (callDetails != null)
+    //            {
+    //                callInProgress = new BO.CallInProgress
+    //                {
+    //                    Id = currentAssignment.NextAssignmentId,
+    //                    CallId = currentAssignment.IdOfRunnerCall,
+    //                    CallTypes = (BO.CallTypes)callDetails.CallTypes,
+    //                    Description = callDetails.CallDescription,
+    //                    CallingAddress = callDetails.CallAddress!,
+    //                    OpeningTime = (DateTime)callDetails.OpeningTime,
+    //                    MaxFinishTime = callDetails.MaxFinishTime,
+    //                    EntryTimeForTreatment = (DateTime)currentAssignment.EntryTimeForTreatment,
+    //                    CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
+    //                    Status = (RiskRangeStatus)Tools.GetCallStatus(callDetails)
+    //                };
+    //            }
+    //        }
+    //        volunteer.TotalCallsHandled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.TakenCareof);
+    //        volunteer.TotalCallsCanceled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
+    //        volunteer.SelectedAndExpiredCalls = assigments.Count(a => a.FinishCallType == DO.FinishCallType.Expired);
+    //        volunteer.CallInProgress = callInProgress;
+
+    //        return volunteer;
+    //    }
+    //    catch (DO.DalDoesNotExistException ex)
+    //    {
+    //        throw new BlDoesNotExistException("Volunteer not found in data layer.", ex);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteer details.", ex);
+    //    }
+    //}
     public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
         try
         {
-            var doVolunteer = _dal.Volunteer.Read(volunteerId) ??
-               throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
-            var volunteer = VolunteerManager.MapToBO(doVolunteer);
-            var assigments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
-            var currentAssignment = assigments.FirstOrDefault(a => a.EndTimeForTreatment == null);
+            var doVolunteer = _dal.Volunteer.Read(volunteerId)
+                              ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+
+            var assigments = _dal.Assignment.ReadAll()
+                .Where(a => a.VolunteerId == volunteerId)
+                .ToList();
+
             BO.CallInProgress? callInProgress = null;
+
+            var currentAssignment = assigments.FirstOrDefault(a => a.EndTimeForTreatment == null);
+
             if (currentAssignment != null)
             {
                 var callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
                 if (callDetails != null)
                 {
-                    callInProgress = new BO.CallInProgress
+                    var status = Tools.GetCallStatus(callDetails);
+
+                    if (status == StatusCallType.inHandling ||
+    status == StatusCallType.HandlingInRisk ||
+    status == StatusCallType.open ||
+    status == StatusCallType.openInRisk)
                     {
-                        //Id = currentAssignment.NextAssignmentId,
-                        Id = currentAssignment.IdOfRunnerCall, 
-                        CallId = currentAssignment.IdOfRunnerCall,
-                        CallTypes = (BO.CallTypes)callDetails.CallTypes,
-                        Description = callDetails.CallDescription,
-                        CallingAddress = callDetails.CallAddress!,
-                        OpeningTime = (DateTime)callDetails.OpeningTime,
-                        MaxFinishTime = callDetails.MaxFinishTime,
-                        EntryTimeForTreatment = (DateTime)currentAssignment.EntryTimeForTreatment,
-                        CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
-                        Status = (RiskRangeStatus)Tools.GetCallStatus(callDetails)
-                    };
+                        callInProgress = new BO.CallInProgress
+                        {
+                            Id = currentAssignment.NextAssignmentId,
+                            CallId = currentAssignment.IdOfRunnerCall,
+                            CallTypes = (BO.CallTypes)callDetails.CallTypes,
+                            Description = callDetails.CallDescription,
+                            CallingAddress = callDetails.CallAddress!,
+                            OpeningTime = (DateTime)callDetails.OpeningTime,
+                            MaxFinishTime = callDetails.MaxFinishTime,
+                            EntryTimeForTreatment = (DateTime)currentAssignment.EntryTimeForTreatment,
+                            CallingDistanceFromVolunteer = Tools.DistanceCalculation(doVolunteer.AddressVolunteer, callDetails.CallAddress),
+                            Status = (BO.RiskRangeStatus)Tools.GetCallStatus(callDetails)
+                        };
+                    }
                 }
             }
-            volunteer.TotalCallsHandled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.TakenCareof);
-            volunteer.TotalCallsCanceled = assigments.Count(a => a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
-            volunteer.SelectedAndExpiredCalls = assigments.Count(a => a.FinishCallType == DO.FinishCallType.Expired);
-            volunteer.CallInProgress = callInProgress;
 
-            return volunteer;
+            return new BO.Volunteer
+            {
+                VolunteerId = doVolunteer.VolunteerId,
+                Name = doVolunteer.Name,
+                PhoneNumber = doVolunteer.PhoneNumber,
+                AddressVolunteer = doVolunteer.AddressVolunteer,
+                VolunteerLongitude = doVolunteer.VolunteerLongitude,
+                VolunteerLatitude = doVolunteer.VolunteerLatitude,
+                Role = (BO.Role)doVolunteer.Role,
+                IsAvailable = doVolunteer.IsAvailable,
+                MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall,
+                DistanceType = (BO.DistanceType)doVolunteer.DistanceType,
+                CallInProgress = callInProgress
+            };
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BlDoesNotExistException("Volunteer not found in data layer.", ex);
+            throw new BO.BlDoesNotExistException(ex.Message, ex);
         }
         catch (Exception ex)
         {
-            throw new BlGeneralDatabaseException("An unexpected error occurred while getting Volunteer details.", ex);
+            throw new BO.BlGeneralDatabaseException("An error occurred while retrieving volunteer details.", ex);
         }
     }
 
