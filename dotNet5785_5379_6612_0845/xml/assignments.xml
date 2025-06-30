@@ -400,4 +400,12 @@
     <EntryTimeForTreatment>2025-04-06T16:12:00</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
+  <Assignment>
+    <NextAssignmentId>1050</NextAssignmentId>
+    <IdOfRunnerCall>0</IdOfRunnerCall>
+    <VolunteerId>1014</VolunteerId>
+    <FinishCallType>None</FinishCallType>
+    <EntryTimeForTreatment>2025-06-30T19:38:15</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
 </ArrayOfAssignment>

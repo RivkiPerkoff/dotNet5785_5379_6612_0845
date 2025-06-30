@@ -500,4 +500,14 @@
     <MaxFinishTime>2025-06-04T14:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
+  <Call>
+    <IdCall>0</IdCall>
+    <CallDescription>הסעה לעבודה</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-30T19:42:58.7078818+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-30T21:42:58.7079141+03:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
 </ArrayOfCall>

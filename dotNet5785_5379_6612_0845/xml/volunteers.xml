@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Volunteer>
     <VolunteerId>1000</VolunteerId>
@@ -199,14 +199,14 @@
   <Volunteer>
     <VolunteerId>1014</VolunteerId>
     <Name>Hadar</Name>
-    <PhoneNumber>055-123-4567</PhoneNumber>
-    <EmailOfVolunteer>Hadar@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>WBCu=8m3DwFj</PasswordVolunteer>
+    <PhoneNumber>0583257228</PhoneNumber>
+    <EmailOfVolunteer>T@GMAIL.COM</EmailOfVolunteer>
+    <PasswordVolunteer>123456</PasswordVolunteer>
     <AddressVolunteer>Ramat Gan</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
+    <VolunteerLatitude>32.0686867</VolunteerLatitude>
+    <VolunteerLongitude>34.8246812</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <MaximumDistanceForReceivingCall>200</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
