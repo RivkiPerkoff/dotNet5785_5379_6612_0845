@@ -84,11 +84,14 @@ namespace PL.VolunteerPersonal
 
                 var existingVolunteer = bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.VolunteerId);
 
-                // שמירת סיסמה אם הוזנה חדשה
-                if (!string.IsNullOrWhiteSpace(PasswordBoxVolunteer.Password))
-                    CurrentVolunteer.PasswordVolunteer = PasswordBoxVolunteer.Password;
-                else
-                    CurrentVolunteer.PasswordVolunteer = existingVolunteer.PasswordVolunteer;
+                // חובה להזין סיסמה לצורך עדכון
+                if (string.IsNullOrWhiteSpace(PasswordBoxVolunteer.Password))
+                {
+                    MessageBox.Show("Password must be entered to update details.", "Missing Password", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                CurrentVolunteer.PasswordVolunteer = PasswordBoxVolunteer.Password;
+
 
                 // שמירת מייל אם לא הוזן חדש (למניעת מחיקה בטעות)
                 if (string.IsNullOrWhiteSpace(CurrentVolunteer.EmailOfVolunteer))
