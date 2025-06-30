@@ -4,6 +4,7 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Implementation of the ICall interface for managing call operations such as create, read, update, delete.
@@ -15,6 +16,8 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="item">The call object to create.</param>
     /// <exception cref="Exception">Thrown when a call with the same ID already exists.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Create(Call item)
     {
         if (DataSource.Calls.Exists(a => a.IdCall == item.IdCall))
@@ -29,6 +32,8 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="id">The ID of the call to delete.</param>
     /// <exception cref="Exception">Thrown when no call with the specified ID is found.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Delete(int id)
     {
         Call? call = Read(id);
@@ -45,6 +50,8 @@ internal class CallImplementation : ICall
     /// <summary>
     /// Deletes all calls from the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void DeleteAll()
     {
         try
@@ -66,6 +73,8 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="id">The ID of the call to read.</param>
     /// <returns>The call with the specified ID, or null if not found.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Call? Read(int id)
     {
         //return DataSource.Calls.FirstOrDefault(call => call.IdCall == id);  // Find the call by ID.
@@ -79,14 +88,12 @@ internal class CallImplementation : ICall
 
         return call;
     }
+    [MethodImpl(MethodImplOptions.Synchronized)]
 
     public Call? Read(Func<Call, bool> filter)
     {
-        // Use LINQ to find the first Call object that matches the filter criteria.
-        //return DataSource.Calls.FirstOrDefault(filter);
-        var call = DataSource.Calls.FirstOrDefault(filter);
 
-        // זריקת חריגה אם לא נמצא מתנדב מתאים
+        var call = DataSource.Calls.FirstOrDefault(filter);
         if (call == null)
         {
             throw new DalDoesNotExistException("No Call found matching the specified criteria.");
@@ -99,14 +106,13 @@ internal class CallImplementation : ICall
     /// Reads all calls from the data source.
     /// </summary>
     /// <returns>A list of all calls.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) // stage 2
     {
-        // חיפוש נתונים עם או בלי סינון
         var result = filter == null
             ? DataSource.Calls.Select(item => item)
             : DataSource.Calls.Where(filter);
-
-        // זריקת חריגה אם אין נתונים
         if (!result.Any())
         {
             throw new DalReedAllImpossible("No Calls found.");
@@ -120,17 +126,19 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="item">The call object to update.</param>
     /// <exception cref="Exception">Thrown when no call with the specified ID is found.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Update(Call item)
     {
-        var existingCall = Read(item.IdCall);  // Find the existing call by ID.
+        var existingCall = Read(item.IdCall); 
         if (existingCall != null)
         {
-            DataSource.Calls.Remove(existingCall);  // Remove the existing call from the data source.
-            DataSource.Calls.Add(item);  // Add the updated call to the data source.
+            DataSource.Calls.Remove(existingCall); 
+            DataSource.Calls.Add(item); 
         }
         else
         {
-            throw new DalDoesNotExistException($"Could not update item, no Call with Id {item.IdCall} found");  // Throw an exception if no matching call is found.
+            throw new DalDoesNotExistException($"Could not update item, no Call with Id {item.IdCall} found"); 
         }
     }
 }

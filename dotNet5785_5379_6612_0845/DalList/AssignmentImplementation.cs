@@ -2,6 +2,7 @@
 using DalApi;
 using DO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Implementation of the IAssignment interface for managing assignment operations such as create, read, update, delete.
@@ -12,6 +13,8 @@ internal class AssignmentImplementation : IAssignment
     /// Creates a new assignment with a unique volunteer ID.
     /// </summary>
     /// <param name="item">The assignment object to create.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Create(Assignment item)
     {
         int newId = Config.NextVolunteerId;  // Generate a new volunteer ID.
@@ -24,6 +27,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The volunteer ID associated with the assignment to delete.</param>
     /// <exception cref="Exception">Thrown when no assignment with the specified ID is found.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Delete(int id)
     {
         Assignment? assignment = Read(id);  // Find the assignment by ID.
@@ -40,6 +45,8 @@ internal class AssignmentImplementation : IAssignment
     /// <summary>
     /// Deletes all assignments in the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void DeleteAll()
     {
         try
@@ -61,6 +68,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The volunteer ID associated with the assignment to read.</param>
     /// <returns>The assignment with the specified ID, or null if not found.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Assignment? Read(int id)
     {
         Assignment? assignment = DataSource.Assignments.FirstOrDefault(assignment => assignment.VolunteerId == id);  // Find the assignment by volunteer ID.
@@ -70,6 +79,7 @@ internal class AssignmentImplementation : IAssignment
         }
         return assignment;
     }
+    [MethodImpl(MethodImplOptions.Synchronized)]
 
     public Assignment? Read(Func<Assignment, bool> filter)
     {
@@ -79,7 +89,6 @@ internal class AssignmentImplementation : IAssignment
         {
             throw new DalDoesNotExistException("No Assignment found matching the specified criteria.");
         }
-        // Use LINQ to find the first element matching the filter, or return null if none is found.
         return DataSource.Assignments.FirstOrDefault(filter);
     }
 
@@ -87,6 +96,8 @@ internal class AssignmentImplementation : IAssignment
     /// Reads all assignments from the data source.
     /// </summary>
     /// <returns>A list of all assignments.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
     {
         var result = filter == null
@@ -104,6 +115,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="item">The assignment object to update.</param>
     /// <exception cref="Exception">Thrown when the assignment with the specified ID is not found.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Update(Assignment item)
     {
         Assignment? existingAssignment = Read(item.VolunteerId);  // Find the existing assignment.

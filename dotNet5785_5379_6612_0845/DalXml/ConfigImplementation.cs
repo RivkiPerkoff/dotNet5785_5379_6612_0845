@@ -1,5 +1,7 @@
 ﻿namespace Dal;
 using DalApi;
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// Implementation of the IConfig interface. Provides methods to access configuration values
 /// for system clock, risk range, and unique ID generation for volunteers, calls, and assignments.
@@ -9,6 +11,7 @@ internal class ConfigImplementation : IConfig
     /// <summary>
     /// Gets or sets the system clock.
     /// </summary>
+
     public DateTime Clock
     {
         get => Config.Clock;
@@ -18,11 +21,6 @@ internal class ConfigImplementation : IConfig
     /// <summary>
     /// Gets or sets the risk range for the system.
     /// </summary>
-    //public TimeSpan? RiskRange
-    //{
-    //    get => Config.RiskRange;
-    //    set => Config.RiskRange = value;
-    //}
 
     public TimeSpan? RiskRange
     {

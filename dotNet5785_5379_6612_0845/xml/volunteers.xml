@@ -1,19 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Volunteer>
-    <VolunteerId>1000</VolunteerId>
-    <Name>Roni</Name>
-    <PhoneNumber>0503217845</PhoneNumber>
-    <EmailOfVolunteer>Roni@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>rlD2x6XsWMOY</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Manager</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
   <Volunteer>
     <VolunteerId>1001</VolunteerId>
     <Name>Maya</Name>
@@ -76,20 +62,6 @@
     <PhoneNumber>0509876789</PhoneNumber>
     <EmailOfVolunteer>Tomer@gmail.com</EmailOfVolunteer>
     <PasswordVolunteer>JodFlzA0CfG9</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1006</VolunteerId>
-    <Name>Liat</Name>
-    <PhoneNumber>0541127654</PhoneNumber>
-    <EmailOfVolunteer>Liat@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>rcnBP5L8iJHS</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -209,5 +181,33 @@
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1000</VolunteerId>
+    <Name>Roni</Name>
+    <PhoneNumber>0503217845</PhoneNumber>
+    <EmailOfVolunteer>Roni@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>123456</PasswordVolunteer>
+    <AddressVolunteer>רחוב הנביאים 10, באר שבע, 8421234</AddressVolunteer>
+    <VolunteerLatitude>49.075098</VolunteerLatitude>
+    <VolunteerLongitude>27.696138</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1006</VolunteerId>
+    <Name>Liat</Name>
+    <PhoneNumber>0541127654</PhoneNumber>
+    <EmailOfVolunteer>Liat@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>123</PasswordVolunteer>
+    <AddressVolunteer>רחוב הנביאים 10, באר שבע, 8421234</AddressVolunteer>
+    <VolunteerLatitude>49.075098</VolunteerLatitude>
+    <VolunteerLongitude>27.696138</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>20</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>RoadDistance</DistanceType>
   </Volunteer>
 </ArrayOfVolunteer>

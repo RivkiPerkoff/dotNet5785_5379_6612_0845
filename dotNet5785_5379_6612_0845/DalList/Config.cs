@@ -1,5 +1,7 @@
 ﻿namespace Dal;
 using DO;
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// Configuration class that manages the generation of unique IDs for volunteers, calls, and assignments,
 /// as well as the system clock and risk range parameters.
@@ -47,6 +49,8 @@ internal record Config
     /// <summary>
     /// Resets the IDs for volunteers, calls, and assignments to their starting values, and sets the clock to the current date and time.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public static void Reset()
     {
         s_nextVolunteerId = StartVolunteerId;
