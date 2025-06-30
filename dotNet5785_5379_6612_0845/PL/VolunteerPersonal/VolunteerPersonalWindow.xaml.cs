@@ -27,7 +27,6 @@ namespace PL.VolunteerPersonal
                 OnPropertyChanged(nameof(CurrentCallInfo));
             }
         }
-
         public IEnumerable<DistanceType> DistanceTypeCollection { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -69,14 +68,12 @@ namespace PL.VolunteerPersonal
                     MessageBox.Show("All mandatory fields must be filled.");
                     return;
                 }
-                // ולידציה לפורמט טלפון
                 if (!System.Text.RegularExpressions.Regex.IsMatch(CurrentVolunteer.PhoneNumber, @"^\d{9,10}$"))
                 {
                     MessageBox.Show("Phone number must contain 9-10 digits.");
                     return;
                 }
 
-                // ולידציה לפורמט אימייל - רק אם הוזן (כי זה לא שדה חובה)
                 if (!string.IsNullOrWhiteSpace(CurrentVolunteer.EmailOfVolunteer) &&
                     !System.Text.RegularExpressions.Regex.IsMatch(CurrentVolunteer.EmailOfVolunteer, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
@@ -85,17 +82,12 @@ namespace PL.VolunteerPersonal
                 }
 
                 var existingVolunteer = bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.VolunteerId);
-
-                // חובה להזין סיסמה לצורך עדכון
                 if (string.IsNullOrWhiteSpace(PasswordBoxVolunteer.Password))
                 {
                     MessageBox.Show("Password must be entered to update details.", "Missing Password", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 CurrentVolunteer.PasswordVolunteer = PasswordBoxVolunteer.Password;
-
-
-                // שמירת מייל אם לא הוזן חדש (למניעת מחיקה בטעות)
                 if (string.IsNullOrWhiteSpace(CurrentVolunteer.EmailOfVolunteer))
                     CurrentVolunteer.EmailOfVolunteer = existingVolunteer.EmailOfVolunteer;
 
@@ -212,18 +204,11 @@ namespace PL.VolunteerPersonal
                 MessageBox.Show($"Error canceling call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        //private void ActiveChanged(object sender, RoutedEventArgs e)
-        //{
-        //    OnPropertyChanged(nameof(CanChooseCall));
-        //    OnPropertyChanged(nameof(CanChangeActiveStatus));
-        //}
         private void ActiveChanged(object sender, RoutedEventArgs e)
         {
             if (CurrentVolunteer.CallInProgress != null)
             {
-                MessageBox.Show("Cannot change availability while handling a call.");
-                // מחזיר את ה־Checkbox למצבו המקורי
+                
                 ((CheckBox)sender).IsChecked = CurrentVolunteer.IsAvailable;
                 return;
             }

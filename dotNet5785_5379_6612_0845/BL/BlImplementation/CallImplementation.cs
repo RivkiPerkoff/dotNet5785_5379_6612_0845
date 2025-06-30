@@ -168,83 +168,34 @@ internal class CallImplementation : BIApi.ICall
     /// <param name="filterType">An optional filter for the type of calls to return.</param>
     /// <param name="sortField">An optional field to sort the returned calls by.</param>
     /// <returns>A list of BO.ClosedCallInList objects representing the closed calls for the volunteer.</returns>
-    //public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
-    //{
-    //    try
-    //    {
-    //        var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
-
-    //        var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
-    //        var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
-
-    //        var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
-    //        if (filterType.HasValue)
-    //        {
-    //            closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
-    //        }
-
-
-    //        return sortField switch
-    //        {
-    //            BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
-    //            BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
-    //            BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
-    //            BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
-    //            BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
-    //            BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
-    //            _ => closedCalls.OrderBy(c => c.Id)
-    //        };
-    //    }
-
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
-    //    }
-    //}
-
     public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
     {
         try
         {
-            // כל ההקצאות של המתנדב
-            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
 
-            // מזהה הקריאות שאליהן הוא שויך
             var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
+            var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
 
-            // כל הקריאות האלו מסוג DO
-            var dalCalls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
-
-            // סינון לקריאות שהסתיימו בכל דרך שהיא
-            var closedCalls = dalCalls.Where(c =>
-                c.GetCallStatus() == BO.StatusCallType.closed ||
-                c.GetCallStatus() == BO.StatusCallType.Expired);
-
-            // יצירת רשימת תצוגה - תוצאה היא IEnumerable<BO.ClosedCallInList>
-            var closedCallList = CallManager.CreateClosedCallList(closedCalls, assignments);
-
-            // סינון לפי סוג קריאה אם נבחר
+            var closedCalls = CallManager.CreateClosedCallList(calls, assignments);
             if (filterType.HasValue)
             {
-                closedCallList = closedCallList.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+                closedCalls = closedCalls.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
             }
 
-            // מיון
+
             return sortField switch
             {
-                BO.ClosedCallInListFields.CallTypes => closedCallList.OrderBy(c => c.CallTypes),
-                BO.ClosedCallInListFields.Address => closedCallList.OrderBy(c => c.Address),
-                BO.ClosedCallInListFields.OpeningTime => closedCallList.OrderBy(c => c.OpeningTime),
-                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCallList.OrderBy(c => c.EntryTimeForTreatment),
-                BO.ClosedCallInListFields.EndTimeForTreatment => closedCallList.OrderBy(c => c.EndTimeForTreatment),
-                BO.ClosedCallInListFields.FinishCallType => closedCallList.OrderBy(c => c.FinishCallType),
-                _ => closedCallList.OrderBy(c => c.Id)
+                BO.ClosedCallInListFields.CallTypes => closedCalls.OrderBy(c => c.CallTypes),
+                BO.ClosedCallInListFields.Address => closedCalls.OrderBy(c => c.Address),
+                BO.ClosedCallInListFields.OpeningTime => closedCalls.OrderBy(c => c.OpeningTime),
+                BO.ClosedCallInListFields.EntryTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.EndTimeForTreatment => closedCalls.OrderBy(c => c.EntryTimeForTreatment),
+                BO.ClosedCallInListFields.FinishCallType => closedCalls.OrderBy(c => c.FinishCallType),
+                _ => closedCalls.OrderBy(c => c.Id)
             };
         }
+
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
@@ -254,6 +205,55 @@ internal class CallImplementation : BIApi.ICall
             throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
         }
     }
+
+    //public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
+    //{
+    //    try
+    //    {
+    //        // כל ההקצאות של המתנדב
+    //        var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+
+    //        // מזהה הקריאות שאליהן הוא שויך
+    //        var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
+
+    //        // כל הקריאות האלו מסוג DO
+    //        var dalCalls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
+
+    //        // סינון לקריאות שהסתיימו בכל דרך שהיא
+    //        var closedCalls = dalCalls.Where(c =>
+    //            c.GetCallStatus() == BO.StatusCallType.closed ||
+    //            c.GetCallStatus() == BO.StatusCallType.Expired);
+
+    //        // יצירת רשימת תצוגה - תוצאה היא IEnumerable<BO.ClosedCallInList>
+    //        var closedCallList = CallManager.CreateClosedCallList(closedCalls, assignments);
+
+    //        // סינון לפי סוג קריאה אם נבחר
+    //        if (filterType.HasValue)
+    //        {
+    //            closedCallList = closedCallList.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
+    //        }
+
+    //        // מיון
+    //        return sortField switch
+    //        {
+    //            BO.ClosedCallInListFields.CallTypes => closedCallList.OrderBy(c => c.CallTypes),
+    //            BO.ClosedCallInListFields.Address => closedCallList.OrderBy(c => c.Address),
+    //            BO.ClosedCallInListFields.OpeningTime => closedCallList.OrderBy(c => c.OpeningTime),
+    //            BO.ClosedCallInListFields.EntryTimeForTreatment => closedCallList.OrderBy(c => c.EntryTimeForTreatment),
+    //            BO.ClosedCallInListFields.EndTimeForTreatment => closedCallList.OrderBy(c => c.EndTimeForTreatment),
+    //            BO.ClosedCallInListFields.FinishCallType => closedCallList.OrderBy(c => c.FinishCallType),
+    //            _ => closedCallList.OrderBy(c => c.Id)
+    //        };
+    //    }
+    //    catch (DO.DalDoesNotExistException ex)
+    //    {
+    //        throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
+    //    }
+    //}
 
     /// <summary>
     /// Retrieves a list of open calls assigned to a specific volunteer, optionally filtered and sorted.

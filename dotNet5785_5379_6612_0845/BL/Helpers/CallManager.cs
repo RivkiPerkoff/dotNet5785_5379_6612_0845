@@ -101,7 +101,9 @@ internal class CallManager
                 Address = call.CallAddress,
                 EntryTimeForTreatment = assignment?.EntryTimeForTreatment ?? DateTime.MinValue,
                 EndTimeForTreatment = assignment?.EndTimeForTreatment,
-                FinishCallType = assignment?.FinishCallType
+                //FinishCallType = assignment?.FinishCallType
+                FinishCallType = assignment == null ? DO.FinishCallType.None : assignment.FinishCallType.Value
+
             };
         });
     }

@@ -1,11 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Volunteer>
+    <VolunteerId>1000</VolunteerId>
+    <Name>Roni</Name>
+    <PhoneNumber>050-321-7845</PhoneNumber>
+    <EmailOfVolunteer>Roni@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>QD4!nOFN82^;</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1001</VolunteerId>
+    <Name>Maya</Name>
+    <PhoneNumber>052-987-1243</PhoneNumber>
+    <EmailOfVolunteer>Maya@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>|^8GPHmtM&lt;j&lt;</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
   <Volunteer>
     <VolunteerId>1002</VolunteerId>
     <Name>Lior</Name>
     <PhoneNumber>054-123-9876</PhoneNumber>
     <EmailOfVolunteer>Lior@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>*6^8#:N9aCPS</PasswordVolunteer>
+    <PasswordVolunteer>dk3N&gt;u;lG1Y.</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -19,7 +47,7 @@
     <Name>Noa</Name>
     <PhoneNumber>053-549-4567</PhoneNumber>
     <EmailOfVolunteer>Noa@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>6dwZ}2GKk.M6</PasswordVolunteer>
+    <PasswordVolunteer>_S4pBqNXZ.Vo</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -33,7 +61,7 @@
     <Name>Dani</Name>
     <PhoneNumber>055-789-1234</PhoneNumber>
     <EmailOfVolunteer>Dani@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>+Meb@9cVp&amp;eC</PasswordVolunteer>
+    <PasswordVolunteer>7W#f6%0oaP.H</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -47,7 +75,7 @@
     <Name>Tomer</Name>
     <PhoneNumber>050-987-6789</PhoneNumber>
     <EmailOfVolunteer>Tomer@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>O&gt;@&gt;%m[u{C6K</PasswordVolunteer>
+    <PasswordVolunteer>b7#)jSCYzktx</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -61,7 +89,7 @@
     <Name>Liat</Name>
     <PhoneNumber>054-112-7654</PhoneNumber>
     <EmailOfVolunteer>Liat@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>F5F;X9C*vdCa</PasswordVolunteer>
+    <PasswordVolunteer>yn1PL&lt;=vO??{</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -75,7 +103,7 @@
     <Name>Gal</Name>
     <PhoneNumber>053-785-6543</PhoneNumber>
     <EmailOfVolunteer>Gal@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>B.hdl9lk1}:7</PasswordVolunteer>
+    <PasswordVolunteer>@rNkTN4-B1BU</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -89,7 +117,7 @@
     <Name>Yona</Name>
     <PhoneNumber>052-312-7890</PhoneNumber>
     <EmailOfVolunteer>Yona@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>CY&lt;$}iIE$N6[</PasswordVolunteer>
+    <PasswordVolunteer>B#&amp;$=}du0Vu^</PasswordVolunteer>
     <AddressVolunteer>Dimona</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -103,7 +131,7 @@
     <Name>Nir</Name>
     <PhoneNumber>055-654-3210</PhoneNumber>
     <EmailOfVolunteer>Nir@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>Q*m6$;C%ei[X</PasswordVolunteer>
+    <PasswordVolunteer>_L9r0uxrx&amp;@a</PasswordVolunteer>
     <AddressVolunteer>Tiberias</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -117,7 +145,7 @@
     <Name>Omer</Name>
     <PhoneNumber>053-789-5647</PhoneNumber>
     <EmailOfVolunteer>Omer@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>_z02i(hyC0R=</PasswordVolunteer>
+    <PasswordVolunteer>h.ZKa*0D4qSm</PasswordVolunteer>
     <AddressVolunteer>Safed</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -131,7 +159,7 @@
     <Name>Shira</Name>
     <PhoneNumber>050-125-1234</PhoneNumber>
     <EmailOfVolunteer>Shira@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>;8_!|G^,X=du</PasswordVolunteer>
+    <PasswordVolunteer>6uv)#edP&amp;X,P</PasswordVolunteer>
     <AddressVolunteer>Kiryat Gat</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -145,7 +173,7 @@
     <Name>Erez</Name>
     <PhoneNumber>052-456-8765</PhoneNumber>
     <EmailOfVolunteer>Erez@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>kz7;yU.fN0-S</PasswordVolunteer>
+    <PasswordVolunteer>/@8Lgxnb4[aC</PasswordVolunteer>
     <AddressVolunteer>Ashkelon</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -159,7 +187,7 @@
     <Name>Michal</Name>
     <PhoneNumber>054-654-4321</PhoneNumber>
     <EmailOfVolunteer>Michal@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>KVJe:]Hbt3k6</PasswordVolunteer>
+    <PasswordVolunteer>0H)7T7osqeap</PasswordVolunteer>
     <AddressVolunteer>Lod</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -173,41 +201,13 @@
     <Name>Hadar</Name>
     <PhoneNumber>055-123-4567</PhoneNumber>
     <EmailOfVolunteer>Hadar@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>:8r-u5w?38W#</PasswordVolunteer>
+    <PasswordVolunteer>oGlu@h:u!OY0</PasswordVolunteer>
     <AddressVolunteer>Ramat Gan</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
     <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1001</VolunteerId>
-    <Name>Maya</Name>
-    <PhoneNumber>0583257228</PhoneNumber>
-    <EmailOfVolunteer>Maya@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>123456</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>31.759595</VolunteerLatitude>
-    <VolunteerLongitude>35.215315</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>200</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1000</VolunteerId>
-    <Name>Roni</Name>
-    <PhoneNumber>0583257228</PhoneNumber>
-    <EmailOfVolunteer>Roni@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>123456</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>31.759595</VolunteerLatitude>
-    <VolunteerLongitude>35.215315</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>200</MaximumDistanceForReceivingCall>
-    <Role>Manager</Role>
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
 </ArrayOfVolunteer>
