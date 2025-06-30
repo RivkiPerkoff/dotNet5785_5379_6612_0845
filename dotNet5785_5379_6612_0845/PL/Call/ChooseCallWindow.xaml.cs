@@ -60,13 +60,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using BL.BO;
 
 namespace PL.Call;
 
-public partial class ChooseCallWindow : Window
+public partial class ChooseCallWindow : Window, INotifyPropertyChanged
 {
     private readonly BL.BO.Volunteer _volunteer;
     private readonly BL.BIApi.IBL _bl = BlApi.Factory.Get();
@@ -77,6 +80,11 @@ public partial class ChooseCallWindow : Window
 
     public CallTypes? SelectedFilterType { get; set; }
     public OpenCallInListFields? SelectedSortField { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public ChooseCallWindow(BL.BO.Volunteer volunteer)
     {
@@ -91,15 +99,44 @@ public partial class ChooseCallWindow : Window
         DataContext = this;
     }
 
+    //private void LoadCalls()
+    //{
+    //    try
+    //    {
+    //        CallsList = _bl.Call.GetOpenCallsForVolunteerSelection(
+    //            _volunteer.VolunteerId,
+    //            SelectedFilterType,
+    //            SelectedSortField
+    //        );
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show("Error loading calls: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    //    }
+    //}
+
     private void LoadCalls()
     {
         try
         {
-            CallsList = _bl.Call.GetOpenCallsForVolunteerSelection(
+            var allCalls = _bl.Call.GetOpenCallsForVolunteerSelection(
                 _volunteer.VolunteerId,
                 SelectedFilterType,
                 SelectedSortField
             );
+
+            if (_volunteer.MaximumDistanceForReceivingCall.HasValue)
+            {
+                CallsList = allCalls
+                    .Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value)
+                    .ToList();
+            }
+            else
+            {
+                CallsList = allCalls.ToList();
+            }
+
+            OnPropertyChanged(nameof(CallsList));
         }
         catch (Exception ex)
         {
@@ -116,6 +153,8 @@ public partial class ChooseCallWindow : Window
                 _bl.Call.ChoosingCallForTreatment(_volunteer.VolunteerId, selectedCall.Id);
                 MessageBox.Show("Call successfully assigned to you.", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadCalls();
+                this.DialogResult = true;
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -128,36 +167,91 @@ public partial class ChooseCallWindow : Window
     {
         if (((DataGrid)sender).SelectedItem is OpenCallInList selectedCall)
         {
-            txtDescription.Text = selectedCall.CallDescription;
-            ShowMap(selectedCall);
+            SelectedCallDescription = selectedCall.CallDescription;
         }
     }
+
 
     private void Filter_Changed(object sender, SelectionChangedEventArgs e)
     {
         LoadCalls();
     }
-
-    private void ShowMap(OpenCallInList call)
+    private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        try
+        var row = FindVisualParent<DataGridRow>(e.OriginalSource as DependencyObject);
+        if (row != null)
         {
-            string mapsUrl = $"https://www.google.com/maps/dir/{_volunteer.AddressVolunteer}/{call.Address}";
-            mapBrowser.Navigate(mapsUrl);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error loading map: " + ex.Message);
+            if (row.Item is OpenCallInList selectedCall)
+            {
+                SelectedCallDescription = selectedCall.CallDescription;
+                //ShowMap(selectedCall);
+            }
         }
     }
 
+    private static T? FindVisualParent<T>(DependencyObject? child) where T : DependencyObject
+    {
+        while (child != null)
+        {
+            if (child is T parent)
+                return parent;
+
+            child = VisualTreeHelper.GetParent(child);
+        }
+        return null;
+    }
+    public string SelectedCallDescription
+    {
+        get => _selectedCallDescription;
+        set
+        {
+            _selectedCallDescription = value;
+            OnPropertyChanged(nameof(SelectedCallDescription));
+        }
+    }
+    private string _selectedCallDescription = string.Empty;
+
+
+    //private void ShowMap(OpenCallInList call)
+    //{
+    //    try
+    //    {
+    //        string mapsUrl = $"https://www.google.com/maps/dir/{_volunteer.AddressVolunteer}/{call.Address}";
+    //        mapBrowser.Navigate(mapsUrl);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show("Error loading map: " + ex.Message);
+    //    }
+    //}
+
+    //private void UpdateAddress_Click(object sender, RoutedEventArgs e)
+    //{
+    //    var newAddress = Microsoft.VisualBasic.Interaction.InputBox("Enter new address:", "Update Address");
+    //    if (!string.IsNullOrWhiteSpace(newAddress))
+    //    {
+    //        _volunteer.AddressVolunteer = newAddress;
+    //        LoadCalls();
+    //    }
+    //}
     private void UpdateAddress_Click(object sender, RoutedEventArgs e)
     {
         var newAddress = Microsoft.VisualBasic.Interaction.InputBox("Enter new address:", "Update Address");
+
         if (!string.IsNullOrWhiteSpace(newAddress))
         {
-            _volunteer.AddressVolunteer = newAddress;
-            LoadCalls();
+            try
+            {
+                _volunteer.AddressVolunteer = newAddress;
+                _bl.Volunteer.UpdateVolunteer(_volunteer.VolunteerId, _volunteer);
+                MessageBox.Show("Address updated successfully.");
+                LoadCalls();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating address: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
+
 }

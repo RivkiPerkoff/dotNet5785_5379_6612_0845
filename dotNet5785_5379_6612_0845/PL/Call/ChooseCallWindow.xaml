@@ -70,7 +70,7 @@
 
         <!-- טבלת קריאות -->
         <DataGrid ItemsSource="{Binding CallsList}" AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True"
-                  SelectionChanged="DataGrid_SelectionChanged">
+                  SelectionChanged="DataGrid_SelectionChanged"  PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Call Type" Binding="{Binding CallTypes}"/>
@@ -85,13 +85,24 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <GroupBox Header="Call Details" Grid.Row="2" Margin="0,10,0,0">
+            <TextBlock Text="{Binding SelectedCallDescription}" TextWrapping="Wrap" Height="80" Margin="5"/>
+        </GroupBox>
 
-        <!-- פירוט ומפה -->
+
+        <!-- פירוט ומפה
         <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,10,0,0">
             <TextBlock Text="Call Details:" FontWeight="Bold"/>
             <TextBlock x:Name="txtDescription" TextWrapping="Wrap" Height="80" Margin="0,5"/>
         </StackPanel>
 
         <WebBrowser x:Name="mapBrowser" Grid.Row="3" Margin="0,10,0,0"/>
+        <GroupBox Header="Map" Grid.Row="3" Margin="0,10,0,0">
+    <Border BorderBrush="Black" BorderThickness="1" Height="200" Background="LightGray">
+        <TextBlock Text="Map Placeholder" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Border>
+</GroupBox>
+
+         -->
     </Grid>
 </Window>

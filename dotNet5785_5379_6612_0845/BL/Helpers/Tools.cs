@@ -129,21 +129,40 @@ static internal class Tools
     /// <returns>The status of the call.</returns>
     public static StatusCallType GetCallStatus(this DO.Call call)
     {
-        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.IdOfRunnerCall == call.IdCall).ToList()!;
-        var lastAssignment = assignments
+        var assignments = s_dal.Assignment
+            .ReadAll(a => a?.IdOfRunnerCall == call.IdCall)
             .Where(a => a != null)
             .OrderByDescending(a => a!.EntryTimeForTreatment)
-            .FirstOrDefault();
+            .ToList();
 
-        if (lastAssignment != null && lastAssignment.EndTimeForTreatment.HasValue)
+        var lastAssignment = assignments.FirstOrDefault();
+
+        // 1. אם יש הקצאה שבוטלה ע"י מתנדב או מנהל
+        if (lastAssignment != null &&
+            lastAssignment.EndTimeForTreatment.HasValue &&
+            (lastAssignment.FinishCallType == FinishCallType.CanceledByVolunteer ||
+             lastAssignment.FinishCallType == FinishCallType.CanceledByManager))
+        {
+            return StatusCallType.open; // ← נחשב עדיין כקריאה פתוחה
+        }
+
+        // 2. אם הקריאה הושלמה
+        if (lastAssignment != null &&
+            lastAssignment.EndTimeForTreatment.HasValue &&
+            lastAssignment.FinishCallType == FinishCallType.TakenCareof)
+        {
             return StatusCallType.closed;
+        }
 
+        // 3. פג תוקף
         if (call.MaxFinishTime < AdminManager.Now)
             return StatusCallType.Expired;
 
+        // 4. פתוחה בסיכון
         if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange && lastAssignment == null)
             return StatusCallType.openInRisk;
 
+        // 5. בטיפול רגיל או בסיכון
         if (lastAssignment != null)
         {
             if ((AdminManager.Now - lastAssignment.EntryTimeForTreatment) > s_dal.Config.RiskRange)
@@ -151,6 +170,8 @@ static internal class Tools
             else
                 return StatusCallType.inHandling;
         }
+
+        // 6. פתוחה רגילה
         return StatusCallType.open;
     }
 }

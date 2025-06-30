@@ -23,7 +23,6 @@ public partial class CallListWindow : Window
         s_bl.Call.AddObserver(RefreshCallList);
     }
 
-    // Properties
     public CallInList? SelectedCall { get; set; }
 
     public List<CallInListFields> SortFields { get; set; }
@@ -94,6 +93,7 @@ public partial class CallListWindow : Window
         var win = new CallWindow();
         win.ShowDialog();
         RefreshCallList();
+
     }
 
     // Edit call
