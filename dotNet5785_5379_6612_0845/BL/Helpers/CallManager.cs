@@ -124,7 +124,6 @@ internal class CallManager
         if (assignments is null) return 0;
         return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.Expired);
     }
-
     public static int? GetCallInTreatment(int volunteerId)
     {
         var assignments = s_dal.Assignment.ReadAll();
@@ -135,3 +134,4 @@ internal class CallManager
             .FirstOrDefault();
     }
 }
+ 
