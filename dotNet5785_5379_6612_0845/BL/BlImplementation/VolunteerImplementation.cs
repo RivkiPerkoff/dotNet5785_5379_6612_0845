@@ -21,14 +21,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="password">The volunteer's password.</param>
     /// <returns>The role of the volunteer.</returns>
     /// <exception cref="BlInvalidOperationException">Thrown when the username or password is incorrect.</exception>
-    //public string Login(string username, string password)
-    //{
-    //    var volunteer = _dal.Volunteer.ReadAll()
-    //            .FirstOrDefault(v => v.Name == username && v.PasswordVolunteer == password)
-    //         ?? throw new BlInvalidOperationException("Username or password is incorrect");
-
-    //    return (volunteer.Role).ToString();
-    //}
+ 
     public string Login(string idString, string password)
     {
         if (!int.TryParse(idString, out int id))
@@ -197,6 +190,7 @@ internal class VolunteerImplementation : IVolunteer
                 VolunteerId = doVolunteer.VolunteerId,
                 Name = doVolunteer.Name,
                 PhoneNumber = doVolunteer.PhoneNumber,
+                EmailOfVolunteer = doVolunteer.EmailOfVolunteer,
                 AddressVolunteer = doVolunteer.AddressVolunteer,
                 VolunteerLongitude = doVolunteer.VolunteerLongitude,
                 VolunteerLatitude = doVolunteer.VolunteerLatitude,

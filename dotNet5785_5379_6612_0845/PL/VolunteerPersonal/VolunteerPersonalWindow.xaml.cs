@@ -223,7 +223,9 @@ namespace PL.VolunteerPersonal
         private void LoadVolunteer(int id)
         {
             CurrentVolunteer = bl.Volunteer.GetVolunteerDetails(id) ?? throw new Exception("Volunteer not found");
-            PasswordBoxVolunteer.Password = ""; // לא מציגים סיסמה קיימת
+            PasswordBoxVolunteer.Password = "";
+            OnPropertyChanged(nameof(CurrentCallInfo));
+            OnPropertyChanged(nameof(IsCallInProgress));
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
@@ -276,6 +278,46 @@ namespace PL.VolunteerPersonal
             }
         }
 
+        //private void btnChooseCall_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrWhiteSpace(CurrentVolunteer.AddressVolunteer))
+        //        {
+        //            MessageBox.Show("Cannot choose a call - your address is missing or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //            return;
+        //        }
+        //        var chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
+        //        //chooseCallWindow.Closed += (s, args) =>
+        //        //{
+        //        //    LoadVolunteer(CurrentVolunteer.VolunteerId);
+        //        //};
+        //        chooseCallWindow.Closed += (s, args) =>
+        //        {
+        //            if (chooseCallWindow.SelectedCallInProgress != null)
+        //            {
+        //                CurrentVolunteer.CallInProgress = chooseCallWindow.SelectedCallInProgress;
+        //                OnPropertyChanged(nameof(CurrentVolunteer));
+        //                OnPropertyChanged(nameof(IsCallInProgress));
+        //                OnPropertyChanged(nameof(CanChooseCall));
+        //                OnPropertyChanged(nameof(CanChangeActiveStatus));
+        //                OnPropertyChanged(nameof(CurrentCallInfo));
+        //            }
+        //            else
+        //            {
+        //                LoadVolunteer(CurrentVolunteer.VolunteerId);
+        //            }
+        //        };
+        //        chooseCallWindow.ShowDialog();
+
+        //        //LoadVolunteer(CurrentVolunteer.VolunteerId);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Error opening Choose Call window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
         private void btnChooseCall_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -285,31 +327,14 @@ namespace PL.VolunteerPersonal
                     MessageBox.Show("Cannot choose a call - your address is missing or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
+
                 var chooseCallWindow = new PL.Call.ChooseCallWindow(CurrentVolunteer);
-                //chooseCallWindow.Closed += (s, args) =>
-                //{
-                //    LoadVolunteer(CurrentVolunteer.VolunteerId);
-                //};
                 chooseCallWindow.Closed += (s, args) =>
                 {
-                    if (chooseCallWindow.SelectedCallInProgress != null)
-                    {
-                        CurrentVolunteer.CallInProgress = chooseCallWindow.SelectedCallInProgress;
-                        OnPropertyChanged(nameof(CurrentVolunteer));
-                        OnPropertyChanged(nameof(IsCallInProgress));
-                        OnPropertyChanged(nameof(CanChooseCall));
-                        OnPropertyChanged(nameof(CanChangeActiveStatus));
-                        OnPropertyChanged(nameof(CurrentCallInfo));
-                    }
-                    else
-                    {
-                        LoadVolunteer(CurrentVolunteer.VolunteerId);
-                    }
+                    LoadVolunteer(CurrentVolunteer.VolunteerId);
                 };
+
                 chooseCallWindow.ShowDialog();
-
-                //LoadVolunteer(CurrentVolunteer.VolunteerId);
-
             }
             catch (Exception ex)
             {
