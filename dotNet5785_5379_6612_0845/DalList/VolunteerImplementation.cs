@@ -1,7 +1,10 @@
 ﻿namespace Dal;
 using DalApi;
 using DO;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
 
 /// <summary>
@@ -14,6 +17,7 @@ internal class VolunteerImplementation : IVolunteer
     /// If the volunteer with the same ID already exists, an exception is thrown.
     /// </summary>
     /// <param name="item">The volunteer entity to be created.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
         if (DataSource.Volunteers.Any(v => v.VolunteerId == item.VolunteerId))
@@ -28,6 +32,7 @@ internal class VolunteerImplementation : IVolunteer
     /// If the volunteer is not found, a KeyNotFoundException is thrown.
     /// </summary>
     /// <param name="id">The ID of the volunteer to be deleted.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         var volunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == id);
@@ -37,13 +42,13 @@ internal class VolunteerImplementation : IVolunteer
             throw new DalDeletionImpossible($"Volunteer with ID {id} does not exist.");
         }
 
-        // Removing the volunteer from the list
         DataSource.Volunteers.Remove(volunteer);
     }
 
     /// <summary>
     /// Deletes all volunteers from the system, clearing the volunteer list.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         try
@@ -52,7 +57,6 @@ internal class VolunteerImplementation : IVolunteer
             {
                 throw new DalDeletionImpossible("The Volunteers list is already empty.");
             }
-            // Clearing the volunteer list
             DataSource.Volunteers.Clear();
         }
         catch (Exception ex)
@@ -66,11 +70,11 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The ID of the volunteer to be read.</param>
     /// <returns>The volunteer entity, or null if not found.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(int id)
     {
         var volunteer = DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
 
-        // זריקת חריגה אם לא נמצא מתנדב
         if (volunteer == null)
         {
             throw new DalDoesNotExistException($"No Volunteer found with ID {id}.");
@@ -79,11 +83,11 @@ internal class VolunteerImplementation : IVolunteer
         return volunteer;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
         var volunteer = DataSource.Volunteers.FirstOrDefault(filter);
 
-        // זריקת חריגה אם לא נמצא מתנדב מתאים
         if (volunteer == null)
         {
             throw new DalDoesNotExistException("No Volunteer found matching the specified criteria.");
@@ -96,19 +100,13 @@ internal class VolunteerImplementation : IVolunteer
     /// Retrieves all volunteers from the system.
     /// </summary>
     /// <returns>A list of all volunteers in the system.</returns>
-    //public List<Volunteer> ReadAll()
-    //{
-    //    // Returning a copy of the list
-    //    return new List<Volunteer>(DataSource.Volunteers);
-    //}
-    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) // stage 2
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
-        // חיפוש נתונים עם או בלי סינון
         var result = filter == null
             ? DataSource.Volunteers
             : DataSource.Volunteers.Where(filter);
 
-        // זריקת חריגה אם אין נתונים
         if (!result.Any())
         {
             throw new DalReedAllImpossible("No Volunteers found.");
@@ -122,17 +120,18 @@ internal class VolunteerImplementation : IVolunteer
     /// If the volunteer is not found, an exception is thrown.
     /// </summary>
     /// <param name="item">The updated volunteer entity.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Volunteer item)
     {
-        Volunteer? existingVolunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == item.VolunteerId); // Find the existing volunteer.
+        Volunteer? existingVolunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == item.VolunteerId);
         if (existingVolunteer != null)
         {
-            DataSource.Volunteers.Remove(existingVolunteer); // Remove the existing volunteer from the data source.
-            DataSource.Volunteers.Add(item); // Add the updated volunteer to the data source.
+            DataSource.Volunteers.Remove(existingVolunteer);
+            DataSource.Volunteers.Add(item);
         }
         else
         {
-            throw new DalDoesNotExistException($"Could not update item, no volunteer with Id {item.VolunteerId} found"); // Throw an exception if volunteer is not found.
+            throw new DalDoesNotExistException($"Could not update item, no volunteer with Id {item.VolunteerId} found");
         }
     }
 }

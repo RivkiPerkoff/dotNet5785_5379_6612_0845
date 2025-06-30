@@ -1,89 +1,81 @@
 ﻿namespace Dal;
 using DalApi;
-using DO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
+using System.Runtime.CompilerServices;
 
-internal class CallImplementation : ICall
+/// <summary>
+/// Implementation of the IConfig interface. Provides methods to access configuration values
+/// for system clock, risk range, and unique ID generation for volunteers, calls, and assignments.
+/// </summary>
+internal class ConfigImplementation : IConfig
 {
-    static Call GetCall(XElement c)
-    {      
-        return new DO.Call(
-            IdCall: c.ToIntNullable("IdCall") ?? throw new FormatException("Can't convert IdCall"),
-            CallDescription: (string?)c.Element("CallDescription") ?? "",
-            CallAddress: (string?)c.Element("CallAddress") ?? "",
-            CallLatitude: (double?)c.Element("CallLatitude") ?? 0,
-            CallLongitude: (double?)c.Element("CallLongitude") ?? 0,
-            OpeningTime: DateTime.Parse(c.Element("OpeningTime")?.Value ?? throw new FormatException("Can't parse OpeningTime")),
-            MaxFinishTime: DateTime.Parse(c.Element("MaxFinishTime")?.Value ?? throw new FormatException("Can't parse MaxFinishTime"))
-            //TypeOfReading: (TypeOfReading)Enum.Parse(typeof(TypeOfReading), c.Element("TypeOfReading")?.Value ?? "Type1")
-        );
+    /// <summary>
+    /// Gets or sets the system clock.
+    /// </summary>
+    public DateTime Clock
+    {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get => Config.Clock;
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        set => Config.Clock = value;
     }
 
-    static XElement CreateCallElement(Call item)
+    /// <summary>
+    /// Gets or sets the risk range for the system.
+    /// </summary>
+    public TimeSpan? RiskRange
     {
-        return new XElement("Call",
-            new XElement("IdCall", item.IdCall),
-            new XElement("CallDescription", item.CallDescription),
-            new XElement("CallAddress", item.CallAddress),
-            new XElement("CallLatitude", item.CallLatitude),
-            new XElement("CallLongitude", item.CallLongitude),
-            new XElement("OpeningTime", item.OpeningTime),
-            new XElement("MaxFinishTime", item.MaxFinishTime)
-            //new XElement("TypeOfReading", item.TypeOfReading.ToString())
-        );
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get => Config.RiskRange;
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        set
+        {
+            if (value.HasValue)
+            {
+                Config.RiskRange = value.Value;
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(value), "RiskRange cannot be null.");
+            }
+        }
     }
 
-    public void Create(Call item)
+    /// <summary>
+    /// Creates and returns the next unique volunteer ID.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public int CreateVolunteerId()
     {
-        List<Call> calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-        if (calls.Any(c => c.IdCall == item.IdCall))
-            throw new DalDoesNotExistException($"Call with ID={item.IdCall} already exists");
-        calls.Add(item);
-        XMLTools.SaveListToXMLSerializer(calls, Config.s_calls_xml);
+        return Config.NextVolunteerId;
     }
 
-    public void Delete(int id)
+    /// <summary>
+    /// Creates and returns the next unique call ID.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public int CreateCallId()
     {
-        List<Call> calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-        if (calls.RemoveAll(c => c.IdCall == id) == 0)
-            throw new DalDoesNotExistException($"Call with ID={id} does not exist");
-        XMLTools.SaveListToXMLSerializer(calls, Config.s_calls_xml);
+        return Config.NextCallId;
     }
 
-    public void DeleteAll()
+    /// <summary>
+    /// Creates and returns the next unique assignment ID.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public int CreateAssignmentId()
     {
-        XMLTools.SaveListToXMLSerializer(new List<Call>(), Config.s_calls_xml);
+        return Config.NextAssignmentId;
     }
 
-    public Call? Read(int id)
+    /// <summary>
+    /// Resets the system's configuration.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public void Reset()
     {
-        XElement? callElem = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().FirstOrDefault(c => (int?)c.Element("IdCall") == id);
-        return callElem is null ? throw new DalDoesNotExistException($"Call with ID={id} does not exist") : GetCall(callElem);
-    }
-
-    public Call? Read(Func<Call, bool> filter)
-    {
-        return XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c => GetCall(c)).FirstOrDefault(filter);
-    }
-
-    public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
-    {
-        var calls = XMLTools.LoadListFromXMLElement(Config.s_calls_xml).Elements().Select(c =>  GetCall(c));
-        return filter is null ? calls : calls.Where(filter);
-    }
-   
-    public void Update(Call item)
-    {
-        XElement callRootElem = XMLTools.LoadListFromXMLElement(Config.s_calls_xml);
-        XElement? elemToRemove = callRootElem.Elements().FirstOrDefault(c => (int?)c.Element("IdCall") == item.IdCall);
-        if (elemToRemove == null)
-            throw new DalDoesNotExistException($"Call with ID={item.IdCall} does not exist");
-
-        elemToRemove.Remove();
-        callRootElem.Add(CreateCallElement(item));
-        XMLTools.SaveListToXMLElement(callRootElem, Config.s_calls_xml);
+        Config.Reset();
     }
 }
