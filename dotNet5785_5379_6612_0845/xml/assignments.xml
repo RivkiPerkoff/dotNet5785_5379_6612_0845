@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfAssignment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Assignment>
     <NextAssignmentId>1000</NextAssignmentId>
@@ -7,5 +7,29 @@
     <FinishCallType>CanceledByVolunteer</FinishCallType>
     <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-30T20:36:26</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1001</NextAssignmentId>
+    <IdOfRunnerCall>1235252</IdOfRunnerCall>
+    <VolunteerId>1001</VolunteerId>
+    <FinishCallType>TakenCareof</FinishCallType>
+    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-30T20:36:26</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1002</NextAssignmentId>
+    <IdOfRunnerCall>12546584</IdOfRunnerCall>
+    <VolunteerId>1001</VolunteerId>
+    <FinishCallType>TakenCareof</FinishCallType>
+    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-30T20:36:26</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1003</NextAssignmentId>
+    <IdOfRunnerCall>541415</IdOfRunnerCall>
+    <VolunteerId>1001</VolunteerId>
+    <FinishCallType>None</FinishCallType>
+    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
 </ArrayOfAssignment>

@@ -120,4 +120,44 @@
     <MaxFinishTime>2025-06-30T22:38:01.9638874+03:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
+  <Call>
+    <IdCall>12546584</IdCall>
+    <CallDescription>הסעה לעבודה</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-30T20:45:43.7811295+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-30T22:45:43.7811599+03:00</MaxFinishTime>
+    <CallTypes>WomanDriver</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>1235252</IdCall>
+    <CallDescription>הסעה לחתונה</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-30T20:46:10.6820002+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-30T22:46:10.6820154+03:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>268268356</IdCall>
+    <CallDescription>1111</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-30T20:57:32.1243792+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-07T00:00:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>541415</IdCall>
+    <CallDescription>22222</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-06-30T20:58:29.623412+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-30T22:58:29.6234134+03:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
 </ArrayOfCall>

@@ -199,7 +199,6 @@ internal class VolunteerImplementation : IVolunteer
                 MaximumDistanceForReceivingCall = doVolunteer.MaximumDistanceForReceivingCall,
                 DistanceType = (BO.DistanceType)doVolunteer.DistanceType,
                 CallInProgress = callInProgress,
-                EmailOfVolunteer = doVolunteer.EmailOfVolunteer
             };
         }
         catch (DO.DalDoesNotExistException ex)
