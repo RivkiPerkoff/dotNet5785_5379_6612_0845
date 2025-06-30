@@ -46,6 +46,12 @@ namespace PL
                         return;
                     }
 
+                    if (!int.TryParse(Username, out int managerAsVolunteerId))
+                    {
+                        MessageBox.Show("מזהה משתמש אינו תקין.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
                     var chooseWindow = new ChooseScreenWindow
                     {
                         Owner = this
@@ -55,12 +61,12 @@ namespace PL
                     {
                         if (chooseWindow.GoToManager)
                         {
-                            MainWindow mainWindow = new MainWindow();
+                            var mainWindow = new MainWindow(BL.BO.Role.Manager, managerAsVolunteerId);
                             mainWindow.Show();
                         }
                         else
                         {
-                            VolunteerWindow volunteerWindow = new VolunteerWindow();
+                            VolunteerPersonalWindow volunteerWindow = new VolunteerPersonalWindow(managerAsVolunteerId);
                             volunteerWindow.Show();
                         }
                     }
@@ -83,6 +89,7 @@ namespace PL
             }
         }
 
+
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (sender is PasswordBox passwordBox)
@@ -92,6 +99,7 @@ namespace PL
         }
     }
 }
+
 
 
 //using BL.BIApi;

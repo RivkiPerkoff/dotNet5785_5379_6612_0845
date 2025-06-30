@@ -203,10 +203,4 @@ static public class VolunteerManager
             CallType = BO.CallTypes.None
         };
     }
- 
-
-
-
-
-
 }

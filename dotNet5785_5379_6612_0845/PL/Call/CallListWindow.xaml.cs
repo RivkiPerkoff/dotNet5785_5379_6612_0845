@@ -12,16 +12,22 @@ namespace PL.Call;
 public partial class CallListWindow : Window
 {
     private static readonly IBL s_bl = BlApi.Factory.Get();
+    private readonly Role _currentUserRole;
+    private readonly int _currentUserId;
 
-    public CallListWindow()
+    public CallListWindow(Role currentUserRole, int currentUserId)
     {
         InitializeComponent();
-        DataContext = this;
+        _currentUserRole = currentUserRole;
+        _currentUserId = currentUserId;
 
+        DataContext = this;
         SortFields = Enum.GetValues(typeof(CallInListFields)).Cast<CallInListFields>().ToList();
         RefreshCallList();
         s_bl.Call.AddObserver(RefreshCallList);
     }
+
+    public bool IsManager => _currentUserRole == Role.Manager;
 
     public CallInList? SelectedCall { get; set; }
 
@@ -64,7 +70,6 @@ public partial class CallListWindow : Window
     public static readonly DependencyProperty CallListProperty =
         DependencyProperty.Register(nameof(CallList), typeof(IEnumerable<CallInList>), typeof(CallListWindow));
 
-    // Refresh List
     private void RefreshCallList()
     {
         CallList = s_bl.Call.GetFilteredAndSortedCallList(
@@ -87,16 +92,13 @@ public partial class CallListWindow : Window
 
     private void CallListObserver() => RefreshCallList();
 
-    // Add call
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         var win = new CallWindow();
         win.ShowDialog();
         RefreshCallList();
-
     }
 
-    // Edit call
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (SelectedCall != null)
@@ -107,7 +109,6 @@ public partial class CallListWindow : Window
         }
     }
 
-    // Delete call
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn && btn.Tag is int callId)
@@ -128,7 +129,7 @@ public partial class CallListWindow : Window
             {
                 s_bl.Call.DeleteCall(callId);
                 MessageBox.Show("Call deleted successfully.");
-                RefreshCallList(); 
+                RefreshCallList();
             }
             catch (Exception ex)
             {
@@ -137,7 +138,50 @@ public partial class CallListWindow : Window
                     msg += $"\nInner: {ex.InnerException.Message}";
                 MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+    }
 
+    private void DeleteAssignmentButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button btn && btn.Tag is int callId)
+        {
+            var call = CallList?.FirstOrDefault(c => c.CallId == callId);
+            if (call == null)
+                return;
+
+            if (call.Status != StatusCallType.open || call.TotalAssignment > 0)
+            {
+                MessageBox.Show("Cannot delete assignment. Either call is not open or it was already assigned.",
+                                "Delete Assignment Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return;
+            }
+
+            var result = MessageBox.Show($"Are you sure you want to delete the assignment for call #{call.CallId}?",
+                                         "Confirm Assignment Deletion",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                s_bl.Call.CancelCallTreatment(
+                    requesterId: _currentUserId,
+                    assignmentId: call.Id ?? throw new InvalidOperationException("Assignment ID is missing")
+                );
+                MessageBox.Show("Assignment deleted successfully.");
+                RefreshCallList();
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                if (ex.InnerException != null)
+                    msg += $"\nInner: {ex.InnerException.Message}";
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

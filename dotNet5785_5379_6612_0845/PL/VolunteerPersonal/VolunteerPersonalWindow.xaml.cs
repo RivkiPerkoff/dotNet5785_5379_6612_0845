@@ -126,7 +126,7 @@ public partial class VolunteerPersonalWindow : Window, INotifyPropertyChanged
 
     private void btnAllCalls_Click(object sender, RoutedEventArgs e)
     {
-        new Call.CallListWindow().ShowDialog();
+        new Call.CallListWindow(CurrentVolunteer.Role, CurrentVolunteer.VolunteerId).ShowDialog();
     }
 
     private void RefreshBindings()

@@ -119,7 +119,8 @@ internal class VolunteerImplementation : IVolunteer
                 {
                     callInProgress = new BO.CallInProgress
                     {
-                        Id = currentAssignment.NextAssignmentId,
+                        //Id = currentAssignment.NextAssignmentId,
+                        Id = currentAssignment.IdOfRunnerCall, 
                         CallId = currentAssignment.IdOfRunnerCall,
                         CallTypes = (BO.CallTypes)callDetails.CallTypes,
                         Description = callDetails.CallDescription,
@@ -194,28 +195,45 @@ internal class VolunteerImplementation : IVolunteer
         try
         {
             var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId)
-                                   ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist");
+                ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist");
+
             var requester = _dal.Volunteer.Read(requesterId)
-                        ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
+                ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
 
             if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId)
             {
                 throw new BlInvalidOperationException("Only admins or the volunteer themselves can update details");
             }
 
-            if (requester.Role == DO.Role.Manager && existingVolunteer.Role != (DO.Role)volunteer.Role)
+            // 🔒 בדיקה שמונעת ממנהל לשנות את עצמו למתנדב אם הוא המנהל היחיד
+            if (requester.Role == DO.Role.Manager &&
+                requesterId == volunteer.VolunteerId &&
+                existingVolunteer.Role == DO.Role.Manager &&
+                volunteer.Role == BO.Role.Volunteer)
             {
-                throw new BlGeneralDatabaseException("Only admins can update the role");
+                int otherManagers = _dal.Volunteer
+                    .ReadAll(v => v.Role == DO.Role.Manager && v.VolunteerId != volunteer.VolunteerId)
+                    .Count();
+
+                if (otherManagers == 0)
+                    throw new BlInvalidOperationException("לא ניתן לשנות את התפקיד למתנדב – חייב להיות לפחות מנהל אחד במערכת.");
             }
-            (double lat, double lon) = Tools.GetCoordinatesFromAddress(volunteer!.AddressVolunteer);
+
+            //if (requester.Role == DO.Role.Manager && existingVolunteer.Role != (DO.Role)volunteer.Role)
+            //{
+            //    // שורת בדיקה זו מיותרת אם הכנסת כבר את התנאי הקודם – תשקלי אם להשאיר
+            //    throw new BlGeneralDatabaseException("Only admins can update the role");
+            //}
+
+            (double lat, double lon) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
 
             volunteer.VolunteerLatitude = lat;
             volunteer.VolunteerLongitude = lon;
 
             var doVolunteer = VolunteerManager.MapToDO(volunteer);
             _dal.Volunteer.Update(doVolunteer);
-            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.VolunteerId); 
-            VolunteerManager.Observers.NotifyListUpdated(); 
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.VolunteerId);
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -226,6 +244,7 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred while adding the volunteer.", ex);
         }
     }
+
 
     /// <summary>
     /// Adds a new volunteer to the system.
