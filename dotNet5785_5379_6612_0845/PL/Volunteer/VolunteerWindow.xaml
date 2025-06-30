@@ -30,29 +30,17 @@
     <Grid Margin="20" DataContext="{Binding CurrentVolunteer}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- 0: ID -->
             <RowDefinition Height="Auto"/>
-            <!-- 1: Name -->
             <RowDefinition Height="Auto"/>
-            <!-- 2: Email -->
             <RowDefinition Height="Auto"/>
-            <!-- 3: Phone -->
             <RowDefinition Height="Auto"/>
-            <!-- 4: Password -->
             <RowDefinition Height="Auto"/>
-            <!-- 5: Address -->
             <RowDefinition Height="Auto"/>
-            <!-- 6: IsAvailable -->
             <RowDefinition Height="Auto"/>
-            <!-- 7: MaxDistance -->
             <RowDefinition Height="Auto"/>
-            <!-- 8: DistanceType -->
             <RowDefinition Height="Auto"/>
-            <!-- 9: Role -->
-            <RowDefinition Height="Auto"/>
-            <!-- 10: CurrentCall -->
             <RowDefinition Height="*"/>
-            <!-- 11: Button -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -62,7 +50,7 @@
         <!-- Volunteer ID -->
         <Label Grid.Row="0" Grid.Column="0" Content="ID:" VerticalAlignment="Center"/>
         <TextBox Grid.Row="0" Grid.Column="1"
-                 Text="{Binding VolunteerId, Mode=TwoWay}"
+                 Text="{Binding VolunteerId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  IsReadOnly="{Binding DataContext.IsEditMode, RelativeSource={RelativeSource AncestorType=Window}}"/>
 
         <!-- Name -->

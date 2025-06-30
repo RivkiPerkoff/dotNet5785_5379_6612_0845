@@ -165,6 +165,13 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             if (CurrentVolunteer == null)
                 return;
 
+            // אם זה עדכון ולא הוזנה סיסמה – לא לאפשר עדכון
+            if (ButtonText == "Update" && string.IsNullOrWhiteSpace(Password))
+            {
+                MessageBox.Show("Password must be entered to update volunteer details.", "Missing Password", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             CurrentVolunteer.PasswordVolunteer = Password;
 
             bool isSelfDemotion =
@@ -188,27 +195,26 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
 
             if (isSelfDemotion)
             {
-                // פותחים את חלון הלוגין לפני שסוגרים
                 var loginWindow = new LoginWindow();
                 loginWindow.Show();
 
-                // סוגרים את כל שאר החלונות פרט ללוגין
                 foreach (Window w in Application.Current.Windows.OfType<Window>().ToList())
                 {
                     if (w != loginWindow)
                         w.Close();
                 }
 
-                return; // לא להמשיך הלאה
+                return;
             }
 
-            Close(); // סגירת חלון אם לא היה שינוי תפקיד
+            Close();
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Error: {ex?.InnerException?.Message ?? ex.Message}");
         }
     }
+
 
 
     private PasswordBox? lastPasswordBox;
