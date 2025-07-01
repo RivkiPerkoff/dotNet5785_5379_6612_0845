@@ -53,16 +53,11 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            IEnumerable<DO.Volunteer> volunteers = _dal.Volunteer.ReadAll(v =>
-            {
-                if (!isActive.HasValue || v.IsAvailable == isActive.Value)
-                {
-                    return true;
-                }
-                return false;
-            });
+            IEnumerable<DO.Volunteer> volunteers;
+            lock (AdminManager.BlMutex)
+                volunteers = _dal.Volunteer.ReadAll(v => !isActive.HasValue || v.IsAvailable == isActive.Value);
 
-            List<BO.VolunteerInList> volunteerList = new List<BO.VolunteerInList>();
+            List<BO.VolunteerInList> volunteerList = new();
 
             foreach (DO.Volunteer volunteer in volunteers)
             {
@@ -107,12 +102,26 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            var doVolunteer = _dal.Volunteer.Read(volunteerId)
-                              ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+            //var doVolunteer = _dal.Volunteer.Read(volunteerId)
+            //                  ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
 
-            var assigments = _dal.Assignment.ReadAll()
-                .Where(a => a.VolunteerId == volunteerId)
-                .ToList();
+            //var assigments = _dal.Assignment.ReadAll()
+            //    .Where(a => a.VolunteerId == volunteerId)
+            //    .ToList();
+
+            //BO.CallInProgress? callInProgress = null;
+
+            //var currentAssignment = assigments.FirstOrDefault(a => a.EndTimeForTreatment == null);
+            DO.Volunteer doVolunteer;
+            List<DO.Assignment> assigments;
+
+            lock (AdminManager.BlMutex)
+            {
+                doVolunteer = _dal.Volunteer.Read(volunteerId)
+                    ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+
+                assigments = _dal.Assignment.ReadAll().Where(a => a.VolunteerId == volunteerId).ToList();
+            }
 
             BO.CallInProgress? callInProgress = null;
 
@@ -120,7 +129,11 @@ internal class VolunteerImplementation : IVolunteer
 
             if (currentAssignment != null)
             {
-                var callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
+                DO.Call callDetails;
+                lock (AdminManager.BlMutex)
+                    callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
+
+                //var callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
                 if (callDetails != null)
                 {
                     var status = Tools.GetCallStatus(callDetails);
@@ -185,15 +198,19 @@ internal class VolunteerImplementation : IVolunteer
         AdminManager.ThrowOnSimulatorIsRunning();
         try
         {
-            var volunteer = _dal.Volunteer.Read(volunteerId)
-                       ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
+            lock (AdminManager.BlMutex)
+            {
+                var volunteer = _dal.Volunteer.Read(volunteerId)
+                           //var volunteer = _dal.Volunteer.Read(volunteerId)
+                           ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist");
 
-            IEnumerable<DO.Assignment> volunteerAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
-            if (volunteerAssignments.Any())
-                throw new BlDeletionImpossible($"Volunteer with ID={volunteerId} cannot be deleted as they have treated/ed calls.");
+                IEnumerable<DO.Assignment> volunteerAssignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+                if (volunteerAssignments.Any())
+                    throw new BlDeletionImpossible($"Volunteer with ID={volunteerId} cannot be deleted as they have treated/ed calls.");
 
-            _dal.Volunteer.Delete(volunteerId);
-            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
+                _dal.Volunteer.Delete(volunteerId);
+            }
+            VolunteerManager.Observers.NotifyListUpdated();
 
         }
         catch (DO.DalDoesNotExistException)
@@ -219,36 +236,39 @@ internal class VolunteerImplementation : IVolunteer
         AdminManager.ThrowOnSimulatorIsRunning();
         try
         {
-            var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId)
+            lock (AdminManager.BlMutex)
+            {
+                var existingVolunteer = _dal.Volunteer.Read(volunteer.VolunteerId)
                 ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} does not exist");
 
-            var requester = _dal.Volunteer.Read(requesterId)
-                ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
+                var requester = _dal.Volunteer.Read(requesterId)
+                    ?? throw new BlDoesNotExistException($"Requester with ID={requesterId} does not exist");
 
-            if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId)
-            {
-                throw new BlInvalidOperationException("Only admins or the volunteer themselves can update details");
+                if (requester.Role != DO.Role.Manager && requesterId != volunteer.VolunteerId)
+                {
+                    throw new BlInvalidOperationException("Only admins or the volunteer themselves can update details");
+                }
+                if (requester.Role == DO.Role.Manager &&
+                    requesterId == volunteer.VolunteerId &&
+                    existingVolunteer.Role == DO.Role.Manager &&
+                    volunteer.Role == BO.Role.Volunteer)
+                {
+                    int otherManagers = _dal.Volunteer
+                        .ReadAll(v => v.Role == DO.Role.Manager && v.VolunteerId != volunteer.VolunteerId)
+                        .Count();
+
+                    if (otherManagers == 0)
+                        throw new BlInvalidOperationException("Cannot change the role to Volunteer – there must be at least one Manager in the system.");
+                }
+                (double lat, double lon) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
+
+                volunteer.VolunteerLatitude = lat;
+                volunteer.VolunteerLongitude = lon;
+
+                var doVolunteer = VolunteerManager.MapToDO(volunteer);
+                _dal.Volunteer.Update(doVolunteer);
             }
-            if (requester.Role == DO.Role.Manager &&
-                requesterId == volunteer.VolunteerId &&
-                existingVolunteer.Role == DO.Role.Manager &&
-                volunteer.Role == BO.Role.Volunteer)
-            {
-                int otherManagers = _dal.Volunteer
-                    .ReadAll(v => v.Role == DO.Role.Manager && v.VolunteerId != volunteer.VolunteerId)
-                    .Count();
-
-                if (otherManagers == 0)
-                    throw new BlInvalidOperationException("Cannot change the role to Volunteer – there must be at least one Manager in the system.");
-            }
-            (double lat, double lon) = Tools.GetCoordinatesFromAddress(volunteer.AddressVolunteer);
-
-            volunteer.VolunteerLatitude = lat;
-            volunteer.VolunteerLongitude = lon;
-
-            var doVolunteer = VolunteerManager.MapToDO(volunteer);
-            _dal.Volunteer.Update(doVolunteer);
-            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.VolunteerId);
+            VolunteerManager.Observers.NotifyItemUpdated(volunteer.VolunteerId);
             VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
@@ -274,13 +294,16 @@ internal class VolunteerImplementation : IVolunteer
 
         try
         {
-            var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == volunteer.VolunteerId);
-            if (existingVolunteer != null)
-                throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} already exists.");
-            VolunteerManager.ValidateVolunteer(volunteer);
+            lock (AdminManager.BlMutex)
+            {
+                var existingVolunteer = _dal.Volunteer.Read(v => v.VolunteerId == volunteer.VolunteerId);
+                if (existingVolunteer != null)
+                    throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} already exists.");
+                VolunteerManager.ValidateVolunteer(volunteer);
 
-            DO.Volunteer doVolunteer = VolunteerManager.MapToDO(volunteer);
-            _dal.Volunteer.Create(doVolunteer);
+                DO.Volunteer doVolunteer = VolunteerManager.MapToDO(volunteer);
+                _dal.Volunteer.Create(doVolunteer);
+            }
             VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
@@ -301,16 +324,19 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            var volunteers = _dal.Volunteer.ReadAll();
+            //var volunteers = _dal.Volunteer.ReadAll();
+            IEnumerable<DO.Volunteer> volunteers;
+            lock (AdminManager.BlMutex)
+                volunteers = _dal.Volunteer.ReadAll();
 
-        List<BO.VolunteerInList> volunteerList = new List<BO.VolunteerInList>();
+            List<BO.VolunteerInList> volunteerList = new List<BO.VolunteerInList>();
 
-        foreach (DO.Volunteer volunteer in volunteers)
-        {
-            BO.VolunteerInList volunteerInList = VolunteerManager.MapToVolunteerInList(volunteer);
-            volunteerList.Add(volunteerInList);
-        }
-        return volunteerList;
+            foreach (DO.Volunteer volunteer in volunteers)
+            {
+                BO.VolunteerInList volunteerInList = VolunteerManager.MapToVolunteerInList(volunteer);
+                volunteerList.Add(volunteerInList);
+            }
+            return volunteerList;
         }
         catch (Exception ex)
         {
@@ -320,10 +346,10 @@ internal class VolunteerImplementation : IVolunteer
     public void AddObserver(Action listObserver) =>
     VolunteerManager.Observers.AddListObserver(listObserver);
     public void AddObserver(int id, Action observer) =>
-    VolunteerManager.Observers.AddObserver(id, observer); 
+    VolunteerManager.Observers.AddObserver(id, observer);
     public void RemoveObserver(Action listObserver) =>
-    VolunteerManager.Observers.RemoveListObserver(listObserver); 
+    VolunteerManager.Observers.RemoveListObserver(listObserver);
     public void RemoveObserver(int id, Action observer) =>
-    VolunteerManager.Observers.RemoveObserver(id, observer); 
+    VolunteerManager.Observers.RemoveObserver(id, observer);
 }
 
