@@ -1,6 +1,7 @@
 ﻿using BL.BO;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 
 public class VolunteerCallHistoryViewModel : INotifyPropertyChanged
 {
@@ -54,20 +55,28 @@ public class VolunteerCallHistoryViewModel : INotifyPropertyChanged
         LoadCalls();
     }
 
+    private volatile DispatcherOperation? _loadCallsOperation = null;
+
     private void LoadCalls()
     {
-        try
+        if (_loadCallsOperation != null && _loadCallsOperation.Status != DispatcherOperationStatus.Completed)
+            return;
+
+        _loadCallsOperation = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
         {
-            CallList = _bl.Call.GetClosedCallsForVolunteer(
-                _volunteerId,
-                SelectedFilterType,
-                SelectedSortField
-            );
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error loading call history: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+            try
+            {
+                CallList = _bl.Call.GetClosedCallsForVolunteer(
+                    _volunteerId,
+                    SelectedFilterType,
+                    SelectedSortField
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading call history: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }));
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

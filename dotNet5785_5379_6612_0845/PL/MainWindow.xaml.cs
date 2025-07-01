@@ -3,7 +3,9 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using BL.BIApi;
 using BL.BO;
@@ -224,7 +226,14 @@ public partial class MainWindow : Window
     {
         s_bl.Admin.RemoveClockObserver(clockObserver);
         s_bl.Admin.RemoveConfigObserver(configObserver);
+
+        if (IsSimulatorRunning)
+        {
+            s_bl.Admin.StopSimulator();
+            IsSimulatorRunning = false;
+        }
     }
+
     public int Interval
     {
         get => (int)GetValue(IntervalProperty);
@@ -249,11 +258,13 @@ public partial class MainWindow : Window
             {
                 s_bl.Admin.StopSimulator();
                 IsSimulatorRunning = false;
+                EnableControls(true);
             }
             else
             {
                 s_bl.Admin.StartSimulator(Interval);
                 IsSimulatorRunning = true;
+                EnableControls(false);
             }
         }
         catch (Exception ex)
@@ -262,4 +273,47 @@ public partial class MainWindow : Window
         }
     }
 
+    private void EnableControls(bool isEnabled)
+    {
+        SetButtonEnabled("+1 Minute", isEnabled);
+        SetButtonEnabled("+1 Hour", isEnabled);
+        SetButtonEnabled("+1 Day", isEnabled);
+        SetButtonEnabled("+1 Year", isEnabled);
+        SetButtonEnabled("Initialize DB", isEnabled);
+        SetButtonEnabled("Reset DB", isEnabled);
+        SetTextBoxEnabledByBinding(nameof(Interval), isEnabled);
+    }
+    private void SetButtonEnabled(string contentText, bool isEnabled)
+    {
+        var button = FindVisualChild<Button>(this, b => b.Content?.ToString() == contentText);
+        if (button != null)
+            button.IsEnabled = isEnabled;
+    }
+
+    private void SetTextBoxEnabledByBinding(string boundPropertyName, bool isEnabled)
+    {
+        var textBox = FindVisualChild<TextBox>(this, tb =>
+        {
+            var binding = BindingOperations.GetBinding(tb, TextBox.TextProperty);
+            return binding?.Path?.Path == boundPropertyName;
+        });
+
+        if (textBox != null)
+            textBox.IsEnabled = isEnabled;
+    }
+
+    private T? FindVisualChild<T>(DependencyObject parent, Func<T, bool> predicate) where T : DependencyObject
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T typedChild && predicate(typedChild))
+                return typedChild;
+
+            var result = FindVisualChild(child, predicate);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
 }

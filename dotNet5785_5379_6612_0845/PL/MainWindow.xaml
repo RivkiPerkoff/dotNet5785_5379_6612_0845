@@ -7,7 +7,7 @@
         xmlns:conv="clr-namespace:PL.Converters"
         mc:Ignorable="d"
         Title="Main Window"
-        Height="650"
+        Height="814"
         Width="850"
         WindowStartupLocation="CenterScreen"
         Background="#F0F2F5"

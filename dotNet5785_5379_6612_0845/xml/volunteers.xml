@@ -1,26 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Volunteer>
-    <VolunteerId>1000</VolunteerId>
-    <Name>Roni</Name>
-    <PhoneNumber>0503217845</PhoneNumber>
-    <EmailOfVolunteer>Roni@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>K6XjCWxJ7omB</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerId>1014</VolunteerId>
+    <Name>Hadar</Name>
+    <PhoneNumber>0551234567</PhoneNumber>
+    <EmailOfVolunteer>Hadar@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>Ca5dyQMB37PE</PasswordVolunteer>
+    <AddressVolunteer>רחוב יפו 35, ירושלים, 9434125</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
     <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Manager</Role>
+    <Role>Volunteer</Role>
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
-    <VolunteerId>1001</VolunteerId>
-    <Name>Maya</Name>
-    <PhoneNumber>0529871243</PhoneNumber>
-    <EmailOfVolunteer>Maya@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>WNgF7JRQ01fj</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerId>1009</VolunteerId>
+    <Name>Nir</Name>
+    <PhoneNumber>0556543210</PhoneNumber>
+    <EmailOfVolunteer>Nir@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>q4yqWB1URw2w</PasswordVolunteer>
+    <AddressVolunteer>רחוב הנרייטה סולד 6, טבריה, 1448123</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1012</VolunteerId>
+    <Name>Erez</Name>
+    <PhoneNumber>0524568765</PhoneNumber>
+    <EmailOfVolunteer>Erez@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>QhK4K42QHsYU</PasswordVolunteer>
+    <AddressVolunteer>רחוב הנביאים 10, באר שבע, 8421234</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1011</VolunteerId>
+    <Name>Shira</Name>
+    <PhoneNumber>0501251234</PhoneNumber>
+    <EmailOfVolunteer>Shira@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>iGiZPfjCIb1H</PasswordVolunteer>
+    <AddressVolunteer>רחוב דוד המלך 22, ראשון לציון, 7521007</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
@@ -34,62 +62,6 @@
     <PhoneNumber>0541239876</PhoneNumber>
     <EmailOfVolunteer>Lior@gmail.com</EmailOfVolunteer>
     <PasswordVolunteer>czASa3lZAJOB</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1003</VolunteerId>
-    <Name>Noa</Name>
-    <PhoneNumber>0535494567</PhoneNumber>
-    <EmailOfVolunteer>Noa@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>ZDwg0gg07ylq</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1004</VolunteerId>
-    <Name>Dani</Name>
-    <PhoneNumber>0557891234</PhoneNumber>
-    <EmailOfVolunteer>Dani@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>zO7zOdlqsRHs</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1005</VolunteerId>
-    <Name>Tomer</Name>
-    <PhoneNumber>0509876789</PhoneNumber>
-    <EmailOfVolunteer>Tomer@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>OhS5e3a7UPlR</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1006</VolunteerId>
-    <Name>Liat</Name>
-    <PhoneNumber>0541127654</PhoneNumber>
-    <EmailOfVolunteer>Liat@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>f1TX4feL1YyD</PasswordVolunteer>
     <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
@@ -113,12 +85,12 @@
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
-    <VolunteerId>1008</VolunteerId>
-    <Name>Yona</Name>
-    <PhoneNumber>0523127890</PhoneNumber>
-    <EmailOfVolunteer>Yona@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>3RoR4q5SqEAq</PasswordVolunteer>
-    <AddressVolunteer>רחוב הגפן 3, מודיעין, 7173311</AddressVolunteer>
+    <VolunteerId>1006</VolunteerId>
+    <Name>Liat</Name>
+    <PhoneNumber>0541127654</PhoneNumber>
+    <EmailOfVolunteer>Liat@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>f1TX4feL1YyD</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
@@ -127,12 +99,68 @@
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
-    <VolunteerId>1009</VolunteerId>
-    <Name>Nir</Name>
-    <PhoneNumber>0556543210</PhoneNumber>
-    <EmailOfVolunteer>Nir@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>q4yqWB1URw2w</PasswordVolunteer>
-    <AddressVolunteer>רחוב הנרייטה סולד 6, טבריה, 1448123</AddressVolunteer>
+    <VolunteerId>1001</VolunteerId>
+    <Name>Maya</Name>
+    <PhoneNumber>0529871243</PhoneNumber>
+    <EmailOfVolunteer>Maya@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>WNgF7JRQ01fj</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1000</VolunteerId>
+    <Name>Roni</Name>
+    <PhoneNumber>0503217845</PhoneNumber>
+    <EmailOfVolunteer>Roni@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>K6XjCWxJ7omB</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1005</VolunteerId>
+    <Name>Tomer</Name>
+    <PhoneNumber>0509876789</PhoneNumber>
+    <EmailOfVolunteer>Tomer@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>OhS5e3a7UPlR</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1004</VolunteerId>
+    <Name>Dani</Name>
+    <PhoneNumber>0557891234</PhoneNumber>
+    <EmailOfVolunteer>Dani@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>zO7zOdlqsRHs</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>0</VolunteerLatitude>
+    <VolunteerLongitude>0</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
+    <Role>Volunteer</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>1008</VolunteerId>
+    <Name>Yona</Name>
+    <PhoneNumber>0523127890</PhoneNumber>
+    <EmailOfVolunteer>Yona@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>3RoR4q5SqEAq</PasswordVolunteer>
+    <AddressVolunteer>רחוב הגפן 3, מודיעין, 7173311</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
@@ -155,34 +183,6 @@
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
-    <VolunteerId>1011</VolunteerId>
-    <Name>Shira</Name>
-    <PhoneNumber>0501251234</PhoneNumber>
-    <EmailOfVolunteer>Shira@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>iGiZPfjCIb1H</PasswordVolunteer>
-    <AddressVolunteer>רחוב דוד המלך 22, ראשון לציון, 7521007</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>1012</VolunteerId>
-    <Name>Erez</Name>
-    <PhoneNumber>0524568765</PhoneNumber>
-    <EmailOfVolunteer>Erez@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>QhK4K42QHsYU</PasswordVolunteer>
-    <AddressVolunteer>רחוב הנביאים 10, באר שבע, 8421234</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
     <VolunteerId>1013</VolunteerId>
     <Name>Michal</Name>
     <PhoneNumber>0546544321</PhoneNumber>
@@ -197,12 +197,12 @@
     <DistanceType>AirDistance</DistanceType>
   </Volunteer>
   <Volunteer>
-    <VolunteerId>1014</VolunteerId>
-    <Name>Hadar</Name>
-    <PhoneNumber>0551234567</PhoneNumber>
-    <EmailOfVolunteer>Hadar@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>Ca5dyQMB37PE</PasswordVolunteer>
-    <AddressVolunteer>רחוב יפו 35, ירושלים, 9434125</AddressVolunteer>
+    <VolunteerId>1003</VolunteerId>
+    <Name>Noa</Name>
+    <PhoneNumber>0535494567</PhoneNumber>
+    <EmailOfVolunteer>Noa@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>ZDwg0gg07ylq</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
     <VolunteerLatitude>0</VolunteerLatitude>
     <VolunteerLongitude>0</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>

@@ -76,7 +76,7 @@ internal class AdminImplementation : IAdmin
     public void InitializeDatabase()
     {
         AdminManager.ThrowOnSimulatorIsRunning();
-        AdminManager.InitializeDB(); 
+        AdminManager.InitializeDB();
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDatabase()
     {
-        AdminManager.ThrowOnSimulatorIsRunning(); 
+        AdminManager.ThrowOnSimulatorIsRunning();
         AdminManager.ResetDB();
     }
     #region Stage 5
