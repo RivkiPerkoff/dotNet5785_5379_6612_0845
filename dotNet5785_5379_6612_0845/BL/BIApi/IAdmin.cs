@@ -53,7 +53,8 @@ public interface IAdmin
     void RemoveConfigObserver(Action configObserver);
     void AddClockObserver(Action clockObserver);
     void RemoveClockObserver(Action clockObserver);
-    //void AddClockObserver(TimeUnit minute);
+    void StartSimulator(int interval);
+    void StopSimulator(); 
     #endregion Stage 5
 
 }
