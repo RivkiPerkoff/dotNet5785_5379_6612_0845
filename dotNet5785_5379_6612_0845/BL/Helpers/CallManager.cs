@@ -253,7 +253,6 @@ internal class CallManager
         // סימולציה של סיום קריאות
         foreach (var assignment in ongoingAssignments)
         {
-            // בהסתברות של 30% הקריאה מסתיימת
             if (s_rand.NextDouble() < 0.3)
             {
                 lock (AdminManager.BlMutex)
