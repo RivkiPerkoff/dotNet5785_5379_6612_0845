@@ -3,12 +3,15 @@ using BL.BO;
 using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace PL.Call
 {
     public partial class CallWindow : Window, INotifyPropertyChanged
     {
         private static readonly IBL bl = BlApi.Factory.Get();
+
+        private volatile DispatcherOperation? _loadCallOperation = null;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string name) =>
@@ -72,16 +75,22 @@ namespace PL.Call
 
             if (callId != 0)
             {
-                try
+                if (_loadCallOperation != null && _loadCallOperation.Status != DispatcherOperationStatus.Completed)
+                    return;
+
+                _loadCallOperation = Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    var call = bl.Call.GetCallDetails(callId);
-                    CurrentCall = call;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error loading call: " + ex.Message);
-                    Close();
-                }
+                    try
+                    {
+                        var call = bl.Call.GetCallDetails(callId);
+                        CurrentCall = call;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error loading call: " + ex.Message);
+                        Close();
+                    }
+                }), DispatcherPriority.Background);
             }
             else
             {

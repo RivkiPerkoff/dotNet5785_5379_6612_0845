@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using BL.BIApi;
 using BL.BO;
 
@@ -14,6 +15,9 @@ public partial class CallListWindow : Window
     private static readonly IBL s_bl = BlApi.Factory.Get();
     private readonly Role _currentUserRole;
     private readonly int _currentUserId;
+
+    private volatile DispatcherOperation? _callListRefreshOperation = null;
+    private volatile DispatcherOperation? _observerRefreshOperation = null;
 
     public CallListWindow(Role currentUserRole, int currentUserId)
     {
@@ -72,12 +76,21 @@ public partial class CallListWindow : Window
 
     private void RefreshCallList()
     {
-        CallList = s_bl.Call.GetFilteredAndSortedCallList(
-            filterBy: SelectedStatusFilter != null ? CallInListFields.Status : null,
-            filterValue: SelectedStatusFilter,
-            sortBy: SelectedSortField
-        );
+        // תנאי לפני קריאה נוספת
+        if (_callListRefreshOperation != null && _callListRefreshOperation.Status != DispatcherOperationStatus.Completed)
+            return;
+
+        // ביצוע אסינכרוני עם BeginInvoke ושמירה ב־DispatcherOperation
+        _callListRefreshOperation = Dispatcher.BeginInvoke(new Action(() =>
+        {
+            CallList = s_bl.Call.GetFilteredAndSortedCallList(
+                filterBy: SelectedStatusFilter != null ? CallInListFields.Status : null,
+                filterValue: SelectedStatusFilter,
+                sortBy: SelectedSortField
+            );
+        }), DispatcherPriority.Background);
     }
+
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -90,7 +103,18 @@ public partial class CallListWindow : Window
         s_bl.Call.RemoveObserver(CallListObserver);
     }
 
-    private void CallListObserver() => RefreshCallList();
+    private void CallListObserver()
+    {
+        // אם הקריאה הקודמת עדיין לא הסתיימה – לא נבצע שוב
+        if (_observerRefreshOperation != null && _observerRefreshOperation.Status != DispatcherOperationStatus.Completed)
+            return;
+
+        // קריאה אסינכרונית דרך BeginInvoke
+        _observerRefreshOperation = Dispatcher.BeginInvoke(new Action(() =>
+        {
+            RefreshCallList();
+        }), DispatcherPriority.Background);
+    }
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
@@ -168,7 +192,6 @@ public partial class CallListWindow : Window
 
             try
             {
-                // שליפת ההקצאה האחרונה הפעילה לקריאה זו
                 var assignments = s_bl.Call.GetCallDetails(callId).CallAssignInLists;
                 var activeAssignment = assignments?
                     .Where(a => a.EndTimeForTreatment == null)
@@ -192,5 +215,4 @@ public partial class CallListWindow : Window
             }
         }
     }
-
 }

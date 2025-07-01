@@ -90,7 +90,6 @@ internal class VolunteerImplementation : IVolunteer
     }
     [MethodImpl(MethodImplOptions.Synchronized)]
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
         var volunteer = DataSource.Volunteers.FirstOrDefault(filter);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using BL.BIApi;
 using BL.BO;
 
@@ -15,8 +16,10 @@ public partial class MainWindow : Window
     private readonly Action clockObserver;
     private readonly Action configObserver;
     private readonly int _currentUserId;
-
     private readonly Role _currentUserRole;
+
+    private DispatcherOperation? _clockOperation = null;
+    private DispatcherOperation? _configOperation = null;
 
     public MainWindow(Role currentUserRole, int currentUserId)
     {
@@ -26,12 +29,24 @@ public partial class MainWindow : Window
 
         clockObserver = () =>
         {
-            CurrentTime = s_bl.Admin.GetClock();
+            if (_clockOperation == null || _clockOperation.Status == DispatcherOperationStatus.Completed)
+            {
+                _clockOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    CurrentTime = s_bl.Admin.GetClock();
+                });
+            }
         };
 
         configObserver = () =>
         {
-            RiskTimeRange = s_bl.Admin.GetRiskTimeRange();
+            if (_configOperation == null || _configOperation.Status == DispatcherOperationStatus.Completed)
+            {
+                _configOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    RiskTimeRange = s_bl.Admin.GetRiskTimeRange();
+                });
+            }
         };
 
         CurrentTime = s_bl.Admin.GetClock();
@@ -70,6 +85,18 @@ public partial class MainWindow : Window
         }
     }
 
+    public static readonly DependencyProperty MaxRangeProperty =
+        DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+
+    public IEnumerable<CallInList> CallList
+    {
+        get => (IEnumerable<CallInList>)GetValue(CallListProperty);
+        set => SetValue(CallListProperty, value);
+    }
+
+    public static readonly DependencyProperty CallListProperty =
+        DependencyProperty.Register(nameof(CallList), typeof(IEnumerable<CallInList>), typeof(MainWindow), new PropertyMetadata(null));
+
     private void btnAddOneMinute_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Minute);
     private void btnAddOneHour_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Hour);
     private void btnAddOneDay_Click(object sender, RoutedEventArgs e) => s_bl.Admin.AdvanceClock(TimeUnit.Day);
@@ -95,50 +122,7 @@ public partial class MainWindow : Window
             MessageBox.Show("Please enter a valid time in the format hh:mm:ss.");
         }
     }
-    public static readonly DependencyProperty MaxRangeProperty =
-    DependencyProperty.Register("MaxRange", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
-    public IEnumerable<CallInList> CallList
-    {
-        get => (IEnumerable<CallInList>)GetValue(CallListProperty);
-        set => SetValue(CallListProperty, value);
-    }
 
-    public static readonly DependencyProperty CallListProperty =
-        DependencyProperty.Register(nameof(CallList), typeof(IEnumerable<CallInList>), typeof(MainWindow), new PropertyMetadata(null));
-
-    private void MainWindow_Closed(object sender, EventArgs e)
-    {
-        s_bl.Admin.RemoveClockObserver(clockObserver);
-        s_bl.Admin.RemoveConfigObserver(configObserver);
-    }
-
-    //private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
-    //{
-    //    var result = MessageBox.Show("האם אתה בטוח שברצונך לאתחל את בסיס הנתונים?",
-    //                                 "אישור אתחול",
-    //                                 MessageBoxButton.YesNo,
-    //                                 MessageBoxImage.Warning);
-
-    //    if (result == MessageBoxResult.Yes)
-    //    {
-    //        try
-    //        {
-    //            Mouse.OverrideCursor = Cursors.Wait;
-    //            foreach (Window win in Application.Current.Windows)
-    //            {
-    //                if (win != this)
-    //                    win.Close();
-    //            }
-
-    //            s_bl.Admin.InitializeDatabase();
-    //            MessageBox.Show("בסיס הנתונים אותחל בהצלחה.", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
-    //        }
-    //        finally
-    //        {
-    //            Mouse.OverrideCursor = null;
-    //        }
-    //    }
-    //}
     private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show("האם אתה בטוח שברצונך לאתחל את בסיס הנתונים?",
@@ -152,11 +136,9 @@ public partial class MainWindow : Window
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                // פתח את חלון הלוגין לפני שסוגרים הכל
                 var loginWindow = new LoginWindow();
                 loginWindow.Show();
 
-                // סגור את כל החלונות פרט ללוגין
                 foreach (Window win in Application.Current.Windows.OfType<Window>().ToList())
                 {
                     if (win != loginWindow)
@@ -173,9 +155,6 @@ public partial class MainWindow : Window
         }
     }
 
-
-
-
     private void btnResetDB_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show("האם אתה בטוח שברצונך לאפס את בסיס הנתונים?",
@@ -188,6 +167,7 @@ public partial class MainWindow : Window
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
+
                 foreach (Window win in Application.Current.Windows)
                 {
                     if (win != this)
@@ -239,4 +219,47 @@ public partial class MainWindow : Window
             window.Show();
         }
     }
+
+    private void MainWindow_Closed(object sender, EventArgs e)
+    {
+        s_bl.Admin.RemoveClockObserver(clockObserver);
+        s_bl.Admin.RemoveConfigObserver(configObserver);
+    }
+    public int Interval
+    {
+        get => (int)GetValue(IntervalProperty);
+        set => SetValue(IntervalProperty, value);
+    }
+    public static readonly DependencyProperty IntervalProperty =
+        DependencyProperty.Register(nameof(Interval), typeof(int), typeof(MainWindow), new PropertyMetadata(1));
+
+    public bool IsSimulatorRunning
+    {
+        get => (bool)GetValue(IsSimulatorRunningProperty);
+        set => SetValue(IsSimulatorRunningProperty, value);
+    }
+    public static readonly DependencyProperty IsSimulatorRunningProperty =
+        DependencyProperty.Register(nameof(IsSimulatorRunning), typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
+    private void ToggleSimulator_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            if (IsSimulatorRunning)
+            {
+                s_bl.Admin.StopSimulator();
+                IsSimulatorRunning = false;
+            }
+            else
+            {
+                s_bl.Admin.StartSimulator(Interval);
+                IsSimulatorRunning = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error toggling simulator: {ex.Message}");
+        }
+    }
+
 }

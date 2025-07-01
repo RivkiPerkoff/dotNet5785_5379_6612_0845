@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using BL.BIApi;
 using BL.BO;
 
@@ -15,6 +16,8 @@ namespace PL.Call
     {
         private readonly BL.BO.Volunteer _volunteer;
         private readonly BL.BIApi.IBL _bl = BlApi.Factory.Get();
+        private volatile DispatcherOperation? _loadCallsOperation = null;
+
         public BL.BO.Volunteer GetUpdatedVolunteer() => _volunteer;
 
         public IEnumerable<OpenCallInList> CallsList { get; set; } = new List<OpenCallInList>();
@@ -46,37 +49,43 @@ namespace PL.Call
             DataContext = this;
             LoadCalls();
         }
-  
+
         private void LoadCalls()
         {
-            try
-            {
-                var allCalls = _bl.Call.GetOpenCallsForVolunteerSelection(
-                    _volunteer.VolunteerId,
-                    SelectedFilterType,
-                    SelectedSortField
-                );
+            if (_loadCallsOperation != null && !_loadCallsOperation.Status.HasFlag(DispatcherOperationStatus.Completed))
+                return;
 
-                // סינון לפי מרחק מקסימלי של המתנדב
-                if (_volunteer.MaximumDistanceForReceivingCall.HasValue && _volunteer.MaximumDistanceForReceivingCall > 0)
-                {
-                    CallsList = allCalls
-                        .Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value)
-                        .ToList();
-                }
-                else
-                {
-                    // אם לא מוגדר מרחק, מציגים את כל הקריאות
-                    CallsList = allCalls.ToList();
-                }
-
-                OnPropertyChanged(nameof(CallsList));
-            }
-            catch (Exception ex)
+            _loadCallsOperation = Dispatcher.BeginInvoke(new Action(() =>
             {
-                MessageBox.Show("Error loading calls: " + ex.Message);
-            }
+                try
+                {
+                    var allCalls = _bl.Call.GetOpenCallsForVolunteerSelection(
+                        _volunteer.VolunteerId,
+                        SelectedFilterType,
+                        SelectedSortField
+                    );
+
+                    if (_volunteer.MaximumDistanceForReceivingCall.HasValue && _volunteer.MaximumDistanceForReceivingCall > 0)
+                    {
+                        CallsList = allCalls
+                            .Where(c => c.CallDistance <= _volunteer.MaximumDistanceForReceivingCall.Value)
+                            .ToList();
+                    }
+                    else
+                    {
+                        CallsList = allCalls.ToList();
+                    }
+
+                    OnPropertyChanged(nameof(CallsList));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error loading calls: " + ex.Message);
+                }
+            }), DispatcherPriority.Background);
+
         }
+
         public CallInProgress? SelectedCallInProgress { get; private set; }
 
         private void ChooseCall_Click(object sender, RoutedEventArgs e)

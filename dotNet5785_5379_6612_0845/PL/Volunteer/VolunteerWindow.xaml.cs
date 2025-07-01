@@ -7,6 +7,7 @@ using System;
 using BL.BIApi;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace PL.Volunteer;
 
@@ -229,17 +230,28 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         }
     }
 
+    // שדה חדש למניעת ריבוי קריאות למתודת ההשקפה
+    private volatile DispatcherOperation? _refreshOperation = null;
+
+    // מתודת השקפה מעודכנת
     private void RefreshVolunteer()
     {
-        if (CurrentVolunteer == null)
+        if (_refreshOperation != null && !_refreshOperation.Status.HasFlag(DispatcherOperationStatus.Completed))
             return;
 
-        int id = CurrentVolunteer.VolunteerId;
-        CurrentVolunteer = null;
-        CurrentVolunteer = volunteer_bl.Volunteer.GetVolunteerDetails(id);
-        DataContext = null;
-        DataContext = this;
-        OnPropertyChanged(nameof(CurrentCallInfo));
+        _refreshOperation = Dispatcher.InvokeAsync(() =>
+        {
+            if (CurrentVolunteer == null)
+                return;
+
+            int id = CurrentVolunteer.VolunteerId;
+            CurrentVolunteer = null;
+            CurrentVolunteer = volunteer_bl.Volunteer.GetVolunteerDetails(id);
+            DataContext = null;
+            DataContext = this;
+            OnPropertyChanged(nameof(CurrentCallInfo));
+        });
     }
+
 
 }

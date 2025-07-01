@@ -48,7 +48,6 @@ internal class VolunteerImplementation : IVolunteer
     }
     [MethodImpl(MethodImplOptions.Synchronized)]
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -59,7 +58,6 @@ internal class VolunteerImplementation : IVolunteer
     }
     [MethodImpl(MethodImplOptions.Synchronized)]
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         XElement volunteersRoot = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -69,7 +67,6 @@ internal class VolunteerImplementation : IVolunteer
     }
     [MethodImpl(MethodImplOptions.Synchronized)]
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLElement(new XElement("ArrayOfVolunteer", []), Config.s_volunteers_xml);

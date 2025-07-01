@@ -1,22 +1,22 @@
 ﻿using BL.BIApi;
 using BL.BO;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PL.Volunteer;
 
-/// <summary>
-/// Interaction logic for VolunteerListWindow.xaml
-/// </summary>
 public partial class VolunteerListWindow : Window
 {
     private static readonly IBL s_bl = BlApi.Factory.Get();
 
+    public VolunteerInList? SelectedVolunteer { get; set; }
+    public List<TypeSortingVolunteers> SortFields { get; set; }
 
-    public BL.BO.VolunteerInList? SelectedVolunteer { get; set; }
-    public List<BL.BO.TypeSortingVolunteers> SortFields { get; set; }
     private bool? _selectedIsActive = null;
     public bool? SelectedIsActive
     {
@@ -33,38 +33,46 @@ public partial class VolunteerListWindow : Window
 
     public IEnumerable<VolunteerInList?> VolunteerList
     {
-        get { return (IEnumerable<VolunteerInList?>)GetValue(VolunteerListProperty); }
-        set { SetValue(VolunteerListProperty, value); }
+        get => (IEnumerable<VolunteerInList?>)GetValue(VolunteerListProperty);
+        set => SetValue(VolunteerListProperty, value);
     }
 
     public static readonly DependencyProperty VolunteerListProperty =
         DependencyProperty.Register("VolunteerList", typeof(IEnumerable<VolunteerInList?>), typeof(VolunteerListWindow));
+
+    private readonly HashSet<int> observedVolunteerIds = new();
+
+    private volatile DispatcherOperation? _refreshOperation = null;
+    private volatile DispatcherOperation? _observerOperation = null;
+
     public VolunteerListWindow()
     {
         InitializeComponent();
-        DataContext = this; 
+        DataContext = this;
 
-
-        SortFields = Enum.GetValues(typeof(BL.BO.TypeSortingVolunteers)).Cast<BL.BO.TypeSortingVolunteers>().ToList();
+        SortFields = Enum.GetValues(typeof(TypeSortingVolunteers)).Cast<TypeSortingVolunteers>().ToList();
         RefreshVolunteerList();
-        s_bl?.Volunteer.AddObserver(RefreshVolunteerList);
+        s_bl.Volunteer.AddObserver(RefreshVolunteerList);
     }
 
-    private HashSet<int> observedVolunteerIds = new();
     private void RefreshVolunteerList()
     {
-        VolunteerList = s_bl.Volunteer.GetVolunteers(
-            sortBy: SelectedSortField == TypeSortingVolunteers.All ? null : SelectedSortField,
-            isActive: SelectedIsActive
-        );
+        if (_refreshOperation != null && !_refreshOperation.Status.HasFlag(DispatcherOperationStatus.Completed))
+            return;
 
-        foreach (var volunteer in VolunteerList.Where(v => v != null))
+        _refreshOperation = Dispatcher.InvokeAsync(() =>
         {
-            if (observedVolunteerIds.Add(volunteer!.VolunteerId)) 
+            VolunteerList = s_bl.Volunteer.GetVolunteers(
+                sortBy: SelectedSortField == TypeSortingVolunteers.All ? null : SelectedSortField,
+                isActive: SelectedIsActive
+            );
+
+            foreach (var volunteer in VolunteerList.Where(v => v != null))
             {
-                s_bl.Volunteer.AddObserver(volunteer.VolunteerId, RefreshVolunteerList);
+                if (observedVolunteerIds.Add(volunteer!.VolunteerId))
+                    s_bl.Volunteer.AddObserver(volunteer.VolunteerId, RefreshVolunteerList);
             }
-        }
+        });
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -72,14 +80,14 @@ public partial class VolunteerListWindow : Window
         s_bl.Volunteer.AddObserver(VolunteerListObserver);
         RefreshVolunteerList();
     }
+
     private void Window_Closed(object sender, EventArgs e)
     {
         s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
     }
 
-    private BL.BO.TypeSortingVolunteers _selectedSortField = BL.BO.TypeSortingVolunteers.All;
-
-    public BL.BO.TypeSortingVolunteers SelectedSortField
+    private TypeSortingVolunteers _selectedSortField = TypeSortingVolunteers.All;
+    public TypeSortingVolunteers SelectedSortField
     {
         get => _selectedSortField;
         set
@@ -91,10 +99,11 @@ public partial class VolunteerListWindow : Window
             }
         }
     }
-    public IEnumerable<BL.BO.CallTypes> CallTypeList { get; } = Enum.GetValues(typeof(BL.BO.CallTypes)).Cast<BL.BO.CallTypes>().ToList();
 
-    private BL.BO.CallTypes? _selectedCallType = null;
-    public BL.BO.CallTypes? SelectedCallType
+    public IEnumerable<CallTypes> CallTypeList { get; } = Enum.GetValues(typeof(CallTypes)).Cast<CallTypes>().ToList();
+
+    private CallTypes? _selectedCallType = null;
+    public CallTypes? SelectedCallType
     {
         get => _selectedCallType;
         set
@@ -106,19 +115,28 @@ public partial class VolunteerListWindow : Window
             }
         }
     }
+
     private void VolunteerListObserver()
-=> RefreshVolunteerList();
-    private  void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_observerOperation != null && !_observerOperation.Status.HasFlag(DispatcherOperationStatus.Completed))
+            return;
+
+        _observerOperation = Dispatcher.InvokeAsync(() => RefreshVolunteerList());
+    }
+
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn && btn.Tag is int volunteerId)
         {
             var volunteer = VolunteerList?.FirstOrDefault(v => v?.VolunteerId == volunteerId);
             if (volunteer == null)
                 return;
+
             var result = MessageBox.Show($"Are you sure you want to delete volunteer '{volunteer.Name}'?",
                                          "Confirm Deletion",
                                          MessageBoxButton.YesNo,
                                          MessageBoxImage.Warning);
+
             if (result != MessageBoxResult.Yes)
                 return;
 
@@ -127,13 +145,6 @@ public partial class VolunteerListWindow : Window
                 s_bl.Volunteer.DeleteVolunteer(volunteerId);
                 MessageBox.Show("Volunteer deleted successfully.");
             }
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Failed to delete volunteer:\n{ex.Message}",
-            //                    "Error",
-            //                    MessageBoxButton.OK,
-            //                    MessageBoxImage.Error);
-            //}
             catch (Exception ex)
             {
                 var fullMessage = $"{ex.Message}";
@@ -141,16 +152,16 @@ public partial class VolunteerListWindow : Window
                     fullMessage += $"\nInner: {ex.InnerException.Message}";
                 MessageBox.Show(fullMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
     }
+
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-        var addWindow = new VolunteerWindow(); 
-        addWindow.ShowDialog(); 
+        var addWindow = new VolunteerWindow();
+        addWindow.ShowDialog();
     }
 
-    private void DataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (SelectedVolunteer != null)
         {
@@ -158,7 +169,4 @@ public partial class VolunteerListWindow : Window
             win.ShowDialog();
         }
     }
-
-
-
 }
