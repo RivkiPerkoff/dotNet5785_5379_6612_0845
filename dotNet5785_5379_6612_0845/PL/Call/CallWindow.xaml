@@ -101,8 +101,8 @@
                         <DataGridTextColumn Header="End Type" Binding="{Binding TreatmentEndType}" Width="120"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <TextBlock Text="אין הקצאות לקריאה זו."
-                           Visibility="{Binding CurrentCall.CallAssignInLists, Converter={StaticResource ListVis}, ConverterParameter=invert}"
+                <TextBlock Text="There are no assignments for this call." 
+                Visibility="{Binding CurrentCall.CallAssignInLists, Converter={StaticResource ListVis}, ConverterParameter=invert}"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            Foreground="Gray" FontStyle="Italic"/>
             </Grid>

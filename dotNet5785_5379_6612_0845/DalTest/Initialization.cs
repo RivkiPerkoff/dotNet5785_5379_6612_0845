@@ -28,6 +28,7 @@ public static class Initialization
         string address = addresses[0];
         double maximumDistance = s_rand.NextDouble() * 50;
         string password = GenerateRandomPassword(12);
+        password = EncryptPassword(password);
         Role role = Role.Manager;
         s_dal!.Volunteer.Create(new Volunteer(
             id,
@@ -48,10 +49,10 @@ public static class Initialization
             name = names[i];
             phone = phones[i];
             email = emails[i];
-
             address = addresses[i];
             maximumDistance = s_rand.NextDouble() * 50;
             password = GenerateRandomPassword(12);
+            password = EncryptPassword(password);
             role = Role.Volunteer;
             s_dal!.Volunteer.Create(new Volunteer(
                 id,
@@ -197,5 +198,11 @@ public static class Initialization
         createCall();
         Console.WriteLine("Initializing Assignment list ...");
         createAssignment();
+    }
+    public static string EncryptPassword(string password)
+    {
+        using var sha256 = System.Security.Cryptography.SHA256.Create();
+        byte[] hashBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
     }
 }

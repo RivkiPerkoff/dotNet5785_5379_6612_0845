@@ -10,8 +10,7 @@ namespace BL.Helpers;
 
 static internal class Tools
 {
-    private static IDal s_dal = Factory.Get; //stage 4
-
+    private static IDal s_dal = Factory.Get; 
     /// <summary>
     /// Retrieves the geographical coordinates (latitude and longitude) for a given address using LocationIQ API.
     /// </summary>
@@ -66,36 +65,7 @@ static internal class Tools
     /// Sends an email notification to volunteers when a new call is opened.
     /// </summary>
     /// <param name="call">The call details.</param>
-    internal static void SendEmailWhenCallOpened(BO.Call call)
-    {
-        List<DO.Volunteer> volunteers;
-        lock (AdminManager.BlMutex)
-            volunteers = s_dal.Volunteer.ReadAll().ToList();
-        foreach (var item in volunteers)
-        {
-            string subject = "Opening call";
-            string body = $@"
-      Hello {item.Name},
-
-     A new call has been opened in your area.
-      Call Details:
-      - Call ID: {call.IdCall}
-      - Call Type: {call.CallType}
-      - Call Address: {call.AddressOfCall}
-      - Opening Time: {call.OpeningTime}
-      - Description: {call.CallDescription}
-      - Entry Time for Treatment: {call.MaxFinishTime}
-      - Call Status: {call.StatusCallType}
-
-      If you wish to handle this call, please log into the system.
-
-      Best regards,  
-     Call Management System Of TrampIst";
-
-            Tools.SendEmail(item.EmailOfVolunteer, subject, body);
-        }
-    }
-
+  
     /// <summary>
     /// Sends an email with the specified subject and body.
     /// </summary>
@@ -199,5 +169,4 @@ static internal class Tools
 
         return StatusCallType.open;
     }
-
 }

@@ -15,6 +15,73 @@ internal class CallManager
     private static readonly Random s_rand = new();
     private static int s_simulatorCounter = 0;
     private static int s_periodicCounter = 0;
+    internal static void SendEmailToVolunteerOnAssignmentCancellation(int volunteerId, int callId)
+    {
+        DO.Volunteer volunteer;
+        DO.Call call;
+
+        lock (AdminManager.BlMutex)
+        {
+            volunteer = s_dal.Volunteer.Read(volunteerId)
+                ?? throw new BO.BlGeneralDatabaseException("Volunteer not found.");
+
+            call = s_dal.Call.Read(callId)
+                ?? throw new BO.BlGeneralDatabaseException("Call not found.");
+        }
+
+        string subject = "Call Assignment Cancelled";
+        string body = $@"
+Hello {volunteer.Name},
+
+The call you were handling has been cancelled by a manager.
+Call Details:
+- Call ID: {call.IdCall}
+- Call Address: {call.CallAddress}
+- Opening Time: {call.OpeningTime}
+- Description: {call.CallDescription}
+
+You are no longer assigned to this call.
+
+Best regards,  
+Call Management System Of TrampIst";
+
+        Tools.SendEmail(volunteer.EmailOfVolunteer, subject, body);
+    }
+
+    internal static void SendEmailWhenCallOpened(BO.Call call)
+    {
+        List<DO.Volunteer> volunteers;
+        lock (AdminManager.BlMutex)
+            volunteers = s_dal.Volunteer.ReadAll().ToList();
+        foreach (var item in volunteers)
+        {
+            double distance = Tools.DistanceCalculation(item.AddressVolunteer, call.AddressOfCall);
+
+            if (item.MaximumDistanceForReceivingCall.HasValue && distance > item.MaximumDistanceForReceivingCall.Value)
+                continue; // המתנדב רחוק מדי
+
+            string subject = "Opening call";
+            string body = $@"
+      Hello {item.Name},
+
+     A new call has been opened in your area.
+      Call Details:
+      - Call ID: {call.IdCall}
+      - Call Type: {call.CallType}
+      - Call Address: {call.AddressOfCall}
+      - Opening Time: {call.OpeningTime}
+      - Description: {call.CallDescription}
+      - Entry Time for Treatment: {call.MaxFinishTime}
+      - Call Status: {call.StatusCallType}
+
+      If you wish to handle this call, please log into the system.
+
+      Best regards,  
+     Call Management System Of TrampIst";
+
+            Tools.SendEmail(item.EmailOfVolunteer, subject, body);
+        }
+    }
 
     internal static IEnumerable<BO.Call> ConvertToBOCalls(IEnumerable<DO.Call> doCalls)
     {
@@ -210,7 +277,6 @@ internal class CallManager
         foreach (var id in callsToNotify.Distinct())
             Observers.NotifyItemUpdated(id);
     }
-
 
     internal static void SimulateCallAssignmentAndTreatment()
     {

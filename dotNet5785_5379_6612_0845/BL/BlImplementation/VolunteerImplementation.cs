@@ -19,6 +19,34 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="password">The volunteer's password.</param>
     /// <returns>The role of the volunteer.</returns>
     /// <exception cref="BlInvalidOperationException">Thrown when the username or password is incorrect.</exception>
+    //public string Login(string idString, string password)
+    //{
+    //    try
+    //    {
+    //        if (!int.TryParse(idString, out int id))
+    //            throw new BlInvalidOperationException("Invalid ID format");
+
+    //        DO.Volunteer volunteer;
+    //        lock (AdminManager.BlMutex)
+    //        {
+    //            volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v.VolunteerId == id && v.PasswordVolunteer == password)
+    //      ?? throw new BlInvalidOperationException("ID or password is incorrect");
+
+    //        }
+    //        if (!VolunteerManager.VerifyPassword(password, volunteer.PasswordVolunteer))
+    //            throw new BlInvalidOperationException("Username or password is incorrect");
+
+    //        return (volunteer.Role).ToString();
+    //    }
+    //    catch (DO.DalDoesNotExistException ex)
+    //    {
+    //        throw new BlGeneralDatabaseException("Database error while accessing volunteer data.", ex);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BlGeneralDatabaseException("An unexpected error occurred during login.", ex);
+    //    }
+    //}
     public string Login(string idString, string password)
     {
         try
@@ -27,11 +55,17 @@ internal class VolunteerImplementation : IVolunteer
                 throw new BlInvalidOperationException("Invalid ID format");
 
             DO.Volunteer volunteer;
-            lock (AdminManager.BlMutex)
-                volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v.VolunteerId == id && v.PasswordVolunteer == password)
-                    ?? throw new BlInvalidOperationException("Username or password is incorrect");
 
-            return (volunteer.Role).ToString();
+            lock (AdminManager.BlMutex)
+            {
+                volunteer = _dal.Volunteer.Read(id)
+                    ?? throw new BlInvalidOperationException("ID or password is incorrect");
+            }
+
+            if (!VolunteerManager.VerifyPassword(password, volunteer.PasswordVolunteer))
+                throw new BlInvalidOperationException("ID or password is incorrect");
+
+            return volunteer.Role.ToString();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -42,6 +76,7 @@ internal class VolunteerImplementation : IVolunteer
             throw new BlGeneralDatabaseException("An unexpected error occurred during login.", ex);
         }
     }
+
     /// <summary>
     /// Retrieves a list of volunteers, optionally filtered by availability and sorted based on specified parameters.
     /// </summary>
@@ -265,6 +300,8 @@ internal class VolunteerImplementation : IVolunteer
                 volunteer.VolunteerLatitude = lat;
                 volunteer.VolunteerLongitude = lon;
 
+                volunteer.PasswordVolunteer = VolunteerManager.EncryptPassword(volunteer.PasswordVolunteer ?? "");
+
                 var doVolunteer = VolunteerManager.MapToDO(volunteer);
                 _dal.Volunteer.Update(doVolunteer);
             }
@@ -300,7 +337,7 @@ internal class VolunteerImplementation : IVolunteer
                 if (existingVolunteer != null)
                     throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteer.VolunteerId} already exists.");
                 VolunteerManager.ValidateVolunteer(volunteer);
-
+                volunteer.PasswordVolunteer = VolunteerManager.EncryptPassword(volunteer.PasswordVolunteer ?? "");
                 DO.Volunteer doVolunteer = VolunteerManager.MapToDO(volunteer);
                 _dal.Volunteer.Create(doVolunteer);
             }
