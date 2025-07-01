@@ -10,6 +10,7 @@ namespace BL.BlImplementation;
 /// </summary>
 internal class AdminImplementation : IAdmin
 {
+
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
     public event Action ClockUpdatedObservers;
@@ -21,6 +22,7 @@ internal class AdminImplementation : IAdmin
     /// <exception cref="BlDoesNotExistException">Thrown when an invalid time unit is provided.</exception>
     public void AdvanceClock(BO.TimeUnit timeUnit)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();
         DateTime currentClock = AdminManager.Now;
 
         DateTime newClock = timeUnit switch
@@ -64,6 +66,7 @@ internal class AdminImplementation : IAdmin
     /// <param name="timeRange">The time span to set as the new risk range.</param>
     public void SetRiskTimeRange(TimeSpan timeRange)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();
         AdminManager.MaxRange = timeRange;
     }
 
@@ -72,10 +75,8 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void InitializeDatabase()
     {
-        //DalTest.Initialization.DO();
-        //AdminManager.UpdateClock(AdminManager.Now);
-        AdminManager.InitializeDB();
-
+        AdminManager.ThrowOnSimulatorIsRunning();
+        AdminManager.InitializeDB(); 
     }
 
     /// <summary>
@@ -83,8 +84,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDatabase()
     {
-        //_dal.ResetDB();
-        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.ThrowOnSimulatorIsRunning(); 
         AdminManager.ResetDB();
     }
     #region Stage 5
@@ -96,11 +96,24 @@ internal class AdminImplementation : IAdmin
     AdminManager.ConfigUpdatedObservers += configObserver;
     public void RemoveConfigObserver(Action configObserver) =>
     AdminManager.ConfigUpdatedObservers -= configObserver;
+    /// <summary>
+    /// Starts the simulator if it's not already running. 
+    /// Throws an exception if the simulator is already active.
+    /// </summary>
+    /// <param name="interval">The interval in milliseconds between simulator actions.</param>
+    public void StartSimulator(int interval)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();
+        AdminManager.Start(interval);
+    }
 
-    //public void AddClockObserver(TimeUnit minute)
-    //{
-    //    throw new NotImplementedException();
-    //}
+    /// <summary>
+    /// Stops the simulator if it is currently running.
+    /// </summary>
+    public void StopSimulator()
+    {
+        AdminManager.Stop();
+    }
     #endregion Stage 5
 
 }

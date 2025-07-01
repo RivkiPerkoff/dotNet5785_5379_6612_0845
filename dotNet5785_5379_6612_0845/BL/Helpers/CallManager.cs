@@ -65,29 +65,11 @@ internal class CallManager
     /// <param name="calls">Collection of DO.Call objects.</param>
     /// <param name="assignments">Collection of DO.Assignment objects.</param>
     /// <returns>Collection of BO.ClosedCallInList objects.</returns>
-    //public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
-    //{
-    //    return calls.Select(call =>
-    //    {
-    //        var assignment = assignments.First(a => a.IdOfRunnerCall == call.IdCall);
-    //        return new BO.ClosedCallInList
-    //        {
-    //            Id = call.IdCall,
-    //            CallTypes = (DO.CallTypes)call.CallTypes,
-    //            OpeningTime = (DateTime)call.OpeningTime,
-    //            Address = call.CallAddress,
-    //            EntryTimeForTreatment = (DateTime)assignment.EntryTimeForTreatment,
-    //            EndTimeForTreatment = assignment.EntryTimeForTreatment,
-    //            FinishCallType = (DO.FinishCallType)assignment.FinishCallType
-    //        };
-    //    });
-    //}
-
+  
     public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
     {
         return calls.Select(call =>
         {
-            // לוקח את ההקצאה האחרונה של הקריאה לפי זמן כניסה
             var assignment = assignments
                 .Where(a => a.IdOfRunnerCall == call.IdCall)
                 .OrderByDescending(a => a.EntryTimeForTreatment)
@@ -160,5 +142,141 @@ internal class CallManager
             .Select(a => (int?)a.IdOfRunnerCall)
             .FirstOrDefault();
     }
+
+    internal static void PeriodicCallUpdates(DateTime oldClock, DateTime newClock)
+    {
+        Thread.CurrentThread.Name = $"Periodic{++s_periodicCounter}"; 
+
+        List<DO.Call> expiredCalls;
+        lock (AdminManager.BlMutex)
+            expiredCalls = s_dal.Call.ReadAll(c => c.MaxFinishTime.HasValue && c.MaxFinishTime.Value <= newClock).ToList();
+
+        foreach (var call in expiredCalls)
+        {
+            List<DO.Assignment> assignments;
+            List<DO.Assignment> assignmentsWithNull;
+
+            lock (AdminManager.BlMutex)
+                assignments = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == call.IdCall).ToList();
+            var newAssignmentId = s_dal.Config.CreateAssignmentId();
+
+            if (!assignments.Any())
+            {
+                lock (AdminManager.BlMutex)
+                    s_dal.Assignment.Create(new DO.Assignment(
+                        NextAssignmentId: newAssignmentId,
+                        IdOfRunnerCall: call.IdCall,
+                        VolunteerId: 0,
+                        EntryTimeForTreatment: AdminManager.Now,
+                        EndTimeForTreatment: AdminManager.Now,
+                        FinishCallType: (DO.FinishCallType)BO.StatusCallType.Expired
+                    ));
+
+                Observers.NotifyItemUpdated(call.IdCall);
+            }
+
+            lock (AdminManager.BlMutex)
+                assignmentsWithNull = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == call.IdCall && a.FinishCallType == null).ToList();
+
+            if (assignmentsWithNull.Any())
+            {
+                lock (AdminManager.BlMutex)
+                {
+                    foreach (var assignment in assignmentsWithNull)
+                    {
+                        s_dal.Assignment.Update(assignment with
+                        {
+                            EndTimeForTreatment = AdminManager.Now,
+                            FinishCallType = (DO.FinishCallType)BO.StatusCallType.Expired
+                        });
+                    }
+                }
+
+                Observers.NotifyItemUpdated(call.IdCall);
+            }
+        }
+    }
+    private static readonly Random s_rand = new();
+    private static int s_simulatorCounter = 0;
+    private static int s_periodicCounter = 0;
+
+    internal static void SimulateCallAssignmentAndTreatment()
+    {
+        Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";
+
+        LinkedList<int> callsToUpdate = new();
+
+        List<DO.Call> openCalls;
+        List<DO.Volunteer> availableVolunteers;
+        List<DO.Assignment> ongoingAssignments;
+
+        lock (AdminManager.BlMutex)
+        {
+            openCalls = s_dal.Call.ReadAll(c =>
+                Tools.GetCallStatus(c) == BO.StatusCallType.open ||
+                Tools.GetCallStatus(c) == BO.StatusCallType.openInRisk
+            ).ToList();
+
+            availableVolunteers = s_dal.Volunteer.ReadAll(v => v.IsAvailable).ToList();
+
+            ongoingAssignments = s_dal.Assignment.ReadAll(a => a.EndTimeForTreatment == null).ToList();
+        }
+
+        // סימולציה של שיוך מתנדבים לקריאות פתוחות
+        foreach (var call in openCalls)
+        {
+            if (!availableVolunteers.Any())
+                break;
+
+            var volunteer = availableVolunteers[s_rand.Next(availableVolunteers.Count)];
+
+            lock (AdminManager.BlMutex)
+            {
+                var newAssignmentId = s_dal.Config.CreateAssignmentId();
+                s_dal.Assignment.Create(new DO.Assignment(
+                    NextAssignmentId: newAssignmentId,
+                    IdOfRunnerCall: call.IdCall,
+                    VolunteerId: volunteer.VolunteerId,
+                    FinishCallType: DO.FinishCallType.None,
+                    EntryTimeForTreatment: AdminManager.Now,
+                    EndTimeForTreatment: null
+                ));
+
+                // המתנדב נהיה לא זמין
+                s_dal.Volunteer.Update(volunteer with { IsAvailable = false });
+            }
+
+            callsToUpdate.AddLast(call.IdCall);
+            availableVolunteers.Remove(volunteer);
+        }
+
+        // סימולציה של סיום קריאות
+        foreach (var assignment in ongoingAssignments)
+        {
+            // בהסתברות של 30% הקריאה מסתיימת
+            if (s_rand.NextDouble() < 0.3)
+            {
+                lock (AdminManager.BlMutex)
+                {
+                    s_dal.Assignment.Update(assignment with
+                    {
+                        EndTimeForTreatment = AdminManager.Now,
+                        FinishCallType = DO.FinishCallType.TakenCareof
+                    });
+
+                    var volunteer = s_dal.Volunteer.Read(assignment.VolunteerId);
+                    if (volunteer != null)
+                    {
+                        s_dal.Volunteer.Update(volunteer with { IsAvailable = true });
+                    }
+                }
+
+                callsToUpdate.AddLast(assignment.IdOfRunnerCall);
+            }
+        }
+
+        foreach (int id in callsToUpdate.Distinct())
+            CallManager.Observers.NotifyItemUpdated(id);
+    }
+
 }
- 

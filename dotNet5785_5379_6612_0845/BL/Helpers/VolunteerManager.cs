@@ -173,5 +173,52 @@ static public class VolunteerManager
             CallType = BO.CallTypes.None
         };
     }
+    private static int s_periodicCounter = 0;
+
+    internal static void PeriodicVolunteerUpdates(DateTime oldClock, DateTime newClock)
+    {
+        Thread.CurrentThread.Name = $"PeriodicVolunteer{++s_periodicCounter}";
+
+        bool volunteerUpdated = false;
+        List<DO.Volunteer> volunteerList;
+        List<DO.Assignment> assignmentList;
+        List<DO.Call> callList;
+
+        lock (AdminManager.BlMutex)
+        {
+            volunteerList = s_dal.Volunteer.ReadAll().ToList();
+            assignmentList = s_dal.Assignment.ReadAll(a => a.EndTimeForTreatment == null).ToList();
+            callList = s_dal.Call.ReadAll().ToList();
+        }
+
+        foreach (var volunteer in volunteerList)
+        {
+            var assignment = assignmentList.FirstOrDefault(a => a.VolunteerId == volunteer.VolunteerId);
+
+            if (assignment != null)
+            {
+                var call = callList.FirstOrDefault(c => c.IdCall == assignment.IdOfRunnerCall);
+
+                if (call != null && call.MaxFinishTime.HasValue && call.MaxFinishTime.Value <= newClock)
+                {
+                    lock (AdminManager.BlMutex)
+                    {
+                        s_dal.Assignment.Update(assignment with
+                        {
+                            EndTimeForTreatment = AdminManager.Now,
+                            FinishCallType = DO.FinishCallType.Expired
+                        });
+                        s_dal.Volunteer.Update(volunteer with { IsAvailable = true });
+                    }
+                    volunteerUpdated = true;
+                    VolunteerManager.Observers.NotifyItemUpdated(volunteer.VolunteerId);
+                }
+            }
+        }
+
+        bool yearChanged = oldClock.Year != newClock.Year;
+        if (yearChanged || volunteerUpdated)
+            VolunteerManager.Observers.NotifyListUpdated();
+    }
 
 }
