@@ -179,11 +179,14 @@ static public class VolunteerManager
     {
         Thread.CurrentThread.Name = $"PeriodicVolunteer{++s_periodicCounter}";
 
-        bool volunteerUpdated = false;
+        bool shouldNotifyList = false;
+        List<int> volunteersToNotify = new();
+
         List<DO.Volunteer> volunteerList;
         List<DO.Assignment> assignmentList;
         List<DO.Call> callList;
 
+        // שלב 1: שליפת נתונים ב־lock עם המרה ל־List
         lock (AdminManager.BlMutex)
         {
             volunteerList = s_dal.Volunteer.ReadAll().ToList();
@@ -191,6 +194,7 @@ static public class VolunteerManager
             callList = s_dal.Call.ReadAll().ToList();
         }
 
+        // שלב 2: טיפול במתנדבים עם קריאות שפגו
         foreach (var volunteer in volunteerList)
         {
             var assignment = assignmentList.FirstOrDefault(a => a.VolunteerId == volunteer.VolunteerId);
@@ -210,15 +214,24 @@ static public class VolunteerManager
                         });
                         s_dal.Volunteer.Update(volunteer with { IsAvailable = true });
                     }
-                    volunteerUpdated = true;
-                    VolunteerManager.Observers.NotifyItemUpdated(volunteer.VolunteerId);
+
+                    volunteersToNotify.Add(volunteer.VolunteerId);
                 }
             }
         }
 
+        // שלב 3: בדיקת שינוי שנה או עדכון מתנדבים
         bool yearChanged = oldClock.Year != newClock.Year;
-        if (yearChanged || volunteerUpdated)
+        if (yearChanged || volunteersToNotify.Any())
+            shouldNotifyList = true;
+
+        // שלב 4: שליחת התראות מחוץ ל־lock
+        foreach (var id in volunteersToNotify.Distinct())
+            VolunteerManager.Observers.NotifyItemUpdated(id);
+
+        if (shouldNotifyList)
             VolunteerManager.Observers.NotifyListUpdated();
     }
+
 
 }

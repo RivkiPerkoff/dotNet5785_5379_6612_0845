@@ -1,12 +1,10 @@
 ﻿using BL.BO;
 using DalApi;
 using Helpers;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace BL.Helpers;
 
@@ -14,12 +12,10 @@ internal class CallManager
 {
     internal static ObserverManager Observers = new();
     private static readonly DalApi.IDal s_dal = DalApi.Factory.Get;
+    private static readonly Random s_rand = new();
+    private static int s_simulatorCounter = 0;
+    private static int s_periodicCounter = 0;
 
-    /// <summary>
-    /// Converts a collection of DO.Call objects to BO.Call objects.
-    /// </summary>
-    /// <param name="doCalls">Collection of DO.Call objects.</param>
-    /// <returns>Collection of BO.Call objects.</returns>
     internal static IEnumerable<BO.Call> ConvertToBOCalls(IEnumerable<DO.Call> doCalls)
     {
         return doCalls.Select(doCall => new BO.Call
@@ -36,12 +32,6 @@ internal class CallManager
         });
     }
 
-    /// <summary>
-    /// Retrieves the value of a specified field from a CallInList object.
-    /// </summary>
-    /// <param name="call">The CallInList object.</param>
-    /// <param name="field">The field to retrieve.</param>
-    /// <returns>The value of the specified field, or null if not found.</returns>
     internal static object? GetFieldValue(CallInList call, CallInListFields field)
     {
         return field switch
@@ -59,13 +49,6 @@ internal class CallManager
         };
     }
 
-    /// <summary>
-    /// Creates a list of ClosedCallInList objects from calls and assignments.
-    /// </summary>
-    /// <param name="calls">Collection of DO.Call objects.</param>
-    /// <param name="assignments">Collection of DO.Assignment objects.</param>
-    /// <returns>Collection of BO.ClosedCallInList objects.</returns>
-  
     public static IEnumerable<BO.ClosedCallInList> CreateClosedCallList(IEnumerable<DO.Call> calls, IEnumerable<DO.Assignment> assignments)
     {
         return calls.Select(call =>
@@ -84,29 +67,27 @@ internal class CallManager
                 EntryTimeForTreatment = assignment?.EntryTimeForTreatment ?? DateTime.MinValue,
                 EndTimeForTreatment = assignment?.EndTimeForTreatment,
                 FinishCallType = assignment?.FinishCallType != null
-    ? ToBOTreatmentEndType(assignment.FinishCallType.Value)
-    : null
-
+                    ? ToBOTreatmentEndType(assignment.FinishCallType.Value)
+                    : null
             };
         });
     }
-    public static DO.CallTypes ToDOCallType(BO.CallTypes type) =>
-       type switch
-       {
-           BO.CallTypes.ManDriver => DO.CallTypes.ManDriver,
-           BO.CallTypes.WomanDriver => DO.CallTypes.WomanDriver,
-           _ => DO.CallTypes.None
-       };
 
-    public static BO.CallTypes ToBOCallType(DO.CallTypes type) =>
-        type switch
-        {
-            DO.CallTypes.ManDriver => BO.CallTypes.ManDriver,
-            DO.CallTypes.WomanDriver => BO.CallTypes.WomanDriver,
-            _ => BO.CallTypes.None
-        };
-    public static TreatmentEndType ToBOTreatmentEndType(DO.FinishCallType type) =>
-    type switch
+    public static DO.CallTypes ToDOCallType(BO.CallTypes type) => type switch
+    {
+        BO.CallTypes.ManDriver => DO.CallTypes.ManDriver,
+        BO.CallTypes.WomanDriver => DO.CallTypes.WomanDriver,
+        _ => DO.CallTypes.None
+    };
+
+    public static BO.CallTypes ToBOCallType(DO.CallTypes type) => type switch
+    {
+        DO.CallTypes.ManDriver => BO.CallTypes.ManDriver,
+        DO.CallTypes.WomanDriver => BO.CallTypes.WomanDriver,
+        _ => BO.CallTypes.None
+    };
+
+    public static TreatmentEndType ToBOTreatmentEndType(DO.FinishCallType type) => type switch
     {
         DO.FinishCallType.TakenCareof => TreatmentEndType.TakenCareof,
         DO.FinishCallType.CanceledByVolunteer => TreatmentEndType.CanceledByVolunteer,
@@ -117,67 +98,96 @@ internal class CallManager
 
     public static int GetCountOfCompletedCalls(int volunteerId)
     {
-        var assignments = s_dal.Assignment.ReadAll();
-        if (assignments is null) return 0;
-        return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.TakenCareof);
+        lock (AdminManager.BlMutex)
+        {
+            var assignments = s_dal.Assignment.ReadAll();
+            return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.TakenCareof);
+        }
     }
+
     public static int GetCountOfSelfCancelledCalls(int volunteerId)
     {
-        var assignments = s_dal.Assignment.ReadAll();
-        if (assignments is null) return 0;
-        return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
+        lock (AdminManager.BlMutex)
+        {
+            var assignments = s_dal.Assignment.ReadAll();
+            return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.CanceledByVolunteer);
+        }
     }
+
     public static int GetCountOfExpiredCalls(int volunteerId)
     {
-        var assignments = s_dal.Assignment.ReadAll();
-        if (assignments is null) return 0;
-        return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.Expired);
+        lock (AdminManager.BlMutex)
+        {
+            var assignments = s_dal.Assignment.ReadAll();
+            return assignments.Count(a => a.VolunteerId == volunteerId && a.FinishCallType == DO.FinishCallType.Expired);
+        }
     }
+
     public static int? GetCallInTreatment(int volunteerId)
     {
-        var assignments = s_dal.Assignment.ReadAll();
-        if (assignments is null) return 0;
-        return assignments
-            .Where(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment == null)
-            .Select(a => (int?)a.IdOfRunnerCall)
-            .FirstOrDefault();
+        lock (AdminManager.BlMutex)
+        {
+            var assignments = s_dal.Assignment.ReadAll();
+            return assignments
+                .Where(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment == null)
+                .Select(a => (int?)a.IdOfRunnerCall)
+                .FirstOrDefault();
+        }
     }
 
     internal static void PeriodicCallUpdates(DateTime oldClock, DateTime newClock)
     {
-        Thread.CurrentThread.Name = $"Periodic{++s_periodicCounter}"; 
+        Thread.CurrentThread.Name = $"Periodic{++s_periodicCounter}";
 
         List<DO.Call> expiredCalls;
+        List<int> callsToNotify = new();
+
+        // שלב 1: קבלת קריאות שפגו תוקף - הפיכה מיידית ל־List
         lock (AdminManager.BlMutex)
+        {
             expiredCalls = s_dal.Call.ReadAll(c => c.MaxFinishTime.HasValue && c.MaxFinishTime.Value <= newClock).ToList();
+        }
 
         foreach (var call in expiredCalls)
         {
             List<DO.Assignment> assignments;
             List<DO.Assignment> assignmentsWithNull;
+            int newAssignmentId;
 
+            // שלב 2: שליפת כל ההקצאות לקריאה הנוכחית
             lock (AdminManager.BlMutex)
+            {
                 assignments = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == call.IdCall).ToList();
-            var newAssignmentId = s_dal.Config.CreateAssignmentId();
+                newAssignmentId = s_dal.Config.CreateAssignmentId();
+            }
 
+            // שלב 3: אם אין הקצאות בכלל - צור הקצאה אוטומטית
             if (!assignments.Any())
             {
                 lock (AdminManager.BlMutex)
+                {
                     s_dal.Assignment.Create(new DO.Assignment(
                         NextAssignmentId: newAssignmentId,
                         IdOfRunnerCall: call.IdCall,
                         VolunteerId: 0,
                         EntryTimeForTreatment: AdminManager.Now,
                         EndTimeForTreatment: AdminManager.Now,
-                        FinishCallType: (DO.FinishCallType)BO.StatusCallType.Expired
+                        FinishCallType: DO.FinishCallType.Expired
                     ));
+                }
 
-                Observers.NotifyItemUpdated(call.IdCall);
+                callsToNotify.Add(call.IdCall); // notification אחרי ה־lock
             }
 
+            // שלב 4: קבלת הקצאות שלא הסתיימו (FinishCallType == null)
             lock (AdminManager.BlMutex)
-                assignmentsWithNull = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == call.IdCall && a.FinishCallType == null).ToList();
+            {
+                assignmentsWithNull = s_dal.Assignment
+                    .ReadAll(a => a.IdOfRunnerCall == call.IdCall && a.FinishCallType == null)
+                    .ToList();
+            }
 
+            // שלב 5: אם יש כאלה – עדכן אותם כ־Expired
             if (assignmentsWithNull.Any())
             {
                 lock (AdminManager.BlMutex)
@@ -187,52 +197,53 @@ internal class CallManager
                         s_dal.Assignment.Update(assignment with
                         {
                             EndTimeForTreatment = AdminManager.Now,
-                            FinishCallType = (DO.FinishCallType)BO.StatusCallType.Expired
+                            FinishCallType = DO.FinishCallType.Expired
                         });
                     }
                 }
 
-                Observers.NotifyItemUpdated(call.IdCall);
+                callsToNotify.Add(call.IdCall); // notification אחרי ה־lock
             }
         }
+
+        // שלב 6: שליחת התראות למשקיפים (רק מחוץ ל־lock)
+        foreach (var id in callsToNotify.Distinct())
+            Observers.NotifyItemUpdated(id);
     }
-    private static readonly Random s_rand = new();
-    private static int s_simulatorCounter = 0;
-    private static int s_periodicCounter = 0;
+
 
     internal static void SimulateCallAssignmentAndTreatment()
     {
         Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";
 
-        LinkedList<int> callsToUpdate = new();
+        LinkedList<int> callsToNotify = new();
 
         List<DO.Call> openCalls;
         List<DO.Volunteer> availableVolunteers;
         List<DO.Assignment> ongoingAssignments;
 
+        // קריאה ל-DAL בתוך lock והמרה מיידית ל-List
         lock (AdminManager.BlMutex)
         {
             openCalls = s_dal.Call.ReadAll(c =>
                 Tools.GetCallStatus(c) == BO.StatusCallType.open ||
-                Tools.GetCallStatus(c) == BO.StatusCallType.openInRisk
-            ).ToList();
+                Tools.GetCallStatus(c) == BO.StatusCallType.openInRisk).ToList();
 
             availableVolunteers = s_dal.Volunteer.ReadAll(v => v.IsAvailable).ToList();
-
             ongoingAssignments = s_dal.Assignment.ReadAll(a => a.EndTimeForTreatment == null).ToList();
         }
 
-        // סימולציה של שיוך מתנדבים לקריאות פתוחות
+        // שיוך מתנדבים לקריאות פתוחות
         foreach (var call in openCalls)
         {
-            if (!availableVolunteers.Any())
-                break;
+            if (!availableVolunteers.Any()) break;
 
             var volunteer = availableVolunteers[s_rand.Next(availableVolunteers.Count)];
 
             lock (AdminManager.BlMutex)
             {
                 var newAssignmentId = s_dal.Config.CreateAssignmentId();
+
                 s_dal.Assignment.Create(new DO.Assignment(
                     NextAssignmentId: newAssignmentId,
                     IdOfRunnerCall: call.IdCall,
@@ -242,19 +253,20 @@ internal class CallManager
                     EndTimeForTreatment: null
                 ));
 
-                // המתנדב נהיה לא זמין
                 s_dal.Volunteer.Update(volunteer with { IsAvailable = false });
             }
 
-            callsToUpdate.AddLast(call.IdCall);
+            callsToNotify.AddLast(call.IdCall);
             availableVolunteers.Remove(volunteer);
         }
 
-        // סימולציה של סיום קריאות
+        // סימולציית סיום קריאות
         foreach (var assignment in ongoingAssignments)
         {
             if (s_rand.NextDouble() < 0.3)
             {
+                bool updated = false;
+
                 lock (AdminManager.BlMutex)
                 {
                     s_dal.Assignment.Update(assignment with
@@ -268,14 +280,18 @@ internal class CallManager
                     {
                         s_dal.Volunteer.Update(volunteer with { IsAvailable = true });
                     }
+
+                    updated = true;
                 }
 
-                callsToUpdate.AddLast(assignment.IdOfRunnerCall);
+                if (updated)
+                    callsToNotify.AddLast(assignment.IdOfRunnerCall);
             }
         }
 
-        foreach (int id in callsToUpdate.Distinct())
-            CallManager.Observers.NotifyItemUpdated(id);
+        // שליחת התראות למשקיפים מחוץ ל-lock
+        foreach (int id in callsToNotify.Distinct())
+            Observers.NotifyItemUpdated(id);
     }
 
 }

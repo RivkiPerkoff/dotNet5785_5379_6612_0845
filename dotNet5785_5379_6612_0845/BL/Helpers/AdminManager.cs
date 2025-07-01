@@ -24,13 +24,20 @@ internal static class AdminManager //stage 4
     /// </summary>
     internal static TimeSpan? MaxRange
     {
-        get => s_dal.Config.RiskRange;
+        get
+        {
+            lock (BlMutex)
+                return s_dal.Config.RiskRange;
+        }
         set
         {
-            s_dal.Config.RiskRange = value;
-            ConfigUpdatedObservers?.Invoke(); // stage 5
+            lock (BlMutex)
+                s_dal.Config.RiskRange = value;
+
+            ConfigUpdatedObservers?.Invoke();
         }
     }
+
 
     /// <summary>
     /// Property for providing current application's clock value for any BL class that may need it
