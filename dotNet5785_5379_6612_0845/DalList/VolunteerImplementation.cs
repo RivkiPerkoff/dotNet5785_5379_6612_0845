@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Implementation of the IVolunteer interface, providing functionality for CRUD operations (Create, Read, Update, Delete) on Volunteer entities.
 /// </summary>
+
 internal class VolunteerImplementation : IVolunteer
 {
     /// <summary>
@@ -18,6 +20,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item">The volunteer entity to be created.</param>
     [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Create(Volunteer item)
     {
         if (DataSource.Volunteers.Any(v => v.VolunteerId == item.VolunteerId))
@@ -33,6 +36,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The ID of the volunteer to be deleted.</param>
     [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Delete(int id)
     {
         var volunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == id);
@@ -49,6 +53,7 @@ internal class VolunteerImplementation : IVolunteer
     /// Deletes all volunteers from the system, clearing the volunteer list.
     /// </summary>
     [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void DeleteAll()
     {
         try
@@ -71,6 +76,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="id">The ID of the volunteer to be read.</param>
     /// <returns>The volunteer entity, or null if not found.</returns>
     [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Volunteer? Read(int id)
     {
         var volunteer = DataSource.Volunteers.FirstOrDefault(volunteer => volunteer.VolunteerId == id);
@@ -82,6 +88,7 @@ internal class VolunteerImplementation : IVolunteer
 
         return volunteer;
     }
+    [MethodImpl(MethodImplOptions.Synchronized)]
 
     [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
@@ -100,8 +107,14 @@ internal class VolunteerImplementation : IVolunteer
     /// Retrieves all volunteers from the system.
     /// </summary>
     /// <returns>A list of all volunteers in the system.</returns>
+    //public List<Volunteer> ReadAll()
+    //{
+    //    // Returning a copy of the list
+    //    return new List<Volunteer>(DataSource.Volunteers);
+    //}
     [MethodImpl(MethodImplOptions.Synchronized)]
-    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
+
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) // stage 2
     {
         var result = filter == null
             ? DataSource.Volunteers
@@ -121,6 +134,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item">The updated volunteer entity.</param>
     [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Update(Volunteer item)
     {
         Volunteer? existingVolunteer = DataSource.Volunteers.FirstOrDefault(v => v.VolunteerId == item.VolunteerId);

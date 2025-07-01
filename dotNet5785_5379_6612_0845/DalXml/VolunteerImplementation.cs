@@ -9,6 +9,8 @@ using System.Xml.Linq;
 
 internal class VolunteerImplementation : IVolunteer
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     static Volunteer getVolunteer(XElement v)
     {
         return new DO.Volunteer(
@@ -44,6 +46,7 @@ internal class VolunteerImplementation : IVolunteer
             new XElement("DistanceType", item.DistanceType.ToString())
         );
     }
+    [MethodImpl(MethodImplOptions.Synchronized)]
 
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
@@ -54,6 +57,7 @@ internal class VolunteerImplementation : IVolunteer
         Volunteers.Add(item);
         XMLTools.SaveListToXMLSerializer(Volunteers, Config.s_volunteers_xml);
     }
+    [MethodImpl(MethodImplOptions.Synchronized)]
 
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
@@ -63,6 +67,7 @@ internal class VolunteerImplementation : IVolunteer
             ?? throw new DalDoesNotExistException($"Volunteer with ID={id} does Not exist")).Remove();
         XMLTools.SaveListToXMLElement(volunteersRoot, Config.s_volunteers_xml);
     }
+    [MethodImpl(MethodImplOptions.Synchronized)]
 
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()

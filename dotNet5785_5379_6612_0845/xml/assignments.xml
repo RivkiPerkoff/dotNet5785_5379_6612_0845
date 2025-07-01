@@ -2,34 +2,402 @@
 <ArrayOfAssignment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Assignment>
     <NextAssignmentId>1000</NextAssignmentId>
-    <IdOfRunnerCall>0</IdOfRunnerCall>
-    <VolunteerId>1000</VolunteerId>
-    <FinishCallType>CanceledByVolunteer</FinishCallType>
-    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-06-30T20:36:26</EndTimeForTreatment>
+    <IdOfRunnerCall>1000</IdOfRunnerCall>
+    <VolunteerId>1005</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-03-21T20:16:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
     <NextAssignmentId>1001</NextAssignmentId>
-    <IdOfRunnerCall>1235252</IdOfRunnerCall>
-    <VolunteerId>1001</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-06-30T20:36:26</EndTimeForTreatment>
+    <IdOfRunnerCall>1001</IdOfRunnerCall>
+    <VolunteerId>1004</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-02-03T20:31:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
     <NextAssignmentId>1002</NextAssignmentId>
-    <IdOfRunnerCall>12546584</IdOfRunnerCall>
-    <VolunteerId>1001</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-06-30T20:36:26</EndTimeForTreatment>
+    <IdOfRunnerCall>1002</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-11T19:40:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
     <NextAssignmentId>1003</NextAssignmentId>
-    <IdOfRunnerCall>541415</IdOfRunnerCall>
+    <IdOfRunnerCall>1003</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-08-29T10:46:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1004</NextAssignmentId>
+    <IdOfRunnerCall>1004</IdOfRunnerCall>
+    <VolunteerId>1007</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-06-18T06:59:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1005</NextAssignmentId>
+    <IdOfRunnerCall>1005</IdOfRunnerCall>
+    <VolunteerId>1004</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-01-05T13:35:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1006</NextAssignmentId>
+    <IdOfRunnerCall>1006</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-11-03T22:18:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1007</NextAssignmentId>
+    <IdOfRunnerCall>1007</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-01-19T10:38:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1008</NextAssignmentId>
+    <IdOfRunnerCall>1008</IdOfRunnerCall>
+    <VolunteerId>1003</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-06-16T12:18:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1009</NextAssignmentId>
+    <IdOfRunnerCall>1009</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-05-30T22:35:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1010</NextAssignmentId>
+    <IdOfRunnerCall>1010</IdOfRunnerCall>
+    <VolunteerId>1002</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-11-19T19:02:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1011</NextAssignmentId>
+    <IdOfRunnerCall>1011</IdOfRunnerCall>
+    <VolunteerId>1000</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-03-08T12:43:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1012</NextAssignmentId>
+    <IdOfRunnerCall>1012</IdOfRunnerCall>
+    <VolunteerId>1014</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-09-17T17:12:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1013</NextAssignmentId>
+    <IdOfRunnerCall>1013</IdOfRunnerCall>
+    <VolunteerId>1008</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-09-30T18:47:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1014</NextAssignmentId>
+    <IdOfRunnerCall>1014</IdOfRunnerCall>
+    <VolunteerId>1004</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-01-29T07:36:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1015</NextAssignmentId>
+    <IdOfRunnerCall>1015</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-12-21T09:20:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1016</NextAssignmentId>
+    <IdOfRunnerCall>1016</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-17T22:14:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1017</NextAssignmentId>
+    <IdOfRunnerCall>1017</IdOfRunnerCall>
+    <VolunteerId>1004</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-10-28T08:21:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1018</NextAssignmentId>
+    <IdOfRunnerCall>1018</IdOfRunnerCall>
+    <VolunteerId>1008</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-06-21T21:12:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1019</NextAssignmentId>
+    <IdOfRunnerCall>1019</IdOfRunnerCall>
     <VolunteerId>1001</VolunteerId>
-    <FinishCallType>None</FinishCallType>
-    <EntryTimeForTreatment>2025-06-30T20:36:26</EntryTimeForTreatment>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-06-08T03:09:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1020</NextAssignmentId>
+    <IdOfRunnerCall>1020</IdOfRunnerCall>
+    <VolunteerId>1006</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-08-21T10:23:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1021</NextAssignmentId>
+    <IdOfRunnerCall>1021</IdOfRunnerCall>
+    <VolunteerId>1007</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-02T13:22:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1022</NextAssignmentId>
+    <IdOfRunnerCall>1022</IdOfRunnerCall>
+    <VolunteerId>1003</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-02-21T10:08:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1023</NextAssignmentId>
+    <IdOfRunnerCall>1023</IdOfRunnerCall>
+    <VolunteerId>1000</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-07T22:38:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1024</NextAssignmentId>
+    <IdOfRunnerCall>1024</IdOfRunnerCall>
+    <VolunteerId>1002</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-05-26T23:09:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1025</NextAssignmentId>
+    <IdOfRunnerCall>1025</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-01-26T17:50:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1026</NextAssignmentId>
+    <IdOfRunnerCall>1026</IdOfRunnerCall>
+    <VolunteerId>1006</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-10-25T14:28:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1027</NextAssignmentId>
+    <IdOfRunnerCall>1027</IdOfRunnerCall>
+    <VolunteerId>1008</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-10-22T20:59:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1028</NextAssignmentId>
+    <IdOfRunnerCall>1028</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-06-27T22:57:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1029</NextAssignmentId>
+    <IdOfRunnerCall>1029</IdOfRunnerCall>
+    <VolunteerId>1014</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-12-14T21:11:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1030</NextAssignmentId>
+    <IdOfRunnerCall>1030</IdOfRunnerCall>
+    <VolunteerId>1013</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-12-03T11:46:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1031</NextAssignmentId>
+    <IdOfRunnerCall>1031</IdOfRunnerCall>
+    <VolunteerId>1011</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-12T08:03:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1032</NextAssignmentId>
+    <IdOfRunnerCall>1032</IdOfRunnerCall>
+    <VolunteerId>1003</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-12T00:12:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1033</NextAssignmentId>
+    <IdOfRunnerCall>1033</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-12-17T14:37:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1034</NextAssignmentId>
+    <IdOfRunnerCall>1034</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-12-15T14:26:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1035</NextAssignmentId>
+    <IdOfRunnerCall>1035</IdOfRunnerCall>
+    <VolunteerId>1010</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-03-24T02:51:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1036</NextAssignmentId>
+    <IdOfRunnerCall>1036</IdOfRunnerCall>
+    <VolunteerId>1001</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-11-05T02:19:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1037</NextAssignmentId>
+    <IdOfRunnerCall>1037</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-01-13T05:01:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1038</NextAssignmentId>
+    <IdOfRunnerCall>1038</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-03-27T23:53:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1039</NextAssignmentId>
+    <IdOfRunnerCall>1039</IdOfRunnerCall>
+    <VolunteerId>1014</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-05-21T03:38:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1040</NextAssignmentId>
+    <IdOfRunnerCall>1040</IdOfRunnerCall>
+    <VolunteerId>1011</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-01-15T09:45:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1041</NextAssignmentId>
+    <IdOfRunnerCall>1041</IdOfRunnerCall>
+    <VolunteerId>1001</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-04-02T18:44:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1042</NextAssignmentId>
+    <IdOfRunnerCall>1042</IdOfRunnerCall>
+    <VolunteerId>1013</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-08-04T00:26:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1043</NextAssignmentId>
+    <IdOfRunnerCall>1043</IdOfRunnerCall>
+    <VolunteerId>1009</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-05-25T08:36:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1044</NextAssignmentId>
+    <IdOfRunnerCall>1044</IdOfRunnerCall>
+    <VolunteerId>1010</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-02-14T19:22:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1045</NextAssignmentId>
+    <IdOfRunnerCall>1045</IdOfRunnerCall>
+    <VolunteerId>1010</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-12-04T03:18:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1046</NextAssignmentId>
+    <IdOfRunnerCall>1046</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-06-22T16:44:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1047</NextAssignmentId>
+    <IdOfRunnerCall>1047</IdOfRunnerCall>
+    <VolunteerId>1000</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2024-11-25T05:43:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1048</NextAssignmentId>
+    <IdOfRunnerCall>1048</IdOfRunnerCall>
+    <VolunteerId>1007</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-02-08T14:32:00</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>1049</NextAssignmentId>
+    <IdOfRunnerCall>1049</IdOfRunnerCall>
+    <VolunteerId>1012</VolunteerId>
+    <FinishCallType xsi:nil="true" />
+    <EntryTimeForTreatment>2025-03-23T15:11:00</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
 </ArrayOfAssignment>
