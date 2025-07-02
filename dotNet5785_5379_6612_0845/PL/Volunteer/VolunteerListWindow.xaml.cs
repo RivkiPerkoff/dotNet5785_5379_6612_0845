@@ -157,7 +157,7 @@ public partial class VolunteerListWindow : Window
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-        var addWindow = new VolunteerWindow();
+        var addWindow = new CallInProgressDisplay();
         addWindow.ShowDialog();
     }
 
@@ -165,7 +165,7 @@ public partial class VolunteerListWindow : Window
     {
         if (SelectedVolunteer != null)
         {
-            var win = new VolunteerWindow(SelectedVolunteer.VolunteerId);
+            var win = new CallInProgressDisplay(SelectedVolunteer.VolunteerId);
             win.ShowDialog();
         }
     }
