@@ -432,4 +432,28 @@
     <EntryTimeForTreatment>2025-07-03T07:02:03</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-07-03T07:02:03</EndTimeForTreatment>
   </Assignment>
+  <Assignment>
+    <NextAssignmentId>2504</NextAssignmentId>
+    <IdOfRunnerCall>34567890</IdOfRunnerCall>
+    <VolunteerId>123</VolunteerId>
+    <FinishCallType>TakenCareof</FinishCallType>
+    <EntryTimeForTreatment>2025-07-03T07:02:03</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-03T07:02:03</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>2505</NextAssignmentId>
+    <IdOfRunnerCall>2659565</IdOfRunnerCall>
+    <VolunteerId>123</VolunteerId>
+    <FinishCallType>CanceledByVolunteer</FinishCallType>
+    <EntryTimeForTreatment>2025-07-03T07:02:03</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-03T07:02:03</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>2506</NextAssignmentId>
+    <IdOfRunnerCall>2659565</IdOfRunnerCall>
+    <VolunteerId>123</VolunteerId>
+    <FinishCallType>TakenCareof</FinishCallType>
+    <EntryTimeForTreatment>2025-07-03T07:02:03</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-03T07:02:03</EndTimeForTreatment>
+  </Assignment>
 </ArrayOfAssignment>

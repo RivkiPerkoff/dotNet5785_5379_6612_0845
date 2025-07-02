@@ -474,7 +474,6 @@ internal class CallImplementation : BIApi.ICall
                     FinishCallType = FinishCallType.TakenCareof,
                     EndTimeForTreatment = AdminManager.Now
                 };
-                //_dal.Assignment.Update(updatedAssignment);
                 lock (AdminManager.BlMutex)
                     _dal.Assignment.Update(updatedAssignment);
 
@@ -572,6 +571,9 @@ internal class CallImplementation : BIApi.ICall
 
             lock (AdminManager.BlMutex)
                 _dal.Assignment.Create(newAssignment);
+            CallManager.Observers.NotifyListUpdated();
+VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -657,7 +659,6 @@ internal class CallImplementation : BIApi.ICall
     public void CancelCallTreatment(int requesterId, int assignmentId)
     {
         AdminManager.ThrowOnSimulatorIsRunning();
-
         try
         {
             DO.Assignment assignment;
@@ -691,7 +692,7 @@ internal class CallImplementation : BIApi.ICall
 
             CallManager.Observers.NotifyItemUpdated(assignment.IdOfRunnerCall);
             CallManager.Observers.NotifyListUpdated();
-            //VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
             VolunteerManager.Observers.NotifyListUpdated();
             if (requester.Role == DO.Role.Manager && assignment.VolunteerId != requesterId)
             {
@@ -714,45 +715,7 @@ internal class CallImplementation : BIApi.ICall
     /// <param name="callObject">A BO.Call object containing the updated call information.</param>
     /// <exception cref="ArgumentNullException">Thrown if the callObject is null.</exception>
     /// <exception cref="InvalidOperationException">Thrown if the call is not found or the update is invalid.</exception>
-    //public void UpdateCallDetails(BL.BO.Call callObject)
-    //{
-    //    AdminManager.ThrowOnSimulatorIsRunning();
-    //    if (callObject == null)
-    //        throw new ArgumentNullException(nameof(callObject));
-
-    //    try
-    //    {
-
-    //        var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(callObject.AddressOfCall);
-    //        callObject.CallLatitude = latitude;
-    //        callObject.CallLongitude = longitude;
-    //    }
-    //    catch (Exception)
-    //    {
-    //        throw new InvalidOperationException("Invalid address: Unable to retrieve coordinates.");
-    //    }
-
-    //    if (!callObject.MaxFinishTime.HasValue || callObject.MaxFinishTime.Value <= callObject.OpeningTime)
-    //        throw new InvalidOperationException("Invalid time range: Max finish time must be after opening time.");
-
-    //    var existingCall = _dal.Call.Read(callObject.IdCall)
-    //                        ?? throw new InvalidOperationException("Call not found.");
-
-    //    var updatedCall = existingCall with
-    //    {
-    //        CallAddress = callObject.AddressOfCall,
-    //        CallLatitude = callObject.CallLatitude,
-    //        CallLongitude = callObject.CallLongitude,
-    //        MaxFinishTime = callObject.MaxFinishTime,
-    //        CallTypes = CallManager.ToDOCallType(callObject.CallType)
-    //    };
-
-    //    _dal.Call.Update(updatedCall);
-    //    CallManager.Observers.NotifyItemUpdated(updatedCall.IdCall); //stage 5
-    //    CallManager.Observers.NotifyListUpdated(); //stage 5
-
-
-    //}
+    
     public void UpdateCallDetails(BL.BO.Call callObject)
     {
         AdminManager.ThrowOnSimulatorIsRunning();
@@ -807,81 +770,6 @@ internal class CallImplementation : BIApi.ICall
     /// <param name="sortBy">An optional field to sort the calls by.</param>
     /// <returns>A list of BO.CallInList objects representing the filtered and sorted calls.</returns>
 
-    //public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterBy = null, object? filterValue = null, CallInListFields? sortBy = null)
-    //{
-    //    IEnumerable<DO.Call> allCalls = _dal.Call.ReadAll().ToList();
-    //    IEnumerable<DO.Assignment> allAssignments = _dal.Assignment.ReadAll().ToList();
-
-    //    IEnumerable<CallInList> callList = allCalls.Select(call =>
-    //    {
-    //        var assignmentsForCall = allAssignments
-    //            .Where(a => a.IdOfRunnerCall == call.IdCall)
-    //            .OrderByDescending(a => a.EntryTimeForTreatment)
-    //            .ToList();
-
-    //        var latestAssignment = assignmentsForCall.FirstOrDefault();
-
-    //        var status = Tools.GetCallStatus(call);
-
-    //        // זמן שנותר רק אם הקריאה פתוחה
-    //        TimeSpan? timeLeft = null;
-    //        if (status == StatusCallType.open || status == StatusCallType.openInRisk)
-    //        {
-    //            timeLeft = call.MaxFinishTime.HasValue
-    //                ? (call.MaxFinishTime.Value > AdminManager.Now
-    //                    ? call.MaxFinishTime.Value - AdminManager.Now
-    //                    : TimeSpan.Zero)
-    //                : null;
-    //        }
-
-    //        // משך טיפול רק אם הקריאה הסתיימה
-    //        TimeSpan? treatmentDuration = null;
-    //        if (status == StatusCallType.closed)
-    //        {
-    //            var closedAssignment = assignmentsForCall
-    //                .FirstOrDefault(a => a.EndTimeForTreatment.HasValue);
-
-    //            if (closedAssignment != null)
-    //            {
-    //                treatmentDuration = closedAssignment.EndTimeForTreatment.Value - closedAssignment.EntryTimeForTreatment;
-    //            }
-    //        }
-
-    //        return new CallInList
-    //        {
-    //            Id = latestAssignment?.NextAssignmentId,
-    //            CallId = call.IdCall,
-    //            CallType = (BL.BO.CallTypes)call.CallTypes,
-    //            StartTime = call.OpeningTime ?? DateTime.MinValue,
-    //            TimeToEnd = timeLeft,
-    //            TimeTocompleteTreatment = treatmentDuration,
-    //            LastUpdateBy = latestAssignment != null
-    //                ? _dal.Volunteer.Read(latestAssignment.VolunteerId)?.Name
-    //                : null,
-    //            Status = status,
-    //            TotalAssignment = assignmentsForCall.Count
-    //        };
-    //    });
-
-    //    // סינון
-    //    if (filterBy != null && filterValue != null)
-    //    {
-    //        callList = callList.Where(c =>
-    //            c.GetType().GetProperty(filterBy.ToString())?.GetValue(c)?.Equals(filterValue) == true);
-    //    }
-
-    //    // מיון
-    //    callList = sortBy switch
-    //    {
-    //        CallInListFields.StartTime => callList.OrderBy(c => c.StartTime),
-    //        CallInListFields.TimeToCompleteTreatment => callList.OrderBy(c => c.TimeTocompleteTreatment ?? TimeSpan.Zero),
-    //        CallInListFields.LastUpdateBy => callList.OrderBy(c => c.LastUpdateBy ?? string.Empty),
-    //        CallInListFields.Status => callList.OrderBy(c => c.Status),
-    //        _ => callList.OrderBy(c => c.CallId)
-    //    };
-
-    //    return callList;
-    //}
     public IEnumerable<CallInList> GetFilteredAndSortedCallList(CallInListFields? filterBy = null, object? filterValue = null, CallInListFields? sortBy = null)
     {
         try

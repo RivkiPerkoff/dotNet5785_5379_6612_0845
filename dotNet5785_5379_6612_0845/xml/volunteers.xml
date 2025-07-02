@@ -19,10 +19,10 @@
     <Name>tamara</Name>
     <PhoneNumber>0583254855</PhoneNumber>
     <EmailOfVolunteer>tamarminhahar@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3</PasswordVolunteer>
-    <AddressVolunteer>רחוב דיזנגוף 89, תל אביב, 6439611</AddressVolunteer>
-    <VolunteerLatitude>32.199671</VolunteerLatitude>
-    <VolunteerLongitude>35.212911</VolunteerLongitude>
+    <PasswordVolunteer>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
     <IsAvailable>true</IsAvailable>
     <MaximumDistanceForReceivingCall>10000</MaximumDistanceForReceivingCall>
     <Role>Manager</Role>
