@@ -40,4 +40,14 @@
     <MaxFinishTime>2025-07-16T00:00:00</MaxFinishTime>
     <CallTypes>WomanDriver</CallTypes>
   </Call>
+  <Call>
+    <IdCall>85466565</IdCall>
+    <CallDescription>כרעהאימח</CallDescription>
+    <CallAddress>רחוב דיזנגוף 89, תל אביב, 6439611</CallAddress>
+    <CallLatitude>32.199671</CallLatitude>
+    <CallLongitude>35.212911</CallLongitude>
+    <OpeningTime>2025-07-03T07:02:03</OpeningTime>
+    <MaxFinishTime>2025-07-04T00:00:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
 </ArrayOfCall>
