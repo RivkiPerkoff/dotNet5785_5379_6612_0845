@@ -1010,4 +1010,124 @@
     <MaxFinishTime>2025-07-02T20:00:00+03:00</MaxFinishTime>
     <CallTypes>ManDriver</CallTypes>
   </Call>
+  <Call>
+    <IdCall>123</IdCall>
+    <CallDescription>ה' יעזור</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T09:13:50.7880124+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-02T11:13:50.7880816+03:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>123456</IdCall>
+    <CallDescription>יאוו</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T09:14:55.548344+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-04T00:00:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>123456789</IdCall>
+    <CallDescription>די נו</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T09:25:35.6744857+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-05T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>1</IdCall>
+    <CallDescription>1</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:05:23.9132923+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-04T00:00:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>122</IdCall>
+    <CallDescription>122</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:28:01.850995+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-04T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>1233</IdCall>
+    <CallDescription>1233</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:30:35.410284+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-05T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>12333</IdCall>
+    <CallDescription>1233</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:30:35.410284+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-05T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>214875379</IdCall>
+    <CallDescription>בבב</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:33:21.3161437+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-08T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>11</IdCall>
+    <CallDescription>11</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:42:30.1968106+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-10T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>111</IdCall>
+    <CallDescription>111</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:44:08.3952059+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-10T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>1111</IdCall>
+    <CallDescription>1111</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:45:37.7326864+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-11T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
+  <Call>
+    <IdCall>12</IdCall>
+    <CallDescription>12</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-02T10:46:40.8763516+03:00</OpeningTime>
+    <MaxFinishTime>2025-07-11T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
 </ArrayOfCall>

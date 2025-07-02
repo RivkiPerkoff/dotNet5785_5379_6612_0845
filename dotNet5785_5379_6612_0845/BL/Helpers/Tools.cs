@@ -101,11 +101,6 @@ static internal class Tools
     /// <returns>The status of the call.</returns>
     public static StatusCallType GetCallStatus(this DO.Call call)
     {
-        //var assignments = s_dal.Assignment
-        //    .ReadAll(a => a?.IdOfRunnerCall == call.IdCall)
-        //    .Where(a => a != null)
-        //    .OrderByDescending(a => a!.EntryTimeForTreatment)
-        //    .ToList();
         List<DO.Assignment> assignments;
         lock (AdminManager.BlMutex)
             assignments = s_dal.Assignment
@@ -117,25 +112,6 @@ static internal class Tools
         var activeAssignment = assignments.FirstOrDefault(a => !a.EndTimeForTreatment.HasValue);
         var lastAssignment = assignments.FirstOrDefault();
 
-        //if (activeAssignment != null)
-        //{
-        //    var duration = AdminManager.Now - activeAssignment.EntryTimeForTreatment;
-        //    TimeSpan riskRange;
-        //    TimeSpan? riskRangeNullable;
-        //    lock (AdminManager.BlMutex)
-        //        riskRangeNullable = s_dal.Config.RiskRange;
-
-        //    if (!riskRangeNullable.HasValue)
-        //        throw new BL.BO.BlGeneralDatabaseException("RiskRange is not set in the configuration.");
-
-        //    TimeSpan riskRange = riskRangeNullable.Value;
-
-        //    if (duration > riskRange)
-
-        //        return StatusCallType.HandlingInRisk;
-        //    else
-        //        return StatusCallType.inHandling;
-        //}
         if (activeAssignment != null)
         {
             var duration = AdminManager.Now - activeAssignment.EntryTimeForTreatment;
@@ -164,9 +140,24 @@ static internal class Tools
         if (call.MaxFinishTime < AdminManager.Now)
             return StatusCallType.Expired;
 
-        if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
-            return StatusCallType.openInRisk;
+        if (call.MaxFinishTime.HasValue)
+        {
+            TimeSpan timeRemaining = call.MaxFinishTime.Value - AdminManager.Now;
+
+            TimeSpan? riskRangeNullable;
+            lock (AdminManager.BlMutex)
+                riskRangeNullable = s_dal.Config.RiskRange;
+
+            if (!riskRangeNullable.HasValue)
+                throw new BL.BO.BlGeneralDatabaseException("RiskRange is not set in the configuration.");
+
+            TimeSpan riskRange = riskRangeNullable.Value;
+
+            if (timeRemaining <= riskRange)
+                return StatusCallType.openInRisk;
+        }
 
         return StatusCallType.open;
     }
+
 }

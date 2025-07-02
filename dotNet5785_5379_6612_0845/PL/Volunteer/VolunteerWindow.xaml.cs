@@ -59,6 +59,15 @@ namespace PL.Volunteer
             get => (string)GetValue(PasswordProperty);
             set => SetValue(PasswordProperty, value);
         }
+        public CallInProgressDisplay? CallInProgressDisplay
+        {
+            get => _callInProgressDisplay;
+            set
+            {
+                _callInProgressDisplay = value;
+                OnPropertyChanged(nameof(CallInProgressDisplay));
+            }
+        }
 
         public static readonly DependencyProperty PasswordProperty =
             DependencyProperty.Register(
@@ -67,11 +76,12 @@ namespace PL.Volunteer
                 typeof(VolunteerWindow),
                 new PropertyMetadata(string.Empty));
 
-        public CallInProgressDisplay? CallInProgressDisplay { get; set; }
 
         private PasswordBox? lastPasswordBox;
         private DispatcherOperation? _refreshOperation = null;
         private DispatcherTimer? _timer;
+        // הוסף את המאפיין הבא למחלקה VolunteerWindow:
+        private CallInProgressDisplay? _callInProgressDisplay;
 
         public VolunteerWindow(int id = 0)
         {
