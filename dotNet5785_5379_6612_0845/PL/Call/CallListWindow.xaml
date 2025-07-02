@@ -32,6 +32,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <conv:NullableTimeSpanToStringConverter x:Key="TimeSpanConverter"/>
         <conv:MaxFinishTimeToTimeLeftConverter x:Key="MaxFinishTimeToTimeLeftConverter"/>
+        <conv:IsListEmptyToVisibilityConverter x:Key="EmptyListVisibilityConverter"/>
     </Window.Resources>
 
     <Grid Background="#F9F9F9">
@@ -119,9 +120,18 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
+
+        <!-- טקסט שמופיע כאשר הרשימה ריקה -->
+        <TextBlock Grid.Row="1"
+                   Text="No calls available"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Foreground="DarkGray"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding CallList, Converter={StaticResource EmptyListVisibilityConverter}}"/>
 
         <!-- Add Call -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">

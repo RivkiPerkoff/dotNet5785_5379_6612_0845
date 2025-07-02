@@ -36,9 +36,15 @@
                    Grid.Row="0"/>
 
         <!-- Clock -->
-        <Border Grid.Row="1" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+        <Border Grid.Row="1" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20" HorizontalAlignment="Center">
             <StackPanel HorizontalAlignment="Center">
-                <Label Content="{Binding CurrentTime}" FontSize="26" FontWeight="Bold" Foreground="#444" Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding CurrentTime}" 
+                   FontSize="30" 
+                   FontWeight="Bold" 
+                   Foreground="#222"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,15"/>
                 <UniformGrid Columns="4" HorizontalAlignment="Center">
                     <Button Content="+1 Minute" Click="btnAddOneMinute_Click" Margin="5" Padding="8,5" Width="120"/>
                     <Button Content="+1 Hour" Click="btnAddOneHour_Click" Margin="5" Padding="8,5" Width="120"/>

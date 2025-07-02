@@ -57,17 +57,10 @@ internal static class Config
     internal static TimeSpan RiskRange
     {
         [MethodImpl(MethodImplOptions.Synchronized)]
-        get
-        {
-            DateTime dateTime = XMLTools.GetConfigDateVal(s_data_config_xml, "RiskRange");
-            return dateTime.TimeOfDay;
-        }
+        get => XMLTools.GetConfigTimeSpanVal(s_data_config_xml, "RiskRange");
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        set
-        {
-            DateTime dateTime = DateTime.Today.Add(value);
-            XMLTools.SetConfigDateVal(s_data_config_xml, "RiskRange", dateTime);
-        }
+        set => XMLTools.SetConfigTimeSpanVal(s_data_config_xml, "RiskRange", value);
     }
+
 }

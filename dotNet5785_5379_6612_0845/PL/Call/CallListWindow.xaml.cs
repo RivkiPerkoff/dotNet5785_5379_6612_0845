@@ -16,6 +16,7 @@ public partial class CallListWindow : Window
     private readonly Role _currentUserRole;
     private readonly int _currentUserId;
 
+    private readonly Action _clockObserver;
     private volatile DispatcherOperation? _callListRefreshOperation = null;
     private volatile DispatcherOperation? _observerRefreshOperation = null;
 
@@ -27,8 +28,21 @@ public partial class CallListWindow : Window
 
         DataContext = this;
         SortFields = Enum.GetValues(typeof(CallInListFields)).Cast<CallInListFields>().ToList();
+
+        _clockObserver = () =>
+        {
+            if (_observerRefreshOperation == null || _observerRefreshOperation.Status == DispatcherOperationStatus.Completed)
+            {
+                _observerRefreshOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    RefreshCallList();
+                });
+            }
+        };
+
         RefreshCallList();
         s_bl.Call.AddObserver(RefreshCallList);
+        s_bl.Admin.AddClockObserver(_clockObserver);
     }
 
     public bool IsManager => _currentUserRole == Role.Manager;
@@ -76,11 +90,9 @@ public partial class CallListWindow : Window
 
     private void RefreshCallList()
     {
-        // תנאי לפני קריאה נוספת
         if (_callListRefreshOperation != null && _callListRefreshOperation.Status != DispatcherOperationStatus.Completed)
             return;
 
-        // ביצוע אסינכרוני עם BeginInvoke ושמירה ב־DispatcherOperation
         _callListRefreshOperation = Dispatcher.BeginInvoke(new Action(() =>
         {
             CallList = s_bl.Call.GetFilteredAndSortedCallList(
@@ -91,7 +103,6 @@ public partial class CallListWindow : Window
         }), DispatcherPriority.Background);
     }
 
-
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         s_bl.Call.AddObserver(CallListObserver);
@@ -101,15 +112,14 @@ public partial class CallListWindow : Window
     private void Window_Closed(object sender, EventArgs e)
     {
         s_bl.Call.RemoveObserver(CallListObserver);
+        s_bl.Admin.RemoveClockObserver(_clockObserver);
     }
 
     private void CallListObserver()
     {
-        // אם הקריאה הקודמת עדיין לא הסתיימה – לא נבצע שוב
         if (_observerRefreshOperation != null && _observerRefreshOperation.Status != DispatcherOperationStatus.Completed)
             return;
 
-        // קריאה אסינכרונית דרך BeginInvoke
         _observerRefreshOperation = Dispatcher.BeginInvoke(new Action(() =>
         {
             RefreshCallList();
@@ -181,9 +191,10 @@ public partial class CallListWindow : Window
                                 MessageBoxImage.Warning);
                 return;
             }
+
             var result = MessageBox.Show($"Are you sure you want to delete the assignment for call #{call.CallId}?",
-                                                  "Confirm Deletion",
-                                                  MessageBoxButton.YesNo,
+                                         "Confirm Deletion",
+                                         MessageBoxButton.YesNo,
                                          MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
