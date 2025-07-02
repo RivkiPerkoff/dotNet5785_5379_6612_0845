@@ -259,7 +259,6 @@ public partial class VolunteerPersonalWindow : Window, INotifyPropertyChanged
             original.EmailOfVolunteer != updated.EmailOfVolunteer ||
             original.AddressVolunteer != updated.AddressVolunteer ||
             original.IsAvailable != updated.IsAvailable ||
-            original.Role != updated.Role ||
             original.MaximumDistanceForReceivingCall != updated.MaximumDistanceForReceivingCall ||
             original.DistanceType != updated.DistanceType ||
             (original.CallInProgress?.Id != updated.CallInProgress?.Id);

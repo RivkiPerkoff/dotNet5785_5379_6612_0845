@@ -22,7 +22,6 @@ public static class Initialization
         string[] phones = { "0503217845", "0529871243", "0541239876", "0535494567", "0557891234", "0509876789", "0541127654", "0537856543", "0523127890", "0556543210", "0537895647", "0501251234", "0524568765", "0546544321", "0551234567" };
         string[] addresses = { "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "רחוב הגפן 3, מודיעין, 7173311", "רחוב הנרייטה סולד 6, טבריה, 1448123", "רחוב רוטשילד 15, פתח תקווה, 4925138", "רחוב דוד המלך 22, ראשון לציון, 7521007", "רחוב הנביאים 10, באר שבע, 8421234", "רחוב ויצמן 7, כפר סבא, 4423027", "רחוב יפו 35, ירושלים, 9434125" };
 
-        // סיסמאות ידועות מראש
         string[] passwords = {
         "Pass1234", "Test5678", "MySecure1", "Hello123", "Volun999",
         "Secret77", "Alpha456", "Bravo789", "Charlie1", "Delta321",
