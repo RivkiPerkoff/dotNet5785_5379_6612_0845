@@ -99,76 +99,7 @@ static internal class Tools
     /// </summary>
     /// <param name="call">The call to evaluate.</param>
     /// <returns>The status of the call.</returns>
-    //public static StatusCallType GetCallStatus(this DO.Call call)
-    //{
-    //    //var assignments = s_dal.Assignment
-    //    //    .ReadAll(a => a?.IdOfRunnerCall == call.IdCall)
-    //    //    .Where(a => a != null)
-    //    //    .OrderByDescending(a => a!.EntryTimeForTreatment)
-    //    //    .ToList();
-    //    List<DO.Assignment> assignments;
-    //    lock (AdminManager.BlMutex)
-    //        assignments = s_dal.Assignment
-    //            .ReadAll(a => a?.IdOfRunnerCall == call.IdCall)
-    //            .Where(a => a != null)
-    //            .OrderByDescending(a => a!.EntryTimeForTreatment)
-    //            .ToList();
 
-    //    var activeAssignment = assignments.FirstOrDefault(a => !a.EndTimeForTreatment.HasValue);
-    //    var lastAssignment = assignments.FirstOrDefault();
-
-    //    //if (activeAssignment != null)
-    //    //{
-    //    //    var duration = AdminManager.Now - activeAssignment.EntryTimeForTreatment;
-    //    //    TimeSpan riskRange;
-    //    //    TimeSpan? riskRangeNullable;
-    //    //    lock (AdminManager.BlMutex)
-    //    //        riskRangeNullable = s_dal.Config.RiskRange;
-
-    //    //    if (!riskRangeNullable.HasValue)
-    //    //        throw new BL.BO.BlGeneralDatabaseException("RiskRange is not set in the configuration.");
-
-    //    //    TimeSpan riskRange = riskRangeNullable.Value;
-
-    //    //    if (duration > riskRange)
-
-    //    //        return StatusCallType.HandlingInRisk;
-    //    //    else
-    //    //        return StatusCallType.inHandling;
-    //    //}
-    //    if (activeAssignment != null)
-    //    {
-    //        var duration = AdminManager.Now - activeAssignment.EntryTimeForTreatment;
-
-    //        TimeSpan? riskRangeNullable;
-    //        lock (AdminManager.BlMutex)
-    //            riskRangeNullable = s_dal.Config.RiskRange;
-
-    //        if (!riskRangeNullable.HasValue)
-    //            throw new BL.BO.BlGeneralDatabaseException("RiskRange is not set in the configuration.");
-
-    //        TimeSpan riskRange = riskRangeNullable.Value;
-
-    //        if (duration > riskRange)
-    //            return StatusCallType.HandlingInRisk;
-    //        else
-    //            return StatusCallType.inHandling;
-    //    }
-
-    //    if (lastAssignment?.EndTimeForTreatment.HasValue == true &&
-    //        lastAssignment.FinishCallType == FinishCallType.TakenCareof)
-    //    {
-    //        return StatusCallType.closed;
-    //    }
-
-    //    if (call.MaxFinishTime < AdminManager.Now)
-    //        return StatusCallType.Expired;
-
-    //    if ((AdminManager.Now - call.OpeningTime) > s_dal.Config.RiskRange)
-    //        return StatusCallType.openInRisk;
-
-    //    return StatusCallType.open;
-    //}
     public static StatusCallType GetCallStatus(this DO.Call call)
     {
         List<DO.Assignment> assignments;
@@ -190,31 +121,23 @@ static internal class Tools
             lock (AdminManager.BlMutex)
                 riskRangeNullable = s_dal.Config.RiskRange;
 
-        if (!riskRangeNullable.HasValue)
-            throw new BL.BO.BlGeneralDatabaseException("RiskRange is not set in the configuration.");
+            if (!riskRangeNullable.HasValue)
+                throw new BL.BO.BlGeneralDatabaseException("RiskRange is not set in the configuration.");
 
-        TimeSpan riskRange = riskRangeNullable.Value;
+            TimeSpan riskRange = riskRangeNullable.Value;
 
-        // בטיפול כרגע
-        if (activeAssignment != null)
-        {
-            // חישוב הזמן שנותר עד MaxFinishTime
-            TimeSpan? timeLeft = call.MaxFinishTime - AdminManager.Now;
-
-            if (timeLeft.HasValue && timeLeft.Value <= riskRange)
+            if (duration > riskRange)
                 return StatusCallType.HandlingInRisk;
-
-            return StatusCallType.inHandling;
+            else
+                return StatusCallType.inHandling;
         }
 
-        // הסתיימה כסגורה
         if (lastAssignment?.EndTimeForTreatment.HasValue == true &&
             lastAssignment.FinishCallType == FinishCallType.TakenCareof)
         {
             return StatusCallType.closed;
         }
 
-        // פג תוקף
         if (call.MaxFinishTime < AdminManager.Now)
             return StatusCallType.Expired;
 
@@ -235,9 +158,9 @@ static internal class Tools
                 return StatusCallType.openInRisk;
         }
 
-        // פתוחה רגילה
         return StatusCallType.open;
     }
+
 
 
 }

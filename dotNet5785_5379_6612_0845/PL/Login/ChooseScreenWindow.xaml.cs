@@ -24,6 +24,5 @@ namespace PL
             DialogResult = true;
         }
 
-
     }
 }
