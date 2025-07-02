@@ -35,7 +35,6 @@ Hello {volunteer.Name},
 
 The call you were handling has been cancelled by a manager.
 Call Details:
-- Call ID: {call.IdCall}
 - Call Address: {call.CallAddress}
 - Opening Time: {call.OpeningTime}
 - Description: {call.CallDescription}
@@ -58,7 +57,7 @@ Call Management System Of TrampIst";
             double distance = Tools.DistanceCalculation(item.AddressVolunteer, call.AddressOfCall);
 
             if (item.MaximumDistanceForReceivingCall.HasValue && distance > item.MaximumDistanceForReceivingCall.Value)
-                continue; // המתנדב רחוק מדי
+                continue; 
 
             string subject = "Opening call";
             string body = $@"
@@ -66,7 +65,6 @@ Call Management System Of TrampIst";
 
      A new call has been opened in your area.
       Call Details:
-      - Call ID: {call.IdCall}
       - Call Type: {call.CallType}
       - Call Address: {call.AddressOfCall}
       - Opening Time: {call.OpeningTime}
@@ -209,7 +207,6 @@ Call Management System Of TrampIst";
         List<DO.Call> expiredCalls;
         List<int> callsToNotify = new();
 
-        // שלב 1: קבלת קריאות שפגו תוקף - הפיכה מיידית ל־List
         lock (AdminManager.BlMutex)
         {
             expiredCalls = s_dal.Call.ReadAll(c => c.MaxFinishTime.HasValue && c.MaxFinishTime.Value <= newClock).ToList();

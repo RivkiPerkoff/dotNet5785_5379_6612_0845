@@ -42,13 +42,13 @@ namespace PL
 
                     if (managerWindowOpen)
                     {
-                        MessageBox.Show("כבר יש מנהל מחובר למערכת.", "אזהרה", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("A manager is already logged into the system.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
 
                     if (!int.TryParse(Username, out int managerAsVolunteerId))
                     {
-                        MessageBox.Show("מזהה משתמש אינו תקין.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Invalid user ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 
@@ -75,7 +75,7 @@ namespace PL
                 {
                     if (!int.TryParse(Username, out int volunteerId))
                     {
-                        MessageBox.Show("פורמט מזהה שגוי.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Invalid ID format.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 
@@ -85,7 +85,7 @@ namespace PL
             }
             catch
             {
-                MessageBox.Show("פרטי התחברות שגויים. אנא בדוק שוב.", "שגיאת התחברות", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Incorrect login details. Please try again.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
