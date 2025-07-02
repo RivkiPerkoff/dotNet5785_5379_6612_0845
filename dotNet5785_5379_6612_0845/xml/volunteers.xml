@@ -5,13 +5,27 @@
     <Name>AVI</Name>
     <PhoneNumber>0583254855</PhoneNumber>
     <EmailOfVolunteer>beckermanavigail@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</PasswordVolunteer>
+    <PasswordVolunteer>8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</PasswordVolunteer>
     <AddressVolunteer>רחוב איגרות משה 9, ירושלים</AddressVolunteer>
     <VolunteerLatitude>31.759595</VolunteerLatitude>
     <VolunteerLongitude>35.215315</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
+    <IsAvailable>false</IsAvailable>
     <MaximumDistanceForReceivingCall>2000</MaximumDistanceForReceivingCall>
     <Role>Manager</Role>
     <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>123</VolunteerId>
+    <Name>tamara</Name>
+    <PhoneNumber>0583254855</PhoneNumber>
+    <EmailOfVolunteer>tamarminhahar@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>1000</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>WalkingDistance</DistanceType>
   </Volunteer>
 </ArrayOfVolunteer>

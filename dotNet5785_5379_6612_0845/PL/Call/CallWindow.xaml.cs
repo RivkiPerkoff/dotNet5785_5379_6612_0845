@@ -99,7 +99,7 @@ namespace PL.Call
                     IdCall = 0,
                     CallDescription = "",
                     AddressOfCall = "",
-                    OpeningTime = DateTime.Now,
+                    OpeningTime = bl.Admin.GetClock(),
                     MaxFinishTime = DateTime.Now.AddHours(2),
                     CallType = CallTypes.None
                 };
