@@ -157,16 +157,22 @@ public partial class VolunteerListWindow : Window
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-        var addWindow = new CallInProgressDisplay();
+        //var addWindow = new CallInProgressDisplay();
+        //addWindow.ShowDialog();
+        var addWindow = new VolunteerWindow();
         addWindow.ShowDialog();
+
     }
 
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (SelectedVolunteer != null)
         {
-            var win = new CallInProgressDisplay(SelectedVolunteer.VolunteerId);
+            //var win = new CallInProgressDisplay(SelectedVolunteer.VolunteerId);
+            //win.ShowDialog();
+            var win = new VolunteerWindow(SelectedVolunteer.VolunteerId);
             win.ShowDialog();
+
         }
     }
 }
