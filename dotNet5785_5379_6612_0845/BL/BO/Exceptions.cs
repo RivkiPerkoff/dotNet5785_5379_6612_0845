@@ -24,19 +24,19 @@ public class BlDeletionImpossible : Exception
     public BlDeletionImpossible(string message, Exception innerException)
    : base(message, innerException) { }
 }
-public class BlReedAllImpossible : Exception //If there is no data to read
+public class BlReedAllImpossible : Exception 
 {
     public BlReedAllImpossible(string? message) : base(message) { }
     public BlReedAllImpossible(string message, Exception innerException)
    : base(message, innerException) { }
 }
-public class BlInvalidOperationException : Exception //If there is no data to read
+public class BlInvalidOperationException : Exception 
 {
     public BlInvalidOperationException(string? message) : base(message) { }
     public BlInvalidOperationException(string message, Exception innerException)
    : base(message, innerException) { }
 }
-public class BlGeneralDatabaseException : Exception //שגיאה בעת קבלת נתונים
+public class BlGeneralDatabaseException : Exception 
 {
     public BlGeneralDatabaseException(string? message) : base(message) { }
     public BlGeneralDatabaseException(string message, Exception innerException)

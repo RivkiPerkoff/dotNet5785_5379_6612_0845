@@ -2,7 +2,7 @@
 <config>
   <NextVolunteerId>1000</NextVolunteerId>
   <NextCallId>1000</NextCallId>
-  <NextAssignmentId>2507</NextAssignmentId>
+  <NextAssignmentId>2509</NextAssignmentId>
   <Clock>03/07/2025 7:02:03</Clock>
-  <RiskRange>02/07/2025 12:10:00</RiskRange>
+  <RiskRange>12:10:00</RiskRange>
 </config>

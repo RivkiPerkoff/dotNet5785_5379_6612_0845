@@ -17,7 +17,6 @@ public class Call
     public DateTime? MaxFinishTime { get; set; }
     public StatusCallType StatusCallType { get; set; }
     public List<BO.CallAssignInList>? CallAssignInLists { get; set; }
-    //public override string ToString() => this.ToStringProperty();
     public override string ToString()
     {
         var sb = new StringBuilder();

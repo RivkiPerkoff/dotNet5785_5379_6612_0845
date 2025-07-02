@@ -50,4 +50,14 @@
     <MaxFinishTime>2025-07-16T00:00:00</MaxFinishTime>
     <CallTypes>ManDriver</CallTypes>
   </Call>
+  <Call>
+    <IdCall>12333</IdCall>
+    <CallDescription>דד</CallDescription>
+    <CallAddress>41 Pisga Street, Jerusalem</CallAddress>
+    <CallLatitude>31.759595</CallLatitude>
+    <CallLongitude>35.215315</CallLongitude>
+    <OpeningTime>2025-07-03T07:02:03</OpeningTime>
+    <MaxFinishTime>2025-07-04T00:00:00</MaxFinishTime>
+    <CallTypes>ManDriver</CallTypes>
+  </Call>
 </ArrayOfCall>
