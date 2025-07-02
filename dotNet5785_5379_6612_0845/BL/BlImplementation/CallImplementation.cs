@@ -480,6 +480,8 @@ internal class CallImplementation : BIApi.ICall
 
                 CallManager.Observers.NotifyItemUpdated(updatedAssignment.IdOfRunnerCall); //stage 5
                 CallManager.Observers.NotifyListUpdated();
+                VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+                VolunteerManager.Observers.NotifyListUpdated();
             }
             else throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
 
@@ -689,6 +691,8 @@ internal class CallImplementation : BIApi.ICall
 
             CallManager.Observers.NotifyItemUpdated(assignment.IdOfRunnerCall);
             CallManager.Observers.NotifyListUpdated();
+            //VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            VolunteerManager.Observers.NotifyListUpdated();
             if (requester.Role == DO.Role.Manager && assignment.VolunteerId != requesterId)
             {
                 CallManager.SendEmailToVolunteerOnAssignmentCancellation(assignment.VolunteerId, assignment.IdOfRunnerCall);
