@@ -218,14 +218,12 @@ Call Management System Of TrampIst";
             List<DO.Assignment> assignmentsWithNull;
             int newAssignmentId;
 
-            // שלב 2: שליפת כל ההקצאות לקריאה הנוכחית
             lock (AdminManager.BlMutex)
             {
                 assignments = s_dal.Assignment.ReadAll(a => a.IdOfRunnerCall == call.IdCall).ToList();
                 newAssignmentId = s_dal.Config.CreateAssignmentId();
             }
 
-            // שלב 3: אם אין הקצאות בכלל - צור הקצאה אוטומטית
             if (!assignments.Any())
             {
                 lock (AdminManager.BlMutex)
@@ -240,10 +238,9 @@ Call Management System Of TrampIst";
                     ));
                 }
 
-                callsToNotify.Add(call.IdCall); // notification אחרי ה־lock
+                callsToNotify.Add(call.IdCall); 
             }
 
-            // שלב 4: קבלת הקצאות שלא הסתיימו (FinishCallType == null)
             lock (AdminManager.BlMutex)
             {
                 assignmentsWithNull = s_dal.Assignment
@@ -251,7 +248,6 @@ Call Management System Of TrampIst";
                     .ToList();
             }
 
-            // שלב 5: אם יש כאלה – עדכן אותם כ־Expired
             if (assignmentsWithNull.Any())
             {
                 lock (AdminManager.BlMutex)
@@ -266,11 +262,10 @@ Call Management System Of TrampIst";
                     }
                 }
 
-                callsToNotify.Add(call.IdCall); // notification אחרי ה־lock
+                callsToNotify.Add(call.IdCall); 
             }
         }
 
-        // שלב 6: שליחת התראות למשקיפים (רק מחוץ ל־lock)
         foreach (var id in callsToNotify.Distinct())
             Observers.NotifyItemUpdated(id);
     }
@@ -285,7 +280,6 @@ Call Management System Of TrampIst";
         List<DO.Volunteer> availableVolunteers;
         List<DO.Assignment> ongoingAssignments;
 
-        // קריאה ל-DAL בתוך lock והמרה מיידית ל-List
         lock (AdminManager.BlMutex)
         {
             openCalls = s_dal.Call.ReadAll(c =>
@@ -296,7 +290,6 @@ Call Management System Of TrampIst";
             ongoingAssignments = s_dal.Assignment.ReadAll(a => a.EndTimeForTreatment == null).ToList();
         }
 
-        // שיוך מתנדבים לקריאות פתוחות
         foreach (var call in openCalls)
         {
             if (!availableVolunteers.Any()) break;
@@ -323,7 +316,6 @@ Call Management System Of TrampIst";
             availableVolunteers.Remove(volunteer);
         }
 
-        // סימולציית סיום קריאות
         foreach (var assignment in ongoingAssignments)
         {
             if (s_rand.NextDouble() < 0.3)
@@ -352,7 +344,6 @@ Call Management System Of TrampIst";
             }
         }
 
-        // שליחת התראות למשקיפים מחוץ ל-lock
         foreach (int id in callsToNotify.Distinct())
             Observers.NotifyItemUpdated(id);
     }

@@ -49,43 +49,7 @@ internal class CallImplementation : BIApi.ICall
     /// <param name="CallId">The ID of the call to retrieve.</param>
     /// <returns>A BO.Call object containing the details of the specified call.</returns>
     /// <exception cref="Exception">Thrown if the call with the given ID is not found.</exception>
-    //public BO.Call GetCallDetails(int callId)
-    //{
-    //    var call = _dal.Call.Read(callId);
-
-    //    if (call == null)
-    //        throw new Exception($"Call with ID {callId} not found.");
-
-    //    var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId)
-    //        .OrderBy(a => a.EntryTimeForTreatment)
-    //        .Select(a =>
-    //        {
-    //            var volunteer = _dal.Volunteer.Read(a.VolunteerId);
-    //            return new BO.CallAssignInList
-    //            {
-    //                VolunteerId = a.VolunteerId,
-    //                VolunteerName = volunteer?.Name ?? "לא ידוע",
-    //                EntryTimeForTreatment = a.EntryTimeForTreatment ?? DateTime.MinValue,
-    //                EndTimeForTreatment = a.EndTimeForTreatment,
-    //                TreatmentEndType = (BO.TreatmentEndType?)a.FinishCallType // בהנחה שיש התאמה
-    //            };
-    //        }).ToList();
-
-    //    return new BO.Call
-    //    {
-    //        IdCall = call.IdCall,
-    //        CallType = CallManager.ToBOCallType(call.CallTypes),
-    //        CallDescription = call.CallDescription,
-    //        AddressOfCall = call.CallAddress,
-    //        CallLongitude = call.CallLongitude,
-    //        CallLatitude = call.CallLatitude,
-    //        OpeningTime = call.OpeningTime ?? DateTime.MinValue,
-    //        MaxFinishTime = call.MaxFinishTime,
-    //        CallAssignInLists = assignments,
-    //        StatusCallType = Tools.GetCallStatus(call)
-    //    };
-
-    //}
+   
     public BO.Call GetCallDetails(int callId)
     {
         try
@@ -153,14 +117,7 @@ internal class CallImplementation : BIApi.ICall
         AdminManager.ThrowOnSimulatorIsRunning();
         try
         {
-            //var call = _dal.Call.Read(callId) ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
-            //var callStatus = Tools.GetCallStatus(call);
-            //var assignments = _dal.Assignment.ReadAll(a => a.IdOfRunnerCall == callId);
-            //if ((callStatus != StatusCallType.open && callStatus != StatusCallType.openInRisk) || assignments.Any())
-            //    throw new BlGeneralDatabaseException("Cannot delete this call. Only open calls that have never been assigned can be deleted.");
-            //_dal.Call.Delete(callId);
-            //CallManager.Observers.NotifyListUpdated(); //stage 5
-            lock (AdminManager.BlMutex)
+             lock (AdminManager.BlMutex)
             {
                 var call = _dal.Call.Read(callId)
                     ?? throw new DO.DalDoesNotExistException($"Call with ID {callId} not found.");
@@ -239,11 +196,7 @@ internal class CallImplementation : BIApi.ICall
     {
         try
         {
-            //var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null);  // Only closed calls
-
-            //var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
-            //var calls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
-            List<DO.Assignment> assignments;
+             List<DO.Assignment> assignments;
             List<DO.Call> calls;
 
             lock (AdminManager.BlMutex)
@@ -282,55 +235,7 @@ internal class CallImplementation : BIApi.ICall
         }
     }
 
-    //public IEnumerable<BO.ClosedCallInList> GetClosedCallsForVolunteer(int volunteerId, BO.CallTypes? filterType = null, BO.ClosedCallInListFields? sortField = null)
-    //{
-    //    try
-    //    {
-    //        // כל ההקצאות של המתנדב
-    //        var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
-
-    //        // מזהה הקריאות שאליהן הוא שויך
-    //        var callIds = assignments.Select(a => a.IdOfRunnerCall).Distinct();
-
-    //        // כל הקריאות האלו מסוג DO
-    //        var dalCalls = _dal.Call.ReadAll(c => callIds.Contains(c.IdCall));
-
-    //        // סינון לקריאות שהסתיימו בכל דרך שהיא
-    //        var closedCalls = dalCalls.Where(c =>
-    //            c.GetCallStatus() == BO.StatusCallType.closed ||
-    //            c.GetCallStatus() == BO.StatusCallType.Expired);
-
-    //        // יצירת רשימת תצוגה - תוצאה היא IEnumerable<BO.ClosedCallInList>
-    //        var closedCallList = CallManager.CreateClosedCallList(closedCalls, assignments);
-
-    //        // סינון לפי סוג קריאה אם נבחר
-    //        if (filterType.HasValue)
-    //        {
-    //            closedCallList = closedCallList.Where(c => (BO.CallTypes)c.CallTypes == filterType.Value);
-    //        }
-
-    //        // מיון
-    //        return sortField switch
-    //        {
-    //            BO.ClosedCallInListFields.CallTypes => closedCallList.OrderBy(c => c.CallTypes),
-    //            BO.ClosedCallInListFields.Address => closedCallList.OrderBy(c => c.Address),
-    //            BO.ClosedCallInListFields.OpeningTime => closedCallList.OrderBy(c => c.OpeningTime),
-    //            BO.ClosedCallInListFields.EntryTimeForTreatment => closedCallList.OrderBy(c => c.EntryTimeForTreatment),
-    //            BO.ClosedCallInListFields.EndTimeForTreatment => closedCallList.OrderBy(c => c.EndTimeForTreatment),
-    //            BO.ClosedCallInListFields.FinishCallType => closedCallList.OrderBy(c => c.FinishCallType),
-    //            _ => closedCallList.OrderBy(c => c.Id)
-    //        };
-    //    }
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BO.BlDoesNotExistException($"Could not find data for volunteer {volunteerId}", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlDoesNotExistException("An error occurred while retrieving closed calls", ex);
-    //    }
-    //}
-
+    
     /// <summary>
     /// Retrieves a list of open calls assigned to a specific volunteer, optionally filtered and sorted.
     /// </summary>
@@ -338,53 +243,7 @@ internal class CallImplementation : BIApi.ICall
     /// <param name="filterField">An optional filter for the type of calls to return.</param>
     /// <param name="sortField">An optional field to sort the returned calls by.</param>
     /// <returns>A list of OpenCallInList objects representing the open calls for the volunteer.</returns>
-    //public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
-    //{
-    //    try
-    //    {
-    //        var volunteer = _dal.Volunteer.Read(volunteerId)
-    //                        ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-    //        if (string.IsNullOrWhiteSpace(volunteer.AddressVolunteer))
-    //            throw new BO.BlInvalidFormatException("Cannot calculate distance - volunteer address is missing or invalid.");
-    //        var openCalls = _dal.Call.ReadAll()
-    //     .Where(c => Tools.GetCallStatus(c) == StatusCallType.open || Tools.GetCallStatus(c) == StatusCallType.openInRisk)
-    //     .Select(c =>
-    //     {
-    //         if (string.IsNullOrWhiteSpace(c.CallAddress))
-    //             throw new BO.BlInvalidFormatException($"Cannot calculate distance - call with ID {c.IdCall} has invalid address.");
-
-    //         return new OpenCallInList
-    //         {
-    //             Id = c.IdCall,
-    //             CallTypes = c.CallTypes,
-    //             CallDescription = c.CallDescription,
-    //             Address = c.CallAddress,
-    //             OpeningTime = (DateTime)c.OpeningTime,
-    //             MaxFinishTime = c.MaxFinishTime,
-    //             CallDistance = Tools.DistanceCalculation(volunteer.AddressVolunteer, c.CallAddress)
-    //         };
-    //     });
-    //        if (filterField.HasValue)
-    //            openCalls = openCalls.Where(c => (BO.CallTypes)c.CallTypes == filterField.Value);
-
-    //        openCalls = sortField switch
-    //        {
-    //            BO.OpenCallInListFields.CallTypes => openCalls.OrderBy(c => c.CallTypes),
-    //            BO.OpenCallInListFields.CallDescription => openCalls.OrderBy(c => c.CallDescription),
-    //            BO.OpenCallInListFields.Address => openCalls.OrderBy(c => c.Address),
-    //            BO.OpenCallInListFields.OpeningTime => openCalls.OrderBy(c => c.OpeningTime),
-    //            BO.OpenCallInListFields.MaxFinishTime => openCalls.OrderBy(c => c.MaxFinishTime),
-    //            BO.OpenCallInListFields.Calldistance => openCalls.OrderBy(c => c.CallDistance),
-    //            _ => openCalls.OrderBy(c => c.Id)
-    //        };
-
-    //        return openCalls.ToList();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlGeneralDatabaseException("An error occurred while retrieving the open calls list.", ex);
-    //    }
-    //}
+    
     public IEnumerable<OpenCallInList> GetOpenCallsForVolunteerSelection(int volunteerId, BO.CallTypes? filterField, OpenCallInListFields? sortField)
     {
         try
@@ -397,7 +256,6 @@ internal class CallImplementation : BIApi.ICall
                 volunteer = _dal.Volunteer.Read(volunteerId)
                     ?? throw new BO.BlGeneralDatabaseException($"Volunteer with ID={volunteerId} does not exist.");
             }
-            //lock (AdminManager.BlMutex)
                 calls = _dal.Call.ReadAll().ToList();
             
 
@@ -457,8 +315,6 @@ internal class CallImplementation : BIApi.ICall
         AdminManager.ThrowOnSimulatorIsRunning();
         try
         {
-            //var assignment = _dal.Assignment.Read(assignmentId)
-            //    ?? throw new DO.DalDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
             DO.Assignment assignment;
             lock (AdminManager.BlMutex)
                 assignment = _dal.Assignment.Read(assignmentId)
@@ -500,39 +356,7 @@ internal class CallImplementation : BIApi.ICall
     /// <param name="volunteerId">The ID of the volunteer being assigned the call.</param>
     /// <param name="callId">The ID of the call to assign.</param>
     /// <exception cref="BlInvalidOperationException">Thrown if the call is already assigned or expired.</exception>
-    //public void ChoosingCallForTreatment(int volunteerId, int callId)
-    //{
-    //    AdminManager.ThrowOnSimulatorIsRunning();
-    //    try
-    //    {
-    //        var volunteer = _dal.Volunteer.Read(volunteerId)
-    //            ?? throw new BO.BlGeneralDatabaseException($"Volunteer with ID={volunteerId} does not exist.");
-
-    //        var call = _dal.Call.Read(callId)
-    //            ?? throw new BO.BlGeneralDatabaseException($"Call with ID={callId} does not exist.");
-
-    //        var callStatus = Tools.GetCallStatus(call);
-    //        if (callStatus != StatusCallType.open && callStatus != StatusCallType.openInRisk)
-    //            throw new BO.BlInvalidOperationException("Call is already assigned or has expired.");
-
-    //        var existingAssignment = _dal.Assignment.ReadAll()
-    //            .FirstOrDefault(a => a.IdOfRunnerCall == callId && a.EndTimeForTreatment == null);
-    //        var newAssignmentId = _dal.Config.CreateAssignmentId();
-    //        if (existingAssignment != null)
-    //            throw new BO.BlInvalidOperationException("Call is already being handled by another volunteer.");
-    //        var newAssignment = new DO.Assignment(newAssignmentId, callId, volunteerId, DO.FinishCallType.None, AdminManager.Now, null);
-
-    //        _dal.Assignment.Create(newAssignment);
-    //    }
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BO.BlGeneralDatabaseException("Database error while accessing call or volunteer data.", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlGeneralDatabaseException("An error occurred while assigning the call.", ex);
-    //    }
-    //}
+   
     public void ChoosingCallForTreatment(int volunteerId, int callId)
     {
         AdminManager.ThrowOnSimulatorIsRunning();
@@ -592,70 +416,7 @@ VolunteerManager.Observers.NotifyListUpdated();
     /// <param name="requesterId">The ID of the volunteer or manager requesting the cancellation.</param>
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
     /// <exception cref="InvalidOperationException">Thrown if the assignment has already been completed or if the requester is unauthorized.</exception>
-    //public void CancelCallTreatment(int requesterId, int assignmentId)
-    //{
-    //    var assignment = _dal.Assignment.Read(assignmentId)
-    //                     ?? throw new InvalidOperationException("Assignment not found.");
-
-    //    if (assignment.EndTimeForTreatment != null)
-    //        throw new InvalidOperationException("Cannot cancel a completed treatment.");
-
-    //    var requester = _dal.Volunteer.Read(requesterId)
-    //                  ?? throw new InvalidOperationException("Volunteer not found.");
-
-    //    if ((assignment.VolunteerId != requesterId) && (requester.Role != DO.Role.Manager))
-    //        throw new InvalidOperationException("Unauthorized cancellation.");
-
-    //    assignment = assignment with
-    //    {
-    //        EndTimeForTreatment = AdminManager.Now,
-    //        FinishCallType = (assignment.VolunteerId == requesterId)
-    //            ? DO.FinishCallType.CanceledByVolunteer
-    //            : DO.FinishCallType.CanceledByManager
-    //    };
-
-    //    _dal.Assignment.Update(assignment);
-    //    CallManager.Observers.NotifyItemUpdated(assignment.IdOfRunnerCall); //stage 5
-    //    CallManager.Observers.NotifyListUpdated();
-    //}
-    //public void CancelCallTreatment(int requesterId, int assignmentId)
-    //{
-    //    AdminManager.ThrowOnSimulatorIsRunning();
-    //    try
-    //    {
-    //        var assignment = _dal.Assignment.Read(assignmentId)
-    //                         ?? throw new InvalidOperationException("Assignment not found.");
-
-    //        if (assignment.EndTimeForTreatment != null)
-    //            throw new InvalidOperationException("Cannot cancel a completed treatment.");
-
-    //        var requester = _dal.Volunteer.Read(requesterId)
-    //                      ?? throw new InvalidOperationException("Volunteer not found.");
-
-    //        if ((assignment.VolunteerId != requesterId) && (requester.Role != DO.Role.Manager))
-    //            throw new InvalidOperationException("Unauthorized cancellation.");
-
-    //        assignment = assignment with
-    //        {
-    //            EndTimeForTreatment = AdminManager.Now,
-    //            FinishCallType = (assignment.VolunteerId == requesterId)
-    //                ? DO.FinishCallType.CanceledByVolunteer
-    //                : DO.FinishCallType.CanceledByManager
-    //        };
-
-    //        _dal.Assignment.Update(assignment);
-    //        CallManager.Observers.NotifyItemUpdated(assignment.IdOfRunnerCall);
-    //        CallManager.Observers.NotifyListUpdated();
-    //    }
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BO.BlGeneralDatabaseException("Database error while accessing assignment or volunteer data.", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlGeneralDatabaseException("An error occurred while cancelling the call treatment.", ex);
-    //    }
-    //}
+   
     public void CancelCallTreatment(int requesterId, int assignmentId)
     {
         AdminManager.ThrowOnSimulatorIsRunning();

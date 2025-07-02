@@ -19,34 +19,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="password">The volunteer's password.</param>
     /// <returns>The role of the volunteer.</returns>
     /// <exception cref="BlInvalidOperationException">Thrown when the username or password is incorrect.</exception>
-    //public string Login(string idString, string password)
-    //{
-    //    try
-    //    {
-    //        if (!int.TryParse(idString, out int id))
-    //            throw new BlInvalidOperationException("Invalid ID format");
-
-    //        DO.Volunteer volunteer;
-    //        lock (AdminManager.BlMutex)
-    //        {
-    //            volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v.VolunteerId == id && v.PasswordVolunteer == password)
-    //      ?? throw new BlInvalidOperationException("ID or password is incorrect");
-
-    //        }
-    //        if (!VolunteerManager.VerifyPassword(password, volunteer.PasswordVolunteer))
-    //            throw new BlInvalidOperationException("Username or password is incorrect");
-
-    //        return (volunteer.Role).ToString();
-    //    }
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BlGeneralDatabaseException("Database error while accessing volunteer data.", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BlGeneralDatabaseException("An unexpected error occurred during login.", ex);
-    //    }
-    //}
+   
     public string Login(string idString, string password)
     {
         try
@@ -137,17 +110,7 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            //var doVolunteer = _dal.Volunteer.Read(volunteerId)
-            //                  ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-
-            //var assigments = _dal.Assignment.ReadAll()
-            //    .Where(a => a.VolunteerId == volunteerId)
-            //    .ToList();
-
-            //BO.CallInProgress? callInProgress = null;
-
-            //var currentAssignment = assigments.FirstOrDefault(a => a.EndTimeForTreatment == null);
-            DO.Volunteer doVolunteer;
+              DO.Volunteer doVolunteer;
             List<DO.Assignment> assigments;
 
             lock (AdminManager.BlMutex)
@@ -168,7 +131,6 @@ internal class VolunteerImplementation : IVolunteer
                 lock (AdminManager.BlMutex)
                     callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
 
-                //var callDetails = _dal.Call.Read(currentAssignment.IdOfRunnerCall);
                 if (callDetails != null)
                 {
                     var status = Tools.GetCallStatus(callDetails);
@@ -361,7 +323,6 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            //var volunteers = _dal.Volunteer.ReadAll();
             IEnumerable<DO.Volunteer> volunteers;
             lock (AdminManager.BlMutex)
                 volunteers = _dal.Volunteer.ReadAll();

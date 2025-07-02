@@ -14,8 +14,8 @@ internal static class AdminManager //stage 4
     #endregion Stage 4
 
     #region Stage 5
-    internal static event Action? ConfigUpdatedObservers; //prepared for stage 5 - for config update observers
-    internal static event Action? ClockUpdatedObservers; //prepared for stage 5 - for clock update observers
+    internal static event Action? ConfigUpdatedObservers; 
+    internal static event Action? ClockUpdatedObservers; 
     #endregion Stage 5
 
     #region Stage 4
@@ -49,7 +49,7 @@ internal static class AdminManager //stage 4
         lock (BlMutex) //stage 7
         {
             s_dal.ResetDB();
-            AdminManager.UpdateClock(AdminManager.Now); //stage 5 - needed since we want the label on Pl to be updated
+            AdminManager.UpdateClock(AdminManager.Now); 
             AdminManager.MaxRange = AdminManager.MaxRange; // stage 5 - needed to update PL 
         }
     }
