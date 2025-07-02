@@ -18,11 +18,6 @@ namespace PL
             DialogResult = true;
         }
 
-        //private void VolunteerButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    GoToManager = false;
-        //    DialogResult = true;
-        //}
         private void VolunteerButton_Click(object sender, RoutedEventArgs e)
         {
             GoToManager = false;

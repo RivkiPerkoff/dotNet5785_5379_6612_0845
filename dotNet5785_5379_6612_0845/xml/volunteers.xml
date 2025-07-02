@@ -1,45 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Volunteer>
-    <VolunteerId>1000</VolunteerId>
-    <Name>Roni</Name>
-    <PhoneNumber>0503217845</PhoneNumber>
-    <EmailOfVolunteer>S0527694217@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>1c9ab5074f0475bb584fabff8053e2ce5f0f4e3a451c6402b711c4cd4d39a1ba</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>0</VolunteerLatitude>
-    <VolunteerLongitude>0</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>0</MaximumDistanceForReceivingCall>
-    <Role>Manager</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer> 
-  <Volunteer>
-    <VolunteerId>327880888</VolunteerId>
-    <Name>ruth</Name>
-    <PhoneNumber>0583259020</PhoneNumber>
-    <EmailOfVolunteer>tamarminhahar@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>35dbed0561488224d6afabd9271255992ee09e5bbb3f3822f7f09065d552a8b0</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>31.759595</VolunteerLatitude>
-    <VolunteerLongitude>35.215315</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>200</MaximumDistanceForReceivingCall>
-    <Role>Volunteer</Role>
-    <DistanceType>AirDistance</DistanceType>
-  </Volunteer>
-  <Volunteer>
-    <VolunteerId>327880845</VolunteerId>
-    <Name>tamar</Name>
-    <PhoneNumber>0583257228</PhoneNumber>
-    <EmailOfVolunteer>tamarminhahar@gmail.com</EmailOfVolunteer>
-    <PasswordVolunteer>d73a7d66379bbf606bb8ff84798cb91470268a5a4bfcd0e0cd68fb1ef435c570</PasswordVolunteer>
-    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-    <VolunteerLatitude>31.759595</VolunteerLatitude>
-    <VolunteerLongitude>35.215315</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
-    <MaximumDistanceForReceivingCall>20</MaximumDistanceForReceivingCall>
-    <Role>Manager</Role>
-    <DistanceType>RoadDistance</DistanceType>
-  </Volunteer>
+	<Volunteer>
+		<VolunteerId>123456</VolunteerId>
+		<Name>AVI</Name>
+		<PhoneNumber>0583254855</PhoneNumber>
+		<EmailOfVolunteer>beckermanavigail@gmail.com</EmailOfVolunteer>
+		<PasswordVolunteer>8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</PasswordVolunteer>
+		<AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+		<VolunteerLatitude>31.759595</VolunteerLatitude>
+		<VolunteerLongitude>35.215315</VolunteerLongitude>
+		<IsAvailable>true</IsAvailable>
+		<MaximumDistanceForReceivingCall>2000</MaximumDistanceForReceivingCall>
+		<Role>Manager</Role>
+		<DistanceType>AirDistance</DistanceType>
+	</Volunteer>
 </ArrayOfVolunteer>

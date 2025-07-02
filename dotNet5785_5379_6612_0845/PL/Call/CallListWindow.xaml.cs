@@ -175,16 +175,15 @@ public partial class CallListWindow : Window
 
             if (call.Status != StatusCallType.inHandling && call.Status != StatusCallType.HandlingInRisk)
             {
-                MessageBox.Show("ניתן למחוק הקצאה רק כאשר הקריאה בטיפול או בטיפול בסיכון.",
-                                "שגיאה",
+                MessageBox.Show("An assignment can only be deleted when the call is in handling or handling at risk.",
+                                "Error",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Warning);
                 return;
             }
-
-            var result = MessageBox.Show($"האם אתה בטוח שברצונך למחוק את ההקצאה של קריאה מספר #{call.CallId}?",
-                                         "אישור מחיקה",
-                                         MessageBoxButton.YesNo,
+            var result = MessageBox.Show($"Are you sure you want to delete the assignment for call #{call.CallId}?",
+                                                  "Confirm Deletion",
+                                                  MessageBoxButton.YesNo,
                                          MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
@@ -199,11 +198,11 @@ public partial class CallListWindow : Window
                     .FirstOrDefault();
 
                 if (activeAssignment == null)
-                    throw new Exception("לא נמצאה הקצאה פעילה למחיקה.");
+                    throw new Exception("No active assignment found for deletion.");
 
                 s_bl.Call.CancelCallTreatment(_currentUserId, call.Id.Value);
 
-                MessageBox.Show("ההקצאה בוטלה בהצלחה.");
+                MessageBox.Show("Assignment successfully canceled.");
                 RefreshCallList();
             }
             catch (Exception ex)
@@ -211,7 +210,7 @@ public partial class CallListWindow : Window
                 string msg = ex.Message;
                 if (ex.InnerException != null)
                     msg += $"\nInner: {ex.InnerException.Message}";
-                MessageBox.Show(msg, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

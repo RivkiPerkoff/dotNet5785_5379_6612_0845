@@ -397,9 +397,10 @@ internal class CallImplementation : BIApi.ICall
             {
                 volunteer = _dal.Volunteer.Read(volunteerId)
                     ?? throw new BO.BlGeneralDatabaseException($"Volunteer with ID={volunteerId} does not exist.");
-
-                calls = _dal.Call.ReadAll().ToList();
             }
+            //lock (AdminManager.BlMutex)
+                calls = _dal.Call.ReadAll().ToList();
+            
 
             if (string.IsNullOrWhiteSpace(volunteer.AddressVolunteer))
                 throw new BO.BlInvalidFormatException("Cannot calculate distance - volunteer address is missing or invalid.");

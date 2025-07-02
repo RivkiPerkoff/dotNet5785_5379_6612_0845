@@ -93,12 +93,25 @@
                   ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=RoleCollection}"
                   SelectedItem="{Binding Role, Mode=TwoWay}" />
 
-        <!-- Current Call -->
+       
         <GroupBox Grid.Row="10" Grid.ColumnSpan="2" Header="Current Call" Margin="0,10,0,0">
             <TextBlock Text="{Binding DataContext.CurrentCallInfo, RelativeSource={RelativeSource AncestorType=Window}}"
                        Padding="8"
                        TextWrapping="Wrap"/>
         </GroupBox>
+        <!-- Current Call 
+        <GroupBox Grid.Row="10" Grid.ColumnSpan="2" Header="Current Call" Margin="0,10,0,0">
+            <StackPanel DataContext="{Binding CallInProgressDisplay}" >
+                <TextBlock Text="Address:" FontWeight="Bold"/>
+                <TextBlock Text="{Binding CallingAddress}" Margin="0,0,0,5"/>
+
+                <TextBlock Text="Distance:" FontWeight="Bold"/>
+                <TextBlock Text="{Binding CallingDistanceFromVolunteer}" Margin="0,0,0,5"/>
+
+                <TextBlock Text="Time Left:" FontWeight="Bold"/>
+                <TextBlock Text="{Binding TimeLeft}" Margin="0,0,0,5"/>
+            </StackPanel>
+        </GroupBox>-->
 
         <!-- Add/Update Button -->
         <Button Grid.Row="11" Grid.ColumnSpan="2"
