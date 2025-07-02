@@ -33,7 +33,10 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         }
     }
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="propertyName"></param>
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -51,6 +54,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         get => (BL.BO.Volunteer?)GetValue(CurrentVolunteerProperty);
         set => SetValue(CurrentVolunteerProperty, value);
     }
+
 
     public static readonly DependencyProperty CurrentVolunteerProperty =
         DependencyProperty.Register(

@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<Volunteer>
-		<VolunteerId>123456</VolunteerId>
-		<Name>AVI</Name>
-		<PhoneNumber>0583254855</PhoneNumber>
-		<EmailOfVolunteer>beckermanavigail@gmail.com</EmailOfVolunteer>
-		<PasswordVolunteer>8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</PasswordVolunteer>
-		<AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
-		<VolunteerLatitude>31.759595</VolunteerLatitude>
-		<VolunteerLongitude>35.215315</VolunteerLongitude>
-		<IsAvailable>true</IsAvailable>
-		<MaximumDistanceForReceivingCall>2000</MaximumDistanceForReceivingCall>
-		<Role>Manager</Role>
-		<DistanceType>AirDistance</DistanceType>
-	</Volunteer>
+  <Volunteer>
+    <VolunteerId>123456</VolunteerId>
+    <Name>AVI</Name>
+    <PhoneNumber>0583254855</PhoneNumber>
+    <EmailOfVolunteer>beckermanavigail@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</PasswordVolunteer>
+    <AddressVolunteer>רחוב איגרות משה 9, ירושלים</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
+    <IsAvailable>true</IsAvailable>
+    <MaximumDistanceForReceivingCall>2000</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
 </ArrayOfVolunteer>
