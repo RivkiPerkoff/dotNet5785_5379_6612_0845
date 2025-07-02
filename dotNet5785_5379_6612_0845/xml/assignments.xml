@@ -402,122 +402,18 @@
   </Assignment>
   <Assignment>
     <NextAssignmentId>2500</NextAssignmentId>
-    <IdOfRunnerCall>123456789</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
+    <IdOfRunnerCall>2659565</IdOfRunnerCall>
+    <VolunteerId>123</VolunteerId>
     <FinishCallType>CanceledByVolunteer</FinishCallType>
     <EntryTimeForTreatment>2025-07-03T07:02:03</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-07-03T07:02:03</EndTimeForTreatment>
   </Assignment>
   <Assignment>
     <NextAssignmentId>2501</NextAssignmentId>
-    <IdOfRunnerCall>123456789</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>CanceledByVolunteer</FinishCallType>
+    <IdOfRunnerCall>2659565</IdOfRunnerCall>
+    <VolunteerId>123</VolunteerId>
+    <FinishCallType>TakenCareof</FinishCallType>
     <EntryTimeForTreatment>2025-07-03T07:02:03</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-07-03T07:02:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>2503</NextAssignmentId>
-    <IdOfRunnerCall>123456</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-03T07:03:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-03T07:04:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>2604</NextAssignmentId>
-    <IdOfRunnerCall>34567890</IdOfRunnerCall>
-    <VolunteerId>0</VolunteerId>
-    <FinishCallType>Expired</FinishCallType>
-    <EntryTimeForTreatment>2025-07-03T07:05:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-03T07:05:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>2605</NextAssignmentId>
-    <IdOfRunnerCall>123</IdOfRunnerCall>
-    <VolunteerId>0</VolunteerId>
-    <FinishCallType>Expired</FinishCallType>
-    <EntryTimeForTreatment>2025-07-03T07:05:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-03T07:05:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>2578</NextAssignmentId>
-    <IdOfRunnerCall>123456789</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-03T07:05:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-03T07:06:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>2662</NextAssignmentId>
-    <IdOfRunnerCall>1</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-03T07:07:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-03T07:14:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>2923</NextAssignmentId>
-    <IdOfRunnerCall>122</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-03T07:15:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-03T07:16:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>4963</NextAssignmentId>
-    <IdOfRunnerCall>1233</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-04T09:20:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-04T11:20:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>5074</NextAssignmentId>
-    <IdOfRunnerCall>12333</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-04T12:20:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-04T13:20:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>7338</NextAssignmentId>
-    <IdOfRunnerCall>214875379</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-07T04:20:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-07T10:20:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>9174</NextAssignmentId>
-    <IdOfRunnerCall>11</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-09T05:25:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-09T05:55:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>10255</NextAssignmentId>
-    <IdOfRunnerCall>111</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-09T08:45:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-09T13:45:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>10583</NextAssignmentId>
-    <IdOfRunnerCall>1111</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-09T17:45:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-09T19:45:03</EndTimeForTreatment>
-  </Assignment>
-  <Assignment>
-    <NextAssignmentId>11022</NextAssignmentId>
-    <IdOfRunnerCall>12</IdOfRunnerCall>
-    <VolunteerId>123456</VolunteerId>
-    <FinishCallType>TakenCareof</FinishCallType>
-    <EntryTimeForTreatment>2025-07-10T05:52:03</EntryTimeForTreatment>
-    <EndTimeForTreatment>2025-07-10T05:59:03</EndTimeForTreatment>
   </Assignment>
 </ArrayOfAssignment>

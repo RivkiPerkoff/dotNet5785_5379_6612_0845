@@ -213,7 +213,6 @@ internal class CallImplementation : BIApi.ICall
                 maxFinishTime: callObject.MaxFinishTime ?? default,
                 CallTypes: CallManager.ToDOCallType(callObject.CallType)
             );
-            //_dal.Call.Create(callDO);
             lock (AdminManager.BlMutex)
                 _dal.Call.Create(callDO);
             CallManager.Observers.NotifyListUpdated();

@@ -9,9 +9,23 @@
     <AddressVolunteer>רחוב איגרות משה 9, ירושלים</AddressVolunteer>
     <VolunteerLatitude>31.759595</VolunteerLatitude>
     <VolunteerLongitude>35.215315</VolunteerLongitude>
-    <IsAvailable>true</IsAvailable>
+    <IsAvailable>false</IsAvailable>
     <MaximumDistanceForReceivingCall>2000</MaximumDistanceForReceivingCall>
     <Role>Manager</Role>
     <DistanceType>AirDistance</DistanceType>
+  </Volunteer>
+  <Volunteer>
+    <VolunteerId>123</VolunteerId>
+    <Name>tamara</Name>
+    <PhoneNumber>0583254855</PhoneNumber>
+    <EmailOfVolunteer>tamarminhahar@gmail.com</EmailOfVolunteer>
+    <PasswordVolunteer>a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3</PasswordVolunteer>
+    <AddressVolunteer>41 Pisga Street, Jerusalem</AddressVolunteer>
+    <VolunteerLatitude>31.759595</VolunteerLatitude>
+    <VolunteerLongitude>35.215315</VolunteerLongitude>
+    <IsAvailable>false</IsAvailable>
+    <MaximumDistanceForReceivingCall>1000</MaximumDistanceForReceivingCall>
+    <Role>Manager</Role>
+    <DistanceType>WalkingDistance</DistanceType>
   </Volunteer>
 </ArrayOfVolunteer>
