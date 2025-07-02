@@ -21,46 +21,32 @@ public static class Initialization
         string[] emails = { "Roni@gmail.com", "Maya@gmail.com", "Lior@gmail.com", "Noa@gmail.com", "Dani@gmail.com", "Tomer@gmail.com", "Liat@gmail.com", "Gal@gmail.com", "Yona@gmail.com", "Nir@gmail.com", "Omer@gmail.com", "Shira@gmail.com", "Erez@gmail.com", "Michal@gmail.com", "Hadar@gmail.com" };
         string[] phones = { "0503217845", "0529871243", "0541239876", "0535494567", "0557891234", "0509876789", "0541127654", "0537856543", "0523127890", "0556543210", "0537895647", "0501251234", "0524568765", "0546544321", "0551234567" };
         string[] addresses = { "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "41 Pisga Street, Jerusalem", "רחוב הגפן 3, מודיעין, 7173311", "רחוב הנרייטה סולד 6, טבריה, 1448123", "רחוב רוטשילד 15, פתח תקווה, 4925138", "רחוב דוד המלך 22, ראשון לציון, 7521007", "רחוב הנביאים 10, באר שבע, 8421234", "רחוב ויצמן 7, כפר סבא, 4423027", "רחוב יפו 35, ירושלים, 9434125" };
-        int id = s_dal!.Config.CreateVolunteerId();
-        string name = names[0];
-        string email = emails[0];
-        string phone = phones[0];
-        string address = addresses[0];
-        double maximumDistance = s_rand.NextDouble() * 50;
-        string password = GenerateRandomPassword(12);
-        password = EncryptPassword(password);
-        Role role = Role.Manager;
-        s_dal!.Volunteer.Create(new Volunteer(
-            id,
-            name,
-             phone,
-            email,          
-            password,
-            address,
-            0,
-            0,
-            true,
-            0,
-            role
-        ));
-        for (int i = 1; i < names.Length; i++)
+
+        // סיסמאות ידועות מראש
+        string[] passwords = {
+        "Pass1234", "Test5678", "MySecure1", "Hello123", "Volun999",
+        "Secret77", "Alpha456", "Bravo789", "Charlie1", "Delta321",
+        "Echo654", "Foxtrot0", "Golf2024", "Hotel77", "India88"
+    };
+
+        for (int i = 0; i < names.Length; i++)
         {
-            id = s_dal!.Config.CreateVolunteerId();
-            name = names[i];
-            phone = phones[i];
-            email = emails[i];
-            address = addresses[i];
-            maximumDistance = s_rand.NextDouble() * 50;
-            password = GenerateRandomPassword(12);
-            password = EncryptPassword(password);
-            role = Role.Volunteer;
-            s_dal!.Volunteer.Create(new Volunteer(
+            int id = s_dal!.Config.CreateVolunteerId();
+            string name = names[i];
+            string phone = phones[i];
+            string email = emails[i];
+            string address = addresses[i];
+            string plainPassword = passwords[i];
+            string encryptedPassword = EncryptPassword(plainPassword);
+
+            Role role = i == 0 ? Role.Manager : Role.Volunteer;
+
+            s_dal.Volunteer.Create(new Volunteer(
                 id,
                 name,
-                
                 phone,
                 email,
-                password,
+                encryptedPassword,
                 address,
                 0,
                 0,
@@ -68,8 +54,12 @@ public static class Initialization
                 0,
                 role
             ));
+
+            // הדפסה למסך כדי שתדע את הסיסמה של כל משתמש
+            Console.WriteLine($"Volunteer Created: {name} (ID: {id}), Password: {plainPassword}, Role: {role}");
         }
     }
+
 
     /// <summary>
     /// Generates a random password that meets the security requirements:
