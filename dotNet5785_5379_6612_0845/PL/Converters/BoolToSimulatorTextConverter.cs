@@ -8,8 +8,11 @@ namespace PL.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is bool b && b ? "Stop Simulator" : "Start Simulator";
+            if (value is bool isRunning)
+                return isRunning ? "Stop Simulator" : "Start Simulator";
+            return "Unknown";
         }
+
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -130,6 +130,8 @@ internal class CallImplementation : BIApi.ICall
                 _dal.Call.Delete(callId);
             }
             CallManager.Observers.NotifyListUpdated();
+            CallManager.NotifyCallStatsUpdated();
+
         }
         catch (DO.DalDeletionImpossible ex)
         {
@@ -174,7 +176,10 @@ internal class CallImplementation : BIApi.ICall
                 _dal.Call.Create(callDO);
             CallManager.Observers.NotifyListUpdated();
             var boCall = GetCallDetails(callDO.IdCall);
+            
             CallManager.SendEmailWhenCallOpened(boCall);
+            CallManager.NotifyCallStatsUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -337,6 +342,8 @@ internal class CallImplementation : BIApi.ICall
                 CallManager.Observers.NotifyListUpdated();
                 VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
                 VolunteerManager.Observers.NotifyListUpdated();
+                CallManager.NotifyCallStatsUpdated();
+
             }
             else throw new BO.BlInvalidOperationException("Assignment has already been completed or expired or canceled.");
 
@@ -398,6 +405,8 @@ internal class CallImplementation : BIApi.ICall
             CallManager.Observers.NotifyListUpdated();
 VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
 VolunteerManager.Observers.NotifyListUpdated();
+            CallManager.NotifyCallStatsUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -455,6 +464,8 @@ VolunteerManager.Observers.NotifyListUpdated();
             CallManager.Observers.NotifyListUpdated();
             VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
             VolunteerManager.Observers.NotifyListUpdated();
+            CallManager.NotifyCallStatsUpdated();
+
             if (requester.Role == DO.Role.Manager && assignment.VolunteerId != requesterId)
             {
                 CallManager.SendEmailToVolunteerOnAssignmentCancellation(assignment.VolunteerId, assignment.IdOfRunnerCall);
@@ -512,6 +523,8 @@ VolunteerManager.Observers.NotifyListUpdated();
 
             CallManager.Observers.NotifyItemUpdated(updatedCall.IdCall);
             CallManager.Observers.NotifyListUpdated();
+            CallManager.NotifyCallStatsUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -628,5 +641,7 @@ VolunteerManager.Observers.NotifyListUpdated();
     public void RemoveObserver(Action listObserver) =>
     CallManager.Observers.RemoveListObserver(listObserver);
     public void RemoveObserver(int id, Action observer) =>
-    CallManager.Observers.RemoveObserver(id, observer); 
+    CallManager.Observers.RemoveObserver(id, observer);
+   
+
 }
