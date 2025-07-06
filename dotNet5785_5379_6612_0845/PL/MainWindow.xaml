@@ -67,10 +67,20 @@
         <Border Grid.Row="3" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
             <StackPanel HorizontalAlignment="Center">
                 <TextBlock Text="Risk Time Range (hh:mm:ss):" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,8"/>
-                <TextBox Width="250" Height="28" Text="{Binding RiskTimeRangeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15"/>
+                <TextBox Width="250" Height="28" Text="{Binding RiskTimeRangeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+                <!-- הצגת הטווח הנוכחי -->
+                <TextBlock Text="{Binding RiskTimeRange}" 
+                   FontSize="14" 
+                   Foreground="#666" 
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"/>
+
                 <Button Content="Update Config" Width="250" Height="35" Click="UpdateConfigButton_Click"/>
             </StackPanel>
         </Border>
+
 
         <!-- Buttons -->
         <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">

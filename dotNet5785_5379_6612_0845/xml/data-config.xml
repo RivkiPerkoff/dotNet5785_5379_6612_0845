@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <NextVolunteerId>1000</NextVolunteerId>
-  <NextCallId>1000</NextCallId>
-  <NextAssignmentId>2509</NextAssignmentId>
-  <Clock>03/07/2025 7:02:03</Clock>
-  <RiskRange>12:10:00</RiskRange>
+  <NextVolunteerId>1015</NextVolunteerId>
+  <NextCallId>1050</NextCallId>
+  <NextAssignmentId>14932</NextAssignmentId>
+  <Clock>18/07/2025 13:57:44</Clock>
+  <RiskRange>00:10:00</RiskRange>
 </config>
