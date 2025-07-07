@@ -7,8 +7,8 @@
         xmlns:conv="clr-namespace:PL.Converters"
         mc:Ignorable="d"
         Title="Main Window"
-        Height="814"
-        Width="850"
+        Height="899"
+        Width="881"
         WindowStartupLocation="CenterScreen"
         Background="#F0F2F5"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">

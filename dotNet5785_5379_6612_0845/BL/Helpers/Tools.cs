@@ -19,11 +19,14 @@ static internal class Tools
     /// <exception cref="Exception">Thrown when the API response is invalid or the address is not found.</exception>
     public static (double, double) GetCoordinatesFromAddress(string address)
     {
+        System.Diagnostics.Debug.WriteLine("🚀 זה עובד!");
+
         string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
         using var client = new HttpClient();
         string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
         var response = client.GetAsync(url).GetAwaiter().GetResult();
+        System.Diagnostics.Debug.WriteLine($"Response status: {response.StatusCode}"); // 👈 הוספה לצורך בדיקה
         if (!response.IsSuccessStatusCode)
             throw new Exception("Invalid address or API error.");
 
