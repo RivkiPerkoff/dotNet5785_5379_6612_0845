@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfAssignment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Assignment>
     <NextAssignmentId>1003</NextAssignmentId>
@@ -399,5 +399,21 @@
     <FinishCallType>Expired</FinishCallType>
     <EntryTimeForTreatment>2025-02-02T12:14:00</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-07-02T21:52:44</EndTimeForTreatment>
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>5102</NextAssignmentId>
+    <IdOfRunnerCall>328084562</IdOfRunnerCall>
+    <VolunteerId>1000</VolunteerId>
+    <FinishCallType>None</FinishCallType>
+    <EntryTimeForTreatment>2025-07-10T00:52:44</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+  </Assignment>
+  <Assignment>
+    <NextAssignmentId>5103</NextAssignmentId>
+    <IdOfRunnerCall>2454451</IdOfRunnerCall>
+    <VolunteerId>1000</VolunteerId>
+    <FinishCallType>None</FinishCallType>
+    <EntryTimeForTreatment>2025-07-10T00:52:44</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
   </Assignment>
 </ArrayOfAssignment>

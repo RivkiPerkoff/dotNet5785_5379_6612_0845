@@ -510,4 +510,14 @@
     <MaxFinishTime>2025-07-17T00:00:00</MaxFinishTime>
     <CallTypes>None</CallTypes>
   </Call>
+  <Call>
+    <IdCall>328084562</IdCall>
+    <CallDescription>ללללל</CallDescription>
+    <CallAddress>רחוב דיזנגוף 89, תל אביב, 6439611</CallAddress>
+    <CallLatitude>32.199671</CallLatitude>
+    <CallLongitude>35.212911</CallLongitude>
+    <OpeningTime>2025-07-10T00:52:44</OpeningTime>
+    <MaxFinishTime>2025-07-30T00:00:00</MaxFinishTime>
+    <CallTypes>None</CallTypes>
+  </Call>
 </ArrayOfCall>
