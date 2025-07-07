@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -12,7 +13,7 @@ using BL.BO;
 
 namespace PL;
 
-public partial class MainWindow : Window
+public partial class MainWindow : Window, INotifyPropertyChanged
 {
     private static readonly IBL s_bl = BlApi.Factory.Get();
     private readonly Action clockObserver;
@@ -55,12 +56,14 @@ public partial class MainWindow : Window
 
         s_bl.Admin.AddClockObserver(clockObserver);
         s_bl.Admin.AddConfigObserver(configObserver);
+        s_bl.Call.AddObserver(CallStatsObserver);
+        CallStatsObserver();
 
         clockObserver();
         configObserver();
         CallList = s_bl.Call.GetFilteredAndSortedCallList();
     }
-
+ 
     public DateTime CurrentTime
     {
         get => (DateTime)GetValue(CurrentTimeProperty);
@@ -84,6 +87,8 @@ public partial class MainWindow : Window
         {
             if (TimeSpan.TryParse(value, out var ts))
                 RiskTimeRange = ts;
+            OnPropertyChanged(nameof(RiskTimeRangeText)); // עדכון ה-UI
+
         }
     }
 
@@ -226,6 +231,7 @@ public partial class MainWindow : Window
     {
         s_bl.Admin.RemoveClockObserver(clockObserver);
         s_bl.Admin.RemoveConfigObserver(configObserver);
+        s_bl.Call.RemoveObserver(CallStatsObserver);
 
         if (IsSimulatorRunning)
         {
@@ -233,6 +239,25 @@ public partial class MainWindow : Window
             IsSimulatorRunning = false;
         }
     }
+    private void UpdateCallAmounts()
+    {
+        try
+        {
+            CallAmounts = s_bl.Call.GetCallAmounts();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error retrieving call amounts: {ex.Message}");
+        }
+    }
+    public int[] CallAmounts
+    {
+        get => (int[])GetValue(CallAmountsProperty);
+        set => SetValue(CallAmountsProperty, value);
+    }
+
+    public static readonly DependencyProperty CallAmountsProperty =
+        DependencyProperty.Register(nameof(CallAmounts), typeof(int[]), typeof(MainWindow));
 
     public int Interval
     {
@@ -316,4 +341,51 @@ public partial class MainWindow : Window
         }
         return null;
     }
+    private DispatcherOperation? _callStatsOperation = null;
+
+    private void CallStatsObserver()
+    {
+        if (_callStatsOperation == null || _callStatsOperation.Status == DispatcherOperationStatus.Completed)
+        {
+            _callStatsOperation = Dispatcher.BeginInvoke(() =>
+            {
+                UpdateCallAmounts();
+            });
+        }
+    }
+
+    private void btnShowOpenCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.open);
+
+    private void btnShowOpenInRiskCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.openInRisk);
+
+    private void btnShowInHandlingCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.inHandling);
+
+    private void btnShowHandlingInRiskCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.HandlingInRisk);
+
+    private void btnShowClosedCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.closed);
+
+    private void btnShowExpiredCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.Expired);
+
+    private void btnShowPendingCalls_Click(object sender, RoutedEventArgs e) =>
+        ShowFilteredCallList(StatusCallType.Pending);
+
+    private void ShowFilteredCallList(StatusCallType status)
+    {
+        var window = new Call.CallListWindow(_currentUserRole, _currentUserId, status);
+        window.Show();
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
 }

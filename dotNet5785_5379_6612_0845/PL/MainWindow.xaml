@@ -18,76 +18,99 @@
     </Window.Resources>
 
     <Grid Margin="20" Background="#FAFAFA">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Title -->
-        <TextBlock Text="System Control Panel"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Foreground="#333"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,20"
-                   Grid.Row="0"/>
+        <!-- ריבוע סטטיסטיקות בצד שמאל -->
+        <Border Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0">
+            <StackPanel>
+                <TextBlock Text="Call Amounts by Status:" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" HorizontalAlignment="Center"/>
 
-        <!-- Clock -->
-        <Border Grid.Row="1" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20" HorizontalAlignment="Center">
-            <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="{Binding CurrentTime}" 
-                   FontSize="30" 
-                   FontWeight="Bold" 
-                   Foreground="#222"
-                   TextAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,15"/>
-                <UniformGrid Columns="4" HorizontalAlignment="Center">
-                    <Button Content="+1 Minute" Click="btnAddOneMinute_Click" Margin="5" Padding="8,5" Width="120"/>
-                    <Button Content="+1 Hour" Click="btnAddOneHour_Click" Margin="5" Padding="8,5" Width="120"/>
-                    <Button Content="+1 Day" Click="btnAddOneDay_Click" Margin="5" Padding="8,5" Width="120"/>
-                    <Button Content="+1 Year" Click="btnAddOneYear_Click" Margin="5" Padding="8,5" Width="120"/>
-                </UniformGrid>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Open:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[5]}" Width="80" Click="btnShowOpenCalls_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Open In Risk:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[4]}" Width="80" Click="btnShowOpenInRiskCalls_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="In Handling:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[1]}" Width="80" Click="btnShowInHandlingCalls_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Handling In Risk:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[0]}" Width="80" Click="btnShowHandlingInRiskCalls_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Closed:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[2]}" Width="80" Click="btnShowClosedCalls_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Expired:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[3]}" Width="80" Click="btnShowExpiredCalls_Click"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Pending:" Width="80" VerticalAlignment="Center"/>
+                    <Button Content="{Binding CallAmounts[6]}" Width="80" Click="btnShowPendingCalls_Click"/>
+                </StackPanel>
             </StackPanel>
         </Border>
 
-        <!-- Simulator -->
-        <Border Grid.Row="2" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
-            <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="Simulator Interval (minutes):" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,8"/>
-                <TextBox Width="250" Height="28" Text="{Binding Interval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15"/>
-                <Button Width="250" Height="35" Click="ToggleSimulator_Click" Content="{Binding IsSimulatorRunning, Converter={StaticResource BoolToSimulatorTextConverter}}"/>
+        <!-- תוכן ראשי בצד ימין -->
+        <Grid Grid.Column="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="System Control Panel" FontSize="28" FontWeight="Bold" Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="0"/>
+
+            <Border Grid.Row="1" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,20" HorizontalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding CurrentTime}" FontSize="30" FontWeight="Bold" Foreground="#222" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                    <UniformGrid Columns="4" HorizontalAlignment="Center">
+                        <Button Content="+1 Minute" Click="btnAddOneMinute_Click" Margin="5" Padding="8,5" Width="120"/>
+                        <Button Content="+1 Hour" Click="btnAddOneHour_Click" Margin="5" Padding="8,5" Width="120"/>
+                        <Button Content="+1 Day" Click="btnAddOneDay_Click" Margin="5" Padding="8,5" Width="120"/>
+                        <Button Content="+1 Year" Click="btnAddOneYear_Click" Margin="5" Padding="8,5" Width="120"/>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="Simulator Interval (minutes):" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,8"/>
+                    <TextBox Width="250" Height="28" Text="{Binding Interval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15"/>
+                    <Button Width="250" Height="35" Click="ToggleSimulator_Click" Content="{Binding IsSimulatorRunning, Converter={StaticResource BoolToSimulatorTextConverter}}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="3" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="Risk Time Range (hh:mm:ss):" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,8"/>
+                    <TextBox Width="250" Height="28" Text="{Binding RiskTimeRangeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15"/>
+                    <Button Content="Update Config" Width="250" Height="35" Click="UpdateConfigButton_Click"/>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Button Content="Show Volunteers" Width="220" Height="35" Margin="5" Click="btnShowVolunteerList_Click"/>
+                <Button Content="Show Calls" Width="220" Height="35" Margin="5" Click="btnShowCallList_Click"/>
+                <Button Content="Initialize DB" Width="220" Height="35" Margin="5" Click="btnInitializeDB_Click"/>
+                <Button Content="Reset DB" Width="220" Height="35" Margin="5" Click="btnResetDB_Click"/>
             </StackPanel>
-        </Border>
-
-        <!-- Risk Time Range -->
-        <Border Grid.Row="3" Background="White" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
-            <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="Risk Time Range (hh:mm:ss):" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,8"/>
-                <TextBox Width="250" Height="28" Text="{Binding RiskTimeRangeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                <!-- הצגת הטווח הנוכחי -->
-                <TextBlock Text="{Binding RiskTimeRange}" 
-                   FontSize="14" 
-                   Foreground="#666" 
-                   TextAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,10"/>
-
-                <Button Content="Update Config" Width="250" Height="35" Click="UpdateConfigButton_Click"/>
-            </StackPanel>
-        </Border>
-
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button Content="Show Volunteers" Width="220" Height="35" Margin="5" Click="btnShowVolunteerList_Click"/>
-            <Button Content="Show Calls" Width="220" Height="35" Margin="5" Click="btnShowCallList_Click"/>
-            <Button Content="Initialize DB" Width="220" Height="35" Margin="5" Click="btnInitializeDB_Click"/>
-            <Button Content="Reset DB" Width="220" Height="35" Margin="5" Click="btnResetDB_Click"/>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Window>

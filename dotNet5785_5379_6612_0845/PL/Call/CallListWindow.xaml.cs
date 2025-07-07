@@ -19,6 +19,11 @@ public partial class CallListWindow : Window
     private readonly Action _clockObserver;
     private volatile DispatcherOperation? _callListRefreshOperation = null;
     private volatile DispatcherOperation? _observerRefreshOperation = null;
+    public CallListWindow(Role currentUserRole, int currentUserId, StatusCallType? statusFilter = null)
+    : this(currentUserRole, currentUserId)
+    {
+        SelectedStatusFilter = statusFilter;
+    }
 
     public CallListWindow(Role currentUserRole, int currentUserId)
     {

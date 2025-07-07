@@ -268,6 +268,8 @@ Call Management System Of TrampIst";
 
         foreach (var id in callsToNotify.Distinct())
             Observers.NotifyItemUpdated(id);
+        NotifyCallStatsUpdated(); // חשוב להוסיף!
+
     }
 
     internal static void SimulateCallAssignmentAndTreatment()
@@ -346,6 +348,12 @@ Call Management System Of TrampIst";
 
         foreach (int id in callsToNotify.Distinct())
             Observers.NotifyItemUpdated(id);
+        NotifyCallStatsUpdated(); // חשוב להוסיף!
+
+    }
+    internal static void NotifyCallStatsUpdated()
+    {
+        Observers.NotifyListUpdated(); // או שתוסיפי ייעודי לסטטיסטיקות אם יש לך
     }
 
 }

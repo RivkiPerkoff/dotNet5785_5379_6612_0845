@@ -10,7 +10,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- פרטים אישיים -->
         <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,10">
             <TextBlock Text="Volunteer Details" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
 
@@ -19,11 +18,7 @@
                 <TextBox Text="{Binding CurrentVolunteer.VolunteerId}" Width="200" IsReadOnly="True"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0,5">
-                <TextBlock Text="Role:" Width="120"/>
-                <TextBox Text="{Binding CurrentVolunteer.Role}" Width="200" IsReadOnly="True"/>
-            </StackPanel>
-
+     
             <StackPanel Orientation="Horizontal" Margin="0,5">
                 <TextBlock Text="Name:" Width="120"/>
                 <TextBox Text="{Binding CurrentVolunteer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200"/>

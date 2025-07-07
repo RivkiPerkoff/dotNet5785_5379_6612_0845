@@ -81,5 +81,5 @@ class ObserverManager //stage 5
         if (_specificObservers.ContainsKey(id))
             _specificObservers[id]?.Invoke();
     }
-
+  
 }
